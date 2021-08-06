@@ -1,5 +1,6 @@
 package vip.floatationdevice.g4j;
 
+import cn.hutool.core.date.DateUtil;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.g4j.event.*;
 
@@ -13,7 +14,8 @@ public class G4JDebugger
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
-            System.out.print("\n["+e.getCreationTime()+"] ["+e.getChannelId()+"] <"+e.getCreator()+"> "+e.getContent()+"\n["+workdir+"] #");
+            ChatMessage m=e.getChatMessageObject();
+            System.out.print("\n["+DateUtil.parse(m.getCreatedAt())+"] ["+m.getChannelId()+"] <"+m.getCreatedBy()+"> "+m.getContent()+"\n["+workdir+"] #");
         }
     }
     static class G4JSession implements Serializable
@@ -57,7 +59,7 @@ public class G4JDebugger
         }
         else
         {
-            System.out.println("Enter AuthToken:");
+            System.out.print("Enter AuthToken:");
             //headers.put("Authorization", "Bearer AAAAAAAAAA+AAAAAAA/AAAAAAAAAAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/AAAAAA/AAAAAAAA==");
             client=new G4JClient(scanner.nextLine());
             System.out.println("[i] Logging in");
@@ -66,42 +68,42 @@ public class G4JDebugger
         String text;//typed command
         String textCache="";//previous command
         G4JClient.bus.register(new GuildedEventListener());
-        for(;;System.out.print("["+workdir+"] #"))
+        for(;;System.out.print("\n["+workdir+"] #"))
         {
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
             if(text.equals("test")){client.sendMessage("1166f4e4-b9b2-4b98-9d70-301662403cb3","【爱发电专属Bukkit插件-全版本】TRMonitor —— 技术侦测插件，找出服务器崩溃/卡顿/内存不足/遭攻击的原因！https://www.relatev.com/forum.php?mod=viewthread&tid=2451");}
-            else if(text.equals("save")){if(session.save(client.authToken,workdir)){System.out.println("[i] G4JSession saved");}}
-            else if(text.startsWith("token ")&&text.length()>6){System.out.println("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
-            else if(text.equals("disconnect")){System.out.println("[i] Disconnecting");client.close();}
-            else if(text.equals("pwd")){System.out.println("[i] Currently in channel: "+workdir);}
-            else if(text.startsWith("cd ")&&text.length()>3){System.out.println("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
+            else if(text.equals("save")){if(session.save(client.authToken,workdir)){System.out.print("[i] G4JSession saved");}}
+            else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
+            else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
+            else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
+            else if(text.startsWith("cd ")&&text.length()>3){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
             else if(text.startsWith("send ")&&text.length()>5)
             {
-                if(workdir.equals("(init)")) System.out.println("[X] Specify a channel UUID first");
+                if(workdir.equals("(init)")) System.out.print("[X] Specify a channel UUID first");
                 else client.sendMessage(workdir,text.substring(5));
             }
-            else if(text.equals("reconnect")){System.out.println("[i] Reconnecting");client.reconnect();}
+            else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save(client.authToken,workdir);break;}
             else if(text.equals("help"))
             {
-                System.out.println(
-                        "COMMANDS:" +
-                        " > token <AuthToken>" +
-                        "    Update AuthToken" +
-                        " > disconnect" +
-                        " > reconnect" +
-                        " > pwd" +
-                        "    Print the current channel UUID" +
-                        " > cd <UUID>" +
-                        "    Change the target channel UUID" +
-                        " > send <string>" +
-                        "    Send the typed string" +
-                        " > exit" +
+                System.out.print(
+                        "COMMANDS:\n" +
+                        " > token <AuthToken>\n" +
+                        "    Update AuthToken\n" +
+                        " > disconnect\n" +
+                        " > reconnect\n" +
+                        " > pwd\n" +
+                        "    Print the current channel UUID\n" +
+                        " > cd <UUID>\n" +
+                        "    Change the target channel UUID\n" +
+                        " > send <string>\n" +
+                        "    Send the typed string\n" +
+                        " > exit\n" +
                         "    Log out and exit"
                 );
             }
-            else{System.out.println("[!] Type 'help' to get available commands and usages");}
+            else{System.out.print("[!] Type 'help' to get available commands and usages");}
             textCache=text;
         }
     }

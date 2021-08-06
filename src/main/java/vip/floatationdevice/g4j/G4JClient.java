@@ -45,14 +45,14 @@ public class G4JClient extends WebSocketClient
         if(eventType!=null&&eventType.equals("ChatMessageCreated"))
         {
             bus.post(
-                    new ChatMessageCreatedEvent(this)
-                    .setOpCode(json.getInt("op"))
-                    .setMsgId(UUID.fromString((String)json.getByPath("d.message.id")))
-                    .setChannelId(UUID.fromString((String)json.getByPath("d.message.channelId")))
-                    .setType((String)json.getByPath("d.message.type"))
-                    .setContent((String)json.getByPath("d.message.content"))
-                    .setCreationTime(DateUtil.parse((String)json.getByPath("d.message.createdAt")))
-                    .setCreator((String)json.getByPath("d.message.createdBy"))
+                    new ChatMessageCreatedEvent(this,new ChatMessage()
+                            .setId((String)json.getByPath("d.message.id"))
+                            .setType((String)json.getByPath("d.message.type"))
+                            .setChannelId((String)json.getByPath("d.message.channelId"))
+                            .setContent((String)json.getByPath("d.message.content"))
+                            .setCreatedAt((String)json.getByPath("d.message.createdAt"))
+                            .setCreatedBy((String)json.getByPath("d.message.createdBy"))
+                    ).setOpCode(json.getInt("op"))
             );
         }
         else

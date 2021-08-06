@@ -1,10 +1,6 @@
 package vip.floatationdevice.g4j;
 import java.net.URI;
-//import java.util.HashMap;
-import java.util.Map;
-
-import cn.hutool.core.date.DateUtil;
-import java.util.UUID;
+import java.util.ArrayList;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONObject;
@@ -21,11 +17,6 @@ public class G4JClient extends WebSocketClient
     public static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
-    @Deprecated
-    public G4JClient(Map<String, String> httpHeaders)//a more simple initial function has replaced this
-    {
-        super(WSS_URI, httpHeaders);
-    }
     public G4JClient(String token)//initial function
     {
         super(WSS_URI);
@@ -75,9 +66,13 @@ public class G4JClient extends WebSocketClient
             //System.out.println(new JSONObject(result).toStringPretty());
         }catch (Throwable e){System.out.print("[X] Message failed to send: "+e.toString());}
     }
-    public void getMessage(UUID channelId, UUID msgId)//get a message from specified message UUID and channel UUID
+    public ChatMessage getMessage(String channelId, String msgId)//TODO: get a message from specified message UUID and channel UUID
     {
-        ;
+        return new ChatMessage();
+    }
+    public ArrayList<ChatMessage> getMessages(String channelId)//TODO: get the last 50 msgs from specified channel
+    {
+        return new ArrayList<ChatMessage>();
     }
     public void setAuthToken(String token)//to initialize or reset AuthToken
     {

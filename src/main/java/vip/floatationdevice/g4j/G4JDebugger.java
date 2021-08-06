@@ -60,7 +60,6 @@ public class G4JDebugger
         else
         {
             System.out.print("Enter AuthToken:");
-            //headers.put("Authorization", "Bearer AAAAAAAAAA+AAAAAAA/AAAAAAAAAAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/AAAAAA/AAAAAAAA==");
             client=new G4JClient(scanner.nextLine());
             System.out.println("[i] Logging in");
         }

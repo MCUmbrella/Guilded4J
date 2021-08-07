@@ -56,24 +56,33 @@ public class G4JClient extends WebSocketClient
                                 .setUpdateTime((String)json.getByPath("d.message.updatedAt"))
                         ).setOpCode(json.getInt("op"))
                 );
+            else if(eventType.equals("ChatMessageDeleted"))
+                bus.post(
+                        new ChatMessageDeletedEvent(this)
+                        .setDeletionTime((String)json.getByPath("d.message.deletedAt"))
+                        .setMsgId((String)json.getByPath("d.message.id"))
+                        .setChannelId((String)json.getByPath("d.message.channelId"))
+                        .setOpCode(json.getInt("op"))
+                );
             else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
         else if(json.getInt("op")!=null)
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));
     }
-    public void sendMessage(String channelId, String msg)//send text message to specified channel
+    public String sendMessage(String channelId, String msg)//send text message to specified channel
     {
-        String content="{\"content\":\"$1\"}".replace("$1",msg);
         try
         {
-            String result=HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
+            return HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
-                    body(content).
+                    body("{\"content\":\"$1\"}".replace("$1",msg)).
                     timeout(20000).execute().body();
-            //System.out.println(new JSONObject(result).toStringPretty());
-        }catch (Throwable e){System.out.print("[X] Message failed to send: "+e.toString());}
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
     }
     public ChatMessage getMessage(String channelId, String msgId)//TODO: get a message from specified message UUID and channel UUID
     {

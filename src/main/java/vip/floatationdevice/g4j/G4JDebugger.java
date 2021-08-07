@@ -1,7 +1,6 @@
 package vip.floatationdevice.g4j;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.g4j.event.*;
@@ -23,17 +22,17 @@ public class G4JDebugger
         @Subscribe
         public void onUnknownEvent(GuildedEvent e)
         {
-            if(dumpMessages&&e.getRawString()!=null){System.out.print("\n[!] Unknown message:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
+            if(dumpMessages&&e.getRawString()!=null){System.out.print("\n[D] Unknown message:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
         }
     }
     static class G4JSession implements Serializable
     {
         public String savedToken="Bearer 0";
         public String savedWorkdir="(init)";
-        public Boolean save(String token, String workdir)
+        public Boolean save()
         {
             try {
-                this.savedToken=token;
+                this.savedToken=client.authToken;
                 this.savedWorkdir=workdir;
                 ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("G4JSession.dat"));
                 o.writeObject(this);
@@ -79,8 +78,7 @@ public class G4JDebugger
         {
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
-            if(text.equals("test")){client.sendMessage("1166f4e4-b9b2-4b98-9d70-301662403cb3","【爱发电专属Bukkit插件-全版本】TRMonitor —— 技术侦测插件，找出服务器崩溃/卡顿/内存不足/遭攻击的原因！https://www.relatev.com/forum.php?mod=viewthread&tid=2451");}
-            else if(text.equals("save")){if(session.save(client.authToken,workdir)){System.out.print("[i] G4JSession saved");}}
+            if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
             else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
             else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
             else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
@@ -88,10 +86,13 @@ public class G4JDebugger
             else if(text.startsWith("send ")&&text.length()>5)
             {
                 if(workdir.equals("(init)")) System.out.print("[X] Specify a channel UUID first");
-                else client.sendMessage(workdir,text.substring(5));
+                else{
+                    String result=client.sendMessage(workdir,text.substring(5));
+                    //System.out.println("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
             }
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
-            else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save(client.authToken,workdir);break;}
+            else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
             else if(text.equals("help"))
             {
                 System.out.print(

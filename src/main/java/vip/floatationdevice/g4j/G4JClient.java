@@ -92,6 +92,7 @@ public class G4JClient extends WebSocketClient
     {
         return new ArrayList<ChatMessage>();
     }
+
     public void setAuthToken(String token)//to initialize or reset AuthToken
     {
         authToken=token;

@@ -1,5 +1,8 @@
 package vip.floatationdevice.g4j;
 
+import cn.hutool.json.JSONObject;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ChatMessage
@@ -28,7 +31,26 @@ public class ChatMessage
     public ChatMessage setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
     public ChatMessage setUpdateTime(String updatedAt){this.updatedAt=updatedAt;return this;}
 
-    public Boolean isSystemMessage(){return type==null || !type.equals("default");}
+    public Boolean isSystemMessage(){return type!=null && !type.equals("default");}
     public Boolean isBotMessage(){return createdByBotId!=null;}
     public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
+
+    @Nullable public ChatMessage fromString(@Nonnull String rawString)
+    {
+        JSONObject json=new JSONObject(rawString);
+        if(json.getInt("op")==null||json.getByPath("d.message.id")==null||json.getByPath("d.message.type")==null
+        ||json.getByPath("d.message.channelId")==null||json.getByPath("d.message.content")==null
+        ||json.getByPath("d.message.createdAt")==null||json.getByPath("d.message.createdBy")==null)
+            return null;
+        this.setMsgId((String)json.getByPath("d.message.id"))
+            .setType((String)json.getByPath("d.message.type"))
+            .setChannelId((String)json.getByPath("d.message.channelId"))
+            .setContent((String)json.getByPath("d.message.content"))
+            .setCreationTime((String)json.getByPath("d.message.createdAt"))
+            .setCreatorId((String)json.getByPath("d.message.createdBy"))
+            .setBotCreatorId((String)json.getByPath("d.message.createdByBotId"))
+            .setWebhookCreatorId((String)json.getByPath("d.message.createdByWebhookId"))
+            .setUpdateTime((String)json.getByPath("d.message.updatedAt"));
+        return this;
+    }
 }

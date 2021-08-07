@@ -6,4 +6,5 @@ public class ChatMessageDeletedEvent extends GuildedEvent
     {
         super(source);
     }
+    //TODO
 }

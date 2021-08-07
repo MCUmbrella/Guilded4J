@@ -1,16 +1,17 @@
 package vip.floatationdevice.g4j.event;
 
+import javax.annotation.Nullable;
 import java.util.EventObject;
 
 public class GuildedEvent extends EventObject
 {
+    int op=Integer.MIN_VALUE;
+    String eventType;
+    String rawString;
     public GuildedEvent(Object source)
     {
         super(source);
     }
-    int op=Integer.MIN_VALUE;
-    String eventType;
-    String rawString;
     public GuildedEvent(Object source, int op)
     {
         super(source);
@@ -22,8 +23,10 @@ public class GuildedEvent extends EventObject
         this.op=op;
         this.eventType=eventType;
     }
-    public GuildedEvent setRawString(String rawString){this.rawString=rawString;return this;}
     public int getOpcode(){return this.op;}
-    public String getEventType(){return this.eventType;}
-    public String getRawString(){return this.rawString;}
+    @Nullable public String getEventType(){return this.eventType;}
+    @Nullable public String getRawString(){return this.rawString;}
+    public GuildedEvent setOpCode(int opCode){this.op=opCode;return this;}
+    public GuildedEvent setRawString(String rawString){this.rawString=rawString;return this;}
+    public GuildedEvent setEventType(String t){this.eventType=t;return this;}
 }

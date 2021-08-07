@@ -1,4 +1,4 @@
-package vip.floatationdevice.g4j.event;
+package vip.floatationdevice.guilded4j.event;
 
 import javax.annotation.Nullable;
 import java.util.EventObject;

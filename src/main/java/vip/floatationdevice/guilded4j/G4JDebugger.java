@@ -1,9 +1,9 @@
-package vip.floatationdevice.g4j;
+package vip.floatationdevice.guilded4j;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
-import vip.floatationdevice.g4j.event.*;
+import vip.floatationdevice.guilded4j.event.*;
 
 import java.io.*;
 import java.util.*;

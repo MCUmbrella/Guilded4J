@@ -1,6 +1,6 @@
-package vip.floatationdevice.g4j.event;
+package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.g4j.ChatMessage;
+import vip.floatationdevice.guilded4j.ChatMessage;
 
 public class ChatMessageUpdatedEvent extends GuildedEvent
 {

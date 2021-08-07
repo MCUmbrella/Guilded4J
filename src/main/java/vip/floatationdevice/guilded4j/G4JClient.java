@@ -1,4 +1,4 @@
-package vip.floatationdevice.g4j;
+package vip.floatationdevice.guilded4j;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import vip.floatationdevice.g4j.event.*;
+import vip.floatationdevice.guilded4j.event.*;
 
 public class G4JClient extends WebSocketClient
 {

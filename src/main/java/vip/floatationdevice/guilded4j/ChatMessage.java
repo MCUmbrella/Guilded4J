@@ -1,4 +1,4 @@
-package vip.floatationdevice.g4j;
+package vip.floatationdevice.guilded4j;
 
 import cn.hutool.json.JSONObject;
 

@@ -49,6 +49,13 @@ public class G4JClient extends WebSocketClient
                         .setChannelId((String)json.getByPath("d.message.channelId"))
                         .setOpCode(json.getInt("op"))
                 );
+            else if(eventType.equals("TeamXpAdded"))
+                bus.post(
+                        new TeamXpAddedEvent(this)
+                        .setXpAmount((Integer)json.getByPath("d.amount"))
+                        .setUserIds(new ArrayList<String>())//TODO: complete handling function
+                        .setOpCode(json.getInt("op"))
+                );
             else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
         else if(json.getInt("op")!=null)
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));

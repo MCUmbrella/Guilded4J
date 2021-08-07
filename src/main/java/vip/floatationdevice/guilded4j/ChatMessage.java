@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class ChatMessage
 {
     String id,type,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
-    // creation/update time's format looks like "2021-08-06T14:30:13.614Z"
+    // creation/update time's format looks like "2021-08-06T14:30:13.614Z" (UTC±0)
     //user ID is not user's display name or a UUID string - it's something different. looks like "Ann6LewA", "8412gw5d"
 
     public String getMsgId(){return id;}
@@ -35,22 +35,33 @@ public class ChatMessage
     public Boolean isBotMessage(){return createdByBotId!=null;}
     public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
 
+    public ChatMessage(String id,String channelId,String content,String createdAt,String createdBy)
+    {
+        this.setMsgId(id)
+                .setChannelId(channelId)
+                .setContent(content)
+                .setCreationTime(createdAt)
+                .setCreatorId(createdBy);
+    }
+
+    public ChatMessage(){}
+
     @Nullable public ChatMessage fromString(@Nonnull String rawString)
     {
         JSONObject json=new JSONObject(rawString);
-        if(json.getInt("op")==null||json.getByPath("d.message.id")==null||json.getByPath("d.message.type")==null
-        ||json.getByPath("d.message.channelId")==null||json.getByPath("d.message.content")==null
-        ||json.getByPath("d.message.createdAt")==null||json.getByPath("d.message.createdBy")==null)
+        if(json.getStr("id")==null||json.getStr("channelId")==null
+        ||json.getStr("content")==null||json.getStr("createdAt")==null
+        ||json.getStr("createdBy")==null)
             return null;
-        this.setMsgId((String)json.getByPath("d.message.id"))
-            .setType((String)json.getByPath("d.message.type"))
-            .setChannelId((String)json.getByPath("d.message.channelId"))
-            .setContent((String)json.getByPath("d.message.content"))
-            .setCreationTime((String)json.getByPath("d.message.createdAt"))
-            .setCreatorId((String)json.getByPath("d.message.createdBy"))
-            .setBotCreatorId((String)json.getByPath("d.message.createdByBotId"))
-            .setWebhookCreatorId((String)json.getByPath("d.message.createdByWebhookId"))
-            .setUpdateTime((String)json.getByPath("d.message.updatedAt"));
+        this.setMsgId(json.getStr("id"))
+            .setType(json.getStr("type"))
+            .setChannelId(json.getStr("channelId"))
+            .setContent(json.getStr("content"))
+            .setCreationTime(json.getStr("createdAt"))
+            .setCreatorId(json.getStr("createdBy"))
+            .setBotCreatorId(json.getStr("createdByBotId"))
+            .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+            .setUpdateTime(json.getStr("updatedAt"));
         return this;
     }
 }

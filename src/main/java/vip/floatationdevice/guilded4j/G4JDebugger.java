@@ -10,19 +10,40 @@ import java.util.*;
 
 public class G4JDebugger
 {
-    static Boolean dumpMessages=false;
+    final static String helpText="COMMANDS:\n" +
+            " > token <AuthToken>\n" +
+            "    Update AuthToken\n" +
+            " > disconnect\n" +
+            " > reconnect\n" +
+            " > dump\n" +
+            "    Toggle dump command result & unknown events\n" +
+            " > pwd\n" +
+            "    Print the current channel UUID\n" +
+            " > cd [UUID]\n" +
+            "    Change/clear the target channel UUID\n" +
+            " > send <string>\n" +
+            "    Send the typed string\n" +
+            " > delete <UUID>\n"+
+            "    Delete a message with specified UUID\n"+
+            " > update <UUID> <string>\n"+
+            "    Update a message with specified UUID\n"+
+            " > get <UUID>\n"+
+            "    Get the raw message object string from specified UUID\n"+
+            " > exit\n" +
+            "    Log out and exit";
+    static Boolean dumpEnabled=false;
     static class GuildedEventListener
     {
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
             ChatMessage m=e.getChatMessageObject();
-            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #");
+            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #");
         }
         @Subscribe
         public void onUnknownEvent(GuildedEvent e)
         {
-            if(dumpMessages&&e.getRawString()!=null){System.out.print("\n[D] Unknown message:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
+            if(dumpEnabled&&e.getRawString()!=null){System.out.print("\n[D] Dump unknown event:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
         }
     }
     static class G4JSession implements Serializable
@@ -79,37 +100,43 @@ public class G4JDebugger
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
             if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
+            else if(text.equals("dump")){
+                dumpEnabled=!dumpEnabled;}
             else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
             else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
             else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
-            else if(text.startsWith("cd ")&&text.length()>3){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
+            else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
+            else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
             else if(text.startsWith("send ")&&text.length()>5)
             {
-                if(workdir.equals("(init)")) System.out.print("[X] Specify a channel UUID first");
+                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
                 else{
-                    String result=client.sendMessage(workdir,text.substring(5));
-                    //System.out.println("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    String result=client.createChannelMessage(workdir,text.substring(5));
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
             }
+            else if(text.startsWith("delete ")&&text.length()==43)
+            {
+                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                else{
+                    String result=client.deleteChannelMessage(workdir,text.substring(7));
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
+                }
+            }
+            else if(text.startsWith("update ")&&text.length()>44)
+            {
+                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                else{
+                    String result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+            }
+            else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
             else if(text.equals("help"))
             {
-                System.out.print(
-                        "COMMANDS:\n" +
-                        " > token <AuthToken>\n" +
-                        "    Update AuthToken\n" +
-                        " > disconnect\n" +
-                        " > reconnect\n" +
-                        " > pwd\n" +
-                        "    Print the current channel UUID\n" +
-                        " > cd <UUID>\n" +
-                        "    Change the target channel UUID\n" +
-                        " > send <string>\n" +
-                        "    Send the typed string\n" +
-                        " > exit\n" +
-                        "    Log out and exit"
-                );
+                System.out.print(helpText);
             }
             else{System.out.print("[!] Type 'help' to get available commands and usages");}
             textCache=text;

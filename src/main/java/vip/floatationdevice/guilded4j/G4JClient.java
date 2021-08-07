@@ -34,13 +34,19 @@ public class G4JClient extends WebSocketClient
         String eventType=json.getStr("t");
         if(eventType!=null)
             if(eventType.equals("ChatMessageCreated"))
+            {
+                JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
                 bus.post(
-                        new ChatMessageCreatedEvent(this,new ChatMessage().fromString(rawMessage)).setOpCode(json.getInt("op"))
+                        new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
                 );
+            }
             else if(eventType.equals("ChatMessageUpdated"))
+            {
+                JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
                 bus.post(
-                        new ChatMessageUpdatedEvent(this,new ChatMessage().fromString(rawMessage)).setOpCode(json.getInt("op"))
+                        new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
                 );
+            }
             else if(eventType.equals("ChatMessageDeleted"))
                 bus.post(
                         new ChatMessageDeletedEvent(this)
@@ -61,7 +67,7 @@ public class G4JClient extends WebSocketClient
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));
     }
-    public String sendMessage(String channelId, String msg)//send text message to specified channel
+    public String createChannelMessage(String channelId, String msg)//send text message to specified channel
     {
         try
         {
@@ -76,11 +82,49 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public ChatMessage getMessage(String channelId, String msgId)//TODO: get a message from specified message UUID and channel UUID
+    public String deleteChannelMessage(String channelId, String msgId)//delete a message from specified channel
     {
-        return new ChatMessage();
+        try
+        {
+            return HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
     }
-    public ArrayList<ChatMessage> getMessages(String channelId)//TODO: get the last 50 msgs from specified channel
+    public String updateChannelMessage(String channelId, String msgId, String content)
+    {
+        try
+        {
+            return HttpRequest.put(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    body("{\"content\":\"$1\"}".replace("$1",content)).
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String getMessage(String channelId, String msgId)//get a message from specified message UUID and channel UUID
+    {
+        try
+        {
+            return HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public ArrayList<ChatMessage> getChannelMessages(String channelId)//TODO: get the last 50 msgs from specified channel
     {
         return new ArrayList<ChatMessage>();
     }
@@ -94,11 +138,12 @@ public class G4JClient extends WebSocketClient
     @Override
     public void onClose(int code, String reason, boolean remote)//when connection closed
     {
-        System.out.println("\n[i] Connection closed " + (remote ? " by remote peer (" : "(") + code + ")\n    " + reason);
+        System.out.println("\n[i] Connection closed " + (remote ? "by remote peer (" : "(") + code + ")\n    " + reason);
     }
     @Override
     public void onError(Exception e)
     {
         e.printStackTrace();
+        System.exit(-1);
     }
 }

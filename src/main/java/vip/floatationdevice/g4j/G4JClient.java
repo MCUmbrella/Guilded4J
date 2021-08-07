@@ -35,26 +35,11 @@ public class G4JClient extends WebSocketClient
         if(eventType!=null)
             if(eventType.equals("ChatMessageCreated"))
                 bus.post(
-                        new ChatMessageCreatedEvent(this,new ChatMessage()
-                                .setMsgId((String)json.getByPath("d.message.id"))
-                                .setType((String)json.getByPath("d.message.type"))
-                                .setChannelId((String)json.getByPath("d.message.channelId"))
-                                .setContent((String)json.getByPath("d.message.content"))
-                                .setCreationTime((String)json.getByPath("d.message.createdAt"))
-                                .setCreatorId((String)json.getByPath("d.message.createdBy"))
-                        ).setOpCode(json.getInt("op"))
+                        new ChatMessageCreatedEvent(this,new ChatMessage().fromString(rawMessage)).setOpCode(json.getInt("op"))
                 );
             else if(eventType.equals("ChatMessageUpdated"))
                 bus.post(
-                        new ChatMessageUpdatedEvent(this,new ChatMessage()
-                                .setMsgId((String)json.getByPath("d.message.id"))
-                                .setType((String)json.getByPath("d.message.type"))
-                                .setChannelId((String)json.getByPath("d.message.channelId"))
-                                .setContent((String)json.getByPath("d.message.content"))
-                                .setCreationTime((String)json.getByPath("d.message.createdAt"))
-                                .setCreatorId((String)json.getByPath("d.message.createdBy"))
-                                .setUpdateTime((String)json.getByPath("d.message.updatedAt"))
-                        ).setOpCode(json.getInt("op"))
+                        new ChatMessageUpdatedEvent(this,new ChatMessage().fromString(rawMessage)).setOpCode(json.getInt("op"))
                 );
             else if(eventType.equals("ChatMessageDeleted"))
                 bus.post(

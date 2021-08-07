@@ -8,6 +8,7 @@ public class GuildedEvent extends EventObject
     int op=Integer.MIN_VALUE;
     String eventType;
     String rawString;
+
     public GuildedEvent(Object source)
     {
         super(source);
@@ -23,9 +24,11 @@ public class GuildedEvent extends EventObject
         this.op=op;
         this.eventType=eventType;
     }
+
     public int getOpcode(){return this.op;}
     @Nullable public String getEventType(){return this.eventType;}
     @Nullable public String getRawString(){return this.rawString;}
+
     public GuildedEvent setOpCode(int opCode){this.op=opCode;return this;}
     public GuildedEvent setRawString(String rawString){this.rawString=rawString;return this;}
     public GuildedEvent setEventType(String t){this.eventType=t;return this;}

@@ -1,6 +1,8 @@
 package vip.floatationdevice.g4j;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.g4j.event.*;
 
@@ -9,13 +11,19 @@ import java.util.*;
 
 public class G4JDebugger
 {
+    static Boolean dumpMessages=false;
     static class GuildedEventListener
     {
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
             ChatMessage m=e.getChatMessageObject();
-            System.out.print("\n["+DateUtil.parse(m.getCreatedAt())+"] ["+m.getChannelId()+"] <"+m.getCreatedBy()+"> "+m.getContent()+"\n["+workdir+"] #");
+            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #");
+        }
+        @Subscribe
+        public void onUnknownEvent(GuildedEvent e)
+        {
+            if(dumpMessages&&e.getRawString()!=null){System.out.print("\n[!] Unknown message:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
         }
     }
     static class G4JSession implements Serializable

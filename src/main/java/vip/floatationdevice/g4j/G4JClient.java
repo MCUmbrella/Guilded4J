@@ -7,19 +7,18 @@ import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import vip.floatationdevice.g4j.event.ChatMessageCreatedEvent;
-import vip.floatationdevice.g4j.event.GuildedEvent;
+import vip.floatationdevice.g4j.event.*;
 
 public class G4JClient extends WebSocketClient
 {
     /*bruh moment*/static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(Throwable e){System.out.println("\n[X] Failed to initialize Guilded bot URI!\n    How did that f**king happen? Anyway the program will exit now");System.exit(-1);return null;}}
-    public static final URI WSS_URI=initURI();
+    public static final URI WEBSOCKET_URI =initURI();
     public static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
     public G4JClient(String token)//initial function
     {
-        super(WSS_URI);
+        super(WEBSOCKET_URI);
         this.setAuthToken(token);
     }
     @Override
@@ -28,29 +27,39 @@ public class G4JClient extends WebSocketClient
         System.out.println("\n[i] Connection opened");
     }
     @Override
-    public void onMessage(String message)//when received a RAW String from Guilded server
+    public void onMessage(String rawMessage)//when received a RAW String from Guilded server
     {
-        JSONObject json=new JSONObject(message);
+        JSONObject json=new JSONObject(rawMessage);
         //System.out.println(json.toStringPretty());
         String eventType=json.getStr("t");
-        if(eventType!=null&&eventType.equals("ChatMessageCreated"))
-        {
-            bus.post(
-                    new ChatMessageCreatedEvent(this,new ChatMessage()
-                            .setId((String)json.getByPath("d.message.id"))
-                            .setType((String)json.getByPath("d.message.type"))
-                            .setChannelId((String)json.getByPath("d.message.channelId"))
-                            .setContent((String)json.getByPath("d.message.content"))
-                            .setCreatedAt((String)json.getByPath("d.message.createdAt"))
-                            .setCreatedBy((String)json.getByPath("d.message.createdBy"))
-                    ).setOpCode(json.getInt("op"))
-            );
-        }
-        else
-        {
-            if (eventType!=null) bus.post(new GuildedEvent(this,json.getInt("op"),eventType));
-            else bus.post(new GuildedEvent(this,json.getInt("op")));
-        }
+        if(eventType!=null)
+            if(eventType.equals("ChatMessageCreated"))
+                bus.post(
+                        new ChatMessageCreatedEvent(this,new ChatMessage()
+                                .setMsgId((String)json.getByPath("d.message.id"))
+                                .setType((String)json.getByPath("d.message.type"))
+                                .setChannelId((String)json.getByPath("d.message.channelId"))
+                                .setContent((String)json.getByPath("d.message.content"))
+                                .setCreationTime((String)json.getByPath("d.message.createdAt"))
+                                .setCreatorId((String)json.getByPath("d.message.createdBy"))
+                        ).setOpCode(json.getInt("op"))
+                );
+            else if(eventType.equals("ChatMessageUpdated"))
+                bus.post(
+                        new ChatMessageUpdatedEvent(this,new ChatMessage()
+                                .setMsgId((String)json.getByPath("d.message.id"))
+                                .setType((String)json.getByPath("d.message.type"))
+                                .setChannelId((String)json.getByPath("d.message.channelId"))
+                                .setContent((String)json.getByPath("d.message.content"))
+                                .setCreationTime((String)json.getByPath("d.message.createdAt"))
+                                .setCreatorId((String)json.getByPath("d.message.createdBy"))
+                                .setUpdateTime((String)json.getByPath("d.message.updatedAt"))
+                        ).setOpCode(json.getInt("op"))
+                );
+            else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
+        else if(json.getInt("op")!=null)
+            bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
+        else bus.post(new GuildedEvent(this).setRawString(rawMessage));
     }
     public void sendMessage(String channelId, String msg)//send text message to specified channel
     {

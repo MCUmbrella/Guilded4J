@@ -31,7 +31,7 @@ public class ChatMessage
     public ChatMessage setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
     public ChatMessage setUpdateTime(String updatedAt){this.updatedAt=updatedAt;return this;}
 
-    public Boolean isSystemMessage(){return type!=null && !type.equals("default");}
+    public Boolean isSystemMessage(){return type!=null&&type.equals("system");}
     public Boolean isBotMessage(){return createdByBotId!=null;}
     public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
 

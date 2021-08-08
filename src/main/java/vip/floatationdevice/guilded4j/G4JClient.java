@@ -31,7 +31,11 @@ public class G4JClient extends WebSocketClient
     public void onMessage(String rawMessage)//when received a RAW String from Guilded server
     {
         JSONObject json=new JSONObject(rawMessage);
-        //System.out.println(json.toStringPretty());
+        //System.out.println("\n"+json.toStringPretty());
+        if(json.getByPath("d.heartbeatIntervalMs")!=null)
+            bus.post(
+                    new GuildedWebsocketInitializedEvent(this,(String)json.getByPath("d.lastMessageId"),(Integer)json.getByPath("d.heartbeatIntervalMs"))
+            );
         String eventType=json.getStr("t");
         if(eventType!=null)
             if(eventType.equals("ChatMessageCreated"))
@@ -103,7 +107,7 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String updateChannelMessage(String channelId, String msgId, String content)
+    public String updateChannelMessage(String channelId, String msgId, String content)//update a message
     {
         try
         {

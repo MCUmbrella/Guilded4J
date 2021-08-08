@@ -49,6 +49,11 @@ public class G4JDebugger
         {
             if(dumpEnabled&&e.getRawString()!=null){System.out.print("\n[D] Dump unknown event:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
         }
+        @Subscribe
+        public void onInit(GuildedWebsocketInitializedEvent e)
+        {
+            System.out.print("[i] Logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
+        }
     }
     static class G4JSession implements Serializable
     {

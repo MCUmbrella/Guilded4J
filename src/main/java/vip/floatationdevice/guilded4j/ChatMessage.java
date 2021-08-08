@@ -64,4 +64,25 @@ public class ChatMessage
             .setUpdateTime(json.getStr("updatedAt"));
         return this;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder s= new StringBuilder()
+                .append("{\"id\":\"")
+                .append(id)
+                .append("\",\"channelId\":\"")
+                .append(channelId)
+                .append("\",\"createdAt\":\"")
+                .append(createdAt)
+                .append("\",\"createdBy\":\"")
+                .append(createdBy)
+                .append("\",");
+        if(type!=null) s.append("\"type\":\"").append(type).append("\",");
+        if(createdByBotId!=null) s.append("\"createdByBotId\":\"").append(createdByBotId).append("\",");
+        if(createdByWebhookId!=null) s.append("\"createdByWebhookId\":\"").append(createdByWebhookId).append("\",");
+        if(updatedAt!=null) s.append("\"updatedAt\":\"").append(updatedAt).append("\",");
+        s.append("\"content\":\"").append(content).append("\"}");
+        return s.toString();
+    }
 }

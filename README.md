@@ -22,6 +22,7 @@ Guilded wrapper for Java development
 - - [ ] Add XP to user
 - - [ ] Add XP to user group
 - [ ] Event
+- - [x] GuildedWebsocketInitializedEvent
 - - [x] ChatMessageCreatedEvent
 - - [x] ChatMessageDeletedEvent
 - - [x] ChatMessageUpdatedEvent

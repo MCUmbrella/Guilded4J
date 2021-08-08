@@ -32,13 +32,17 @@ public class G4JDebugger
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
+    static String parseMessage(ChatMessage m)
+    {
+        return "\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #";
+    }
     static class GuildedEventListener
     {
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
             ChatMessage m=e.getChatMessageObject();
-            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #");
+            System.out.print(parseMessage(m));
         }
         @Subscribe
         public void onUnknownEvent(GuildedEvent e)
@@ -107,6 +111,17 @@ public class G4JDebugger
             else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
             else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
             else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
+            else if(text.equals("ls"))
+            {
+                ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
+                ChatMessage m;
+                Collections.reverse(msgs);
+                for (int i=0;i!=msgs.size();i++)
+                {
+                    m=msgs.get(i);
+                    System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
+                }
+            }
             else if(text.startsWith("send ")&&text.length()>5)
             {
                 if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");

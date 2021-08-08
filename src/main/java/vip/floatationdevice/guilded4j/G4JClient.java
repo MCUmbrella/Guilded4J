@@ -3,6 +3,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
@@ -67,6 +68,7 @@ public class G4JClient extends WebSocketClient
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));
     }
+
     public String createChannelMessage(String channelId, String msg)//send text message to specified channel
     {
         try
@@ -126,7 +128,23 @@ public class G4JClient extends WebSocketClient
     }
     public ArrayList<ChatMessage> getChannelMessages(String channelId)//TODO: get the last 50 msgs from specified channel
     {
-        return new ArrayList<ChatMessage>();
+        ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
+        try
+        {
+            String rawResult= HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    timeout(20000).execute().body();
+            JSONArray array=new JSONObject(rawResult).getJSONArray("messages");
+            Object[] converted=array.toArray();
+            for(int i=0;i!=converted.length;i++) messages.add(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
+            return messages;
+        }catch (Exception e)
+        {
+            System.out.println("[X] Failed to get messages: "+e.toString());
+            return messages;
+        }
     }
 
     public void setAuthToken(String token)//to initialize or reset AuthToken

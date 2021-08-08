@@ -6,7 +6,7 @@ Guilded wrapper for Java development
 
 ## Progress:
 
-- [ ] Text
+- [x] Text
 - - [x] Create message - createChannelMessage()
 - - [x] Delete message - deleteChannelMessage()
 - - [x] Update message - updateChannelMessage()

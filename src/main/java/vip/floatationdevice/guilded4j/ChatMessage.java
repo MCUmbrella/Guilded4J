@@ -12,7 +12,7 @@ public class ChatMessage
     //user ID is not user's display name or a UUID string - it's something different. looks like "Ann6LewA", "8412gw5d"
 
     public String getMsgId(){return id;}
-    public String getType(){return type;}
+    @Nullable public String getType(){return type;}
     public String getChannelId(){return channelId;}
     public String getContent(){return content;}
     public String getCreationTime(){return createdAt;}
@@ -68,7 +68,7 @@ public class ChatMessage
     @Override
     public String toString()
     {
-        StringBuilder s= new StringBuilder()
+        StringBuilder s=new StringBuilder()
                 .append("{\"id\":\"")
                 .append(id)
                 .append("\",\"channelId\":\"")

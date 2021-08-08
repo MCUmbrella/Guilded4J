@@ -116,11 +116,13 @@ public class G4JClient extends WebSocketClient
     {
         try
         {
-            return HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    timeout(20000).execute().body();
+            return new JSONObject(
+                    HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
+                            header("Authorization","Bearer "+authToken).
+                            header("Accept","application/json").
+                            header("Content-type","application/json").
+                            timeout(20000).execute().body()
+            ).get("message").toString();
         }catch (Exception e)
         {
             return "{\"Exception\":\""+e.toString()+"\"}";

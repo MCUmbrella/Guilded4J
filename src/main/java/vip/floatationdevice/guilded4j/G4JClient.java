@@ -57,12 +57,18 @@ public class G4JClient extends WebSocketClient
                         .setOpCode(json.getInt("op"))
                 );
             else if(eventType.equals("TeamXpAdded"))
+            {
+                ArrayList<String> userIds=new ArrayList<String>();
+                JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
+                Object[] converted=array.toArray();
+                for(int i=0;i!=converted.length;i++) userIds.add((String)converted[i]);
                 bus.post(
                         new TeamXpAddedEvent(this)
-                        .setXpAmount((Integer)json.getByPath("d.amount"))
-                        .setUserIds(new ArrayList<String>())//TODO: complete handling function
-                        .setOpCode(json.getInt("op"))
+                                .setXpAmount((Integer) json.getByPath("d.amount"))
+                                .setUserIds(userIds)
+                                .setOpCode(json.getInt("op"))
                 );
+            }
             else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
         else if(json.getInt("op")!=null)
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
@@ -128,7 +134,7 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public ArrayList<ChatMessage> getChannelMessages(String channelId)//TODO: get the last 50 msgs from specified channel
+    public ArrayList<ChatMessage> getChannelMessages(String channelId)//get the last 50 msgs from specified channel
     {
         ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
         try

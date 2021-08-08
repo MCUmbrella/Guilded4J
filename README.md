@@ -25,4 +25,4 @@ Guilded wrapper for Java development
 - - [x] ChatMessageCreatedEvent
 - - [x] ChatMessageDeletedEvent
 - - [x] ChatMessageUpdatedEvent
-- - [ ] TeamXpAddedEvent
+- - [x] TeamXpAddedEvent

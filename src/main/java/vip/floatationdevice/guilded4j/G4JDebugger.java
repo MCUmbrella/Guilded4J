@@ -39,6 +39,16 @@ public class G4JDebugger
     static class GuildedEventListener
     {
         @Subscribe
+        public void onInit(GuildedWebsocketInitializedEvent e)
+        {
+            System.out.print("[i] Logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
+        }
+        @Subscribe
+        public void onDisconnect(GuildedWebsocketClosedEvent e)
+        {
+            System.out.print("\n[i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason());
+        }
+        @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
             ChatMessage m=e.getChatMessageObject();
@@ -48,11 +58,6 @@ public class G4JDebugger
         public void onUnknownEvent(GuildedEvent e)
         {
             if(dumpEnabled&&e.getRawString()!=null){System.out.print("\n[D] Dump unknown event:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
-        }
-        @Subscribe
-        public void onInit(GuildedWebsocketInitializedEvent e)
-        {
-            System.out.print("[i] Logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
         }
     }
     static class G4JSession implements Serializable
@@ -154,10 +159,7 @@ public class G4JDebugger
             else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
-            else if(text.equals("help"))
-            {
-                System.out.print(helpText);
-            }
+            else if(text.equals("help")) System.out.print(helpText);
             else{System.out.print("[!] Type 'help' to get available commands and usages");}
             textCache=text;
         }

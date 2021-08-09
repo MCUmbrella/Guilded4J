@@ -185,12 +185,11 @@ public class G4JClient extends WebSocketClient
     @Override
     public void onClose(int code, String reason, boolean remote)//when connection closed
     {
-        System.out.println("\n[i] Connection closed " + (remote ? "by remote peer (" : "(") + code + ")\n    " + reason);
+        bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
     }
     @Override
     public void onError(Exception e)
     {
         e.printStackTrace();
-        System.exit(-1);
     }
 }

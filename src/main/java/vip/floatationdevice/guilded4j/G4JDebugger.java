@@ -96,7 +96,7 @@ public class G4JDebugger
         }
         else
         {
-            System.out.print("Enter AuthToken:");
+            System.out.print("Enter AuthToken: ");
             client=new G4JClient(scanner.nextLine());
             System.out.println("[i] Logging in");
         }

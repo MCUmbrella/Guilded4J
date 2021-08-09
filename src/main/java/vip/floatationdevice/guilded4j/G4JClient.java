@@ -15,6 +15,8 @@ public class G4JClient extends WebSocketClient
     /*bruh moment*/static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(Throwable e){System.out.println("\n[X] Failed to initialize Guilded bot URI!\n    How did that f**king happen? Anyway the program will exit now");System.exit(-1);return null;}}
     public static final URI WEBSOCKET_URI =initURI();
     public static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
+    public static final String FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum";
+    public static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
     public G4JClient(String token)//initial function
@@ -156,6 +158,21 @@ public class G4JClient extends WebSocketClient
         {
             System.out.println("[X] Failed to get messages: "+e.toString());
             return messages;
+        }
+    }
+    public String createForumThread(String channelId, String title, String content)//create a topic at specified channel
+    {
+        try
+        {
+            return HttpRequest.post(FORUM_CHANNEL_URL.replace("{channelId}",channelId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    body("{\"title\":\""+title+"\",\"content\":\""+content+"\"}").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
 

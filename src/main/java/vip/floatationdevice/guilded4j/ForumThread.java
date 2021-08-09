@@ -1,5 +1,7 @@
 package vip.floatationdevice.guilded4j;
 
+import cn.hutool.json.JSONObject;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,7 +31,22 @@ public class ForumThread
         .setCreationTime(createdAt)
         .setCreatorId(createdBy);
     }
-    /*
+
+    public ForumThread(){}
+
+    @Nullable public ForumThread fromString(String rawString)
+    {
+        JSONObject json=new JSONObject(rawString);
+        if(json.getStr("id")==null||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
+            return null;
+        this.setId(json.getInt("id"))
+        .setCreationTime(json.getStr("createdAt"))
+        .setCreatorId(json.getStr("createdBy"))
+        .setBotCreatorId(json.getStr("createdByBotId"))
+        .setWebhookCreatorId(json.getStr("createdByWebhookId"));
+        return this;
+    }
+
     @Override
     public String toString()
     {
@@ -38,13 +55,10 @@ public class ForumThread
                 .append(id)
                 .append("\",\"createdAt\":\"")
                 .append(createdAt)
-                .append("\",\"createdBy\":\"")
-                .append(createdBy)
                 .append("\",");
         if(createdByBotId!=null) s.append("\"createdByBotId\":\"").append(createdByBotId).append("\",");
         if(createdByWebhookId!=null) s.append("\"createdByWebhookId\":\"").append(createdByWebhookId).append("\",");
-        s.append("\"content\":\"").append(content).append("\"}");
+        s.append("\"createdBy\":\"").append(createdBy).append("\"}");
         return s.toString();
     }
-    */
 }

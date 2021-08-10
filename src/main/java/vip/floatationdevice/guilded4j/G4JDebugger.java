@@ -29,6 +29,8 @@ public class G4JDebugger
             "    Update a message with specified UUID\n"+
             " > get <UUID>\n"+
             "    Get the raw message object string from specified UUID\n"+
+            " > newitem <string>\n"+
+            "    Create a list item\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -157,6 +159,14 @@ public class G4JDebugger
                 }
             }
             else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
+            else if(text.startsWith("newitem ")&&text.length()>8)
+            {
+                if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                else{
+                    String result=client.createListItem(workdir,text.substring(8),null);
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+            }
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
             else if(text.equals("help")) System.out.print(helpText);

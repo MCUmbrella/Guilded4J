@@ -17,9 +17,9 @@ Official Guilded server: https://guilded.gg/G4JCafe
 - - [x] Get message info - getMessage()
 - - [x] Get last 50 messages - getChannelMessages()
 - [ ] Forum
-- - [x] Create forum thread
+- - [x] Create forum thread - createForumThread()
 - [ ] List
-- - [ ] Create list item
+- - [x] Create list item - createListItem()
 - [ ] Reaction
 - - [ ] Add reaction
 - [ ] XP

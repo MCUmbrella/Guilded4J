@@ -27,7 +27,7 @@ public class G4JClient extends WebSocketClient
     @Override
     public void onOpen(ServerHandshake h)//when successfully logged in
     {
-        System.out.println("\n[i] Connection opened");
+        System.out.println("[i] Guilded4J websocket connection opened");
     }
     @Override
     public void onMessage(String rawMessage)//when received a RAW String from Guilded server
@@ -175,6 +175,26 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
+    public String createListItem(String channelId, String message, String note)//create a list item at specified channel
+    {
+        String m;
+        if(note!=null)
+            m="{\"message\":\""+message+"\",\"note\":\""+note+"\"}";
+        else
+            m="{\"message\":\""+message+"\"}";
+        try
+        {
+            return HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}",channelId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    body(m).
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
 
     public void setAuthToken(String token)//to initialize or reset AuthToken
     {
@@ -185,7 +205,13 @@ public class G4JClient extends WebSocketClient
     @Override
     public void onClose(int code, String reason, boolean remote)//when connection closed
     {
-        bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
+        System.out.println("[i] Guilded4J websocket connection closed");
+        try
+        {
+            bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
+        }catch (Exception e){
+            System.out.println("[X] Failed to pass GuildedWebsocketClosedEvent: "+e.toString());
+        }
     }
     @Override
     public void onError(Exception e)

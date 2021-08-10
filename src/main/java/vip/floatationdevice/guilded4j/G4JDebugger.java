@@ -7,6 +7,7 @@ import vip.floatationdevice.guilded4j.event.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class G4JDebugger
 {
@@ -31,6 +32,10 @@ public class G4JDebugger
             "    Get the raw message object string from specified UUID\n"+
             " > newitem <string>\n"+
             "    Create a list item\n"+
+            " > addxp <string> <int>\n"+
+            "    Add XP to specified user\n"+
+            " > addrolexp <int> <int>\n"+
+            "    Add XP to all users with specified role"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -147,7 +152,9 @@ public class G4JDebugger
                 if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
                 else{
                     String result=client.deleteChannelMessage(workdir,text.substring(7));
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
+                    if(dumpEnabled)
+                        if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        else System.out.print("\n[D] Result:\n"+result);
                 }
             }
             else if(text.startsWith("update ")&&text.length()>44)
@@ -167,7 +174,29 @@ public class G4JDebugger
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
             }
-            else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");client.reconnect();}
+            else if(text.startsWith("addxp ")&&text.length()>15)
+            {
+                String[] parsed=text.split(" ");
+                if(parsed.length==3&&parsed[1].length()==8&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                {
+                    String result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+                else System.out.print("[X] Usage: addxp <(string)userId> <(int)amount>");
+            }
+            else if(text.startsWith("addrolexp ")&&text.length()>12)
+            {
+                String[] parsed=text.split(" ");
+                if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                {
+                    String result=client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
+                    if(dumpEnabled)
+                        if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        else System.out.print("\n[D] Result:\n"+result);
+                }
+                else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
+            }
+            else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
             else if(text.equals("help")) System.out.print(helpText);
             else{System.out.print("[!] Type 'help' to get available commands and usages");}

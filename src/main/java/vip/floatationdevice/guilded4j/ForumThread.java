@@ -8,10 +8,7 @@ import javax.annotation.Nullable;
 public class ForumThread
 {
     int id;
-    String createdAt;
-    String createdBy;
-    String createdByBotId;
-    String createdByWebhookId;
+    String createdAt, createdBy, createdByBotId, createdByWebhookId;
 
     public int getId(){return id;}
     public String getCreationTime(){return createdAt;}
@@ -31,7 +28,6 @@ public class ForumThread
         .setCreationTime(createdAt)
         .setCreatorId(createdBy);
     }
-
     public ForumThread(){}
 
     @Nullable public ForumThread fromString(String rawString)

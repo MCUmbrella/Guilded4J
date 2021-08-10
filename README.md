@@ -22,9 +22,9 @@ Official Guilded server: https://guilded.gg/G4JCafe
 - - [x] Create list item - createListItem()
 - [ ] Reaction
 - - [ ] Add reaction
-- [ ] XP
-- - [ ] Add XP to user
-- - [ ] Add XP to user group
+- [x] XP
+- - [x] Add XP to user - awardUserXp()
+- - [x] Add XP to user group - awardRoleXp()
 - [ ] Event
 - - [x] GuildedWebsocketInitializedEvent
 - - [x] GuildedWebsocketClosedEvent

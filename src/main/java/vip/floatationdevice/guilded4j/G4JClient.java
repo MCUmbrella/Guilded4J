@@ -19,6 +19,8 @@ public class G4JClient extends WebSocketClient
     public static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
     public static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
     public static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
+    public static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
+    public static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
     public G4JClient(String token)//initial function
@@ -221,6 +223,58 @@ public class G4JClient extends WebSocketClient
                     header("Accept","application/json").
                     header("Content-type","application/json").
                     body("{\"amount\":"+amount+"}").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String addGroupMember(String groupId, String userId)//Add member to group
+    {
+        try
+        {
+            return HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String removeGroupMember(String groupId, String userId)//Remove member from group
+    {
+        try
+        {
+            return HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String addRoleMember(String groupId, String roleId)//Assign role to member
+    {
+        try
+        {
+            return HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{roleId}",roleId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String removeRoleMember(String groupId, String roleId)//Remove role from member
+    {
+        try
+        {
+            return HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{roleId}",roleId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
                     timeout(20000).execute().body();
         }catch (Exception e)
         {

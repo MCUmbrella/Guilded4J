@@ -25,6 +25,12 @@ Official Guilded server: https://guilded.gg/G4JCafe
 - [x] XP
 - - [x] Add XP to user - awardUserXp()
 - - [x] Add XP to user group - awardRoleXp()
+- [ ] Group membership
+- - [x] Add group member - addGroupMember()
+- - [x] Remove group member - removeGroupMember()
+- [ ] Role membership
+- - [x] Add role member - addRoleMember()
+- - [x] Remove role member - removeRoleMember()
 - [ ] Event
 - - [x] GuildedWebsocketInitializedEvent
 - - [x] GuildedWebsocketClosedEvent

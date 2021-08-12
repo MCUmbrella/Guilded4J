@@ -130,13 +130,16 @@ public class G4JDebugger
             else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
             else if(text.equals("ls"))
             {
-                ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
-                ChatMessage m;
-                Collections.reverse(msgs);
-                for (int i=0;i!=msgs.size();i++)
-                {
-                    m=msgs.get(i);
-                    System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
+                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                else {
+                    ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
+                    ChatMessage m;
+                    Collections.reverse(msgs);
+                    for (int i=0;i!=msgs.size();i++)
+                    {
+                        m=msgs.get(i);
+                        System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
+                    }
                 }
             }
             else if(text.startsWith("send ")&&text.length()>5)

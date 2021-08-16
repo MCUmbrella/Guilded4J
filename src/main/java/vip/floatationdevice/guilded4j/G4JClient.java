@@ -21,6 +21,7 @@ public class G4JClient extends WebSocketClient
     public static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
     public static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
     public static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
+    public static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{customReactionId}";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
     public G4JClient(String token)//initial function

@@ -5,7 +5,7 @@ import cn.hutool.json.JSONObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContentReaction
+public class ContentReaction// https://www.guilded.gg/docs/api/reactions/ContentReaction
 {
     int id;
     String createdAt, createdBy, createdByBotId, createdByWebhookId;

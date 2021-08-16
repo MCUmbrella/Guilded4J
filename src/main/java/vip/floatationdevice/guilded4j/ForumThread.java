@@ -5,7 +5,7 @@ import cn.hutool.json.JSONObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ForumThread
+public class ForumThread// https://www.guilded.gg/docs/api/forums/ForumThread
 {
     int id;
     String createdAt, createdBy, createdByBotId, createdByWebhookId;

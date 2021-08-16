@@ -5,7 +5,7 @@ import cn.hutool.json.JSONObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ChatMessage
+public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
 {
     String id,type,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
     // creation/update time's format looks like "2021-08-06T14:30:13.614Z" (UTC±0)

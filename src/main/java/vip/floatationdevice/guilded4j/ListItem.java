@@ -5,7 +5,7 @@ import cn.hutool.json.JSONObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ListItem
+public class ListItem// https://www.guilded.gg/docs/api/listItems/ListItem
 {
     String id, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
 

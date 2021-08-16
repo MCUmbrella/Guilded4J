@@ -2,7 +2,7 @@ package vip.floatationdevice.guilded4j.event;
 
 import vip.floatationdevice.guilded4j.ChatMessage;
 
-public class ChatMessageUpdatedEvent extends GuildedEvent
+public class ChatMessageUpdatedEvent extends GuildedEvent// https://www.guilded.gg/docs/api/websockets/ChatMessageUpdated
 {
     ChatMessage msgObj;
 

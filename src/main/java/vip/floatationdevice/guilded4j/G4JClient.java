@@ -21,7 +21,7 @@ public class G4JClient extends WebSocketClient
     public static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
     public static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
     public static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
-    public static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{customReactionId}";
+    public static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
     public static String authToken="Bearer 0";
     public static EventBus bus = new EventBus();
     public G4JClient(String token)//initial function
@@ -274,6 +274,19 @@ public class G4JClient extends WebSocketClient
         try
         {
             return HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{roleId}",roleId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return "{\"Exception\":\""+e.toString()+"\"}";
+        }
+    }
+    public String createContentReaction(String channelId, String contentId, int emoteId)//Add a reaction emote
+    {
+        try
+        {
+            return HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();

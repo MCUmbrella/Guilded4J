@@ -32,10 +32,12 @@ public class G4JDebugger
             "    Get the raw message object string from specified UUID\n"+
             " > newitem <string>\n"+
             "    Create a list item\n"+
-            " > addxp <string> <int>\n"+
+            " > addxp <(string)userId> <(int)amount>\n"+
             "    Add XP to specified user\n"+
-            " > addrolexp <int> <int>\n"+
+            " > addrolexp <(int)roleId> <(int)amount>\n"+
             "    Add XP to all users with specified role"+
+            " > react <(?)contentId> <(int)emoteId>\n"+
+            "    Add a reaction to specified content\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -198,6 +200,18 @@ public class G4JDebugger
                         else System.out.print("\n[D] Result:\n"+result);
                 }
                 else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
+            }
+            else if(text.startsWith("react ")&&text.length()>8)
+            {
+                if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                String[] parsed=text.split(" ");
+                if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                {
+                    String result=client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
+                    if(dumpEnabled)
+                        System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+                else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
             }
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}

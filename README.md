@@ -5,11 +5,10 @@
 Build status: [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
 Official Guilded server: https://guilded.gg/G4JCafe
 # WARNING:
-- ## Guilded4J is currently under development - there are still many imperfect or uncompleted features.
-- ## The bot API is only available to users who participate in the early access for now.
+- ## The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
+- ## The API is only available to users who participate in the early access for now.
 
-## Progress:
-
+## Progress: `(Waiting for Guilded side to complete basic API functions)`
 - [x] Text
 - - [x] Create message - createChannelMessage()
 - - [x] Delete message - deleteChannelMessage()
@@ -21,7 +20,7 @@ Official Guilded server: https://guilded.gg/G4JCafe
 - [ ] List
 - - [x] Create list item - createListItem()
 - [ ] Reaction
-- - [ ] Add reaction
+- - [x] Add reaction - createContentReaction()
 - [x] XP
 - - [x] Add XP to user - awardUserXp()
 - - [x] Add XP to user group - awardRoleXp()

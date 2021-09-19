@@ -71,8 +71,8 @@ public class G4JDebugger
     }
     static class G4JSession implements Serializable
     {
-        public String savedToken="Bearer 0";
-        public String savedWorkdir="(init)";
+        public String savedToken="";
+        public String savedWorkdir="";
         public Boolean save()
         {
             try {

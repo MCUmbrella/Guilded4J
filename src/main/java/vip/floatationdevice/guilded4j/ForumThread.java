@@ -34,13 +34,12 @@ public class ForumThread// https://www.guilded.gg/docs/api/forums/ForumThread
     {
         JSONObject json=new JSONObject(rawString);
         if(json.getStr("id")==null||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
-            return null;
-        this.setId(json.getInt("id"))
-        .setCreationTime(json.getStr("createdAt"))
-        .setCreatorId(json.getStr("createdBy"))
-        .setBotCreatorId(json.getStr("createdByBotId"))
-        .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        return this;
+            throw new IllegalArgumentException("At least 1 basic key of ForumThread is missing");
+        return this.setId(json.getInt("id"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setBotCreatorId(json.getStr("createdByBotId"))
+                .setWebhookCreatorId(json.getStr("createdByWebhookId"));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package vip.floatationdevice.guilded4j;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import cn.hutool.http.HttpRequest;
@@ -10,32 +11,56 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 
+import javax.annotation.Nullable;
+
+/**
+ * The Guilded4J client that can receive WebSocket events and send HTTP requests to the API.
+ *
+ * <p>NOTE:</p>
+ *   <p>After creating G4JClient object you need to manually call connect() or disconnect() to start/stop receiving WebSocket events. These operations doesn't affect sending HTTP requests.</p>
+ *   <p>When an exception occurs in the operation of sending HTTP request, the method will return a JSON string (like {"Exception":" result of Exception.toString()"}) instead of throwing an Exception.</p>
+ *
+ */
 public class G4JClient extends WebSocketClient
 {
-    /*bruh moment*/static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(Throwable e){System.out.println("\n[X] Failed to initialize Guilded bot URI!\n    How did that f**king happen? Anyway the program will exit now");System.exit(-1);return null;}}
-    public static final URI WEBSOCKET_URI =initURI();
-    public static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
-    public static final String FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum";
-    public static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
-    public static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
-    public static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
-    public static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
-    public static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
-    public static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
-    public static String authToken="Bearer 0";
+    private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
+    private static final URI WEBSOCKET_URI=initURI();
+    private static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
+    private static final String FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum";
+    private static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
+    private static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
+    private static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
+    private static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
+    private static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
+    private static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
+    static String authToken;
+    /**
+     * Used to post events or register a event listener class.
+     * Write your own event listener class and use {@code bus.register()} to receive events.
+     * See {@link G4JDebugger} for example uses.
+     */
     public static EventBus bus = new EventBus();
-    public G4JClient(String token)//initial function
+
+    /**
+     * Initial function.
+     * @param token The bot API access token (without "Bearer" prefix).
+     */
+    public G4JClient(String token)
     {
         super(WEBSOCKET_URI);
         this.setAuthToken(token);
     }
+
+    /**
+     * No current use. Implements WebSocketClient.onOpen() (org.java_websocket.client).
+     */
     @Override
-    public void onOpen(ServerHandshake h)
-    {
-        System.out.println("[i] Guilded4J websocket connection opened");
-    }
+    public void onOpen(ServerHandshake h){}
+    /**
+     * Parse the received JSON string to various event objects. Implements WebSocketClient.onMessage() (org.java_websocket.client).
+     */
     @Override
-    public void onMessage(String rawMessage)//when received a RAW String from Guilded server
+    public void onMessage(String rawMessage)
     {
         JSONObject json=new JSONObject(rawMessage);
         //System.out.println("\n"+json.toStringPretty());
@@ -86,7 +111,10 @@ public class G4JClient extends WebSocketClient
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));
     }
 
-    public String createChannelMessage(String channelId, String msg)//Create a channel message
+    /**
+     * Create a channel message.
+     */
+    public String createChannelMessage(String channelId, String msg)
     {
         try
         {
@@ -101,7 +129,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String deleteChannelMessage(String channelId, String msgId)//Delete a channel message
+
+    /**
+     * Delete a channel message.
+     */
+    public String deleteChannelMessage(String channelId, String msgId)
     {
         try
         {
@@ -114,7 +146,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String updateChannelMessage(String channelId, String msgId, String content)//Update a channel message
+
+    /**
+     * Update a channel message.
+     */
+    public String updateChannelMessage(String channelId, String msgId, String content)
     {
         try
         {
@@ -129,7 +165,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String getMessage(String channelId, String msgId)//Get details for a specific chat message from a chat channel
+
+    /**
+     * Get details for a specific chat message from a chat channel.
+     */
+    public String getMessage(String channelId, String msgId)
     {
         try
         {
@@ -145,7 +185,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public ArrayList<ChatMessage> getChannelMessages(String channelId)//Get a list of the latest 50 messages from a channel
+
+    /**
+     * Get a list of the latest 50 messages from a channel.
+     */
+    public ArrayList<ChatMessage> getChannelMessages(String channelId)
     {
         ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
         try
@@ -165,7 +209,11 @@ public class G4JClient extends WebSocketClient
             return messages;
         }
     }
-    public String createForumThread(String channelId, String title, String content)//Create a thread in a forum
+
+    /**
+     * Create a thread in a forum.
+     */
+    public String createForumThread(String channelId, String title, String content)
     {
         try
         {
@@ -180,7 +228,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String createListItem(String channelId, String message, String note)//Create a list item
+
+    /**
+     * Create a list item.
+     */
+    public String createListItem(String channelId, String message, @Nullable String note)
     {
         String m;
         if(note!=null)
@@ -200,7 +252,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String awardUserXp(String userId, int amount)//Award XP to a member
+
+    /**
+     * Award XP to a member.
+     */
+    public String awardUserXp(String userId, int amount)
     {
         try
         {
@@ -215,7 +271,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String awardRoleXp(int roleId, int amount)//Award XP to all members with a particular role
+
+    /**
+     * Award XP to all members with a particular role.
+     */
+    public String awardRoleXp(int roleId, int amount)
     {
         try
         {
@@ -230,7 +290,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String addGroupMember(String groupId, String userId)//Add member to group
+
+    /**
+     * Add member to group.
+     */
+    public String addGroupMember(String groupId, String userId)
     {
         try
         {
@@ -243,7 +307,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String removeGroupMember(String groupId, String userId)//Remove member from group
+
+    /**
+     * Remove member from group.
+     */
+    public String removeGroupMember(String groupId, String userId)
     {
         try
         {
@@ -256,11 +324,15 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String addRoleMember(String groupId, String roleId)//Assign role to member
+
+    /**
+     * Assign role to member.
+     */
+    public String addRoleMember(String userId, String roleId)
     {
         try
         {
-            return HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{roleId}",roleId)).
+            return HttpRequest.put(ROLE_URL.replace("{userId}",userId).replace("{roleId}",roleId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();
@@ -269,11 +341,15 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String removeRoleMember(String groupId, String roleId)//Remove role from member
+
+    /**
+     * Remove role from member.
+     */
+    public String removeRoleMember(String userId, String roleId)
     {
         try
         {
-            return HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{roleId}",roleId)).
+            return HttpRequest.delete(ROLE_URL.replace("{userId}",userId).replace("{roleId}",roleId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();
@@ -282,7 +358,11 @@ public class G4JClient extends WebSocketClient
             return "{\"Exception\":\""+e.toString()+"\"}";
         }
     }
-    public String createContentReaction(String channelId, String contentId, int emoteId)//Add a reaction emote
+
+    /**
+     * Add a reaction emote.
+     */
+    public String createContentReaction(String channelId, String contentId, int emoteId)
     {
         try
         {
@@ -296,23 +376,30 @@ public class G4JClient extends WebSocketClient
         }
     }
 
-    public void setAuthToken(String token)//Initialize or reset AuthToken
+    /**
+     * Initialize or reset Guilded bot access token.
+     * @param token The bot API access token (without "Bearer" prefix).
+     */
+    public void setAuthToken(String token)
     {
         authToken=token;
         this.clearHeaders();
         this.addHeader("Authorization","Bearer "+authToken);
     }
+
+    /**
+     * Posts {@link GuildedWebsocketClosedEvent}. Implements WebSocketClient.onOpen() (org.java_websocket.client).
+     * @param remote Is connection closed by remote peer? If so, remote=true.
+     */
     @Override
     public void onClose(int code, String reason, boolean remote)
     {
-        System.out.println("[i] Guilded4J websocket connection closed");
-        try
-        {
-            bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
-        }catch (Exception e){
-            System.out.println("[X] Failed to pass GuildedWebsocketClosedEvent: "+e.toString());
-        }
+        bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
     }
+
+    /**
+     * Implements WebSocketClient.onError (org.java_websocket.client).
+     */
     @Override
     public void onError(Exception e){e.printStackTrace();}
 }

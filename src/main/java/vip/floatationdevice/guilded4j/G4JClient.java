@@ -15,10 +15,9 @@ import javax.annotation.Nullable;
 
 /**
  * The Guilded4J client that can receive WebSocket events and send HTTP requests to the API.
- *
  * <p>NOTE:</p>
- *   <p>After creating G4JClient object you need to manually call connect() or disconnect() to start/stop receiving WebSocket events. These operations doesn't affect sending HTTP requests.</p>
- *   <p>When an exception occurs in the operation of sending HTTP request, the method will return a JSON string (like {"Exception":" result of Exception.toString()"}) instead of throwing an Exception.</p>
+ * <p>- After creating G4JClient object you need to manually call connect() or disconnect() to start/stop receiving WebSocket events. These operations doesn't affect sending HTTP requests.</p>
+ * <p>- When an exception occurs in the operation of sending HTTP request, the method will return a JSON string (like {"Exception":" result of Exception.toString()"}) instead of throwing an Exception.</p>
  *
  */
 public class G4JClient extends WebSocketClient
@@ -34,6 +33,7 @@ public class G4JClient extends WebSocketClient
     private static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
     private static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
     static String authToken;
+
     /**
      * Used to post events or register a event listener class.
      * Write your own event listener class and use {@code bus.register()} to receive events.
@@ -42,7 +42,7 @@ public class G4JClient extends WebSocketClient
     public static EventBus bus = new EventBus();
 
     /**
-     * Initial function.
+     * Generate a Guilded4J client using the given access token.
      * @param token The bot API access token (without "Bearer" prefix).
      */
     public G4JClient(String token)
@@ -53,11 +53,14 @@ public class G4JClient extends WebSocketClient
 
     /**
      * No current use. Implements WebSocketClient.onOpen() (org.java_websocket.client).
+     * @param h No current use.
      */
     @Override
     public void onOpen(ServerHandshake h){}
+
     /**
      * Parse the received JSON string to various event objects. Implements WebSocketClient.onMessage() (org.java_websocket.client).
+     * @param rawMessage The original WebSocket message received (should be in JSON format).
      */
     @Override
     public void onMessage(String rawMessage)
@@ -65,11 +68,13 @@ public class G4JClient extends WebSocketClient
         JSONObject json=new JSONObject(rawMessage);
         //System.out.println("\n"+json.toStringPretty());
         if(json.getByPath("d.heartbeatIntervalMs")!=null)
+        {
             bus.post(
                     new GuildedWebsocketInitializedEvent(this,(String)json.getByPath("d.lastMessageId"),(Integer)json.getByPath("d.heartbeatIntervalMs"))
-            );
-        String eventType=json.getStr("t");
-        if(eventType!=null)
+            );return;
+        }
+        String eventType=json.getStr("t");//hope they wont change this key name in the future
+        if(eventType!=null)//has "t" key
             if(eventType.equals("ChatMessageCreated"))
             {
                 JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
@@ -104,15 +109,18 @@ public class G4JClient extends WebSocketClient
                                 .setUserIds(userIds)
                                 .setOpCode(json.getInt("op"))
                 );
-            }
+            }//no implemented GuildedEvents matched? post raw event with the event name and original string
             else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
         else if(json.getInt("op")!=null)
-            bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));
-        else bus.post(new GuildedEvent(this).setRawString(rawMessage));
+            bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));//at least we have opcode
+        else bus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment
     }
 
     /**
      * Create a channel message.
+     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
+     * @param msg The content of the message, some characters need to be escaped again. For example: {@code createChannelMessage(..., "He\nHim")} need to be escaped to {@code createChannelMessage(..., "He\\nHim")}.
+     * @return A JSON string that contains a ChatMessage object called "message" if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createChannelMessage(String channelId, String msg)
     {
@@ -132,6 +140,8 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Delete a channel message.
+     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String deleteChannelMessage(String channelId, String msgId)
     {
@@ -149,6 +159,8 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Update a channel message.
+     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate</a>
+     * @return A JSON string that contains the updated ChatMessage object (same UUID but new content) called "message" if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String updateChannelMessage(String channelId, String msgId, String content)
     {
@@ -168,6 +180,8 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Get details for a specific chat message from a chat channel.
+     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageRead</a>
+     * @return A JSON string that directly contains the ChatMessage object with the given UUID if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String getMessage(String channelId, String msgId)
     {
@@ -188,6 +202,8 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Get a list of the latest 50 messages from a channel.
+     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
+     * @return An ChatMessage type ArrayList that contains up to 50 ChatMessage objects if succeeded, else print Exception.toString()
      */
     public ArrayList<ChatMessage> getChannelMessages(String channelId)
     {
@@ -212,6 +228,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Create a thread in a forum.
+     * <a>https://www.guilded.gg/docs/api/forums/ForumThreadCreate</a>
+     * @param title The title of the thread.
+     * @param content The thread's content, some characters need to be escaped again. For example: {@code createForumThread(..., ..., "He\nHim")} need to be escaped to {@code createForumThread(..., ..., "He\\nHim")}.
+     * @return A JSON string that contains a ForumThread object called "forumThread" if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createForumThread(String channelId, String title, String content)
     {
@@ -231,6 +251,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Create a list item.
+     * <a>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
+     * @param message The item's name.
+     * @param note The item's note, some characters need to be escaped again.
+     * @return A JSON string that contains a ListItem object called "listItem" if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createListItem(String channelId, String message, @Nullable String note)
     {
@@ -255,6 +279,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Award XP to a member.
+     * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
+     * @param userId The target user's ID.
+     * @param amount The amount of xp to add.
+     * @return A JSON string contains a "total" key if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String awardUserXp(String userId, int amount)
     {
@@ -274,6 +302,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Award XP to all members with a particular role.
+     * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
+     * @param roleId The ID of the role.
+     * @param amount The amount of xp to add.
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String awardRoleXp(int roleId, int amount)
     {
@@ -293,6 +325,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Add member to group.
+     * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
+     * @param groupId The target group's ID.
+     * @param userId The target user's ID.
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String addGroupMember(String groupId, String userId)
     {
@@ -310,6 +346,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Remove member from group.
+     * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete</a>
+     * @param groupId The target group's ID.
+     * @param userId The target user's ID.
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String removeGroupMember(String groupId, String userId)
     {
@@ -327,6 +367,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Assign role to member.
+     * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
+     * @param userId The target user's ID.
+     * @param roleId The target role's ID.
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String addRoleMember(String userId, String roleId)
     {
@@ -344,6 +388,10 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Remove role from member.
+     * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
+     * @param userId The target user's ID.
+     * @param roleId The target role's ID.
+     * @return {@code null} if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String removeRoleMember(String userId, String roleId)
     {
@@ -361,6 +409,9 @@ public class G4JClient extends WebSocketClient
 
     /**
      * Add a reaction emote.
+     * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
+     * @param emoteId The ID of the emote.
+     * @return A JSON string that contains a ContentReaction object called "emote" if succeeded, else return a JSON string with a "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createContentReaction(String channelId, String contentId, int emoteId)
     {
@@ -398,7 +449,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Implements WebSocketClient.onError (org.java_websocket.client).
+     * No current use. Implements WebSocketClient.onError (org.java_websocket.client).
      */
     @Override
     public void onError(Exception e){e.printStackTrace();}

@@ -1,18 +1,24 @@
 package vip.floatationdevice.guilded4j;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Simple message object.
- * A valid ChatMessage object contains 6 essential keys: id, type, channelId, content, createdAt, createdBy.
+ * <a>https://www.guilded.gg/docs/api/chat/ChatMessage</a>
+ * <p>A valid ChatMessage object contains 6 essential keys: id, type, channelId, content, createdAt, createdBy.</p>
  */
 public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
 {
     private String id,type,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
 
+    /**
+     * Get the message's UUID.
+     * @return A UUID string that contains the UUID of the message.
+     */
     public String getMsgId(){return id;}
 
     /**
@@ -21,7 +27,16 @@ public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
      */
     public String getType(){return type;}
 
+    /**
+     * Get the UUID of the channel to which the message belongs.
+     * @return A string that contains the channel's UUID of the message.
+     */
     public String getChannelId(){return channelId;}
+
+    /**
+     * Get the content of the message.
+     * @return A string contains the content of the message.
+     */
     public String getContent(){return content;}
 
     /**
@@ -90,29 +105,33 @@ public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
     /**
      * Generate empty ChatMessage object - don't call toString() or do any other operations before setting up the 6 essential keys.
      */
-    public ChatMessage(){}
+    @Deprecated public ChatMessage(){}
 
     /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
      * @throws IllegalArgumentException when the string is missing at least 1 of the 6 essential keys.
+     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
     public ChatMessage fromString(@Nonnull String rawString)
     {
         JSONObject json=new JSONObject(rawString);
-        if(json.getStr("id")==null||json.getStr("type")==null
-                ||json.getStr("channelId")==null||json.getStr("content")==null
-                ||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
-            throw new IllegalArgumentException("At least 1 essential key of ChatMessage is missing");
-        return this.setMsgId(json.getStr("id"))
-                .setType(json.getStr("type"))
-                .setChannelId(json.getStr("channelId"))
-                .setContent(json.getStr("content"))
-                .setCreationTime(json.getStr("createdAt"))
-                .setCreatorId(json.getStr("createdBy"))
-                .setBotCreatorId(json.getStr("createdByBotId"))
-                .setWebhookCreatorId(json.getStr("createdByWebhookId"))
-                .setUpdateTime(json.getStr("updatedAt"));
+        if(JSONUtil.isJson(rawString))
+        {
+            if(json.getStr("id")==null||json.getStr("type")==null
+                    ||json.getStr("channelId")==null||json.getStr("content")==null
+                    ||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
+                throw new IllegalArgumentException("At least 1 essential key of ChatMessage is missing");
+            return this.setMsgId(json.getStr("id"))
+                    .setType(json.getStr("type"))
+                    .setChannelId(json.getStr("channelId"))
+                    .setContent(json.getStr("content"))
+                    .setCreationTime(json.getStr("createdAt"))
+                    .setCreatorId(json.getStr("createdBy"))
+                    .setBotCreatorId(json.getStr("createdByBotId"))
+                    .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+                    .setUpdateTime(json.getStr("updatedAt"));
+        }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**

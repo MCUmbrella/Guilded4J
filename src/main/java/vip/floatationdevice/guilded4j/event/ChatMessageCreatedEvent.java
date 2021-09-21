@@ -4,8 +4,9 @@ import vip.floatationdevice.guilded4j.ChatMessage;
 
 /**
  * A new message was created.
+ * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageCreated</a>
  */
-public class ChatMessageCreatedEvent extends GuildedEvent// https://www.guilded.gg/docs/api/websockets/ChatMessageCreated
+public class ChatMessageCreatedEvent extends GuildedEvent
 {
     ChatMessage msgObj;
 

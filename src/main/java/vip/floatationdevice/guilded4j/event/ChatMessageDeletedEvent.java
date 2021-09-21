@@ -2,8 +2,9 @@ package vip.floatationdevice.guilded4j.event;
 
 /**
  * A message was deleted.
+ * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted</a>
  */
-public class ChatMessageDeletedEvent extends GuildedEvent// https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted
+public class ChatMessageDeletedEvent extends GuildedEvent
 {
     String deletedAt;
     String id;

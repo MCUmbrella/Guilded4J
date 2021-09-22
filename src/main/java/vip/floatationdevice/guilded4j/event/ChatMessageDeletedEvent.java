@@ -1,3 +1,5 @@
+// Copyright (c) 2021 MCUmbrella & contributors
+
 package vip.floatationdevice.guilded4j.event;
 
 /**

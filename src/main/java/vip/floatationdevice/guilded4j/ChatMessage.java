@@ -16,6 +16,8 @@ import javax.annotation.Nullable;
 public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
 {
     private String id,type,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
+    private boolean isPrivate; //TODO
+    private String[] replyMessageIds; //TODO
 
     /**
      * Get the message's UUID.
@@ -107,7 +109,7 @@ public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
     /**
      * Generate empty ChatMessage object - don't call toString() or do any other operations before setting up the 6 essential keys.
      */
-    @Deprecated public ChatMessage(){}
+    public ChatMessage(){}
 
     /**
      * Use the given JSON string to generate ChatMessage object.

@@ -34,7 +34,8 @@ public class G4JClient extends WebSocketClient
     private static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
     private static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
     private static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
-    static String authToken;
+    protected String authToken;
+    private boolean dump=false;
 
     /**
      * Used to post events or register a event listener class.
@@ -54,6 +55,13 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
+     * Toggle printing the received JSON string from WebSocket to stdout.
+     * Disabled (dump=false) by default.
+     * @return Dumping status after changed.
+     */
+    public boolean toggleDump(){dump=!dump;return dump;}
+
+    /**
      * No current use. Implements WebSocketClient.onOpen() (org.java_websocket.client).
      * @param h No current use.
      */
@@ -68,7 +76,7 @@ public class G4JClient extends WebSocketClient
     public void onMessage(String rawMessage)
     {
         JSONObject json=new JSONObject(rawMessage);
-        //System.out.println("\n"+json.toStringPretty());
+        if(dump) System.out.println("\n"+json.toStringPretty());
         if(json.getByPath("d.heartbeatIntervalMs")!=null)
         {
             bus.post(
@@ -77,7 +85,7 @@ public class G4JClient extends WebSocketClient
         }
         String eventType=json.getStr("t");//hope they wont change this key name in the future
         if(eventType!=null)//has "t" key
-            if(eventType.equals("ChatMessageCreated"))
+            if(eventType.equals("ChatMessageCreated"))//TODO: change to switch-case style
             {
                 JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
                 bus.post(
@@ -93,11 +101,11 @@ public class G4JClient extends WebSocketClient
             }
             else if(eventType.equals("ChatMessageDeleted"))
                 bus.post(
-                        new ChatMessageDeletedEvent(this)
-                        .setDeletionTime((String)json.getByPath("d.message.deletedAt"))
-                        .setMsgId((String)json.getByPath("d.message.id"))
-                        .setChannelId((String)json.getByPath("d.message.channelId"))
-                        .setOpCode(json.getInt("op"))
+                        new ChatMessageDeletedEvent(this,
+                                (String)json.getByPath("d.message.deletedAt"),
+                                (String)json.getByPath("d.message.id"),
+                                (String)json.getByPath("d.message.channelId")
+                        ).setOpCode(json.getInt("op"))
                 );
             else if(eventType.equals("TeamXpAdded"))
             {

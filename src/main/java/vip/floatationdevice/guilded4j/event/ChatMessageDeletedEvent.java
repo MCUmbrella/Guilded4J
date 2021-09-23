@@ -8,9 +8,7 @@ package vip.floatationdevice.guilded4j.event;
  */
 public class ChatMessageDeletedEvent extends GuildedEvent
 {
-    String deletedAt;
-    String id;
-    String channelId;
+    private String deletedAt, id, channelId;
 
     /**
      * Default constructor (not recommended to use).

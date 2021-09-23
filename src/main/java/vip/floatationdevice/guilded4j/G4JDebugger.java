@@ -19,7 +19,7 @@ public class G4JDebugger
             " > disconnect\n" +
             " > reconnect\n" +
             " > dump\n" +
-            "    Toggle dump command result & unknown events\n" +
+            "    Toggle dump command result & WebSocket events\n" +
             " > pwd\n" +
             "    Print the current channel UUID\n" +
             " > cd [UUID]\n" +
@@ -64,11 +64,6 @@ public class G4JDebugger
         {
             ChatMessage m=e.getChatMessageObject();
             System.out.print(parseMessage(m));
-        }
-        @Subscribe
-        public void onUnknownEvent(GuildedEvent e)
-        {
-            if(dumpEnabled&&e.getRawString()!=null){System.out.print("\n[D] Dump unknown event:\n"+new JSONObject(e.getRawString()).toStringPretty()+"\n["+workdir+"] #");}
         }
     }
     static class G4JSession implements Serializable
@@ -125,8 +120,11 @@ public class G4JDebugger
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
             if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-            else if(text.equals("dump")){
-                dumpEnabled=!dumpEnabled;}
+            else if(text.equals("dump"))
+            {
+                dumpEnabled=!dumpEnabled;
+                client.toggleDump();
+            }
             else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
             else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
             else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}

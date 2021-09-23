@@ -85,42 +85,56 @@ public class G4JClient extends WebSocketClient
         }
         String eventType=json.getStr("t");//hope they wont change this key name in the future
         if(eventType!=null)//has "t" key
-            if(eventType.equals("ChatMessageCreated"))//TODO: change to switch-case style
+        {
+            switch (eventType)
             {
-                JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                bus.post(
-                        new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
-                );
+                case "ChatMessageCreated":
+                {
+                    JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
+                    bus.post(
+                            new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
+                    );
+                    break;
+                }
+                case "ChatMessageUpdated":
+                {
+                    JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
+                    bus.post(
+                            new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
+                    );
+                    break;
+                }
+                case "ChatMessageDeleted":
+                {
+                    bus.post(
+                            new ChatMessageDeletedEvent(this,
+                                    (String)json.getByPath("d.message.deletedAt"),
+                                    (String)json.getByPath("d.message.id"),
+                                    (String)json.getByPath("d.message.channelId")
+                            ).setOpCode(json.getInt("op"))
+                    );
+                    break;
+                }
+                case "TeamXpAdded":
+                {
+                    ArrayList<String> userIds=new ArrayList<String>();
+                    JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
+                    Object[] converted=array.toArray();
+                    for(int i=0;i!=converted.length;i++) userIds.add((String)converted[i]);
+                    bus.post(
+                            new TeamXpAddedEvent(this)
+                                    .setXpAmount((Integer) json.getByPath("d.amount"))
+                                    .setUserIds(userIds)
+                                    .setOpCode(json.getInt("op"))
+                    );
+                    break;
+                }
+                case "TeamMemberUpdated": //TODO
+                case "teamRolesUpdated": //TODO
+                default: //no implemented GuildedEvents matched? post raw event with the event name and original string
+                    bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
             }
-            else if(eventType.equals("ChatMessageUpdated"))
-            {
-                JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                bus.post(
-                        new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
-                );
-            }
-            else if(eventType.equals("ChatMessageDeleted"))
-                bus.post(
-                        new ChatMessageDeletedEvent(this,
-                                (String)json.getByPath("d.message.deletedAt"),
-                                (String)json.getByPath("d.message.id"),
-                                (String)json.getByPath("d.message.channelId")
-                        ).setOpCode(json.getInt("op"))
-                );
-            else if(eventType.equals("TeamXpAdded"))
-            {
-                ArrayList<String> userIds=new ArrayList<String>();
-                JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
-                Object[] converted=array.toArray();
-                for(int i=0;i!=converted.length;i++) userIds.add((String)converted[i]);
-                bus.post(
-                        new TeamXpAddedEvent(this)
-                                .setXpAmount((Integer) json.getByPath("d.amount"))
-                                .setUserIds(userIds)
-                                .setOpCode(json.getInt("op"))
-                );
-            }//no implemented GuildedEvents matched? post raw event with the event name and original string
-            else bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
+        }
         else if(json.getInt("op")!=null)
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));//at least we have opcode
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment

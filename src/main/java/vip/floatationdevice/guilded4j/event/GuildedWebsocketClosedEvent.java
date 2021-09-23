@@ -4,12 +4,22 @@ package vip.floatationdevice.guilded4j.event;
 
 import java.util.EventObject;
 
+/**
+ * WebSocket connection closed.
+ * This is a Guilded4J's custom event, meaning that there is no event in the Guilded API called this name.
+ */
 public class GuildedWebsocketClosedEvent extends EventObject
 {
-    int code=Integer.MIN_VALUE;
-    String reason="";
-    Boolean remote=false;
+    private int code=Integer.MIN_VALUE;
+    private String reason="";
+    private Boolean remote=false;
 
+    /**
+     * Generate a GuildedWebsocketClosedEvent using the given keys.
+     * @param code The WebSocket status code.
+     * @param reason The reason of the disconnection (can be null).
+     * @param remote Is connection closed by remote peer? If so, remote=true.
+     */
     public GuildedWebsocketClosedEvent(Object source, int code, String reason, Boolean remote)
     {
         super(source);
@@ -18,8 +28,22 @@ public class GuildedWebsocketClosedEvent extends EventObject
         this.remote=remote;
     }
 
+    /**
+     * Get the WebSocket status code.
+     * @return The WebSocket status code.
+     */
     public int getCode(){return code;}
+
+    /**
+     * Get the reason of disconnect.
+     * @return The reason of the disconnection (can be null).
+     */
     public String getReason(){return reason;}
+
+    /**
+     * Get a boolean which indicates that the connection is closed by remote.
+     * @return {@code true} if remote closed the connection, else return {@code false}.
+     */
     public Boolean isRemote(){return remote;}
 
 }

@@ -9,6 +9,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - ## The API is only available to users who participate in the early access for now.
 # Using:
 - [Refer to the Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki/How-to-use-Guilded4J-in-your-Maven-project)
+- [Refer to the Javadoc (still writing)](http://docs.floatationdevice.vip/guilded4j/)
 # Progress: `(Waiting for Guilded side to complete basic API functions)`
 - [x] Text
 - - [x] Create message - createChannelMessage()

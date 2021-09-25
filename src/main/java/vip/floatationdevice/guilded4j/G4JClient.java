@@ -12,6 +12,7 @@ import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 import javax.annotation.Nullable;
 

@@ -2,7 +2,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.ChatMessage;
+import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 /**
  * A message was updated.

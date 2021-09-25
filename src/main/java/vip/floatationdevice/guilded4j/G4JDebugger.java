@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 import java.io.*;
 import java.util.*;

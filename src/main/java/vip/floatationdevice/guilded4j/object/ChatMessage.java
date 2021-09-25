@@ -1,6 +1,6 @@
 // Copyright (c) 2021 MCUmbrella & contributors
 
-package vip.floatationdevice.guilded4j;
+package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;

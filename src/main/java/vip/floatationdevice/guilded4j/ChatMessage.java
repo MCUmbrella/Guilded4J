@@ -2,6 +2,7 @@
 
 package vip.floatationdevice.guilded4j;
 
+import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
@@ -140,27 +141,21 @@ public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
 
     /**
      * Convert the ChatMessage object to JSON string.
-     * @return A JSON string. Make sure all 6 essential keys are set.
+     * @return A JSON string.
      */
     @Override
     public String toString()
     {
-        StringBuilder s=new StringBuilder()
-                .append("{\"id\":\"")
-                .append(id)
-                .append("{\"type\":\"")
-                .append(type)
-                .append("\",\"channelId\":\"")
-                .append(channelId)
-                .append("\",\"createdAt\":\"")
-                .append(createdAt)
-                .append("\",\"createdBy\":\"")
-                .append(createdBy)
-                .append("\",");
-        if(createdByBotId!=null) s.append("\"createdByBotId\":\"").append(createdByBotId).append("\",");
-        if(createdByWebhookId!=null) s.append("\"createdByWebhookId\":\"").append(createdByWebhookId).append("\",");
-        if(updatedAt!=null) s.append("\"updatedAt\":\"").append(updatedAt).append("\",");
-        s.append("\"content\":\"").append(content).append("\"}");
-        return s.toString();
+        return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                .set("id",id)
+                .set("type",type)
+                .set("channelId",channelId)
+                .set("createdAt",createdAt)
+                .set("createdBy",createdBy)
+                .set("createdByBotId",createdByBotId)
+                .set("createdByWebhookId",createdByWebhookId)
+                .set("updatedAt",updatedAt)
+                .set("content",content)
+                .toString();
     }
 }

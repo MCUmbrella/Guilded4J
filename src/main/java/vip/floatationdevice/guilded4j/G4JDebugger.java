@@ -38,7 +38,7 @@ public class G4JDebugger
             " > addxp <(string)userId> <(int)amount>\n"+
             "    Add XP to specified user\n"+
             " > addrolexp <(int)roleId> <(int)amount>\n"+
-            "    Add XP to all users with specified role"+
+            "    Add XP to all users with specified role\n"+
             " > react <(?)contentId> <(int)emoteId>\n"+
             "    Add a reaction to specified content\n"+
             " > exit\n" +
@@ -91,7 +91,7 @@ public class G4JDebugger
                 this.savedWorkdir=session.savedWorkdir;
                 i.close();
                 return true;
-            }catch(Throwable e){System.out.println("[X] Failed to restore session: "+e);return false;}
+            }catch(java.io.FileNotFoundException e){return false;}catch(Throwable e){System.out.println("[X] Failed to restore session: "+e);return false;}
         }
     }
     final static Scanner scanner=new Scanner(System.in);

@@ -80,18 +80,18 @@ public class G4JDebugger
                 o.writeObject(this);
                 o.close();
                 return true;
-            }catch(Throwable e){System.out.println("[X] Failed to save session: "+e.toString());return false;}
+            }catch(Throwable e){System.out.println("[X] Failed to save session: "+e);return false;}
         }
         public Boolean restore()
         {
             try {
-                ObjectInputStream i=new ObjectInputStream(new FileInputStream(new File("G4JSession.dat")));
+                ObjectInputStream i=new ObjectInputStream(new FileInputStream("G4JSession.dat"));
                 G4JSession session=(G4JSession)i.readObject();
                 this.savedToken=session.savedToken;
                 this.savedWorkdir=session.savedWorkdir;
                 i.close();
                 return true;
-            }catch(Throwable e){System.out.println("[X] Failed to restore session: "+e.toString());return false;}
+            }catch(Throwable e){System.out.println("[X] Failed to restore session: "+e);return false;}
         }
     }
     final static Scanner scanner=new Scanner(System.in);

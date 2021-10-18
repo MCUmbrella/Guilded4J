@@ -17,6 +17,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Update message - updateChannelMessage()
 - - [x] Get message info - getMessage()
 - - [x] Get last 50 messages - getChannelMessages()
+- [ ] Members
+- - [ ] Get member's role(s)
+- - [ ] Update/delete nickname
 - [ ] Forum
 - - [x] Create forum thread - createForumThread()
 - [ ] List
@@ -26,6 +29,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] XP
 - - [x] Add XP to user - awardUserXp()
 - - [x] Add XP to user group - awardRoleXp()
+- [ ] Social links
+- - [ ] Get member's social link
 - [ ] Group membership
 - - [x] Add group member - addGroupMember()
 - - [x] Remove group member - removeGroupMember()
@@ -39,3 +44,5 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] ChatMessageDeletedEvent
 - - [x] ChatMessageUpdatedEvent
 - - [x] TeamXpAddedEvent
+- - [ ] TeamMemberUpdatedEvent
+- - [ ] TeamRolesUpdatedEvent

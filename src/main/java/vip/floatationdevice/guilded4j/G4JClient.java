@@ -68,6 +68,7 @@ public class G4JClient extends WebSocketClient
     @Override
     public void onOpen(ServerHandshake h){}
 
+//============================== EVENT MANAGER START ==============================
     /**
      * Parse the received JSON string to various event objects. Implements WebSocketClient.onMessage() (org.java_websocket.client).
      * @param rawMessage The original WebSocket message received (should be in JSON format).
@@ -139,6 +140,10 @@ public class G4JClient extends WebSocketClient
             bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));//at least we have opcode
         else bus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment
     }
+//============================== EVENT MANAGER END ==============================
+
+//============================== API FUNCTIONS START ==============================
+////////////////////////////// Chat & messaging //////////////////////////////
 
     /**
      * Create a channel message.
@@ -158,7 +163,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -177,7 +182,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -198,7 +203,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -220,14 +225,14 @@ public class G4JClient extends WebSocketClient
             ).get("message").toString();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
     /**
      * Get a list of the latest 50 messages from a channel.
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
-     * @return An ChatMessage type ArrayList that contains up to 50 ChatMessage objects if succeeded, else print Exception.toString()
+     * @return An ChatMessage type ArrayList that contains up to 50 ChatMessage objects if succeeded, else return {@code null}
      */
     public ArrayList<ChatMessage> getChannelMessages(String channelId)
     {
@@ -245,10 +250,28 @@ public class G4JClient extends WebSocketClient
             return messages;
         }catch (Exception e)
         {
-            System.out.println("[X] Failed to get messages: "+e.toString());
-            return messages;
+            return null;
         }
     }
+
+////////////////////////////// Members //////////////////////////////
+
+    public String[] getMemberRoles(String userId) //TODO
+    {
+        return null;
+    }
+
+    public String updateMemberNickname(String userId, String nickname) //TODO
+    {
+        return null;
+    }
+
+    public String deleteMemberNickname(String userId) //TODO
+    {
+        return null;
+    }
+
+////////////////////////////// Forums //////////////////////////////
 
     /**
      * Create a thread in a forum.
@@ -269,9 +292,11 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
+
+////////////////////////////// List items //////////////////////////////
 
     /**
      * Create a list item.
@@ -297,9 +322,33 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
+
+////////////////////////////// Reactions //////////////////////////////
+
+    /**
+     * Add a reaction emote.
+     * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
+     * @param emoteId The ID of the emote.
+     * @return A JSON string that contains a ContentReaction object called "emote" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     */
+    public String createContentReaction(String channelId, String contentId, int emoteId)
+    {
+        try
+        {
+            return HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+        }catch (Exception e)
+        {
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+        }
+    }
+
+////////////////////////////// Team XP //////////////////////////////
 
     /**
      * Award XP to a member.
@@ -320,7 +369,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -343,9 +392,18 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
+
+////////////////////////////// Social links //////////////////////////////
+
+    public String getSocialLink(String type) //TODO
+    {
+        return null;
+    }
+
+////////////////////////////// Group membership //////////////////////////////
 
     /**
      * Add member to group.
@@ -364,7 +422,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -385,9 +443,11 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
+
+////////////////////////////// Role membership //////////////////////////////
 
     /**
      * Assign role to member.
@@ -406,7 +466,7 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
@@ -427,29 +487,11 @@ public class G4JClient extends WebSocketClient
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
-            return "{\"Exception\":\""+e.toString()+"\"}";
+            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
         }
     }
 
-    /**
-     * Add a reaction emote.
-     * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
-     * @param emoteId The ID of the emote.
-     * @return A JSON string that contains a ContentReaction object called "emote" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
-     */
-    public String createContentReaction(String channelId, String contentId, int emoteId)
-    {
-        try
-        {
-            return HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return "{\"Exception\":\""+e.toString()+"\"}";
-        }
-    }
+//============================== API FUNCTIONS END ==============================
 
     /**
      * Initialize or reset Guilded bot access token.

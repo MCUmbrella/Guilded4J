@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
@@ -148,10 +149,11 @@ public class G4JClient extends WebSocketClient
     /**
      * Create a channel message.
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
-     * @param msg The content of the message, some characters need to be escaped again. For example: {@code createChannelMessage(..., "He\nHim")} need to be escaped to {@code createChannelMessage(..., "He\\nHim")}.
+     * @param content The content of the message.
      * @return A JSON string that contains a ChatMessage object called "message" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
-    public String createChannelMessage(String channelId, String msg)
+    //TODO: createChannelMessage(String channelId, String content, @Nullable String[] replyMessageIds, @Nullable Boolean isPrivate)
+    public String createChannelMessage(String channelId, String content)
     {
         try
         {
@@ -159,7 +161,7 @@ public class G4JClient extends WebSocketClient
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
-                    body("{\"content\":\"$1\"}".replace("$1",msg)).
+                    body(new JSONObject().set("content",content).toString()).
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
@@ -199,7 +201,7 @@ public class G4JClient extends WebSocketClient
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
-                    body("{\"content\":\"$1\"}".replace("$1",content)).
+                    body(new JSONObject().set("content",content).toString()).
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
@@ -277,7 +279,7 @@ public class G4JClient extends WebSocketClient
      * Create a thread in a forum.
      * <a>https://www.guilded.gg/docs/api/forums/ForumThreadCreate</a>
      * @param title The title of the thread.
-     * @param content The thread's content, some characters need to be escaped again. For example: {@code createForumThread(..., ..., "He\nHim")} need to be escaped to {@code createForumThread(..., ..., "He\\nHim")}.
+     * @param content The thread's content.
      * @return A JSON string that contains a ForumThread object called "forumThread" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createForumThread(String channelId, String title, String content)
@@ -288,7 +290,7 @@ public class G4JClient extends WebSocketClient
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
-                    body("{\"title\":\""+title+"\",\"content\":\""+content+"\"}").
+                    body(new JSONObject().set("title",title).set("content",content).toString()).
                     timeout(20000).execute().body();
         }catch (Exception e)
         {
@@ -302,23 +304,18 @@ public class G4JClient extends WebSocketClient
      * Create a list item.
      * <a>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
      * @param message The item's name.
-     * @param note The item's note, some characters need to be escaped again.
+     * @param note The item's note (can be null).
      * @return A JSON string that contains a ListItem object called "listItem" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
     public String createListItem(String channelId, String message, @Nullable String note)
     {
-        String m;
-        if(note!=null)
-            m="{\"message\":\""+message+"\",\"note\":\""+note+"\"}";
-        else
-            m="{\"message\":\""+message+"\"}";
         try
         {
             return HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}",channelId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
-                    body(m).
+                    body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message",message).set("note",note).toString()).
                     timeout(20000).execute().body();
         }catch (Exception e)
         {

@@ -133,6 +133,7 @@ public class G4JClient extends WebSocketClient
                 }
                 case "TeamMemberUpdated": //TODO
                 case "teamRolesUpdated": //TODO
+                case "TeamRolesUpdated":
                 default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                     bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
             }

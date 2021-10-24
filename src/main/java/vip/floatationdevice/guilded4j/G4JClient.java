@@ -181,10 +181,11 @@ public class G4JClient extends WebSocketClient
     {
         try
         {
-            return HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
+            String rawResult= HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();
+            return rawResult.equals("")?null:rawResult;
         }catch (Exception e)
         {
             return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
@@ -288,14 +289,44 @@ public class G4JClient extends WebSocketClient
         }
     }
 
-    public String updateMemberNickname(String userId, String nickname) //TODO
+    /**
+     * Update/delete a member's nickname.<br>
+     * <a>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
+     * @param userId The ID of the member.
+     * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
+     * @return A JSON String contains a "nickname" key when setting nickname, {@code null} when deleting nickname.<br>
+     * If failed, return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     */
+    public String setMemberNickname(String userId, @Nullable String nickname)
     {
-        return null;
-    }
-
-    public String deleteMemberNickname(String userId) //TODO
-    {
-        return null;
+        String rawResult;
+        if(nickname==null)
+            try
+            {
+                rawResult= HttpRequest.delete(NICKNAME_URL.replace("{userId}",userId)).
+                        header("Authorization","Bearer "+authToken).
+                        header("Accept","application/json").
+                        timeout(20000).execute().body();
+                return rawResult.equals("")?null:rawResult;
+            }
+            catch(Exception e)
+            {
+                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            }
+        else
+            try
+            {
+                rawResult= HttpRequest.put(NICKNAME_URL.replace("{userId}",userId)).
+                        header("Authorization","Bearer "+authToken).
+                        header("Accept","application/json").
+                        header("Content-type","application/json").
+                        body(new JSONObject().set("nickname",nickname).toString()).
+                        timeout(20000).execute().body();
+                return rawResult;
+            }catch (Exception e)
+            {
+                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            }
     }
 
 ////////////////////////////// Forums //////////////////////////////

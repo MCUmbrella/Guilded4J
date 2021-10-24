@@ -41,6 +41,12 @@ public class G4JDebugger
             "    Add XP to all users with specified role\n"+
             " > react <(?)contentId> <(int)emoteId>\n"+
             "    Add a reaction to specified content\n"+
+            " > lsrole <userId>\n"+
+            "    Print the specified user's role ID(s)\n"+
+            " > nick <userId> <nickname>\n"+
+            "    Set the specified user's nickname\n"+
+            " > rmnick <userId>\n"+
+            "    Remove the specified user's nickname\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -214,6 +220,26 @@ public class G4JDebugger
                         System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
                 else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
+            }
+            else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}
+            else if(text.startsWith("nick "))
+            {
+                String[] arguments=text.split(" ");
+                if(arguments.length<3)
+                {
+                    System.out.print("[X] Usage: nick <userID> <nickname>");
+                }
+                else
+                {
+                    String nick="";
+                    for (int i=2;i!=arguments.length;i++) nick+=(arguments[i]+" ");
+                    String result=client.setMemberNickname(arguments[1],nick.trim());
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+            }
+            else if(text.startsWith("rmnick ")&&text.length()==15) {
+                String result = client.setMemberNickname(text.substring(7), null);
+                if(dumpEnabled&&result!=null) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
             }
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}

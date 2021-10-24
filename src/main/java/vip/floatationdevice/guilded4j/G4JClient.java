@@ -249,6 +249,7 @@ public class G4JClient extends WebSocketClient
                     header("Accept","application/json").
                     header("Content-type","application/json").
                     timeout(20000).execute().body();
+            if(!new JSONObject(rawResult).containsKey("messages")) return null;
             JSONArray array=new JSONObject(rawResult).getJSONArray("messages");
             Object[] converted=array.toArray();
             for(int i=0;i!=converted.length;i++) messages.add(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
@@ -265,7 +266,7 @@ public class G4JClient extends WebSocketClient
      * Get a list of the roles assigned to a member.<br>
      * <a>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
      * @param userId The ID of the member to obtain roles from.
-     * @return A String type ArrayList. Contains the IDs of the roles that the member currently has.
+     * @return A String type ArrayList contains the IDs of the roles that the member currently has, if succeeded, else return {@code null}.
      */
     public ArrayList<String> getMemberRoles(String userId)
     {
@@ -276,6 +277,7 @@ public class G4JClient extends WebSocketClient
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();
+            if(!new JSONObject(rawResult).containsKey("roleIds")) return null;
             JSONArray array=new JSONObject(rawResult).getJSONArray("roleIds");
             Object[] converted=array.toArray();
             for(int i=0;i!=converted.length;i++) roles.add(converted[i].toString());

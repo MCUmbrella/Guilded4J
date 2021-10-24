@@ -3,7 +3,7 @@
 <br>
 
 Build status: [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
-Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe)
+Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))
 # WARNING:
 - ## The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
 - ## The API is only available to users who participate in the early access for now.

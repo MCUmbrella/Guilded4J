@@ -12,13 +12,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+/**
+ * Guilded4J WebSocket event manager.
+ */
 public class G4JWebSocketClient extends WebSocketClient
 {
 
-    private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
-    public static final URI WEBSOCKET_URI=initURI();
     protected String authToken;
     private boolean dump=false;
+    private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
+
+    /**
+     * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
+     */
+    public static final URI WEBSOCKET_URI=initURI();
 
     /**
      * Generate a G4JWebSocketClient using the given access token.

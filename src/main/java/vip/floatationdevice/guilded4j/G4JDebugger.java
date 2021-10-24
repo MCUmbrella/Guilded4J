@@ -12,6 +12,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * A built-in CLI tool for testing and debugging Guilded4J library.
+ */
 public class G4JDebugger
 {
     final static String helpText="COMMANDS:\n" +
@@ -43,10 +46,14 @@ public class G4JDebugger
             "    Add a reaction to specified content\n"+
             " > lsrole <userId>\n"+
             "    Print the specified user's role ID(s)\n"+
-            " > nick <userId> <nickname>\n"+
+            " > nick <userId> <(string)nickname>\n"+
             "    Set the specified user's nickname\n"+
             " > rmnick <userId>\n"+
             "    Remove the specified user's nickname\n"+
+            " > smlink <userID> <(string)socialMediaName>\n"+
+            "    Get the social media link of the specified user.\n"+
+            "    Available: twitch, bnet, psn, xbox, steam, origin,\n"+
+            "    youtube, twitter, facebook, switch, patreon, roblox\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;

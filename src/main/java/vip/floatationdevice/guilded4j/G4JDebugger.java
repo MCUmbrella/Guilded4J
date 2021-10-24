@@ -126,136 +126,145 @@ public class G4JDebugger
         {
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
-            if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-            else if(text.equals("test")){}
-            else if(text.equals("dump"))
+            try
             {
-                dumpEnabled=!dumpEnabled;
-                client.toggleDump();
-            }
-            else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
-            else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
-            else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
-            else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
-            else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
-            else if(text.equals("ls"))
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                else {
-                    ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
-                    ChatMessage m;
-                    Collections.reverse(msgs);
-                    for (int i=0;i!=msgs.size();i++)
-                    {
-                        m=msgs.get(i);
-                        System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
+                if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
+                else if(text.equals("test")){}
+                else if(text.equals("dump"))
+                {
+                    dumpEnabled=!dumpEnabled;
+                    client.toggleDump();
+                }
+                else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
+                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
+                else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
+                else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
+                else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
+                else if(text.equals("ls"))
+                {
+                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    else {
+                        ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
+                        ChatMessage m;
+                        Collections.reverse(msgs);
+                        for (int i=0;i!=msgs.size();i++)
+                        {
+                            m=msgs.get(i);
+                            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
+                        }
                     }
                 }
-            }
-            else if(text.startsWith("send ")&&text.length()>5)
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                else{
-                    String result=client.createChannelMessage(workdir,text.substring(5));
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                }
-            }
-            else if(text.startsWith("delete ")&&text.length()==43)
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                else{
-                    String result=client.deleteChannelMessage(workdir,text.substring(7));
-                    if(dumpEnabled)
-                        if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                        else System.out.print("\n[D] Result:\n"+result);
-                }
-            }
-            else if(text.startsWith("update ")&&text.length()>44)
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                else{
-                    String result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                }
-            }
-            else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
-            else if(text.startsWith("newitem ")&&text.length()>8)
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
-                else{
-                    String result=client.createListItem(workdir,text.substring(8),null);
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                }
-            }
-            else if(text.startsWith("addxp ")&&text.length()>15)
-            {
-                String[] parsed=text.split(" ");
-                if(parsed.length==3&&parsed[1].length()==8&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                else if(text.startsWith("send ")&&text.length()>5)
                 {
-                    String result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    else{
+                        String result=client.createChannelMessage(workdir,text.substring(5));
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
                 }
-                else System.out.print("[X] Usage: addxp <(string)userId> <(int)amount>");
-            }
-            else if(text.startsWith("addrolexp ")&&text.length()>12)
-            {
-                String[] parsed=text.split(" ");
-                if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                else if(text.startsWith("delete ")&&text.length()==43)
                 {
-                    String result=client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
-                    if(dumpEnabled)
-                        if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                        else System.out.print("\n[D] Result:\n"+result);
+                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    else{
+                        String result=client.deleteChannelMessage(workdir,text.substring(7));
+                        if(dumpEnabled)
+                            if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                            else System.out.print("\n[D] Result:\n"+result);
+                    }
                 }
-                else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
-            }
-            else if(text.startsWith("react ")&&text.length()>8)
-            {
-                if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
-                String[] parsed=text.split(" ");
-                if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                else if(text.startsWith("update ")&&text.length()>44)
                 {
-                    String result=client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
-                    if(dumpEnabled)
+                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    else{
+                        String result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                }
+                else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
+                else if(text.startsWith("newitem ")&&text.length()>8)
+                {
+                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                    else{
+                        String result=client.createListItem(workdir,text.substring(8),null);
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                }
+                else if(text.startsWith("addxp ")&&text.length()>15)
+                {
+                    String[] parsed=text.split(" ");
+                    if(parsed.length==3&&parsed[1].length()==8&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                    {
+                        String result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                    else System.out.print("[X] Usage: addxp <(string)userId> <(int)amount>");
+                }
+                else if(text.startsWith("addrolexp ")&&text.length()>12)
+                {
+                    String[] parsed=text.split(" ");
+                    if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                    {
+                        String result=client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
+                        if(dumpEnabled)
+                            if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                            else System.out.print("\n[D] Result:\n"+result);
+                    }
+                    else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
+                }
+                else if(text.startsWith("react ")&&text.length()>8)
+                {
+                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                    String[] parsed=text.split(" ");
+                    if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                    {
+                        String result=client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
+                        if(dumpEnabled)
+                            System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                    else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
+                }
+                else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}
+                else if(text.startsWith("nick "))
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length<3)
+                    {
+                        System.out.print("[X] Usage: nick <userID> <nickname>");
+                    }
+                    else
+                    {
+                        String nick="";
+                        for (int i=2;i!=arguments.length;i++) nick+=(arguments[i]+" ");
+                        String result=client.setMemberNickname(arguments[1],nick.trim());
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                }
+                else if(text.startsWith("rmnick ")&&text.length()==15)
+                {
+                    String result = client.setMemberNickname(text.substring(7), null);
+                    if(dumpEnabled&&result!=null) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+                else if(text.startsWith("smlink ")&&text.length()>15)
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length==3)
+                    {
+                        String result=client.getSocialLink(arguments[1],arguments[2]);
                         System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    }
+                    else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
                 }
-                else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
+                else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
+                else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
+                else if(text.equals("help")) System.out.print(helpText);
+                else{System.out.print("[!] Type 'help' to get available commands and usages");}
             }
-            else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}
-            else if(text.startsWith("nick "))
+            catch(Throwable e)
             {
-                String[] arguments=text.split(" ");
-                if(arguments.length<3)
-                {
-                    System.out.print("[X] Usage: nick <userID> <nickname>");
-                }
-                else
-                {
-                    String nick="";
-                    for (int i=2;i!=arguments.length;i++) nick+=(arguments[i]+" ");
-                    String result=client.setMemberNickname(arguments[1],nick.trim());
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                }
+                StringWriter esw = new StringWriter();
+                e.printStackTrace(new PrintWriter(esw));
+                System.out.print("[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
             }
-            else if(text.startsWith("rmnick ")&&text.length()==15)
-            {
-                String result = client.setMemberNickname(text.substring(7), null);
-                if(dumpEnabled&&result!=null) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-            }
-            else if(text.startsWith("smlink ")&&text.length()>15)
-            {
-                String[] arguments=text.split(" ");
-                if(arguments.length==3)
-                {
-                    String result=client.getSocialLink(arguments[1],arguments[2]);
-                    System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                }
-                else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
-            }
-            else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
-            else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
-            else if(text.equals("help")) System.out.print(helpText);
-            else{System.out.print("[!] Type 'help' to get available commands and usages");}
             textCache=text;
         }
     }

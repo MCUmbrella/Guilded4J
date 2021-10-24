@@ -8,8 +8,8 @@ package vip.floatationdevice.guilded4j.event;
  */
 public class GuildedWebsocketInitializedEvent extends GuildedEvent
 {
-    private String lastMessageId;
-    private int heartbeatIntervalMs;
+    private final String lastMessageId;
+    private final int heartbeatIntervalMs;
 
     /**
      * Generate GuildedWebsocketInitializedEvent using the given keys.

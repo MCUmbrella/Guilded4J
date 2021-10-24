@@ -10,9 +10,9 @@ import java.util.EventObject;
  */
 public class GuildedWebsocketClosedEvent extends EventObject
 {
-    private int code=Integer.MIN_VALUE;
-    private String reason="";
-    private Boolean remote=false;
+    private final int code;
+    private final String reason;
+    private final Boolean remote;
 
     /**
      * Generate a GuildedWebsocketClosedEvent using the given keys.

@@ -59,7 +59,7 @@ public class G4JDebugger
         @Subscribe
         public void onInit(GuildedWebsocketInitializedEvent e)
         {
-            System.out.print("[i] Logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
+            System.out.print("\n[i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
         }
         @Subscribe
         public void onDisconnect(GuildedWebsocketClosedEvent e)
@@ -101,27 +101,32 @@ public class G4JDebugger
         }
     }
     final static Scanner scanner=new Scanner(System.in);
+    private static String token;
     static String workdir="(init)";
     static G4JClient client;
+    static G4JWebSocketClient wsclient;
     public static void main(String[] args)
     {
         G4JSession session=new G4JSession();
         if(session.restore())
         {
             client=new G4JClient(session.savedToken);
+            wsclient=new G4JWebSocketClient(session.savedToken);
             workdir=session.savedWorkdir;
             System.out.println("[i] Restoring session");
         }
         else
         {
             System.out.print("Enter AuthToken: ");
-            client=new G4JClient(scanner.nextLine());
+            token=scanner.nextLine();
+            client=new G4JClient(token);
+            wsclient=new G4JWebSocketClient(token);
             System.out.println("[i] Logging in");
         }
-        client.connect();
+        wsclient.connect();
         String text;//typed command
         String textCache="";//previous command
-        G4JClient.bus.register(new GuildedEventListener());
+        wsclient.bus.register(new GuildedEventListener());
         for(;;System.out.print("\n["+workdir+"] #"))
         {
             text=scanner.nextLine();
@@ -133,10 +138,10 @@ public class G4JDebugger
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
-                    client.toggleDump();
+                    wsclient.toggleDump();
                 }
-                else if(text.startsWith("token ")&&text.length()>6){System.out.print("[i] Updated AuthToken");client.setAuthToken(text.substring(6));}
-                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.close();}
+                else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("[i] Updated AuthToken");client.setAuthToken(token);wsclient.setAuthToken(token);}
+                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");wsclient.close();}
                 else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
                 else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
                 else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
@@ -254,8 +259,8 @@ public class G4JDebugger
                     }
                     else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
                 }
-                else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
-                else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}
+                else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
+                else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);
                 else{System.out.print("[!] Type 'help' to get available commands and usages");}
             }
@@ -263,7 +268,7 @@ public class G4JDebugger
             {
                 StringWriter esw = new StringWriter();
                 e.printStackTrace(new PrintWriter(esw));
-                System.out.print("[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
+                System.out.print("\n[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
             }
             textCache=text;
         }

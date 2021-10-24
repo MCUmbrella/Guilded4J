@@ -34,9 +34,11 @@ public class G4JClient extends WebSocketClient
     private static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
     private static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
     private static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
+    private static final String SOCIAL_LINK_URL="https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}";
     private static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
     private static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
     private static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
+    private static final String[] socialMedias={"twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", "roblox"};
     protected String authToken;
     private boolean dump=false;
 
@@ -451,9 +453,35 @@ public class G4JClient extends WebSocketClient
 
 ////////////////////////////// Social links //////////////////////////////
 
-    public String getSocialLink(String type) //TODO
+    /**
+     * Retrieves a member's public social links.<br>
+     * <a>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
+     * @param userId The target user's ID.
+     * @param type The type of social link to retrieve.<br>- should be "twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", or "roblox".
+     * @throws IllegalArgumentException If the value of "type" argument is not listed.
+     * @return A JSON String with a "type" key and a "handle" key if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     */
+    public String getSocialLink(String userId, String type)
     {
-        return null;
+        String result;
+        boolean found = false;
+        for(String s:socialMedias) if(s.equals(type.toLowerCase())){found=true;break;}
+        if(found)
+        {
+            try
+            {
+                result=HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type)).
+                        header("Authorization","Bearer "+authToken).
+                        header("Accept","application/json").
+                        header("Content-type","application/json").
+                        timeout(20000).execute().body();
+                return result;
+            }catch (Exception e)
+            {
+                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            }
+        }
+        else throw new IllegalArgumentException("The specified social media '"+type+"' is not available");
     }
 
 ////////////////////////////// Group membership //////////////////////////////

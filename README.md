@@ -29,8 +29,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] XP
 - - [x] Add XP to user - awardUserXp()
 - - [x] Add XP to user group - awardRoleXp()
-- [ ] Social links
-- - [ ] Get member's social link
+- [x] Social links
+- - [x] Get member's social link
 - [ ] Group membership
 - - [x] Add group member - addGroupMember()
 - - [x] Remove group member - removeGroupMember()

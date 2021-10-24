@@ -237,9 +237,20 @@ public class G4JDebugger
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
             }
-            else if(text.startsWith("rmnick ")&&text.length()==15) {
+            else if(text.startsWith("rmnick ")&&text.length()==15)
+            {
                 String result = client.setMemberNickname(text.substring(7), null);
                 if(dumpEnabled&&result!=null) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+            }
+            else if(text.startsWith("smlink ")&&text.length()>15)
+            {
+                String[] arguments=text.split(" ");
+                if(arguments.length==3)
+                {
+                    String result=client.getSocialLink(arguments[1],arguments[2]);
+                    System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                }
+                else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
             }
             else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.isClosed()){client.connect();}else client.reconnect();}
             else if(text.equals("exit")){System.out.println("[i] Exiting");client.close();session.save();break;}

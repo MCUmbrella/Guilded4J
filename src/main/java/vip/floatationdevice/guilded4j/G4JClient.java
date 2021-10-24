@@ -28,6 +28,8 @@ public class G4JClient extends WebSocketClient
     private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
     private static final URI WEBSOCKET_URI=initURI();
     private static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
+    private static final String ROLES_URL="https://www.guilded.gg/api/v1/members/{userId}/roles";
+    private static final String NICKNAME_URL="https://www.guilded.gg/api/v1/members/{userId}/nickname";
     private static final String FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum";
     private static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
     private static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
@@ -148,7 +150,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Chat & messaging //////////////////////////////
 
     /**
-     * Create a channel message.
+     * Create a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
      * @param content The content of the message.
      * @return A JSON string that contains a ChatMessage object called "message" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
@@ -171,7 +173,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Delete a channel message.
+     * Delete a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
      * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
@@ -190,7 +192,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Update a channel message.
+     * Update a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate</a>
      * @return A JSON string that contains the updated ChatMessage object (same UUID but new content) called "message" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
@@ -211,7 +213,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Get details for a specific chat message from a chat channel.
+     * Get details for a specific chat message from a chat channel.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageRead</a>
      * @return A JSON string that directly contains the ChatMessage object with the given UUID if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
@@ -233,7 +235,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Get a list of the latest 50 messages from a channel.
+     * Get a list of the latest 50 messages from a channel.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
      * @return An ChatMessage type ArrayList that contains up to 50 ChatMessage objects if succeeded, else return {@code null}
      */
@@ -259,9 +261,29 @@ public class G4JClient extends WebSocketClient
 
 ////////////////////////////// Members //////////////////////////////
 
-    public String[] getMemberRoles(String userId) //TODO
+    /**
+     * Get a list of the roles assigned to a member.<br>
+     * <a>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
+     * @param userId The ID of the member to obtain roles from.
+     * @return A String type ArrayList. Contains the IDs of the roles that the member currently has.
+     */
+    public ArrayList<String> getMemberRoles(String userId)
     {
-        return null;
+        try
+        {
+            ArrayList<String> roles=new ArrayList<String>();
+            String rawResult= HttpRequest.get(ROLES_URL.replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+            JSONArray array=new JSONObject(rawResult).getJSONArray("roleIds");
+            Object[] converted=array.toArray();
+            for(int i=0;i!=converted.length;i++) roles.add(converted[i].toString());
+            return roles;
+        }catch(Exception e)
+        {
+            return null;
+        }
     }
 
     public String updateMemberNickname(String userId, String nickname) //TODO
@@ -277,7 +299,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Forums //////////////////////////////
 
     /**
-     * Create a thread in a forum.
+     * Create a thread in a forum.<br>
      * <a>https://www.guilded.gg/docs/api/forums/ForumThreadCreate</a>
      * @param title The title of the thread.
      * @param content The thread's content.
@@ -302,7 +324,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// List items //////////////////////////////
 
     /**
-     * Create a list item.
+     * Create a list item.<br>
      * <a>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
      * @param message The item's name.
      * @param note The item's note (can be null).
@@ -327,7 +349,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Reactions //////////////////////////////
 
     /**
-     * Add a reaction emote.
+     * Add a reaction emote.<br>
      * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
      * @param emoteId The ID of the emote.
      * @return A JSON string that contains a ContentReaction object called "emote" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
@@ -349,7 +371,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Team XP //////////////////////////////
 
     /**
-     * Award XP to a member.
+     * Award XP to a member.<br>
      * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
      * @param userId The target user's ID.
      * @param amount The amount of xp to add.
@@ -372,7 +394,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Award XP to all members with a particular role.
+     * Award XP to all members with a particular role.<br>
      * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
      * @param roleId The ID of the role.
      * @param amount The amount of xp to add.
@@ -404,7 +426,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Group membership //////////////////////////////
 
     /**
-     * Add member to group.
+     * Add member to group.<br>
      * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
      * @param groupId The target group's ID.
      * @param userId The target user's ID.
@@ -425,7 +447,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Remove member from group.
+     * Remove member from group.<br>
      * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete</a>
      * @param groupId The target group's ID.
      * @param userId The target user's ID.
@@ -448,7 +470,7 @@ public class G4JClient extends WebSocketClient
 ////////////////////////////// Role membership //////////////////////////////
 
     /**
-     * Assign role to member.
+     * Assign role to member.<br>
      * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
      * @param userId The target user's ID.
      * @param roleId The target role's ID.
@@ -469,7 +491,7 @@ public class G4JClient extends WebSocketClient
     }
 
     /**
-     * Remove role from member.
+     * Remove role from member.<br>
      * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
      * @param userId The target user's ID.
      * @param roleId The target role's ID.

@@ -121,7 +121,7 @@ public class G4JDebugger
             text=scanner.nextLine();
             if(text.equals("!!")){text=textCache;}
             if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-            else if(text.equals("test")){client.createChannelMessage(workdir,"c\ncc\nccc");}
+            else if(text.equals("test")){System.out.println(client.getMemberRoles("8412wg5d"));}
             else if(text.equals("dump"))
             {
                 dumpEnabled=!dumpEnabled;

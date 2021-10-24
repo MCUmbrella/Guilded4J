@@ -18,7 +18,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Get message info - getMessage()
 - - [x] Get last 50 messages - getChannelMessages()
 - [ ] Members
-- - [ ] Get member's role(s)
+- - [x] Get member's role(s) - getMemberRoles()
 - - [ ] Update/delete nickname
 - [ ] Forum
 - - [x] Create forum thread - createForumThread()

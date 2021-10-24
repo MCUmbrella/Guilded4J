@@ -18,9 +18,8 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
 import javax.annotation.Nullable;
 
 /**
- * The Guilded4J client that can receive WebSocket events and send HTTP requests to the API.
+ * The Guilded4J client that can send HTTP requests to the API.
  * <p>NOTE:</p>
- * <p>- After creating G4JClient object you need to manually call connect() or disconnect() to start/stop receiving WebSocket events. These operations doesn't affect sending HTTP requests.</p>
  * <p>- When an exception occurs in the operation of sending HTTP request, the method will return a JSON string (like {"Exception":" result of Exception.toString()"}) instead of throwing an Exception.</p>
  */
 public class G4JClient

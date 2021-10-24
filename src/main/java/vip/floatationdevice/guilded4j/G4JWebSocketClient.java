@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 /**
  * Guilded4J WebSocket event manager.
+ * <p>NOTE:</p>
+ * <p>- After creating G4JWebSocketClient object you need to manually call connect(), close() or reconnect() to start/stop receiving WebSocket events.</p>
  */
 public class G4JWebSocketClient extends WebSocketClient
 {

@@ -13,6 +13,7 @@ import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 import javax.annotation.Nullable;
@@ -49,23 +50,21 @@ public class G4JClient
      * Create a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
      * @param content The content of the message.
-     * @return A JSON string that contains a ChatMessage object called "message" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @return The newly created message's ChatMessage object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     //TODO: createChannelMessage(String channelId, String content, @Nullable String[] replyMessageIds, @Nullable Boolean isPrivate)
-    public String createChannelMessage(String channelId, String content)
+    public ChatMessage createChannelMessage(String channelId, String content)
     {
-        try
-        {
-            return HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    body(new JSONObject().set("content",content).toString()).
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-        }
+        JSONObject result=new JSONObject(HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body(new JSONObject().set("content",content).toString()).
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new ChatMessage().fromString(result.get("message").toString());
     }
 
     /**

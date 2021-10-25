@@ -170,7 +170,7 @@ public class G4JDebugger
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
                     else{
-                        String result=client.createChannelMessage(workdir,text.substring(5));
+                        String result=client.createChannelMessage(workdir,text.substring(5)).toString();
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                     }
                 }

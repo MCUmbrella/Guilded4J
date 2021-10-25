@@ -120,9 +120,9 @@ public class ChatMessage// https://www.guilded.gg/docs/api/chat/ChatMessage
      */
     public ChatMessage fromString(@Nonnull String rawString)
     {
-        JSONObject json=new JSONObject(rawString);
         if(JSONUtil.isJson(rawString))
         {
+            JSONObject json=new JSONObject(rawString);
             if(json.getStr("id")==null||json.getStr("type")==null
                     ||json.getStr("channelId")==null||json.getStr("content")==null
                     ||json.getStr("createdAt")==null||json.getStr("createdBy")==null)

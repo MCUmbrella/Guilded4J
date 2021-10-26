@@ -132,29 +132,28 @@ public class G4JClient
     }
 
     /**
-     * Get a list of the latest 50 messages from a channel.<br>
+     * Get a list of the latest 100 messages from a channel.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
-     * @return An ChatMessage type ArrayList that contains up to 50 ChatMessage objects if succeeded, else return {@code null}
+     * @param channelId The ID of the channel.
+     * @return An ChatMessage type ArrayList that contains up to 100 ChatMessage objects.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    //TODO: public ArrayList<ChatMessage> getChannelMessages(String channelId, Boolean includePrivate)
     public ArrayList<ChatMessage> getChannelMessages(String channelId)
     {
         ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
-        try
-        {
-            String rawResult= HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    timeout(20000).execute().body();
-            if(!new JSONObject(rawResult).containsKey("messages")) return null;
-            JSONArray array=new JSONObject(rawResult).getJSONArray("messages");
-            Object[] converted=array.toArray();
-            for(int i=0;i!=converted.length;i++) messages.add(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
-            return messages;
-        }catch (Exception e)
-        {
-            return null;
-        }
+
+        JSONObject result=new JSONObject(HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        JSONArray array=result.getJSONArray("messages");
+        Object[] converted=array.toArray();
+        for(int i=0;i!=converted.length;i++) messages.add(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
+        return messages;
     }
 
 ////////////////////////////// Members //////////////////////////////

@@ -92,22 +92,23 @@ public class G4JClient
     /**
      * Update a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate</a>
-     * @return A JSON string that contains the updated ChatMessage object (same UUID but new content) called "message" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param channelId The ID of the channel.
+     * @param messageId The ID of the message.
+     * @param content The message content to update.
+     * @return the updated message's ChatMessage object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String updateChannelMessage(String channelId, String msgId, String content)
+    public ChatMessage updateChannelMessage(String channelId, String messageId, String content)
     {
-        try
-        {
-            return HttpRequest.put(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    body(new JSONObject().set("content",content).toString()).
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-        }
+        JSONObject result=new JSONObject(HttpRequest.put(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+messageId).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body(new JSONObject().set("content",content).toString()).
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new ChatMessage().fromString(result.get("message").toString());
     }
 
     /**

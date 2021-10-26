@@ -183,8 +183,8 @@ public class G4JDebugger
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
                     else{
-                        String result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        ChatMessage result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result.toString()).toStringPretty());
                     }
                 }
                 else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}

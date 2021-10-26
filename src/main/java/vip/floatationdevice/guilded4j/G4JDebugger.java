@@ -177,12 +177,7 @@ public class G4JDebugger
                 else if(text.startsWith("delete ")&&text.length()==43)
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                    else{
-                        String result=client.deleteChannelMessage(workdir,text.substring(7));
-                        if(dumpEnabled)
-                            if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                            else System.out.print("\n[D] Result:\n"+result);
-                    }
+                    else client.deleteChannelMessage(workdir,text.substring(7));
                 }
                 else if(text.startsWith("update ")&&text.length()>44)
                 {

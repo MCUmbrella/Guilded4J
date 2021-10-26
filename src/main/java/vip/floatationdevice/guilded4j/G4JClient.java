@@ -9,6 +9,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -70,20 +71,21 @@ public class G4JClient
     /**
      * Delete a channel message.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param channelId The ID of the channel.
+     * @param messageId The ID of the message.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String deleteChannelMessage(String channelId, String msgId)
+    public void deleteChannelMessage(String channelId, String messageId)
     {
-        try
+        String result=HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+messageId).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            String rawResult= HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-            return rawResult.equals("")?null:rawResult;
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
         }
     }
 

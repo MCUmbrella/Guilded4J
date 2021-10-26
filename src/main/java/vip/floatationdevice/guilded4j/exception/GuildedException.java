@@ -11,7 +11,7 @@ public class GuildedException extends RuntimeException
      */
     public GuildedException(String code, String message)
     {
-        super(message);
+        super(code + " - " + message);
         this.code = code;
     }
 
@@ -20,10 +20,4 @@ public class GuildedException extends RuntimeException
      * @return The error code in the JSON returned by Guilded API.
      */
     public String getCode() {return code;}
-
-    @Override
-    public String toString()
-    {
-        return this.getClass().getName() + ": " + getCode() + " - " + getMessage();
-    }
 }

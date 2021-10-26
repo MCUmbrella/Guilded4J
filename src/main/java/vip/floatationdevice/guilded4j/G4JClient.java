@@ -114,23 +114,21 @@ public class G4JClient
     /**
      * Get details for a specific chat message from a chat channel.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageRead</a>
-     * @return A JSON string that directly contains the ChatMessage object with the given UUID if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param channelId The ID of the channel.
+     * @param messageId The ID of the message.
+     * @return ChatMessage object of the message with the given UUID.
      */
-    public String getMessage(String channelId, String msgId)
+    public ChatMessage getMessage(String channelId, String messageId)
     {
-        try
-        {
-            return new JSONObject(
-                    HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+msgId).
-                            header("Authorization","Bearer "+authToken).
-                            header("Accept","application/json").
-                            header("Content-type","application/json").
-                            timeout(20000).execute().body()
-            ).get("message").toString();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-        }
+        JSONObject result=new JSONObject(new JSONObject(
+                HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+messageId).
+                        header("Authorization","Bearer "+authToken).
+                        header("Accept","application/json").
+                        header("Content-type","application/json").
+                        timeout(20000).execute().body()
+        ));
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new ChatMessage().fromString(result.get("message").toString());
     }
 
     /**

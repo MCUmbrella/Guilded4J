@@ -187,7 +187,7 @@ public class G4JDebugger
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result.toString()).toStringPretty());
                     }
                 }
-                else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4))).toStringPretty());}
+                else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4)).toString()).toStringPretty());}
                 else if(text.startsWith("newitem ")&&text.length()>8)
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");

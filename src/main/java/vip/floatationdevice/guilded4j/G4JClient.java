@@ -17,6 +17,7 @@ import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.ForumThread;
+import vip.floatationdevice.guilded4j.object.ListItem;
 
 import javax.annotation.Nullable;
 
@@ -249,22 +250,20 @@ public class G4JClient
      * <a>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
      * @param message The item's name.
      * @param note The item's note (can be null).
-     * @return A JSON string that contains a ListItem object called "listItem" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @return The newly created item's ListItem object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String createListItem(String channelId, String message, @Nullable String note)
+    public ListItem createListItem(String channelId, String message, @Nullable String note)
     {
-        try
-        {
-            return HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}",channelId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message",message).set("note",note).toString()).
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-        }
+        JSONObject result=new JSONObject(HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}",channelId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message",message).set("note",note).toString()).
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new ListItem().fromString(result.get("listItem").toString());
     }
 
 ////////////////////////////// Reactions //////////////////////////////

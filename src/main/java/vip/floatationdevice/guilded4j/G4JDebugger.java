@@ -37,8 +37,8 @@ public class G4JDebugger
             "    Update a message with specified UUID\n"+
             " > get <UUID>\n"+
             "    Get the raw message object string from specified UUID\n"+
-            " > newitem <string>\n"+
-            "    Create a list item\n"+
+            " > mkitem\n"+
+            "    Create a list item in the list channel\n"+
             " > addxp <(string)userId> <(int)amount>\n"+
             "    Add XP to specified user\n"+
             " > addrolexp <(int)roleId> <(int)amount>\n"+
@@ -55,7 +55,7 @@ public class G4JDebugger
             "    Get the social media link of the specified user.\n"+
             "    Available: twitch, bnet, psn, xbox, steam, origin,\n"+
             "    youtube, twitter, facebook, switch, patreon, roblox\n"+
-            "> mkthread\n"+
+            " > mkthread\n"+
             "    Create a forum thread in the forum channel\n"+
             " > exit\n" +
             "    Log out and exit";
@@ -191,11 +191,18 @@ public class G4JDebugger
                     }
                 }
                 else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4)).toString()).toStringPretty());}
-                else if(text.startsWith("newitem ")&&text.length()>8)
+                else if(text.equals("mkitem"))
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
-                    else{
-                        String result=client.createListItem(workdir,text.substring(8),null);
+                    else
+                    {
+                        Scanner s=new Scanner(System.in);
+                        String message, note;
+                        System.out.print("[i] Enter the list item's display message:\n? ");message=s.nextLine();
+                        if(message.length()<1) {System.out.print("[X] Message too short");continue;}
+                        System.out.print("[i] Enter the note (optional):\n? ");note=s.nextLine();
+                        if(note.length()<1) note=null;
+                        String result=client.createListItem(workdir,message,note).toString();
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                     }
                 }
@@ -266,12 +273,15 @@ public class G4JDebugger
                 }
                 else if (text.equals("mkthread"))
                 {
+                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
                     Scanner s=new Scanner(System.in);
                     String title, content;
                     System.out.print("[i] Enter title:\n? ");
                     title=s.nextLine();
+                    if(title.length()<1){System.out.print("[X] Title too short");continue;}
                     System.out.print("[i] Enter content:\n? ");
                     content=s.nextLine();
+                    if(content.length()<1){System.out.print("[X] Content too short");continue;}
                     String result=client.createForumThread(workdir,title,content).toString();
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }

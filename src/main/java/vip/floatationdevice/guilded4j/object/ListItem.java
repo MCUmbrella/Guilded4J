@@ -49,7 +49,7 @@ public class ListItem
         JSONObject json=new JSONObject(rawString);
         if(JSONUtil.isJson(rawString))
         {
-            if(json.getStr("id")==null||json.getStr("channelId")==null
+            if(json.getStr("id")==null||json.getStr("message")==null
                     ||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
                 throw new IllegalArgumentException("At least 1 basic key of ListItem is missing");
             return this.setId(json.getStr("id"))

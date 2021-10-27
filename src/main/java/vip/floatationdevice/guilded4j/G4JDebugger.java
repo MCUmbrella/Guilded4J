@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 import java.io.*;
@@ -141,7 +142,7 @@ public class G4JDebugger
             try
             {
                 if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-                else if(text.equals("test")){}
+                else if(text.equals("test")){System.out.println("[!] skibidi bop mm dada");throw new UnknownError("booooooooooooom");}
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
@@ -243,13 +244,13 @@ public class G4JDebugger
                         String nick="";
                         for (int i=2;i!=arguments.length;i++) nick+=(arguments[i]+" ");
                         String result=client.setMemberNickname(arguments[1],nick.trim());
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
                     }
                 }
                 else if(text.startsWith("rmnick ")&&text.length()==15)
                 {
                     String result = client.setMemberNickname(text.substring(7), null);
-                    if(dumpEnabled&&result!=null) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
                 }
                 else if(text.startsWith("smlink ")&&text.length()>15)
                 {
@@ -266,11 +267,21 @@ public class G4JDebugger
                 else if(text.equals("help")) System.out.print(helpText);
                 else{System.out.print("[!] Type 'help' to get available commands and usages");}
             }
-            catch(Throwable e)
+            catch (GuildedException e)
+            {
+                System.out.print("[X] Operation failed\n    "+e.getCode()+": "+e.getDescription());
+            }
+            catch(Exception e)
             {
                 StringWriter esw = new StringWriter();
                 e.printStackTrace(new PrintWriter(esw));
                 System.out.print("\n[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
+            }
+            catch(Throwable e)
+            {
+                System.out.println("\n[X] A fatal error occurred. Program will exit");
+                e.printStackTrace();
+                System.exit(-1);
             }
             textCache=text;
         }

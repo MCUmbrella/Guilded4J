@@ -135,21 +135,20 @@ public class G4JClient
      * Get a list of the latest 100 messages from a channel.<br>
      * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
      * @param channelId The ID of the channel.
-     * @return An ChatMessage type ArrayList that contains up to 100 ChatMessage objects.
+     * @return A ChatMessage type ArrayList that contains up to 100 ChatMessage objects.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     //TODO: public ArrayList<ChatMessage> getChannelMessages(String channelId, Boolean includePrivate)
     public ArrayList<ChatMessage> getChannelMessages(String channelId)
     {
-        ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
-
         JSONObject result=new JSONObject(HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 timeout(20000).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        ArrayList<ChatMessage> messages=new ArrayList<ChatMessage>();
         JSONArray array=result.getJSONArray("messages");
         Object[] converted=array.toArray();
         for(int i=0;i!=converted.length;i++) messages.add(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
@@ -162,26 +161,23 @@ public class G4JClient
      * Get a list of the roles assigned to a member.<br>
      * <a>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
      * @param userId The ID of the member to obtain roles from.
-     * @return A String type ArrayList contains the IDs of the roles that the member currently has, if succeeded, else return {@code null}.
+     * @return An Integer type ArrayList contains the IDs of the roles that the member currently has.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public ArrayList<String> getMemberRoles(String userId)
+    public ArrayList<Integer> getMemberRoles(String userId)
     {
-        try
-        {
-            ArrayList<String> roles=new ArrayList<String>();
-            String rawResult= HttpRequest.get(ROLES_URL.replace("{userId}",userId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-            if(!new JSONObject(rawResult).containsKey("roleIds")) return null;
-            JSONArray array=new JSONObject(rawResult).getJSONArray("roleIds");
-            Object[] converted=array.toArray();
-            for(int i=0;i!=converted.length;i++) roles.add(converted[i].toString());
-            return roles;
-        }catch(Exception e)
-        {
-            return null;
-        }
+        ArrayList<Integer> roles=new ArrayList<Integer>();
+        JSONObject result=new JSONObject(HttpRequest.get(ROLES_URL.replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        if(!result.containsKey("roleIds")) return roles;
+        JSONArray array=result.getJSONArray("roleIds");
+        Object[] converted=array.toArray();
+        for(int i=0;i!=converted.length;i++) roles.add((int)converted[i]);
+        return roles;
     }
 
     /**
@@ -189,39 +185,37 @@ public class G4JClient
      * <a>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
      * @param userId The ID of the member.
      * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
-     * @return A JSON String contains a "nickname" key when setting nickname, {@code null} when deleting nickname.<br>
-     * If failed, return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @return The nickname to be set when setting nickname, {@code null} when deleting nickname.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public String setMemberNickname(String userId, @Nullable String nickname)
     {
-        String rawResult;
+        JSONObject result;
         if(nickname==null)
-            try
+        {
+            String rawString=HttpRequest.delete(NICKNAME_URL.replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(20000).execute().body();
+            if(!JSONUtil.isJson(rawString)) return null;
+            else
             {
-                rawResult= HttpRequest.delete(NICKNAME_URL.replace("{userId}",userId)).
-                        header("Authorization","Bearer "+authToken).
-                        header("Accept","application/json").
-                        timeout(20000).execute().body();
-                return rawResult.equals("")?null:rawResult;
+                result=new JSONObject(rawString);
+                throw new GuildedException(result.getStr("code"),result.getStr("message"));
             }
-            catch(Exception e)
-            {
-                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-            }
+        }
         else
-            try
-            {
-                rawResult= HttpRequest.put(NICKNAME_URL.replace("{userId}",userId)).
-                        header("Authorization","Bearer "+authToken).
-                        header("Accept","application/json").
-                        header("Content-type","application/json").
-                        body(new JSONObject().set("nickname",nickname).toString()).
-                        timeout(20000).execute().body();
-                return rawResult;
-            }catch (Exception e)
-            {
-                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-            }
+        {
+            result=new JSONObject(HttpRequest.put(NICKNAME_URL.replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    body(new JSONObject().set("nickname",nickname).toString()).
+                    timeout(20000).execute().body());
+            if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+            return result.get("nickname").toString();
+        }
     }
 
 ////////////////////////////// Forums //////////////////////////////

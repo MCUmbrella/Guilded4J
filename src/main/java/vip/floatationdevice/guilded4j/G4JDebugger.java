@@ -55,6 +55,8 @@ public class G4JDebugger
             "    Get the social media link of the specified user.\n"+
             "    Available: twitch, bnet, psn, xbox, steam, origin,\n"+
             "    youtube, twitter, facebook, switch, patreon, roblox\n"+
+            "> mkthread\n"+
+            "    Create a forum thread in the forum channel\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -132,15 +134,15 @@ public class G4JDebugger
             System.out.println("[i] Logging in");
         }
         wsclient.connect();
-        String text;//typed command
+        String text=null;//typed command
         String textCache="";//previous command
         wsclient.bus.register(new GuildedEventListener());
         for(;;System.out.print("\n["+workdir+"] #"))
         {
-            text=scanner.nextLine();
-            if(text.equals("!!")){text=textCache;}
             try
             {
+                text=scanner.nextLine();
+                if(text.equals("!!")){text=textCache;}
                 if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
                 else if(text.equals("test")){}
                 else if(text.equals("dump"))
@@ -277,6 +279,10 @@ public class G4JDebugger
                 else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);
                 else{System.out.print("[!] Type 'help' to get available commands and usages");}
+            }
+            catch (NoSuchElementException e)
+            {
+                System.out.println("[i] Exiting");wsclient.close();session.save();break;
             }
             catch (GuildedException e)
             {

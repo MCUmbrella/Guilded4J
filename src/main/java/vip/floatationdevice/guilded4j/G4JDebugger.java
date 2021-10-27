@@ -111,13 +111,13 @@ public class G4JDebugger
         }
     }
     final static Scanner scanner=new Scanner(System.in);
-    private static String token;
     static String workdir="(init)";
     static G4JClient client;
     static G4JWebSocketClient wsclient;
     public static void main(String[] args)
     {
         G4JSession session=new G4JSession();
+        String token;
         if(session.restore())
         {
             client=new G4JClient(session.savedToken);

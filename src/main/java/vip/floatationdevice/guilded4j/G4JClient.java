@@ -1,8 +1,6 @@
 // Copyright (c) 2021 MCUmbrella & contributors
 
 package vip.floatationdevice.guilded4j;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import cn.hutool.http.HttpRequest;
@@ -10,21 +8,13 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.google.common.eventbus.EventBus;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-import vip.floatationdevice.guilded4j.event.*;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.ForumThread;
-import vip.floatationdevice.guilded4j.object.ListItem;
+import vip.floatationdevice.guilded4j.exception.*;
+import vip.floatationdevice.guilded4j.object.*;
 
 import javax.annotation.Nullable;
 
 /**
  * The Guilded4J client that can send HTTP requests to the API.
- * <p>NOTE:</p>
- * <p>- When an exception occurs in the operation of sending HTTP request, the method will return a JSON string (like {"Exception":" result of Exception.toString()"}) instead of throwing an Exception.</p>
  */
 public class G4JClient
 {
@@ -46,7 +36,7 @@ public class G4JClient
     {
         this.authToken=authToken;
     }
-//============================== API FUNCTIONS START ==============================
+//============================== API FUNCTIONS START ============================== //TODO: rewrite exception handling
 ////////////////////////////// Chat & messaging //////////////////////////////
 
     /**

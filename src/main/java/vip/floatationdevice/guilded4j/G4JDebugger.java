@@ -142,7 +142,7 @@ public class G4JDebugger
             try
             {
                 if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-                else if(text.equals("test")){System.out.println("[!] skibidi bop mm dada");throw new UnknownError("booooooooooooom");}
+                else if(text.equals("test")){}
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
@@ -261,6 +261,17 @@ public class G4JDebugger
                         System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                     }
                     else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
+                }
+                else if (text.equals("mkthread"))
+                {
+                    Scanner s=new Scanner(System.in);
+                    String title, content;
+                    System.out.print("[i] Enter title:\n? ");
+                    title=s.nextLine();
+                    System.out.print("[i] Enter content:\n? ");
+                    content=s.nextLine();
+                    String result=client.createForumThread(workdir,title,content).toString();
+                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
                 else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
                 else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}

@@ -287,46 +287,45 @@ public class G4JClient
     /**
      * Award XP to a member.<br>
      * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
-     * @param userId The target user's ID.
-     * @param amount The amount of xp to add.
-     * @return A JSON string contains a "total" key if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param userId Member ID to award XP to.
+     * @param amount The amount of XP to award.
+     * @return The total XP after this operation.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String awardUserXp(String userId, int amount)
+    public int awardUserXp(String userId, int amount)
     {
-        try
-        {
-            return HttpRequest.post(USER_XP_URL.replace("{userId}",userId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    body("{\"amount\":"+amount+"}").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-        }
+        JSONObject result=new JSONObject(HttpRequest.post(USER_XP_URL.replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body("{\"amount\":"+amount+"}").
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return result.getInt("total");
     }
 
     /**
      * Award XP to all members with a particular role.<br>
      * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
-     * @param roleId The ID of the role.
-     * @param amount The amount of xp to add.
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param roleId Role ID to award XP to.
+     * @param amount The amount of XP to award.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String awardRoleXp(int roleId, int amount)
+    public void awardRoleXp(int roleId, int amount)
     {
-        try
+        String result=HttpRequest.post(ROLE_XP_URL.replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body("{\"amount\":"+amount+"}").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.post(ROLE_XP_URL.replace("{roleId}",String.valueOf(roleId))).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    body("{\"amount\":"+amount+"}").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("TeamXpForRoleCreate returned an unexpected JSON string");
         }
     }
 

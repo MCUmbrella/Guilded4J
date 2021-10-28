@@ -211,8 +211,8 @@ public class G4JDebugger
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&parsed[1].length()==8&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                     {
-                        String result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        int result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
+                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
                     }
                     else System.out.print("[X] Usage: addxp <(string)userId> <(int)amount>");
                 }
@@ -220,12 +220,7 @@ public class G4JDebugger
                 {
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
-                    {
-                        String result=client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
-                        if(dumpEnabled)
-                            if(result.startsWith("{")&&result.endsWith("}")) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                            else System.out.print("\n[D] Result:\n"+result);
-                    }
+                        client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
                     else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
                 }
                 else if(text.startsWith("react ")&&text.length()>8)

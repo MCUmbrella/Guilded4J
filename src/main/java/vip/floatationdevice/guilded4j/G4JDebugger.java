@@ -55,7 +55,7 @@ public class G4JDebugger
                 o.writeObject(this);
                 o.close();
                 return true;
-            }catch(Throwable e){System.out.println("[X] Failed to save session: "+e);return false;}
+            }catch(Throwable e){System.err.println("[X] Failed to save session: "+e);return false;}
         }
         public Boolean restore()
         {
@@ -66,7 +66,7 @@ public class G4JDebugger
                 this.savedWorkdir=session.savedWorkdir;
                 i.close();
                 return true;
-            }catch(java.io.FileNotFoundException e){return false;}catch(Throwable e){System.out.println("[X] Failed to restore session: "+e);return false;}
+            }catch(java.io.FileNotFoundException e){return false;}catch(Throwable e){System.err.println("[X] Failed to restore session: "+e);return false;}
         }
     }
     final static Scanner scanner=new Scanner(System.in);
@@ -116,7 +116,7 @@ public class G4JDebugger
                 else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
                 else if(text.equals("ls"))
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     else {
                         ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
                         ChatMessage m;
@@ -130,7 +130,7 @@ public class G4JDebugger
                 }
                 else if(text.startsWith("send ")&&text.length()>5)
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     else{
                         String result=client.createChannelMessage(workdir,text.substring(5)).toString();
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
@@ -138,12 +138,12 @@ public class G4JDebugger
                 }
                 else if(text.startsWith("rm ")&&text.length()==39)
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     else client.deleteChannelMessage(workdir,text.substring(3));
                 }
                 else if(text.startsWith("update ")&&text.length()>44)
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     else{
                         ChatMessage result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result.toString()).toStringPretty());
@@ -152,13 +152,13 @@ public class G4JDebugger
                 else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4)).toString()).toStringPretty());}
                 else if(text.equals("mkitem"))
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     else
                     {
                         Scanner s=new Scanner(System.in);
                         String message, note;
                         System.out.print("[i] Enter the list item's display message:\n? ");message=s.nextLine();
-                        if(message.length()<1) {System.out.print("[X] Message too short");continue;}
+                        if(message.length()<1) {System.err.println("[X] Message too short");continue;}
                         System.out.print("[i] Enter the note (optional):\n? ");note=s.nextLine();
                         if(note.length()<1) note=null;
                         String result=client.createListItem(workdir,message,note).toString();
@@ -173,22 +173,22 @@ public class G4JDebugger
                         int result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
                     }
-                    else System.out.print("[X] Usage: addxp <(string)userId> <(int)amount>");
+                    else System.err.println("[X] Usage: addxp <(string)userId> <(int)amount>");
                 }
                 else if(text.startsWith("addrolexp ")&&text.length()>12)
                 {
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                         client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
-                    else System.out.print("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
+                    else System.err.println("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
                 }
                 else if(text.startsWith("react ")&&text.length()>8)
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                         client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
-                    else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
+                    else System.err.println("[X] Usage: react <contentId> <(int)emoteId>");
                 }
                 else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}
                 else if(text.startsWith("nick "))
@@ -196,7 +196,7 @@ public class G4JDebugger
                     String[] arguments=text.split(" ");
                     if(arguments.length<3)
                     {
-                        System.out.print("[X] Usage: nick <userID> <nickname>");
+                        System.err.println("[X] Usage: nick <userID> <nickname>");
                     }
                     else
                     {
@@ -219,19 +219,19 @@ public class G4JDebugger
                         HashMap<String,String> result=client.getSocialLink(arguments[1],arguments[2]);
                         System.out.print("\n[D] Result:\n"+result);
                     }
-                    else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
+                    else System.err.println("[X] Usage: smlink <userID> <socialMediaName>");
                 }
                 else if (text.equals("mkthread"))
                 {
-                    if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
+                    if(workdir.length()!=36) notifyCD();
                     Scanner s=new Scanner(System.in);
                     String title, content;
                     System.out.print("[i] Enter title:\n? ");
                     title=s.nextLine();
-                    if(title.length()<1){System.out.print("[X] Title too short");continue;}
+                    if(title.length()<1){System.err.println("[X] Title too short");continue;}
                     System.out.print("[i] Enter content:\n? ");
                     content=s.nextLine();
-                    if(content.length()<1){System.out.print("[X] Content too short");continue;}
+                    if(content.length()<1){System.err.println("[X] Content too short");continue;}
                     String result=client.createForumThread(workdir,title,content).toString();
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
@@ -239,25 +239,25 @@ public class G4JDebugger
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.addGroupMember(arguments[1],arguments[2]);
-                    else System.out.print("[X] Usage: groupadd <groupId> <userId>");
+                    else System.err.println("[X] Usage: groupadd <groupId> <userId>");
                 }
                 else if (text.startsWith("groupkick"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.removeGroupMember(arguments[1],arguments[2]);
-                    else System.out.print("[X] Usage: groupkick <groupId> <userId>");
+                    else System.err.println("[X] Usage: groupkick <groupId> <userId>");
                 }
                 else if (text.startsWith("roleadd"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.addRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
-                    else System.out.print("[X] Usage: roleadd <roleId> <userId>");
+                    else System.err.println("[X] Usage: roleadd <roleId> <userId>");
                 }
                 else if (text.startsWith("rolekick"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.removeRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
-                    else System.out.print("[X] Usage: rolekick <roleId> <userId>");
+                    else System.err.println("[X] Usage: rolekick <roleId> <userId>");
                 }
                 else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
                 else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
@@ -270,17 +270,17 @@ public class G4JDebugger
             }
             catch (GuildedException e)
             {
-                System.out.print("[X] Operation failed\n    "+e.getCode()+": "+e.getDescription());
+                System.err.println("[X] Operation failed\n    "+e.getCode()+": "+e.getDescription());
             }
             catch(Exception e)
             {
                 StringWriter esw = new StringWriter();
                 e.printStackTrace(new PrintWriter(esw));
-                System.out.print("\n[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
+                System.err.println("\n[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
             }
             catch(Throwable e)
             {
-                System.out.println("\n[X] A fatal error occurred. Program will exit");
+                System.err.println("\n[X] A fatal error occurred. Program will exit");
                 e.printStackTrace();
                 System.exit(-1);
             }
@@ -336,4 +336,5 @@ public class G4JDebugger
             "    Remove the specified role from specified user\n"+
             " > exit\n" +
             "    Log out and exit";
+    public static void notifyCD(){System.err.println("[X] Specify a list channel UUID first");}
 }

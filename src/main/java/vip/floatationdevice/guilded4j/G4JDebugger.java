@@ -107,7 +107,7 @@ public class G4JDebugger
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
-                    wsclient.toggleDump();
+                    System.out.print("[i] Dump status: "+wsclient.toggleDump());
                 }
                 else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("[i] Updated AuthToken");client.setAuthToken(token);wsclient.setAuthToken(token);}
                 else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");wsclient.close();}
@@ -133,7 +133,7 @@ public class G4JDebugger
                     if(workdir.length()!=36) notifyCD();
                     else{
                         String result=client.createChannelMessage(workdir,text.substring(5)).toString();
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result).toStringPretty());
                     }
                 }
                 else if(text.startsWith("rm ")&&text.length()==39)
@@ -146,7 +146,7 @@ public class G4JDebugger
                     if(workdir.length()!=36) notifyCD();
                     else{
                         ChatMessage result=client.updateChannelMessage(workdir,text.substring(7,43),text.substring(44));
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result.toString()).toStringPretty());
+                        if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result.toString()).toStringPretty());
                     }
                 }
                 else if(text.startsWith("get ")&&text.length()==40){System.out.print(new JSONObject(client.getMessage(workdir,text.substring(4)).toString()).toStringPretty());}
@@ -162,7 +162,7 @@ public class G4JDebugger
                         System.out.print("[i] Enter the note (optional):\n? ");note=s.nextLine();
                         if(note.length()<1) note=null;
                         String result=client.createListItem(workdir,message,note).toString();
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result).toStringPretty());
                     }
                 }
                 else if(text.startsWith("addxp ")&&text.length()>15)
@@ -171,7 +171,7 @@ public class G4JDebugger
                     if(parsed.length==3&&parsed[1].length()==8&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                     {
                         int result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
+                        if(dumpEnabled) System.out.print(RESULT_PFX+result);
                     }
                     else System.err.println("[X] Usage: addxp <(string)userId> <(int)amount>");
                 }
@@ -203,13 +203,13 @@ public class G4JDebugger
                         String nick="";
                         for (int i=2;i!=arguments.length;i++) nick+=(arguments[i]+" ");
                         String result=client.setMemberNickname(arguments[1],nick.trim());
-                        if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
+                        if(dumpEnabled) System.out.print(RESULT_PFX+result);
                     }
                 }
                 else if(text.startsWith("rmnick ")&&text.length()==15)
                 {
                     String result = client.setMemberNickname(text.substring(7), null);
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+result);
+                    if(dumpEnabled) System.out.print(RESULT_PFX+result);
                 }
                 else if(text.startsWith("smlink ")&&text.length()>15)
                 {
@@ -217,7 +217,7 @@ public class G4JDebugger
                     if(arguments.length==3)
                     {
                         HashMap<String,String> result=client.getSocialLink(arguments[1],arguments[2]);
-                        System.out.print("\n[D] Result:\n"+result);
+                        System.out.print(RESULT_PFX+result);
                     }
                     else System.err.println("[X] Usage: smlink <userID> <socialMediaName>");
                 }
@@ -233,7 +233,7 @@ public class G4JDebugger
                     content=s.nextLine();
                     if(content.length()<1){System.err.println("[X] Content too short");continue;}
                     String result=client.createForumThread(workdir,title,content).toString();
-                    if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                    if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result).toStringPretty());
                 }
                 else if (text.startsWith("groupadd"))
                 {
@@ -336,5 +336,6 @@ public class G4JDebugger
             "    Remove the specified role from specified user\n"+
             " > exit\n" +
             "    Log out and exit";
-    public static void notifyCD(){System.err.println("[X] Specify a list channel UUID first");}
+    static void notifyCD(){System.err.println("[X] Specify a list channel UUID first");}
+    final static String RESULT_PFX="[D] Result:\n";
 }

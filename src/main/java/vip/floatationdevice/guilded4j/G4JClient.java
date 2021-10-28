@@ -369,10 +369,10 @@ public class G4JClient
     /**
      * Add member to group.<br>
      * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
-     * @param groupId The target group's ID.
-     * @param userId The target user's ID.
-     * @throw GuildedException if Guilded API returned an error JSON string.
-     * @throw cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     * @param groupId Group ID to add the member to.
+     * @param userId Member ID to add to the group.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void addGroupMember(String groupId, String userId)
     {
@@ -391,9 +391,10 @@ public class G4JClient
     /**
      * Remove member from group.<br>
      * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete</a>
-     * @param groupId The target group's ID.
-     * @param userId The target user's ID.
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param groupId Group ID to remove the member from.
+     * @param userId Member ID to remove from the group.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void removeGroupMember(String groupId, String userId)
     {

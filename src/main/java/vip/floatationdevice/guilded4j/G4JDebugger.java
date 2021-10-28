@@ -57,6 +57,10 @@ public class G4JDebugger
             "    youtube, twitter, facebook, switch, patreon, roblox\n"+
             " > mkthread\n"+
             "    Create a forum thread in the forum channel\n"+
+            " > groupadd <(string)groupId> <userId>\n"+
+            "    Add the specified user to the specified group\n"+
+            " > groupkick <(string)groupId> <userId>\n"+
+            "    Remove the specified user from the specified group\n"+
             " > exit\n" +
             "    Log out and exit";
     static Boolean dumpEnabled=false;
@@ -276,6 +280,20 @@ public class G4JDebugger
                     String result=client.createForumThread(workdir,title,content).toString();
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
+                else if (text.startsWith("groupadd "))
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length==3) client.addGroupMember(arguments[1],arguments[2]);
+                    else System.out.print("[X] Usage: groupadd <groupId> <userId>");
+                }
+                else if (text.startsWith("groupkick"))
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length==3) client.removeGroupMember(arguments[1],arguments[2]);
+                    else System.out.print("[X] Usage: groupkick <groupId> <userId>");
+                }
+                else if (text.startsWith("roleadd"));
+                else if (text.startsWith("rolekick"));
                 else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
                 else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);

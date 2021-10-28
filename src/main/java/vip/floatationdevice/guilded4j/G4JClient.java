@@ -371,19 +371,20 @@ public class G4JClient
      * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
      * @param groupId The target group's ID.
      * @param userId The target user's ID.
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @throw GuildedException if Guilded API returned an error JSON string.
+     * @throw cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String addGroupMember(String groupId, String userId)
+    public void addGroupMember(String groupId, String userId)
     {
-        try
+        String result=HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("GroupMembershipCreate returned an unexpected JSON string");
         }
     }
 
@@ -394,17 +395,17 @@ public class G4JClient
      * @param userId The target user's ID.
      * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
      */
-    public String removeGroupMember(String groupId, String userId)
+    public void removeGroupMember(String groupId, String userId)
     {
-        try
+        String result=HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("GroupMembershipDelete returned an unexpected JSON string");
         }
     }
 

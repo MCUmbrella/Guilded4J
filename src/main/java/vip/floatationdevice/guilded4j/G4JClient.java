@@ -78,6 +78,7 @@ public class G4JClient
         {
             JSONObject json=new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("ChannelMessageDelete returned an unexpected JSON string");
         }
     }
 
@@ -261,20 +262,23 @@ public class G4JClient
     /**
      * Add a reaction emote.<br>
      * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
-     * @param emoteId The ID of the emote.
-     * @return A JSON string that contains a ContentReaction object called "emote" if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param channelId The ID of the channel.
+     * @param contentId Content ID of the content.
+     * @param emoteId Emote ID to apply.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String createContentReaction(String channelId, String contentId, int emoteId)
+    public void createContentReaction(String channelId, String contentId, int emoteId)
     {
-        try
+        String result=HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("ContentReactionCreate returned an unexpected JSON string");
         }
     }
 

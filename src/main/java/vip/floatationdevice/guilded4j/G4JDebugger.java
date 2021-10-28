@@ -31,7 +31,7 @@ public class G4JDebugger
             "    Change/clear the target channel UUID\n" +
             " > send <string>\n" +
             "    Send the typed string\n" +
-            " > delete <UUID>\n"+
+            " > rm <UUID>\n"+
             "    Delete a message with specified UUID\n"+
             " > update <UUID> <string>\n"+
             "    Update a message with specified UUID\n"+
@@ -177,10 +177,10 @@ public class G4JDebugger
                         if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                     }
                 }
-                else if(text.startsWith("delete ")&&text.length()==43)
+                else if(text.startsWith("rm ")&&text.length()==39)
                 {
                     if(workdir.length()!=36) System.out.print("[X] Specify a channel UUID first");
-                    else client.deleteChannelMessage(workdir,text.substring(7));
+                    else client.deleteChannelMessage(workdir,text.substring(3));
                 }
                 else if(text.startsWith("update ")&&text.length()>44)
                 {
@@ -233,11 +233,7 @@ public class G4JDebugger
                     if(workdir.length()!=36) System.out.print("[X] Specify a list channel UUID first");
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
-                    {
-                        String result=client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
-                        if(dumpEnabled)
-                            System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
-                    }
+                        client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
                     else System.out.print("[X] Usage: react <contentId> <(int)emoteId>");
                 }
                 else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}

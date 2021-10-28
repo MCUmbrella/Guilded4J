@@ -2,6 +2,8 @@
 
 package vip.floatationdevice.guilded4j;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONArray;
@@ -336,28 +338,28 @@ public class G4JClient
      * <a>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
      * @param userId The target user's ID.
      * @param type The type of social link to retrieve.<br>- should be "twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", or "roblox".
+     * @return A HashMap with "type", "handle", "serviceId(nullable)" keys.
      * @throws IllegalArgumentException If the value of "type" argument is not listed.
-     * @return A JSON String with a "type" key and a "handle" key if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String getSocialLink(String userId, String type)
+    public HashMap<String, String> getSocialLink(String userId, String type)
     {
-        String result;
         boolean found = false;
         for(String s:socialMedias) if(s.equals(type.toLowerCase())){found=true;break;}
         if(found)
         {
-            try
-            {
-                result=HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type)).
-                        header("Authorization","Bearer "+authToken).
-                        header("Accept","application/json").
-                        header("Content-type","application/json").
-                        timeout(20000).execute().body();
-                return result;
-            }catch (Exception e)
-            {
-                return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
-            }
+            JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    timeout(20000).execute().body());
+            if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+            HashMap<String, String> map=new HashMap<>();
+            map.put("type",(String)result.getByPath("socialLink.type"));
+            map.put("handle",(String)result.getByPath("socialLink.handle"));
+            map.put("serviceId",(String)result.getByPath("socialLink.serviceId"));
+            return map;
         }
         else throw new IllegalArgumentException("The specified social media '"+type+"' is not available");
     }

@@ -257,8 +257,8 @@ public class G4JDebugger
                     String[] arguments=text.split(" ");
                     if(arguments.length==3)
                     {
-                        String result=client.getSocialLink(arguments[1],arguments[2]);
-                        System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
+                        HashMap<String,String> result=client.getSocialLink(arguments[1],arguments[2]);
+                        System.out.print("\n[D] Result:\n"+result);
                     }
                     else System.out.print("[X] Usage: smlink <userID> <socialMediaName>");
                 }

@@ -38,7 +38,7 @@ public class G4JClient
     {
         this.authToken=authToken;
     }
-//============================== API FUNCTIONS START ============================== //TODO: rewrite exception handling
+//============================== API FUNCTIONS START ==============================
 ////////////////////////////// Chat & messaging //////////////////////////////
 
     /**
@@ -415,42 +415,42 @@ public class G4JClient
     /**
      * Assign role to member.<br>
      * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
-     * @param userId The target user's ID.
-     * @param roleId The target role's ID.
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param userId The ID of the member that the role should be assigned to.
+     * @param roleId The role ID to apply to the user.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String addRoleMember(String userId, String roleId)
+    public void addRoleMember(int roleId, String userId)
     {
-        try
+        String result=HttpRequest.put(ROLE_URL.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.put(ROLE_URL.replace("{userId}",userId).replace("{roleId}",roleId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("RoleMembershipCreate returned an unexpected JSON string");
         }
     }
 
     /**
      * Remove role from member.<br>
      * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
-     * @param userId The target user's ID.
-     * @param roleId The target role's ID.
-     * @return {@code null} if succeeded, else return a JSON string with an "Exception" key (Guilded4J's exception), or a "code" key and a "message" key (API's exception).
+     * @param userId The ID of the member that the role should be removed from.
+     * @param roleId The role ID to remove from the user.
      */
-    public String removeRoleMember(String userId, String roleId)
+    public void removeRoleMember(int roleId, String userId)
     {
-        try
+        String result=HttpRequest.delete(ROLE_URL.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(20000).execute().body();
+        if(JSONUtil.isJson(result))
         {
-            return HttpRequest.delete(ROLE_URL.replace("{userId}",userId).replace("{roleId}",roleId)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    timeout(20000).execute().body();
-        }catch (Exception e)
-        {
-            return new JSONObject().set("Exception",e.toString()).set("ExceptionName",e.getClass().getName()).set("ExceptionMessage",e.getMessage()).toString();
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
         }
     }
 

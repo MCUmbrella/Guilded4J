@@ -18,51 +18,6 @@ import java.util.regex.Pattern;
  */
 public class G4JDebugger
 {
-    final static String helpText="COMMANDS:\n" +
-            " > token <AuthToken>\n" +
-            "    Update AuthToken\n" +
-            " > disconnect\n" +
-            " > reconnect\n" +
-            " > dump\n" +
-            "    Toggle dump command result & WebSocket events\n" +
-            " > pwd\n" +
-            "    Print the current channel UUID\n" +
-            " > cd [UUID]\n" +
-            "    Change/clear the target channel UUID\n" +
-            " > send <string>\n" +
-            "    Send the typed string\n" +
-            " > rm <UUID>\n"+
-            "    Delete a message with specified UUID\n"+
-            " > update <UUID> <string>\n"+
-            "    Update a message with specified UUID\n"+
-            " > get <UUID>\n"+
-            "    Get the raw message object string from specified UUID\n"+
-            " > mkitem\n"+
-            "    Create a list item in the list channel\n"+
-            " > addxp <(string)userId> <(int)amount>\n"+
-            "    Add XP to specified user\n"+
-            " > addrolexp <(int)roleId> <(int)amount>\n"+
-            "    Add XP to all users with specified role\n"+
-            " > react <(?)contentId> <(int)emoteId>\n"+
-            "    Add a reaction to specified content\n"+
-            " > lsrole <userId>\n"+
-            "    Print the specified user's role ID(s)\n"+
-            " > nick <userId> <(string)nickname>\n"+
-            "    Set the specified user's nickname\n"+
-            " > rmnick <userId>\n"+
-            "    Remove the specified user's nickname\n"+
-            " > smlink <userID> <(string)socialMediaName>\n"+
-            "    Get the social media link of the specified user.\n"+
-            "    Available: twitch, bnet, psn, xbox, steam, origin,\n"+
-            "    youtube, twitter, facebook, switch, patreon, roblox\n"+
-            " > mkthread\n"+
-            "    Create a forum thread in the forum channel\n"+
-            " > groupadd <(string)groupId> <userId>\n"+
-            "    Add the specified user to the specified group\n"+
-            " > groupkick <(string)groupId> <userId>\n"+
-            "    Remove the specified user from the specified group\n"+
-            " > exit\n" +
-            "    Log out and exit";
     static Boolean dumpEnabled=false;
     static String parseMessage(ChatMessage m)
     {
@@ -280,7 +235,7 @@ public class G4JDebugger
                     String result=client.createForumThread(workdir,title,content).toString();
                     if(dumpEnabled) System.out.print("\n[D] Result:\n"+new JSONObject(result).toStringPretty());
                 }
-                else if (text.startsWith("groupadd "))
+                else if (text.startsWith("groupadd"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.addGroupMember(arguments[1],arguments[2]);
@@ -292,8 +247,18 @@ public class G4JDebugger
                     if(arguments.length==3) client.removeGroupMember(arguments[1],arguments[2]);
                     else System.out.print("[X] Usage: groupkick <groupId> <userId>");
                 }
-                else if (text.startsWith("roleadd"));
-                else if (text.startsWith("rolekick"));
+                else if (text.startsWith("roleadd"))
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length==3) client.addRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
+                    else System.out.print("[X] Usage: roleadd <roleId> <userId>");
+                }
+                else if (text.startsWith("rolekick"))
+                {
+                    String[] arguments=text.split(" ");
+                    if(arguments.length==3) client.removeRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
+                    else System.out.print("[X] Usage: rolekick <roleId> <userId>");
+                }
                 else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
                 else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);
@@ -322,4 +287,53 @@ public class G4JDebugger
             textCache=text;
         }
     }
+    final static String helpText="COMMANDS:\n" +
+            " > token <AuthToken>\n" +
+            "    Update AuthToken\n" +
+            " > disconnect\n" +
+            " > reconnect\n" +
+            " > dump\n" +
+            "    Toggle dump command result & WebSocket events\n" +
+            " > pwd\n" +
+            "    Print the current channel UUID\n" +
+            " > cd [UUID]\n" +
+            "    Change/clear the target channel UUID\n" +
+            " > send <string>\n" +
+            "    Send the typed string\n" +
+            " > rm <UUID>\n"+
+            "    Delete a message with specified UUID\n"+
+            " > update <UUID> <string>\n"+
+            "    Update a message with specified UUID\n"+
+            " > get <UUID>\n"+
+            "    Get the raw message object string from specified UUID\n"+
+            " > mkitem\n"+
+            "    Create a list item in the list channel\n"+
+            " > addxp <(string)userId> <(int)amount>\n"+
+            "    Add XP to specified user\n"+
+            " > addrolexp <(int)roleId> <(int)amount>\n"+
+            "    Add XP to all users with specified role\n"+
+            " > react <(?)contentId> <(int)emoteId>\n"+
+            "    Add a reaction to specified content\n"+
+            " > lsrole <userId>\n"+
+            "    Print the specified user's role ID(s)\n"+
+            " > nick <userId> <(string)nickname>\n"+
+            "    Set the specified user's nickname\n"+
+            " > rmnick <userId>\n"+
+            "    Remove the specified user's nickname\n"+
+            " > smlink <userID> <(string)socialMediaName>\n"+
+            "    Get the social media link of the specified user.\n"+
+            "    Available: twitch, bnet, psn, xbox, steam, origin,\n"+
+            "    youtube, twitter, facebook, switch, patreon, roblox\n"+
+            " > mkthread\n"+
+            "    Create a forum thread in the forum channel\n"+
+            " > groupadd <(string)groupId> <userId>\n"+
+            "    Add the specified user to the specified group\n"+
+            " > groupkick <(string)groupId> <userId>\n"+
+            "    Remove the specified user from the specified group\n"+
+            " > roleadd <(int)roleId> <userId>\n"+
+            "    Give the specified role to specified user\n"+
+            " > rolekick <(int)roleId> <userId>\n"+
+            "    Remove the specified role from specified user\n"+
+            " > exit\n" +
+            "    Log out and exit";
 }

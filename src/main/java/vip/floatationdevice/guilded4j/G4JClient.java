@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 
 /**
- * Guilded4J's main component, can send HTTP requests to the API, receive WebSocket events and post them as GuildedEvents.
+ * Guilded4J's main component, can send HTTP requests to the API, receive WebSocket events and post them as {@link vip.floatationdevice.guilded4j.event.GuildedEvent}s.
  * @see G4JWebSocketClient
  * @see vip.floatationdevice.guilded4j.event.GuildedEvent
  */
@@ -40,8 +40,7 @@ public class G4JClient
     protected String authToken;
 
     /**
-     * Built-in WebSocket event manager (<a href="G4JWebSocketClient.html">G4JWebSocketClient</a>).
-     * @see G4JWebSocketClient
+     * Built-in WebSocket event manager ({@link G4JWebSocketClient}).
      */
     public G4JWebSocketClient ws=new G4JWebSocketClient(authToken);
 

@@ -14,11 +14,12 @@ import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * The Guilded4J client that can send HTTP requests to the API.
+ * Guilded4J's main component, can send HTTP requests to the API, receive WebSocket events and post them as GuildedEvents.
+ * @see G4JWebSocketClient
+ * @see vip.floatationdevice.guilded4j.event.GuildedEvent
  */
 public class G4JClient
 {
@@ -37,10 +38,12 @@ public class G4JClient
 
     public static final String[] socialMedias={"twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", "roblox"};
     protected String authToken;
+    public G4JWebSocketClient ws=new G4JWebSocketClient(authToken);
 
     public G4JClient(String authToken)
     {
         this.authToken=authToken;
+        ws.setAuthToken(authToken);
     }
 //============================== API FUNCTIONS START ==============================
 ////////////////////////////// Chat & messaging //////////////////////////////
@@ -467,5 +470,6 @@ public class G4JClient
     public void setAuthToken(String token)
     {
         authToken=token;
+        ws.setAuthToken(authToken);
     }
 }

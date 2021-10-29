@@ -17,7 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Guilded4J WebSocket event manager.
+ * Guilded4J WebSocket event manager, built in by G4JClient, also can be used independently.
  * <p>NOTE:</p>
  * <p>- After creating G4JWebSocketClient object you need to manually call connect(), close() or reconnect() to start/stop receiving WebSocket events.</p>
  */
@@ -45,10 +45,10 @@ public class G4JWebSocketClient extends WebSocketClient
 
     /**
      * Used to post events or register an event listener class.
-     * Write your own event listener class and use {@code bus.register()} to receive events.
+     * Write your own event listener class and use {@code eventBus.register()} to receive events.
      * See {@link G4JDebugger} for example uses.
      */
-    public EventBus bus=new EventBus();
+    public EventBus eventBus=new EventBus();
 
     /**
      * Toggle printing the received JSON string from WebSocket to stdout.
@@ -75,7 +75,7 @@ public class G4JWebSocketClient extends WebSocketClient
         if(dump) System.out.println("\n"+json.toStringPretty());
         if(json.getByPath("d.heartbeatIntervalMs")!=null)
         {
-            bus.post(
+            eventBus.post(
                     new GuildedWebsocketInitializedEvent(this,(String)json.getByPath("d.lastMessageId"),(Integer)json.getByPath("d.heartbeatIntervalMs"))
             );return;
         }
@@ -87,7 +87,7 @@ public class G4JWebSocketClient extends WebSocketClient
                 case "ChatMessageCreated":
                 {
                     JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                    bus.post(
+                    eventBus.post(
                             new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
                     );
                     break;
@@ -95,14 +95,14 @@ public class G4JWebSocketClient extends WebSocketClient
                 case "ChatMessageUpdated":
                 {
                     JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                    bus.post(
+                    eventBus.post(
                             new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString())).setOpCode(json.getInt("op"))
                     );
                     break;
                 }
                 case "ChatMessageDeleted":
                 {
-                    bus.post(
+                    eventBus.post(
                             new ChatMessageDeletedEvent(this,
                                     (String)json.getByPath("d.message.deletedAt"),
                                     (String)json.getByPath("d.message.id"),
@@ -117,7 +117,7 @@ public class G4JWebSocketClient extends WebSocketClient
                     Object[] converted=array.toArray();
                     String[] userIds=new String[converted.length];
                     for(int i=0;i!=converted.length;i++) userIds[i]=((String)converted[i]);
-                    bus.post(
+                    eventBus.post(
                             new TeamXpAddedEvent(this, (Integer)json.getByPath("d.amount"), userIds)
                                     .setOpCode(json.getInt("op"))
                     );
@@ -127,12 +127,12 @@ public class G4JWebSocketClient extends WebSocketClient
                 case "teamRolesUpdated": //TODO
                 case "TeamRolesUpdated":
                 default: //no implemented GuildedEvents matched? post raw event with the event name and original string
-                    bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
+                    eventBus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
             }
         }
         else if(json.getInt("op")!=null)
-            bus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));//at least we have opcode
-        else bus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment
+            eventBus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setRawString(rawMessage));//at least we have opcode
+        else eventBus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment
     }
 //============================== EVENT MANAGER END ==============================
 
@@ -143,7 +143,7 @@ public class G4JWebSocketClient extends WebSocketClient
     @Override
     public void onClose(int code, String reason, boolean remote)
     {
-        bus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
+        eventBus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
     }
 
     /**

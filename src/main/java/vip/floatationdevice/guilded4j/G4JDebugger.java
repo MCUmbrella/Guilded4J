@@ -77,7 +77,6 @@ public class G4JDebugger
     final static Scanner scanner=new Scanner(System.in);
     static String workdir="(init)";
     static G4JClient client;
-    static G4JWebSocketClient wsclient;
     public static void main(String[] args)
     {
         G4JSession session=new G4JSession();
@@ -85,7 +84,6 @@ public class G4JDebugger
         if(session.restore())
         {
             client=new G4JClient(session.savedToken);
-            wsclient=new G4JWebSocketClient(session.savedToken);
             workdir=session.savedWorkdir;
             System.out.println("[i] Restoring session");
         }
@@ -94,13 +92,12 @@ public class G4JDebugger
             System.out.print("Enter AuthToken: ");
             token=scanner.nextLine();
             client=new G4JClient(token);
-            wsclient=new G4JWebSocketClient(token);
             System.out.println("[i] Logging in");
         }
-        wsclient.connect();
+        client.ws.connect();
         String text=null;//typed command
         String textCache="";//previous command
-        wsclient.bus.register(new GuildedEventListener());
+        client.ws.eventBus.register(new GuildedEventListener());
         for(;;System.out.print("\n["+workdir+"] #"))
         {
             try
@@ -112,10 +109,10 @@ public class G4JDebugger
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
-                    System.out.print("[i] Dump status: "+wsclient.toggleDump());
+                    System.out.print("[i] Dump status: "+client.ws.toggleDump());
                 }
-                else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("[i] Updated AuthToken");client.setAuthToken(token);wsclient.setAuthToken(token);}
-                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");wsclient.close();}
+                else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("[i] Updated AuthToken");client.setAuthToken(token);client.ws.setAuthToken(token);}
+                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.ws.close();}
                 else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
                 else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
                 else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
@@ -258,14 +255,14 @@ public class G4JDebugger
                     if(arguments.length==3) client.removeRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
                     else System.err.println("[X] Usage: rolekick <roleId> <userId>");
                 }
-                else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(wsclient!=null){wsclient.reconnect();}}
-                else if(text.equals("exit")){System.out.println("[i] Exiting");wsclient.close();session.save();break;}
+                else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.ws!=null){client.ws.reconnect();}}
+                else if(text.equals("exit")){System.out.println("[i] Exiting");client.ws.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);
                 else{System.out.print("[!] Type 'help' to get available commands and usages");}
             }
             catch (NoSuchElementException e)
             {
-                System.out.println("[i] Exiting");wsclient.close();session.save();break;
+                System.out.println("[i] Exiting");client.ws.close();session.save();break;
             }
             catch (GuildedException e)
             {

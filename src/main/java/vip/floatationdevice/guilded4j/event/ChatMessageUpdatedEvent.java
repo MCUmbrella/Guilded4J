@@ -9,7 +9,7 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 /**
  * Event fired when a chat message is updated.<br>
- * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageUpdated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ChatMessageUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/ChatMessageUpdated</a>
  */
 public class ChatMessageUpdatedEvent extends GuildedEvent
 {

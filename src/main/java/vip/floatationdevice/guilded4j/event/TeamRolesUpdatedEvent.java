@@ -7,7 +7,7 @@ package vip.floatationdevice.guilded4j.event;
 
 /**
  * Not implemented yet.<br>
- * <a>https://www.guilded.gg/docs/api/websockets/teamRolesUpdated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/teamRolesUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/teamRolesUpdated</a>
  */
 public class TeamRolesUpdatedEvent extends GuildedEvent //TODO
 {

@@ -7,7 +7,7 @@ package vip.floatationdevice.guilded4j.event;
 
 /**
  * Event fired when a chat message is deleted.<br>
- * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted" target=_blank>https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted</a>
  */
 public class ChatMessageDeletedEvent extends GuildedEvent
 {

@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 /**
  * Not implemented yet.<br>
- * <a>https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated</a>
  */
 public class TeamMemberUpdatedEvent extends GuildedEvent //TODO
 {

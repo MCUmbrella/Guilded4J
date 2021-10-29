@@ -38,6 +38,11 @@ public class G4JClient
 
     public static final String[] socialMedias={"twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", "roblox"};
     protected String authToken;
+
+    /**
+     * Built-in WebSocket event manager (<a href="G4JWebSocketClient.html">G4JWebSocketClient</a>).
+     * @see G4JWebSocketClient
+     */
     public G4JWebSocketClient ws=new G4JWebSocketClient(authToken);
 
     public G4JClient(String authToken)
@@ -50,7 +55,7 @@ public class G4JClient
 
     /**
      * Create a channel message.<br>
-     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageCreate" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
      * @param content The content of the message.
      * @return The newly created message's ChatMessage object.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -71,7 +76,7 @@ public class G4JClient
 
     /**
      * Delete a channel message.<br>
-     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
+     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageDelete" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
      * @param channelId The ID of the channel.
      * @param messageId The ID of the message.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -93,7 +98,7 @@ public class G4JClient
 
     /**
      * Update a channel message.<br>
-     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate</a>
+     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageUpdate</a>
      * @param channelId The ID of the channel.
      * @param messageId The ID of the message.
      * @param content The message content to update.
@@ -115,7 +120,7 @@ public class G4JClient
 
     /**
      * Get details for a specific chat message from a chat channel.<br>
-     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageRead</a>
+     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageRead" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageRead</a>
      * @param channelId The ID of the channel.
      * @param messageId The ID of the message.
      * @return ChatMessage object of the message with the given UUID.
@@ -135,7 +140,7 @@ public class G4JClient
 
     /**
      * Get a list of the latest 100 messages from a channel.<br>
-     * <a>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
+     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
      * @param channelId The ID of the channel.
      * @return A ChatMessage[] that contains up to 100 ChatMessage objects.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -161,7 +166,7 @@ public class G4JClient
 
     /**
      * Get a list of the roles assigned to a member.<br>
-     * <a>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
+     * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
      * @param userId The ID of the member to obtain roles from.
      * @return An int[] contains the IDs of the roles that the member currently has.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -184,7 +189,7 @@ public class G4JClient
 
     /**
      * Update/delete a member's nickname.<br>
-     * <a>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
+     * <a href="https://www.guilded.gg/docs/api/members/MemberNicknameUpdate" target=_blank>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
      * @param userId The ID of the member.
      * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
      * @return The nickname to be set when setting nickname, {@code null} when deleting nickname.
@@ -224,7 +229,7 @@ public class G4JClient
 
     /**
      * Create a thread in a forum.<br>
-     * <a>https://www.guilded.gg/docs/api/forums/ForumThreadCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/forums/ForumThreadCreate" target=_blank>https://www.guilded.gg/docs/api/forums/ForumThreadCreate</a>
      * @param title The title of the thread.
      * @param content The thread's content.
      * @return The newly created thread's ForumThread object.
@@ -247,7 +252,7 @@ public class G4JClient
 
     /**
      * Create a list item.<br>
-     * <a>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemCreate" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemCreate</a>
      * @param message The item's name.
      * @param note The item's note (can be null).
      * @return The newly created item's ListItem object.
@@ -270,7 +275,7 @@ public class G4JClient
 
     /**
      * Add a reaction emote.<br>
-     * <a>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ContentReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
      * @param channelId The ID of the channel.
      * @param contentId Content ID of the content.
      * @param emoteId Emote ID to apply.
@@ -295,7 +300,7 @@ public class G4JClient
 
     /**
      * Award XP to a member.<br>
-     * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
      * @param userId Member ID to award XP to.
      * @param amount The amount of XP to award.
      * @return The total XP after this operation.
@@ -316,7 +321,7 @@ public class G4JClient
 
     /**
      * Award XP to all members with a particular role.<br>
-     * <a>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
      * @param roleId Role ID to award XP to.
      * @param amount The amount of XP to award.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -342,7 +347,7 @@ public class G4JClient
 
     /**
      * Retrieves a member's public social links.<br>
-     * <a>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
+     * <a href="https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead" target=_blank>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
      * @param userId The target user's ID.
      * @param type The type of social link to retrieve.<br>- should be "twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", or "roblox".
      * @return A HashMap with "type", "handle", "serviceId(nullable)" keys.
@@ -375,7 +380,7 @@ public class G4JClient
 
     /**
      * Add member to group.<br>
-     * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate" target=_blank>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipCreate</a>
      * @param groupId Group ID to add the member to.
      * @param userId Member ID to add to the group.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -397,7 +402,7 @@ public class G4JClient
 
     /**
      * Remove member from group.<br>
-     * <a>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete</a>
+     * <a href="https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete" target=_blank>https://www.guilded.gg/docs/api/groupMembership/GroupMembershipDelete</a>
      * @param groupId Group ID to remove the member from.
      * @param userId Member ID to remove from the group.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -421,7 +426,7 @@ public class G4JClient
 
     /**
      * Assign role to member.<br>
-     * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate" target=_blank>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
      * @param userId The ID of the member that the role should be assigned to.
      * @param roleId The role ID to apply to the user.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -443,7 +448,7 @@ public class G4JClient
 
     /**
      * Remove role from member.<br>
-     * <a>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
+     * <a href="https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete" target=_blank>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
      * @param userId The ID of the member that the role should be removed from.
      * @param roleId The role ID to remove from the user.
      */

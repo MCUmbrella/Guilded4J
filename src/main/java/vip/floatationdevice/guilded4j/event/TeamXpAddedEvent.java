@@ -2,18 +2,35 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import java.util.ArrayList;
-
+/**
+ * Event that is fired when XP is added to user(s).
+ */
 public class TeamXpAddedEvent extends GuildedEvent
 {
-    int xpAmount=0;
-    ArrayList<String> userIds=new ArrayList<String>();
+    private final int xpAmount;
+    private final String[] userIds;
 
-    public TeamXpAddedEvent(Object source){super(source);}
+    /**
+     * Default constructor.
+     * @param xpAmount The amount of XP added.
+     * @param userIds The IDs of the users that received XP.
+     */
+    public TeamXpAddedEvent(Object source, int xpAmount, String[] userIds)
+    {
+        super(source);
+        this.xpAmount=xpAmount;
+        this.userIds=userIds;
+    }
 
+    /**
+     * Get the amount of XP added.
+     * @return The amount of XP.
+     */
     public int getXpAmount(){return this.xpAmount;}
-    public ArrayList<String> getUserIds(){return this.userIds;}
 
-    public TeamXpAddedEvent setXpAmount(int amount){this.xpAmount=amount;return this;}
-    public TeamXpAddedEvent setUserIds(ArrayList<String> userIds){return this;}
+    /**
+     * Get the IDs of the users that received XP.
+     * @return A String[] containing the IDs of the users.
+     */
+    public String[] getUserIds(){return this.userIds;}
 }

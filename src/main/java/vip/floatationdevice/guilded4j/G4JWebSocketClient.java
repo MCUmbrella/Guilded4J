@@ -109,14 +109,12 @@ public class G4JWebSocketClient extends WebSocketClient
                 }
                 case "TeamXpAdded":
                 {
-                    ArrayList<String> userIds=new ArrayList<String>();
                     JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
                     Object[] converted=array.toArray();
-                    for(int i=0;i!=converted.length;i++) userIds.add((String)converted[i]);
+                    String[] userIds=new String[converted.length];
+                    for(int i=0;i!=converted.length;i++) userIds[i]=((String)converted[i]);
                     bus.post(
-                            new TeamXpAddedEvent(this)
-                                    .setXpAmount((Integer) json.getByPath("d.amount"))
-                                    .setUserIds(userIds)
+                            new TeamXpAddedEvent(this, (Integer)json.getByPath("d.amount"), userIds)
                                     .setOpCode(json.getInt("op"))
                     );
                     break;

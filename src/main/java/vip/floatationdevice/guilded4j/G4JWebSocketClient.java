@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
  * <p>NOTE:</p>
  * <p>- After creating G4JWebSocketClient object you need to manually call connect(), close() or reconnect() to start/stop receiving WebSocket events.</p>
  */
-@SuppressWarnings("UnstableApiUsage")
 public class G4JWebSocketClient extends WebSocketClient
 {
 

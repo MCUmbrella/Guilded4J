@@ -19,13 +19,14 @@ import java.util.regex.Pattern;
 /**
  * A built-in CLI tool for testing and debugging Guilded4J library.
  */
-@SuppressWarnings({"UnstableApiUsage","unused"})
+@SuppressWarnings({"unused"})
 public class G4JDebugger
 {
     static Boolean dumpEnabled=false;
-    static String parseMessage(ChatMessage m)
+    static String parseMessage(ChatMessage m, Boolean prompt)
     {
-        return "\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #";
+        return prompt?"\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #"
+                :"\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent();
     }
     static class GuildedEventListener
     {
@@ -43,7 +44,7 @@ public class G4JDebugger
         public void onMsg(ChatMessageCreatedEvent e)
         {
             ChatMessage m=e.getChatMessageObject();
-            System.out.print(parseMessage(m));
+            System.out.print(parseMessage(m,true));
         }
     }
     static class G4JSession implements Serializable
@@ -122,14 +123,8 @@ public class G4JDebugger
                 {
                     if(workdir.length()!=36) notifyCD();
                     else {
-                        ArrayList<ChatMessage> msgs=client.getChannelMessages(workdir);
-                        ChatMessage m;
-                        Collections.reverse(msgs);
-                        for (int i=0;i!=msgs.size();i++)
-                        {
-                            m=msgs.get(i);
-                            System.out.print("\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent());
-                        }
+                        ChatMessage[] msgs=client.getChannelMessages(workdir);
+                        for(int i=msgs.length-1;i>=0;i--) System.out.print(parseMessage(msgs[i],false));
                     }
                 }
                 else if(text.startsWith("send ")&&text.length()>5)
@@ -194,7 +189,7 @@ public class G4JDebugger
                         client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
                     else System.err.println("[X] Usage: react <contentId> <(int)emoteId>");
                 }
-                else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(client.getMemberRoles(text.substring(7)));}
+                else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(Arrays.toString(client.getMemberRoles(text.substring(7))));}
                 else if(text.startsWith("nick "))
                 {
                     String[] arguments=text.split(" ");

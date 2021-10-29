@@ -1,11 +1,14 @@
-// Copyright (c) 2021 MCUmbrella & contributors
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
 
 package vip.floatationdevice.guilded4j.event;
 
 import java.util.EventObject;
 
 /**
- * WebSocket connection closed.
+ * Event that is fired when the event manager's WebSocket connection is closed.
  * This is a Guilded4J's custom event, meaning that there is no event in the Guilded API called this name.
  */
 public class GuildedWebsocketClosedEvent extends EventObject

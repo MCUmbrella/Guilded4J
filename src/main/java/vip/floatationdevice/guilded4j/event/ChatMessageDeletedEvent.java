@@ -1,9 +1,12 @@
-// Copyright (c) 2021 MCUmbrella & contributors
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
 
 package vip.floatationdevice.guilded4j.event;
 
 /**
- * A message was deleted.
+ * Event fired when a chat message is deleted.<br>
  * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted</a>
  */
 public class ChatMessageDeletedEvent extends GuildedEvent

@@ -1,4 +1,7 @@
-// Copyright (c) 2021 MCUmbrella & contributors
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
 
 package vip.floatationdevice.guilded4j;
 
@@ -6,8 +9,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
+import vip.floatationdevice.guilded4j.exception.*;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.io.*;
 import java.util.*;
@@ -16,6 +19,7 @@ import java.util.regex.Pattern;
 /**
  * A built-in CLI tool for testing and debugging Guilded4J library.
  */
+@SuppressWarnings({"UnstableApiUsage","unused"})
 public class G4JDebugger
 {
     static Boolean dumpEnabled=false;

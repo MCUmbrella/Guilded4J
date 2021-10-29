@@ -1,3 +1,8 @@
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
+
 package vip.floatationdevice.guilded4j;
 
 import cn.hutool.json.JSONArray;
@@ -10,13 +15,13 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 /**
  * Guilded4J WebSocket event manager.
  * <p>NOTE:</p>
  * <p>- After creating G4JWebSocketClient object you need to manually call connect(), close() or reconnect() to start/stop receiving WebSocket events.</p>
  */
+@SuppressWarnings("UnstableApiUsage")
 public class G4JWebSocketClient extends WebSocketClient
 {
 

@@ -1,35 +1,40 @@
-// Copyright (c) 2021 MCUmbrella & contributors
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
 
 package vip.floatationdevice.guilded4j;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import vip.floatationdevice.guilded4j.exception.*;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The Guilded4J client that can send HTTP requests to the API.
  */
 public class G4JClient
 {
-    public static final String MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages";
-    public static final String ROLES_URL="https://www.guilded.gg/api/v1/members/{userId}/roles";
-    public static final String NICKNAME_URL="https://www.guilded.gg/api/v1/members/{userId}/nickname";
-    public static final String FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum";
-    public static final String LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list";
-    public static final String USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp";
-    public static final String ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp";
-    public static final String SOCIAL_LINK_URL="https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}";
-    public static final String GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}";
-    public static final String ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}";
-    public static final String REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
+    public static final String
+    MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages",
+    ROLES_URL="https://www.guilded.gg/api/v1/members/{userId}/roles",
+    NICKNAME_URL="https://www.guilded.gg/api/v1/members/{userId}/nickname",
+    FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum",
+    LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list",
+    USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp",
+    ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp",
+    SOCIAL_LINK_URL="https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}",
+    GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
+    ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
+    REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
+
     public static final String[] socialMedias={"twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", "roblox"};
     protected String authToken;
 

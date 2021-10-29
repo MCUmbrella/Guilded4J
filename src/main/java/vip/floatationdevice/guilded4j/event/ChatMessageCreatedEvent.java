@@ -1,16 +1,19 @@
-// Copyright (c) 2021 MCUmbrella & contributors
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
 
 package vip.floatationdevice.guilded4j.event;
 
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 /**
- * A new message was created.
+ * Event fired when a chat message is created.<br>
  * <a>https://www.guilded.gg/docs/api/websockets/ChatMessageCreated</a>
  */
 public class ChatMessageCreatedEvent extends GuildedEvent
 {
-    private ChatMessage msgObj;
+    private final ChatMessage msgObj;
 
     /**
      * Generate ChatMessageCreatedEvent using the given ChatMessage object.

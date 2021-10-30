@@ -46,6 +46,16 @@ public class G4JDebugger
             ChatMessage m=e.getChatMessageObject();
             System.out.print(parseMessage(m,true));
         }
+        @Subscribe
+        public void onXP(TeamXpAddedEvent e)
+        {
+            if(dumpEnabled) System.out.print("\n[D] "+Arrays.toString(e.getUserIds())+": +"+e.getXpAmount()+" XP"+"\n["+workdir+"] #");
+        }
+        @Subscribe
+        public void onNicknameChange(TeamMemberUpdatedEvent e)
+        {
+            if(dumpEnabled) System.out.print("\n[D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+"\n["+workdir+"] #");
+        }
     }
     static class G4JSession implements Serializable
     {
@@ -333,5 +343,5 @@ public class G4JDebugger
             " > exit\n" +
             "    Log out and exit";
     static void notifyCD(){System.err.println("[X] Specify a list channel UUID first");}
-    final static String RESULT_PFX="[D] Result:\n";
+    final static String RESULT_PFX="\n[D] Result:\n";
 }

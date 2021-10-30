@@ -123,7 +123,14 @@ public class G4JWebSocketClient extends WebSocketClient
                     );
                     break;
                 }
-                case "TeamMemberUpdated": //TODO
+                case "TeamMemberUpdated":
+                {
+                    eventBus.post(
+                            new TeamMemberUpdatedEvent(this,
+                                    (String)json.getByPath("d.userInfo.id"),
+                                    json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull?null:(String)json.getByPath("d.userInfo.nickname"))
+                    );
+                }
                 case "teamRolesUpdated": //TODO
                 case "TeamRolesUpdated":
                 default: //no implemented GuildedEvents matched? post raw event with the event name and original string

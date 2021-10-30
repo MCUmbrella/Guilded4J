@@ -13,7 +13,7 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
  */
 public class ChatMessageUpdatedEvent extends GuildedEvent
 {
-    private ChatMessage msgObj;
+    private final ChatMessage msgObj;
 
     /**
      * Generate ChatMessageUpdatedEvent using the given ChatMessage object.

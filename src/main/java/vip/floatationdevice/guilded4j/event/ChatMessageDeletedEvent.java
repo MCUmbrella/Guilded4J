@@ -11,16 +11,9 @@ package vip.floatationdevice.guilded4j.event;
  */
 public class ChatMessageDeletedEvent extends GuildedEvent
 {
-    private String deletedAt, id, channelId;
-
-    /**
-     * Default constructor (not recommended to use).
-     * Remember to set the 3 essential keys if really need to use.
-     */
-    @Deprecated public ChatMessageDeletedEvent(Object source)
-    {
-        super(source);
-    }
+    private final String deletedAt;
+    private final String id;
+    private final String channelId;
 
     /**
      * Generate ChatMessageDeletedEvent using 3 given essential keys.
@@ -53,8 +46,4 @@ public class ChatMessageDeletedEvent extends GuildedEvent
      * @return A UUID string of the channel which the message belongs.
      */
     public String getChannelId(){return this.channelId;}
-
-    public ChatMessageDeletedEvent setDeletionTime(String deletedAt){this.deletedAt=deletedAt;return this;}
-    public ChatMessageDeletedEvent setMsgId(String msgId){this.id=msgId;return this;}
-    public ChatMessageDeletedEvent setChannelId(String channelId){this.channelId=channelId;return this;}
 }

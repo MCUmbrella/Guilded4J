@@ -12,8 +12,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * The basic forum thread object in a 'forum' type channel.
- * <a>https://www.guilded.gg/docs/api/forums/ForumThread</a>
+ * The basic forum thread object in a 'forum' type channel.<br>
+ * <a href="https://www.guilded.gg/docs/api/forums/ForumThread" target=_blank>https://www.guilded.gg/docs/api/forums/ForumThread</a>
  */
 public class ForumThread
 {

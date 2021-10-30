@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * The basic item object in a 'list' type channel.
- * <a>https://www.guilded.gg/docs/api/listItems/ListItem</a>
+ * The basic item object in a 'list' type channel.<br>
+ * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
 public class ListItem
 {

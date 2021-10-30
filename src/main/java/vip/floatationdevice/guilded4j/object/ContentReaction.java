@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * The reaction emote object.
- * <a>https://www.guilded.gg/docs/api/reactions/ContentReaction</a>
+ * The reaction emote object.<br>
+ * <a href="https://www.guilded.gg/docs/api/reactions/ContentReaction" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReaction</a>
  */
 public class ContentReaction
 {

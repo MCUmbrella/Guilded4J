@@ -55,19 +55,25 @@ public class G4JClient
     /**
      * Create a channel message.<br>
      * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageCreate" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
-     * @param content The content of the message.
+     * @param channelId The ID of the channel.
+     * @param content The message content to create.
+     * @param replyMessageIds The ID of the message(s) to reply to.
+     * @param isPrivate If set, this message will only be seen by those mentioned or replied to.
      * @return The newly created message's ChatMessage object.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    //TODO: createChannelMessage(String channelId, String content, @Nullable String[] replyMessageIds, @Nullable Boolean isPrivate)
-    public ChatMessage createChannelMessage(String channelId, String content)
+    public ChatMessage createChannelMessage(String channelId, String content, @Nullable String[] replyMessageIds, @Nullable Boolean isPrivate)
     {
         JSONObject result=new JSONObject(HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
-                body(new JSONObject().set("content",content).toString()).
+                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("content", content)
+                        .set("replyMessageIds", replyMessageIds==null?null:new JSONArray(replyMessageIds))
+                        .set("isPrivate", isPrivate)
+                        .toString()).
                 timeout(20000).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ChatMessage().fromString(result.get("message").toString());
@@ -145,7 +151,6 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    //TODO: public ArrayList<ChatMessage> getChannelMessages(String channelId, Boolean includePrivate)
     public ChatMessage[] getChannelMessages(String channelId)
     {
         JSONObject result=new JSONObject(HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}",channelId)).

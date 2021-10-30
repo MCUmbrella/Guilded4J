@@ -149,7 +149,35 @@ public class G4JDebugger
                 {
                     if(workdir.length()!=36) notifyCD();
                     else{
-                        String result=client.createChannelMessage(workdir,text.substring(5)).toString();
+                        String result=client.createChannelMessage(workdir,text.substring(5),null,null).toString();
+                        if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result).toStringPretty());
+                    }
+                }
+                else if(text.equals("reply"))
+                {
+                    if(workdir.length()!=36) notifyCD();
+                    else
+                    {
+                        System.out.println("[i] UUID of the message(s) replying to: (1 UUID per line, empty line to end)");
+                        ArrayList<String> uuids=new ArrayList<String>();
+                        Scanner s=new Scanner(System.in);
+                        String uuid;
+                        boolean isPrivate;
+                        for(;;)
+                        {
+                            System.out.print("? ");uuid=s.nextLine();
+                            if(uuid.length()!=36) break;
+                            else
+                                if(!uuids.contains(uuid)) uuids.add(uuid);
+                        }
+                        String[] uuidArray=new String[uuids.size()];
+                        uuids.toArray(uuidArray);
+                        if(uuidArray.length==0) {System.out.print("[X] No UUID given");continue;}
+                        System.out.println("[i] Private reply? [true/false]");
+                        System.out.print("? ");isPrivate=Boolean.parseBoolean(s.nextLine());
+                        System.out.println("[i] Message content:");
+                        System.out.print("? ");
+                        String result=client.createChannelMessage(workdir,s.nextLine(),uuidArray,isPrivate).toString();
                         if(dumpEnabled) System.out.print(RESULT_PFX+new JSONObject(result).toStringPretty());
                     }
                 }
@@ -317,6 +345,8 @@ public class G4JDebugger
             "    Change/clear the target channel UUID\n" +
             " > send <string>\n" +
             "    Send the typed string\n" +
+            " > reply\n"+
+            "    Make a reply to up to 5 messages\n"+
             " > rm <UUID>\n"+
             "    Delete a message with specified UUID\n"+
             " > update <UUID> <string>\n"+

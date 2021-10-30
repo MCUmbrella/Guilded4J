@@ -3,14 +3,15 @@
 <br>
 
 Build status: [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
-Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))
-# WARNING:
-- ## The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
-- ## The API is only available to users who participate in the early access for now.
+Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))<br>
 # Using:
-- [Refer to the Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki/How-to-use-Guilded4J-in-your-Maven-project)
-- [Refer to the Javadoc (still writing)](http://docs.floatationdevice.vip/guilded4j/)
-# Progress: `(Waiting for Guilded side to complete basic API functions)`
+- [Refer to the Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
+- [Refer to the Javadoc](http://docs.floatationdevice.vip/guilded4j/)
+# CAUTION:
+- The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
+- The API is only available to users who participate in the early access for now.<br>
+# Progress:
+`(Waiting for Guilded side to complete basic API functions)`
 - [x] Text
 - - [x] Create message - createChannelMessage()
 - - [x] Delete message - deleteChannelMessage()
@@ -30,7 +31,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Add XP to user - awardUserXp()
 - - [x] Add XP to user group - awardRoleXp()
 - [x] Social links
-- - [x] Get member's social link
+- - [x] Get member's social link - getSocialLink()
 - [ ] Group membership
 - - [x] Add group member - addGroupMember()
 - - [x] Remove group member - removeGroupMember()
@@ -44,5 +45,5 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] ChatMessageDeletedEvent
 - - [x] ChatMessageUpdatedEvent
 - - [x] TeamXpAddedEvent
-- - [ ] TeamMemberUpdatedEvent
-- - [ ] TeamRolesUpdatedEvent
+- - [x] TeamMemberUpdatedEvent
+- - [x] TeamRolesUpdatedEvent

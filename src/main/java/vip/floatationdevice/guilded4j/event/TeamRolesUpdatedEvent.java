@@ -5,13 +5,32 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import vip.floatationdevice.guilded4j.object.User;
+
 /**
- * Not implemented yet.<br>
+ * Event fired when one or more member's roles are updated.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/teamRolesUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/teamRolesUpdated</a>
  */
-public class TeamRolesUpdatedEvent extends GuildedEvent //TODO
+public class TeamRolesUpdatedEvent extends GuildedEvent
 {
-    private Object[] memberRoleIds;
+    private final User[] memberRoleIds;
 
-    @Deprecated public TeamRolesUpdatedEvent(Object source){super(source);}
+    /**
+     * Generate TeamRolesUpdatedEvent with a list of user(s) updated roles.
+     * @param memberRoleIds A {@link User}[] containing the user(s) whose roles have been updated.
+     */
+    public TeamRolesUpdatedEvent(Object source, User[] memberRoleIds)
+    {
+        super(source);
+        this.memberRoleIds=memberRoleIds;
+    }
+
+    /**
+     * Get the list of user(s) updated roles.
+     * @return A {@link User}[] containing the user(s) whose roles have been updated.
+     */
+    public User[] getMembers()
+    {
+        return this.memberRoleIds;
+    }
 }

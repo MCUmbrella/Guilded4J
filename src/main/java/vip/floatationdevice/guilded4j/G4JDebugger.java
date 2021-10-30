@@ -56,6 +56,17 @@ public class G4JDebugger
         {
             if(dumpEnabled) System.out.print("\n[D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+"\n["+workdir+"] #");
         }
+        @Subscribe
+        public void onRoleChange(TeamRolesUpdatedEvent e)
+        {
+            User[] users=e.getMembers();
+            if (dumpEnabled)
+            {
+                System.out.println("[D] Member role changes:");
+                for(User user:users) System.out.println("    "+user.getUserId()+": "+Arrays.toString(user.getRoleIds()));
+                System.out.print("\n["+workdir+"] #");
+            }
+        }
     }
     static class G4JSession implements Serializable
     {

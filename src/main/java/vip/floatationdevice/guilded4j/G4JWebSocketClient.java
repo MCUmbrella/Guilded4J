@@ -12,6 +12,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
+import vip.floatationdevice.guilded4j.object.User;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -131,8 +132,23 @@ public class G4JWebSocketClient extends WebSocketClient
                                     json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull?null:(String)json.getByPath("d.userInfo.nickname"))
                     );
                 }
-                case "teamRolesUpdated": //TODO
+                case "teamRolesUpdated":
                 case "TeamRolesUpdated":
+                {
+                    JSONArray memberRoleIds=(JSONArray) json.getByPath("d.memberRoleIds");
+                    User[] users=new User[memberRoleIds.size()];
+                    for (int i=0;i!=memberRoleIds.size();i++)
+                    {
+                        JSONObject temp=(JSONObject)memberRoleIds.get(i);
+                        Object[] rawRoles=temp.getJSONArray("roleIds").toArray();
+                        int[] roles=new int[rawRoles.length];
+                        for(int a=0;a!=rawRoles.length;a++) roles[a]=(int)rawRoles[a];
+                        users[i]=new User(temp.getStr("userId")).setRoleIds(roles);
+                    }
+                    eventBus.post(
+                            new TeamRolesUpdatedEvent(this, users)
+                    );
+                }
                 default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                     eventBus.post(new GuildedEvent(this).setOpCode(json.getInt("op")).setEventType(eventType).setRawString(rawMessage));
             }

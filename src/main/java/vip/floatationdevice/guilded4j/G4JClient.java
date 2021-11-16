@@ -49,6 +49,13 @@ public class G4JClient
         this.authToken=authToken;
         ws.setAuthToken(authToken);
     }
+
+    public G4JClient(String authToken, String lastMessageId)
+    {
+        this.authToken=authToken;
+        ws.setAuthToken(authToken);
+        ws.addHeader("guilded-last-message-id",lastMessageId);
+    }
 //============================== API FUNCTIONS START ==============================
 ////////////////////////////// Chat & messaging //////////////////////////////
 

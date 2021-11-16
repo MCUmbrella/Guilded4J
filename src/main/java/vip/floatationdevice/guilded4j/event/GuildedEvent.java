@@ -13,8 +13,9 @@ import java.util.EventObject;
  */
 public class GuildedEvent extends EventObject
 {
-    int op=Integer.MIN_VALUE;
-    String eventType;
+    int op;// "op" key in the WebSocket message
+    String replayID;// "s" key in the WebSocket message
+    String eventType;// "t" key in the WebSocket message
     String rawString;
 
     /**
@@ -26,28 +27,21 @@ public class GuildedEvent extends EventObject
     }
 
     /**
-     * Generate GuildedEvent with a given operation code.
-     * @param op An operation code corresponding to the nature of the sent message (for example, success, failure, etc.).
+     * Get the operation code corresponding to the nature of the sent message.
+     * @return The operation code: 0(normal), 1(WebSocket connection opened), 2(replay done and ready to resume), 8(unknown), or 9(unknown)
      */
-    public GuildedEvent(Object source, int op)
-    {
-        super(source);
-        this.op=op;
-    }
+    public int getOpcode(){return this.op;}
 
     /**
-     * Generate GuildedEvent with a given operation code and a WebSocket event name.
-     * @param op An operation code corresponding to the nature of the sent message (for example, success, failure, etc.).
-     * @param eventType WebSocket event's name.
+     * Get the WebSocket message ID.
+     * @return The WebSocket message ID used for replaying events after a disconnect.
      */
-    public GuildedEvent(Object source, int op, String eventType)
-    {
-        super(source);
-        this.op=op;
-        this.eventType=eventType;
-    }
+    @Nullable public String getReplayID(){return this.replayID;}
 
-    public int getOpcode(){return this.op;}
+    /**
+     * Get the WebSocket event's name.
+     * @return Event name for the given WebSocket message.
+     */
     @Nullable public String getEventType(){return this.eventType;}
 
     /**
@@ -57,6 +51,7 @@ public class GuildedEvent extends EventObject
     @Nullable public String getRawString(){return this.rawString;}
 
     public GuildedEvent setOpCode(int opCode){this.op=opCode;return this;}
+    public GuildedEvent setReplayID(String replayID){this.replayID=replayID;return this;}
     public GuildedEvent setEventType(String t){this.eventType=t;return this;}
 
     /**

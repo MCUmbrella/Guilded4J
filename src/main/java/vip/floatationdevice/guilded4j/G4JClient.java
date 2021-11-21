@@ -42,19 +42,18 @@ public class G4JClient
     /**
      * Built-in WebSocket event manager ({@link G4JWebSocketClient}).
      */
-    public G4JWebSocketClient ws=new G4JWebSocketClient(authToken);
+    public G4JWebSocketClient ws;
 
     public G4JClient(String authToken)
     {
         this.authToken=authToken;
-        ws.setAuthToken(authToken);
+        ws=new G4JWebSocketClient(authToken);
     }
 
     public G4JClient(String authToken, String lastMessageId)
     {
         this.authToken=authToken;
-        ws.setAuthToken(authToken);
-        ws.addHeader("guilded-last-message-id",lastMessageId);
+        ws=new G4JWebSocketClient(authToken, lastMessageId);
     }
 //============================== API FUNCTIONS START ==============================
 ////////////////////////////// Chat & messaging //////////////////////////////

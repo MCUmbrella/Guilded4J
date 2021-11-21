@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 public class G4JWebSocketClient extends WebSocketClient
 {
 
-    protected String authToken;
+    protected String authToken, lastMessageId;
     private boolean dump=false;
     private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
 
@@ -52,8 +52,8 @@ public class G4JWebSocketClient extends WebSocketClient
     public G4JWebSocketClient(String token, String lastMessageId)
     {
         super(WEBSOCKET_URI);
+        this.lastMessageId=lastMessageId;
         this.setAuthToken(token);
-        this.addHeader("guilded-last-message-id",lastMessageId);
     }
 
     /**
@@ -213,5 +213,6 @@ public class G4JWebSocketClient extends WebSocketClient
         authToken=token;
         this.clearHeaders();
         this.addHeader("Authorization","Bearer "+authToken);
+        if(lastMessageId!=null) this.addHeader("guilded-last-message-id",lastMessageId);
     }
 }

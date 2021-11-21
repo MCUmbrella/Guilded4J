@@ -115,10 +115,10 @@ public class G4JDebugger
             client=new G4JClient(token);
             System.out.println("[i] Logging in");
         }
+        client.ws.eventBus.register(new GuildedEventListener());
         client.ws.connect();
         String text=null;//typed command
         String textCache="";//previous command
-        client.ws.eventBus.register(new GuildedEventListener());
         for(;;System.out.print("\n["+workdir+"] #"))
         {
             try

@@ -14,7 +14,7 @@ import java.util.EventObject;
 public class GuildedEvent extends EventObject
 {
     int op;// "op" key in the WebSocket message
-    String replayID;// "s" key in the WebSocket message
+    String eventID;// "s" key in the WebSocket message
     String eventType;// "t" key in the WebSocket message
     String rawString;
 
@@ -28,15 +28,16 @@ public class GuildedEvent extends EventObject
 
     /**
      * Get the operation code corresponding to the nature of the sent message.
-     * @return The operation code: 0(normal), 1(WebSocket connection opened), 2(replay done and ready to resume), 8(unknown), or 9(unknown)
+     * @return The operation code:
+     * 0(normal), 1(WebSocket connection opened), 2(replay done and ready to resume), 8(invalid lastMessageId), or 9(unknown)
      */
-    public int getOpcode(){return this.op;}
+    public int getOpCode(){return this.op;}
 
     /**
      * Get the WebSocket message ID.
      * @return The WebSocket message ID used for replaying events after a disconnect.
      */
-    @Nullable public String getReplayID(){return this.replayID;}
+    @Nullable public String getEventID(){return this.eventID;}
 
     /**
      * Get the WebSocket event's name.
@@ -50,8 +51,8 @@ public class GuildedEvent extends EventObject
      */
     @Nullable public String getRawString(){return this.rawString;}
 
-    public GuildedEvent setOpCode(int opCode){this.op=opCode;return this;}
-    public GuildedEvent setReplayID(String replayID){this.replayID=replayID;return this;}
+    public GuildedEvent setOpCode(int op){this.op=op;return this;}
+    public GuildedEvent setEventID(String s){this.eventID=s;return this;}
     public GuildedEvent setEventType(String t){this.eventType=t;return this;}
 
     /**

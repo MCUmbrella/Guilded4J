@@ -11,6 +11,7 @@ import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.User;
 
@@ -86,105 +87,129 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         JSONObject json=new JSONObject(rawMessage);
         if(dump) System.out.println("\n"+json.toStringPretty());
-        if(json.getByPath("d.heartbeatIntervalMs")!=null)
-        {
-            eventBus.post(
-                    new GuildedWebsocketInitializedEvent(this,
-                            (String)json.getByPath("d.lastMessageId"),
-                            (Integer)json.getByPath("d.heartbeatIntervalMs")
-                    ).setOpCode(json.getInt("op")).setReplayID((String)json.getByPath("d.lastMessageId"))
-            );return;
-        }
+        int op=json.getInt("op");//operation code: 0, 1, 2, 8, 9
+        String eventID=json.getStr("s");//event id (aka. lastMessageId)
         String eventType=json.getStr("t");//hope they wont change this key name in the future
-        if(eventType!=null)//has "t" key
+
+        switch(op)
         {
-            switch (eventType)
+            case 1: //welcome event
             {
-                case "ChatMessageCreated":
+                eventBus.post(
+                        new GuildedWebsocketInitializedEvent(this,
+                                (String)json.getByPath("d.lastMessageId"),
+                                (Integer)json.getByPath("d.heartbeatIntervalMs")
+                        ).setOpCode(json.getInt("op"))
+                );
+                break;
+            }
+            case 2: //resume event
+            {
+                eventBus.post(
+                        new ResumeEvent(this,
+                                (String)json.getByPath("d.s")
+                        ).setOpCode(op)
+                );
+                break;
+            }
+            case 8: //error replaying
+            {
+                throw new GuildedException("EventReplayError",(String)json.getByPath("d.message"));
+                //i guess its called this
+            }
+            case 0: //normal event
+            {
+                switch (eventType)
                 {
-                    JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                    eventBus.post(
-                            new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                    .setOpCode(json.getInt("op"))
-                                    .setReplayID(json.getStr("s"))
-                    );
-                    break;
-                }
-                case "ChatMessageUpdated":
-                {
-                    JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
-                    eventBus.post(
-                            new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                    .setOpCode(json.getInt("op"))
-                                    .setReplayID(json.getStr("s"))
-                    );
-                    break;
-                }
-                case "ChatMessageDeleted":
-                {
-                    eventBus.post(
-                            new ChatMessageDeletedEvent(this,
-                                    (String)json.getByPath("d.message.deletedAt"),
-                                    (String)json.getByPath("d.message.id"),
-                                    (String)json.getByPath("d.message.channelId")
-                            ).setOpCode(json.getInt("op")).setReplayID(json.getStr("s"))
-                    );
-                    break;
-                }
-                case "TeamXpAdded":
-                {
-                    JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
-                    Object[] converted=array.toArray();
-                    String[] userIds=new String[converted.length];
-                    for(int i=0;i!=converted.length;i++) userIds[i]=((String)converted[i]);
-                    eventBus.post(
-                            new TeamXpAddedEvent(this, (Integer)json.getByPath("d.amount"), userIds)
-                                    .setOpCode(json.getInt("op"))
-                                    .setReplayID(json.getStr("s"))
-                    );
-                    break;
-                }
-                case "TeamMemberUpdated":
-                {
-                    eventBus.post(
-                            new TeamMemberUpdatedEvent(this,
-                                    (String)json.getByPath("d.userInfo.id"),
-                                    json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull?null:(String)json.getByPath("d.userInfo.nickname"))
-                                    .setOpCode(json.getInt("op"))
-                                    .setReplayID(json.getStr("s"))
-                    );
-                }
-                case "teamRolesUpdated":
-                case "TeamRolesUpdated":
-                {
-                    JSONArray memberRoleIds=(JSONArray) json.getByPath("d.memberRoleIds");
-                    User[] users=new User[memberRoleIds.size()];
-                    for (int i=0;i!=memberRoleIds.size();i++)
+                    case "ChatMessageCreated":
                     {
-                        JSONObject temp=(JSONObject)memberRoleIds.get(i);
-                        Object[] rawRoles=temp.getJSONArray("roleIds").toArray();
-                        int[] roles=new int[rawRoles.length];
-                        for(int a=0;a!=rawRoles.length;a++) roles[a]=(int)rawRoles[a];
-                        users[i]=new User(temp.getStr("userId")).setRoleIds(roles);
+                        JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
+                        eventBus.post(
+                                new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
+                                        .setOpCode(op)
+                                        .setEventID(eventID)
+                        );
+                        break;
                     }
-                    eventBus.post(
-                            new TeamRolesUpdatedEvent(this, users)
-                                    .setOpCode(json.getInt("op"))
-                                    .setReplayID(json.getStr("s"))
-                    );
+                    case "ChatMessageUpdated":
+                    {
+                        JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
+                        eventBus.post(
+                                new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
+                                        .setOpCode(op)
+                                        .setEventID(eventID)
+                        );
+                        break;
+                    }
+                    case "ChatMessageDeleted":
+                    {
+                        eventBus.post(
+                                new ChatMessageDeletedEvent(this,
+                                        (String)json.getByPath("d.message.deletedAt"),
+                                        (String)json.getByPath("d.message.id"),
+                                        (String)json.getByPath("d.message.channelId")
+                                ).setOpCode(op).setEventID(eventID)
+                        );
+                        break;
+                    }
+                    case "TeamXpAdded":
+                    {
+                        JSONArray array=(JSONArray)new JSONObject(rawMessage).getByPath("d.userIds");
+                        Object[] converted=array.toArray();
+                        String[] userIds=new String[converted.length];
+                        for(int i=0;i!=converted.length;i++) userIds[i]=((String)converted[i]);
+                        eventBus.post(
+                                new TeamXpAddedEvent(this, (Integer)json.getByPath("d.amount"), userIds)
+                                        .setOpCode(op)
+                                        .setEventID(eventID)
+                        );
+                        break;
+                    }
+                    case "TeamMemberUpdated":
+                    {
+                        eventBus.post(
+                                new TeamMemberUpdatedEvent(this,
+                                        (String)json.getByPath("d.userInfo.id"),
+                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull?null:(String)json.getByPath("d.userInfo.nickname"))
+                                        .setOpCode(op)
+                                        .setEventID(eventID)
+                        );
+                    }
+                    case "teamRolesUpdated":
+                    case "TeamRolesUpdated":
+                    {
+                        JSONArray memberRoleIds=(JSONArray) json.getByPath("d.memberRoleIds");
+                        User[] users=new User[memberRoleIds.size()];
+                        for (int i=0;i!=memberRoleIds.size();i++)
+                        {
+                            JSONObject temp=(JSONObject)memberRoleIds.get(i);
+                            Object[] rawRoles=temp.getJSONArray("roleIds").toArray();
+                            int[] roles=new int[rawRoles.length];
+                            for(int a=0;a!=rawRoles.length;a++) roles[a]=(int)rawRoles[a];
+                            users[i]=new User(temp.getStr("userId")).setRoleIds(roles);
+                        }
+                        eventBus.post(
+                                new TeamRolesUpdatedEvent(this, users)
+                                        .setOpCode(op)
+                                        .setEventID(eventID)
+                        );
+                    }
+                    default: //no implemented GuildedEvents matched? post raw event with the event name and original string
+                        eventBus.post(new GuildedEvent(this)
+                                .setOpCode(op)
+                                .setEventID(eventID)
+                                .setEventType(eventType).setRawString(rawMessage));
                 }
-                default: //no implemented GuildedEvents matched? post raw event with the event name and original string
-                    eventBus.post(new GuildedEvent(this)
-                            .setOpCode(json.getInt("op"))
-                            .setReplayID(json.getStr("s"))
-                            .setEventType(eventType).setRawString(rawMessage));
+                break;
+            }
+            default: //unknown
+            {
+                eventBus.post(new GuildedEvent(this)
+                        .setOpCode(op)
+                        .setRawString(rawMessage));
+                break;
             }
         }
-        else if(json.getInt("op")!=null)
-            eventBus.post(new GuildedEvent(this)
-                    .setOpCode(json.getInt("op"))
-                    .setRawString(rawMessage));//at least we have opcode
-        else eventBus.post(new GuildedEvent(this).setRawString(rawMessage));//bruh moment
     }
 //============================== EVENT MANAGER END ==============================
 

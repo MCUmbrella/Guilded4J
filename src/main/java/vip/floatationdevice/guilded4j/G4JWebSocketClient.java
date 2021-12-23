@@ -96,7 +96,7 @@ public class G4JWebSocketClient extends WebSocketClient
             case 1: //welcome event
             {
                 eventBus.post(
-                        new GuildedWebsocketInitializedEvent(this,
+                        new GuildedWebSocketInitializedEvent(this,
                                 (String)json.getByPath("d.lastMessageId"),
                                 (Integer)json.getByPath("d.heartbeatIntervalMs")
                         ).setOpCode(json.getInt("op"))
@@ -214,13 +214,13 @@ public class G4JWebSocketClient extends WebSocketClient
 //============================== EVENT MANAGER END ==============================
 
     /**
-     * Posts {@link GuildedWebsocketClosedEvent}.
+     * Posts {@link GuildedWebSocketClosedEvent}.
      * @param remote Is connection closed by remote peer? If so, remote=true.
      */
     @Override
     public void onClose(int code, String reason, boolean remote)
     {
-        eventBus.post(new GuildedWebsocketClosedEvent(this,code,reason,remote));
+        eventBus.post(new GuildedWebSocketClosedEvent(this,code,reason,remote));
     }
 
     /**

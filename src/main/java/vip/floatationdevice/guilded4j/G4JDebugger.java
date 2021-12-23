@@ -31,12 +31,12 @@ public class G4JDebugger
     static class GuildedEventListener
     {
         @Subscribe
-        public void onInit(GuildedWebsocketInitializedEvent e)
+        public void onInit(GuildedWebSocketInitializedEvent e)
         {
             System.out.print("\n[i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
         }
         @Subscribe
-        public void onDisconnect(GuildedWebsocketClosedEvent e)
+        public void onDisconnect(GuildedWebSocketClosedEvent e)
         {
             System.out.print("\n[i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason());
         }

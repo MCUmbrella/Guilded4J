@@ -11,19 +11,19 @@ import java.util.EventObject;
  * Event that is fired when the event manager's WebSocket connection is closed.
  * This is a Guilded4J's custom event, meaning that there is no event in the Guilded API called this name.
  */
-public class GuildedWebsocketClosedEvent extends EventObject
+public class GuildedWebSocketClosedEvent extends EventObject
 {
     private final int code;
     private final String reason;
     private final Boolean remote;
 
     /**
-     * Generate a GuildedWebsocketClosedEvent using the given keys.
+     * Generate a GuildedWebSocketClosedEvent using the given keys.
      * @param code The WebSocket status code.
      * @param reason The reason of the disconnection (can be null).
      * @param remote Is connection closed by remote peer? If so, remote=true.
      */
-    public GuildedWebsocketClosedEvent(Object source, int code, String reason, Boolean remote)
+    public GuildedWebSocketClosedEvent(Object source, int code, String reason, Boolean remote)
     {
         super(source);
         this.code=code;

@@ -9,17 +9,17 @@ package vip.floatationdevice.guilded4j.event;
  * Event that is fired when the event manager's WebSocket connection has been opened and successfully logged in.
  * This is a Guilded4J's custom event, meaning that there is no event in the Guilded API called this name.
  */
-public class GuildedWebsocketInitializedEvent extends GuildedEvent
+public class GuildedWebSocketInitializedEvent extends GuildedEvent
 {
     private final String lastMessageId;
     private final int heartbeatIntervalMs;
 
     /**
-     * Generate GuildedWebsocketInitializedEvent using the given keys.
+     * Generate GuildedWebSocketInitializedEvent using the given keys.
      * @param lastMessageId Message ID used for replaying events after a disconnect.
      * @param heartbeatIntervalMs Heartbeat / keepalive interval (milliseconds).
      */
-    public GuildedWebsocketInitializedEvent(Object source, String lastMessageId, int heartbeatIntervalMs)
+    public GuildedWebSocketInitializedEvent(Object source, String lastMessageId, int heartbeatIntervalMs)
     {
         super(source);
         this.lastMessageId=lastMessageId;

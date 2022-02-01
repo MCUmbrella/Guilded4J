@@ -8,6 +8,7 @@ package vip.floatationdevice.guilded4j;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
+import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.*;
 import vip.floatationdevice.guilded4j.object.*;
@@ -261,7 +262,7 @@ public class G4JDebugger
                     String[] arguments=text.split(" ");
                     if(arguments.length==3)
                     {
-                        HashMap<String,String> result=client.getSocialLink(arguments[1],arguments[2]);
+                        HashMap<String,String> result=client.getSocialLink(arguments[1],SocialMedia.valueOf(arguments[2].toUpperCase()));
                         System.out.print(RESULT_PFX+result);
                     }
                     else System.err.println("[X] Usage: smlink <userID> <socialMediaName>");

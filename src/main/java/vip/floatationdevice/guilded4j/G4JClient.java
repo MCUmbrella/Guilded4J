@@ -10,6 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 
@@ -36,7 +37,6 @@ public class G4JClient
     ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
     REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
-    public static final String[] socialMedias={"twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", "roblox"};
     protected String authToken;
 
     /**
@@ -359,31 +359,24 @@ public class G4JClient
      * Retrieves a member's public social links.<br>
      * <a href="https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead" target=_blank>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
      * @param userId The target user's ID.
-     * @param type The type of social link to retrieve.<br>- should be "twitch", "bnet", "psn", "xbox", "steam", "origin", "youtube", "twitter", "facebook", "switch", "patreon", or "roblox".
+     * @param type The type of social link to retrieve (see {@link SocialMedia} for available types).
      * @return A HashMap with "type", "handle", "serviceId(nullable)" keys.
-     * @throws IllegalArgumentException If the value of "type" argument is not listed.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public HashMap<String, String> getSocialLink(String userId, String type)
+    public HashMap<String, String> getSocialLink(String userId, SocialMedia type)
     {
-        boolean found = false;
-        for(String s:socialMedias) if(s.equals(type.toLowerCase())){found=true;break;}
-        if(found)
-        {
-            JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type)).
-                    header("Authorization","Bearer "+authToken).
-                    header("Accept","application/json").
-                    header("Content-type","application/json").
-                    timeout(20000).execute().body());
-            if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
-            HashMap<String, String> map=new HashMap<String, String>();
-            map.put("type",(String)result.getByPath("socialLink.type"));
-            map.put("handle",(String)result.getByPath("socialLink.handle"));
-            map.put("serviceId",(String)result.getByPath("socialLink.serviceId"));
-            return map;
-        }
-        else throw new IllegalArgumentException("The specified social media '"+type+"' is not available");
+        JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type.toString().toLowerCase())).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(20000).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        HashMap<String, String> map=new HashMap<String, String>();
+        map.put("type",(String)result.getByPath("socialLink.type"));
+        map.put("handle",(String)result.getByPath("socialLink.handle"));
+        map.put("serviceId",(String)result.getByPath("socialLink.serviceId"));
+        return map;
     }
 
 ////////////////////////////// Group membership //////////////////////////////

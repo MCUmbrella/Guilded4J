@@ -90,6 +90,7 @@ public class G4JWebSocketClient extends WebSocketClient
         int op=json.getInt("op");//operation code: 0, 1, 2, 8, 9
         String eventID=json.getStr("s");//event id (aka. lastMessageId)
         String eventType=json.getStr("t");//hope they wont change this key name in the future
+        String serverID=(String)json.getByPath("d.serverId");// null if op != 0
 
         switch(op)
         {
@@ -99,7 +100,7 @@ public class G4JWebSocketClient extends WebSocketClient
                         new GuildedWebSocketInitializedEvent(this,
                                 (String)json.getByPath("d.lastMessageId"),
                                 (Integer)json.getByPath("d.heartbeatIntervalMs")
-                        ).setOpCode(json.getInt("op"))
+                        ).setOpCode(op)
                 );
                 break;
             }
@@ -126,8 +127,7 @@ public class G4JWebSocketClient extends WebSocketClient
                         JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
                                 new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op)
-                                        .setEventID(eventID)
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -136,8 +136,7 @@ public class G4JWebSocketClient extends WebSocketClient
                         JSONObject msgObj=(JSONObject)new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
                                 new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op)
-                                        .setEventID(eventID)
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -147,8 +146,8 @@ public class G4JWebSocketClient extends WebSocketClient
                                 new ChatMessageDeletedEvent(this,
                                         (String)json.getByPath("d.message.deletedAt"),
                                         (String)json.getByPath("d.message.id"),
-                                        (String)json.getByPath("d.message.channelId")
-                                ).setOpCode(op).setEventID(eventID)
+                                        (String)json.getByPath("d.message.channelId"))
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -160,8 +159,7 @@ public class G4JWebSocketClient extends WebSocketClient
                         for(int i=0;i!=converted.length;i++) userIds[i]=((String)converted[i]);
                         eventBus.post(
                                 new TeamXpAddedEvent(this, (Integer)json.getByPath("d.amount"), userIds)
-                                        .setOpCode(op)
-                                        .setEventID(eventID)
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -171,8 +169,7 @@ public class G4JWebSocketClient extends WebSocketClient
                                 new TeamMemberUpdatedEvent(this,
                                         (String)json.getByPath("d.userInfo.id"),
                                         json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull?null:(String)json.getByPath("d.userInfo.nickname"))
-                                        .setOpCode(op)
-                                        .setEventID(eventID)
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                     }
                     case "teamRolesUpdated":
@@ -190,21 +187,22 @@ public class G4JWebSocketClient extends WebSocketClient
                         }
                         eventBus.post(
                                 new TeamRolesUpdatedEvent(this, users)
-                                        .setOpCode(op)
-                                        .setEventID(eventID)
+                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                     }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
-                        eventBus.post(new GuildedEvent(this)
+                        eventBus.post(new UnknownGuildedEvent(this)
                                 .setOpCode(op)
                                 .setEventID(eventID)
-                                .setEventType(eventType).setRawString(rawMessage));
+                                .setEventType(eventType)
+                                .setServerID(serverID)
+                                .setRawString(rawMessage));
                 }
                 break;
             }
-            default: //unknown
+            default: //unknown opcode or opcode not present
             {
-                eventBus.post(new GuildedEvent(this)
+                eventBus.post(new UnknownGuildedEvent(this)
                         .setOpCode(op)
                         .setRawString(rawMessage));
                 break;

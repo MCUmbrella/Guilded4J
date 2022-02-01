@@ -16,6 +16,7 @@ public class GuildedEvent extends EventObject
     int op;// "op" key in the WebSocket message
     String eventID;// "s" key in the WebSocket message
     String eventType;// "t" key in the WebSocket message
+    String serverID;// usually located in "d.serverId"
     String rawString;
 
     /**
@@ -46,6 +47,12 @@ public class GuildedEvent extends EventObject
     @Nullable public String getEventType(){return this.eventType;}
 
     /**
+     * Get the ID of the server the event was sent to.
+     * @return The server ID.
+     */
+    @Nullable public String getServerID(){return this.serverID;}
+
+    /**
      * Get the original WebSocket message of the event.
      * @return A JSON string that contains the original data received.
      */
@@ -53,6 +60,7 @@ public class GuildedEvent extends EventObject
 
     public GuildedEvent setOpCode(int op){this.op=op;return this;}
     public GuildedEvent setEventID(String s){this.eventID=s;return this;}
+    public GuildedEvent setServerID(String serverID){this.serverID=serverID;return this;}
     public GuildedEvent setEventType(String t){this.eventType=t;return this;}
 
     /**

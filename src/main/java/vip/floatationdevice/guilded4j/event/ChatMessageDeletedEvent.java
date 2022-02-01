@@ -42,7 +42,7 @@ public class ChatMessageDeletedEvent extends GuildedEvent
     public String getMsgId(){return this.id;}
 
     /**
-     * Get the UUID of the deleted message.
+     * Get the UUID of the deleted message's channel.
      * @return A UUID string of the channel which the message belongs.
      */
     public String getChannelId(){return this.channelId;}

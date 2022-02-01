@@ -26,20 +26,21 @@ public class G4JDebugger
     static Boolean dumpEnabled=false;
     static String parseMessage(ChatMessage m, Boolean prompt)
     {
-        return prompt?"\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+"\n["+workdir+"] #"
+        return prompt?"\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getServerId()+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent()+prompt()
                 :"\n["+DateUtil.parse(m.getCreationTime())+"] ["+m.getChannelId()+"] ("+m.getMsgId()+") <"+m.getCreatorId()+"> "+m.getContent();
     }
+    static String prompt(){return "\n["+workdir+"] #";}
     static class GuildedEventListener
     {
         @Subscribe
         public void onInit(GuildedWebSocketInitializedEvent e)
         {
-            System.out.print("\n[i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+"\n["+workdir+"] #");
+            System.out.print("\n[i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+prompt());
         }
         @Subscribe
         public void onDisconnect(GuildedWebSocketClosedEvent e)
         {
-            System.out.print("\n[i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason());
+            System.out.print("\n[i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason()+prompt());
         }
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
@@ -50,12 +51,12 @@ public class G4JDebugger
         @Subscribe
         public void onXP(TeamXpAddedEvent e)
         {
-            if(dumpEnabled) System.out.print("\n[D] "+Arrays.toString(e.getUserIds())+": +"+e.getXpAmount()+" XP"+"\n["+workdir+"] #");
+            if(dumpEnabled) System.out.print("\n[D] "+Arrays.toString(e.getUserIds())+": +"+e.getXpAmount()+" XP"+prompt());
         }
         @Subscribe
         public void onNicknameChange(TeamMemberUpdatedEvent e)
         {
-            if(dumpEnabled) System.out.print("\n[D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+"\n["+workdir+"] #");
+            if(dumpEnabled) System.out.print("\n[D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+prompt());
         }
         @Subscribe
         public void onRoleChange(TeamRolesUpdatedEvent e)
@@ -65,8 +66,13 @@ public class G4JDebugger
             {
                 System.out.println("[D] Member role changes:");
                 for(User user:users) System.out.println("    "+user.getUserId()+": "+Arrays.toString(user.getRoleIds()));
-                System.out.print("\n["+workdir+"] #");
+                System.out.print(prompt());
             }
+        }
+        @Subscribe
+        public void UnknownGuildedEvent(UnknownGuildedEvent e)
+        {
+            System.out.print("\n[!] Unknown event received: \n"+new JSONObject(e.getRawString()).toStringPretty()+prompt());
         }
     }
     static class G4JSession implements Serializable
@@ -120,7 +126,7 @@ public class G4JDebugger
         client.ws.connect();
         String text=null;//typed command
         String textCache="";//previous command
-        for(;;System.out.print("\n["+workdir+"] #"))
+        for(;;System.out.print(prompt()))
         {
             try
             {

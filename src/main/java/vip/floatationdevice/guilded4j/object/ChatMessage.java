@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
  */
 public class ChatMessage
 {
-    private String id,type,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
+    private String id,type,serverId,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
     private Boolean isPrivate;
     private String[] replyMessageIds;
 
@@ -35,6 +35,12 @@ public class ChatMessage
      * @return "{@code system}" if the message is created by system(e.g. the "Channel created" message), else return "{@code default}".
      */
     public String getType(){return type;}
+
+    /**
+     * Get the ID of the server to which the message belongs.
+     * @return The ID of the server.
+     */
+    public String getServerId(){return serverId;}
 
     /**
      * Get the UUID of the channel to which the message belongs.
@@ -93,6 +99,7 @@ public class ChatMessage
 
     public ChatMessage setMsgId(String id){this.id=id;return this;}
     public ChatMessage setType(String type){this.type=type;return this;}
+    public ChatMessage setServerId(String serverId){this.serverId=serverId;return this;}
     public ChatMessage setChannelId(String channelId){this.channelId=channelId;return this;}
     public ChatMessage setContent(String content){this.content=content;return this;}
     public ChatMessage setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
@@ -151,6 +158,7 @@ public class ChatMessage
             if(rawReplyMessageIds!=null) for(int i=0;i<rawReplyMessageIds.length;i++) replyMessageIds[i]=rawReplyMessageIds[i].toString();
             return this.setMsgId(json.getStr("id"))
                     .setType(json.getStr("type"))
+                    .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setContent(json.getStr("content"))
                     .setCreationTime(json.getStr("createdAt"))
@@ -173,6 +181,7 @@ public class ChatMessage
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id",id)
                 .set("type",type)
+                .set("serverId",serverId)
                 .set("channelId",channelId)
                 .set("createdAt",createdAt)
                 .set("createdBy",createdBy)

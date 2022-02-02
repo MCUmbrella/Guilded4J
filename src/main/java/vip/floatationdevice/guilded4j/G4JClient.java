@@ -43,7 +43,8 @@ public class G4JClient
     ROLE_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
     REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
-    protected String authToken;
+    String authToken;
+    int httpTimeout=20000;
 
     /**
      * Built-in WebSocket event manager ({@link G4JWebSocketClient}).
@@ -86,7 +87,7 @@ public class G4JClient
                         .set("replyMessageIds", replyMessageIds==null?null:new JSONArray(replyMessageIds))
                         .set("isPrivate", isPrivate)
                         .toString()).
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ChatMessage().fromString(result.get("message").toString());
     }
@@ -104,7 +105,7 @@ public class G4JClient
         String result=HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+messageId).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -130,7 +131,7 @@ public class G4JClient
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 body(new JSONObject().set("content",content).toString()).
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ChatMessage().fromString(result.get("message").toString());
     }
@@ -149,7 +150,7 @@ public class G4JClient
                         header("Authorization","Bearer "+authToken).
                         header("Accept","application/json").
                         header("Content-type","application/json").
-                        timeout(20000).execute().body()
+                        timeout(httpTimeout).execute().body()
         ));
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ChatMessage().fromString(result.get("message").toString());
@@ -169,7 +170,7 @@ public class G4JClient
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         JSONArray array=result.getJSONArray("messages");
         Object[] converted=array.toArray();
@@ -194,7 +195,7 @@ public class G4JClient
         JSONObject result=new JSONObject(HttpRequest.get(ROLES_URL_OLD.replace("{userId}",userId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         if(!result.containsKey("roleIds")) return new int[0];
         JSONArray array=result.getJSONArray("roleIds");
@@ -222,7 +223,7 @@ public class G4JClient
             String rawString=HttpRequest.delete(NICKNAME_URL_OLD.replace("{userId}",userId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
-                    timeout(20000).execute().body();
+                    timeout(httpTimeout).execute().body();
             if(!JSONUtil.isJson(rawString)) return null;
             else
             {
@@ -237,7 +238,7 @@ public class G4JClient
                     header("Accept","application/json").
                     header("Content-type","application/json").
                     body(new JSONObject().set("nickname",nickname).toString()).
-                    timeout(20000).execute().body());
+                    timeout(httpTimeout).execute().body());
             if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
             return result.get("nickname").toString();
         }
@@ -261,7 +262,7 @@ public class G4JClient
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 body(new JSONObject().set("title",title).set("content",content).toString()).
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ForumThread().fromString(result.get("forumThread").toString());
     }
@@ -284,7 +285,7 @@ public class G4JClient
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message",message).set("note",note).toString()).
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return new ListItem().fromString(result.get("listItem").toString());
     }
@@ -305,7 +306,7 @@ public class G4JClient
         String result=HttpRequest.put(REACTION_URL.replace("{channelId}",channelId).replace("{contentId}",contentId).replace("{emoteId}",Integer.toString(emoteId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -333,7 +334,7 @@ public class G4JClient
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 body("{\"amount\":"+amount+"}").
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         return result.getInt("total");
     }
@@ -354,7 +355,7 @@ public class G4JClient
                 header("Accept","application/json").
                 header("Content-type","application/json").
                 body("{\"amount\":"+amount+"}").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -381,7 +382,7 @@ public class G4JClient
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
-                timeout(20000).execute().body());
+                timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
         HashMap<String, String> map=new HashMap<String, String>();
         map.put("type",(String)result.getByPath("socialLink.type"));
@@ -405,7 +406,7 @@ public class G4JClient
         String result=HttpRequest.put(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -427,7 +428,7 @@ public class G4JClient
         String result=HttpRequest.delete(GROUP_URL.replace("{groupId}",groupId).replace("{userId}",userId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -452,7 +453,7 @@ public class G4JClient
         String result=HttpRequest.put(ROLE_URL_OLD.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -473,7 +474,7 @@ public class G4JClient
         String result=HttpRequest.delete(ROLE_URL_OLD.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
-                timeout(20000).execute().body();
+                timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
             JSONObject json=new JSONObject(result);
@@ -493,4 +494,10 @@ public class G4JClient
         authToken=token;
         ws.setAuthToken(authToken);
     }
+
+    /**
+     * Set the timeout of the HTTP request.
+     * @param timeoutMs The timeout in milliseconds.
+     */
+    public void setHttpTimeout(int timeoutMs){this.httpTimeout=timeoutMs;}
 }

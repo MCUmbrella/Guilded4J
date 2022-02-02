@@ -26,15 +26,21 @@ public class G4JClient
 {
     public static final String
     MSG_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/messages",
-    ROLES_URL="https://www.guilded.gg/api/v1/members/{userId}/roles",
-    NICKNAME_URL="https://www.guilded.gg/api/v1/members/{userId}/nickname",
+    ROLES_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
+    ROLES_URL_OLD ="https://www.guilded.gg/api/v1/members/{userId}/roles",
+    NICKNAME_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
+    NICKNAME_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/nickname",
     FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum",
     LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list",
-    USER_XP_URL="https://www.guilded.gg/api/v1/members/{userId}/xp",
-    ROLE_XP_URL="https://www.guilded.gg/api/v1/roles/{roleId}/xp",
-    SOCIAL_LINK_URL="https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}",
+    USER_XP_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
+    USER_XP_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/xp",
+    ROLE_XP_URL="https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
+    ROLE_XP_URL_OLD="https://www.guilded.gg/api/v1/roles/{roleId}/xp",
+    SOCIAL_LINK_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
+    SOCIAL_LINK_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}",
     GROUP_URL="https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
-    ROLE_URL="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
+    ROLE_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles/{roleId}",
+    ROLE_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
     REACTION_URL="https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
     protected String authToken;
@@ -182,9 +188,10 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public int[] getMemberRoles(String userId)
     {
-        JSONObject result=new JSONObject(HttpRequest.get(ROLES_URL.replace("{userId}",userId)).
+        JSONObject result=new JSONObject(HttpRequest.get(ROLES_URL_OLD.replace("{userId}",userId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 timeout(20000).execute().body());
@@ -206,12 +213,13 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public String setMemberNickname(String userId, @Nullable String nickname)
     {
         JSONObject result;
         if(nickname==null)
         {
-            String rawString=HttpRequest.delete(NICKNAME_URL.replace("{userId}",userId)).
+            String rawString=HttpRequest.delete(NICKNAME_URL_OLD.replace("{userId}",userId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     timeout(20000).execute().body();
@@ -224,7 +232,7 @@ public class G4JClient
         }
         else
         {
-            result=new JSONObject(HttpRequest.put(NICKNAME_URL.replace("{userId}",userId)).
+            result=new JSONObject(HttpRequest.put(NICKNAME_URL_OLD.replace("{userId}",userId)).
                     header("Authorization","Bearer "+authToken).
                     header("Accept","application/json").
                     header("Content-type","application/json").
@@ -317,9 +325,10 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public int awardUserXp(String userId, int amount)
     {
-        JSONObject result=new JSONObject(HttpRequest.post(USER_XP_URL.replace("{userId}",userId)).
+        JSONObject result=new JSONObject(HttpRequest.post(USER_XP_URL_OLD.replace("{userId}",userId)).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
@@ -337,9 +346,10 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public void awardRoleXp(int roleId, int amount)
     {
-        String result=HttpRequest.post(ROLE_XP_URL.replace("{roleId}",String.valueOf(roleId))).
+        String result=HttpRequest.post(ROLE_XP_URL_OLD.replace("{roleId}",String.valueOf(roleId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
@@ -364,9 +374,10 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public HashMap<String, String> getSocialLink(String userId, SocialMedia type)
     {
-        JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{userId}",userId).replace("{type}",type.toString().toLowerCase())).
+        JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL_OLD.replace("{userId}",userId).replace("{type}",type.toString().toLowerCase())).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 header("Content-type","application/json").
@@ -435,9 +446,10 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    @Deprecated
     public void addRoleMember(int roleId, String userId)
     {
-        String result=HttpRequest.put(ROLE_URL.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+        String result=HttpRequest.put(ROLE_URL_OLD.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 timeout(20000).execute().body();
@@ -455,9 +467,10 @@ public class G4JClient
      * @param userId The ID of the member that the role should be removed from.
      * @param roleId The role ID to remove from the user.
      */
+    @Deprecated
     public void removeRoleMember(int roleId, String userId)
     {
-        String result=HttpRequest.delete(ROLE_URL.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+        String result=HttpRequest.delete(ROLE_URL_OLD.replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
                 timeout(20000).execute().body();

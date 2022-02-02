@@ -9,6 +9,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import vip.floatationdevice.guilded4j.Util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,7 +56,7 @@ public class ChatMessage
     public String getContent(){return content;}
 
     /**
-     * Get the creation time of the message.
+     * Get the ISO 8601 timestamp string that the message was created at.
      * @return A string that contains a time formatted like "2021-08-06T14:30:13.614Z" (UTC+-0)
      */
     public String getCreationTime(){return createdAt;}
@@ -85,17 +86,45 @@ public class ChatMessage
     @Nullable public String getUpdateTime(){return updatedAt;}
 
     /**
-     * Check if the message is a private reply.
-     * @return {@code true} if the message is a private reply, {@code false} if not,
-     * {@code null} if the message is not replying to any messages.
-     */
-    @Nullable public Boolean isPrivateReply(){return replyMessageIds!=null&&isPrivate;}
-
-    /**
      * Get a list of UUIDs of the messages that this message replies to.
      * @return An array of UUID Strings, if the message isn't a reply, return {@code null}.
      */
     @Nullable public String[] getReplyMessageIds(){return replyMessageIds;}
+
+
+    /**
+     * Check if the message is a private reply.
+     * @return {@code true} if the message is a private reply, {@code false} if not,
+     * {@code null} if the message is not replying to any messages.
+     */
+    @Nullable public Boolean isPrivateReply()
+    {
+        return replyMessageIds!=null?
+                isPrivate!=null
+                        ?isPrivate
+                        :false
+                :null;
+    }
+
+    /**
+     * Check if the message is a system message.
+     * @return {@code true} if the message is created by system, {@code false} if not.
+     */
+    public Boolean isSystemMessage(){return type.equals("system");}
+
+    /**
+     * This function is broken for now due to the fact that Guilded migrated bot objects to user objects.
+     * @return {@code true} if the message is created by bot, {@code false} if not.
+     */
+    @Deprecated
+    public Boolean isBotMessage(){return createdByBotId!=null;}
+
+    /**
+     * Check if the message is created by a webhook.
+     * @return {@code true} if the message is created by webhook, {@code false} if not.
+     */
+    public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
+
 
     public ChatMessage setMsgId(String id){this.id=id;return this;}
     public ChatMessage setType(String type){this.type=type;return this;}
@@ -110,38 +139,15 @@ public class ChatMessage
     public ChatMessage setPrivateReply(Boolean isPrivate){this.isPrivate=isPrivate;return this;}
     public ChatMessage setReplyMessageIds(String[] replyMessageIds){this.replyMessageIds=replyMessageIds;return this;}
 
-    public Boolean isSystemMessage(){return type!=null&&type.equals("system");}
-    public Boolean isBotMessage(){return createdByBotId!=null;}
-    public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
-
     /**
-     * Generate ChatMessage object using 6 given essential keys.
-     * @param id The UUID of the message.
-     * @param type The type of the message.
-     * @param channelId The UUID of the channel to which the message belongs.
-     * @param content The message's content.
-     * @param createdAt The creation date of the message (pay attention to the format).
-     * @param createdBy The ID of the message's creator (this is not UUID).
-     */
-    public ChatMessage(String id,String type,String channelId,String content,String createdAt,String createdBy)
-    {
-        this.setMsgId(id)
-                .setType(type)
-                .setChannelId(channelId)
-                .setContent(content)
-                .setCreationTime(createdAt)
-                .setCreatorId(createdBy);
-    }
-
-    /**
-     * Generate empty ChatMessage object - don't call toString() or do any other operations before setting up the 6 essential keys.
+     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
      */
     public ChatMessage(){}
 
     /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
-     * @throws IllegalArgumentException when the string is missing at least 1 of the 6 essential keys.
+     * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
     public ChatMessage fromString(@Nonnull String rawString)
@@ -149,10 +155,14 @@ public class ChatMessage
         if(JSONUtil.isJson(rawString))
         {
             JSONObject json=new JSONObject(rawString);
-            if(json.getStr("id")==null||json.getStr("type")==null
-                    ||json.getStr("channelId")==null||json.getStr("content")==null
-                    ||json.getStr("createdAt")==null||json.getStr("createdBy")==null)
-                throw new IllegalArgumentException("At least 1 essential key of ChatMessage is missing");
+            Util.checkNullArgument(
+                    json.getStr("id"),
+                    json.getStr("type"),
+                    json.getStr("channelId"),
+                    json.getStr("content"),
+                    json.getStr("createdAt"),
+                    json.getStr("createdBy")
+            );
             Object[] rawReplyMessageIds=json.containsKey("replyMessageIds")?json.getJSONArray("replyMessageIds").toArray():null;
             String[] replyMessageIds=rawReplyMessageIds!=null?new String[rawReplyMessageIds.length]:null;
             if(rawReplyMessageIds!=null) for(int i=0;i<rawReplyMessageIds.length;i++) replyMessageIds[i]=rawReplyMessageIds[i].toString();

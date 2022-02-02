@@ -5,6 +5,8 @@
 
 package vip.floatationdevice.guilded4j.exception;
 
+import vip.floatationdevice.guilded4j.enums.ExceptionType;
+
 /**
  * The exception object converted from the error JSON returned by Guilded API.
  */
@@ -12,6 +14,7 @@ public class GuildedException extends RuntimeException
 {
     private final String code;
     private final String description;
+    private final ExceptionType type;//TODO
 
     /**
      * Default constructor.
@@ -23,6 +26,7 @@ public class GuildedException extends RuntimeException
         super(code + " - " + message);
         this.code = code;
         this.description = message;
+        this.type = ExceptionType.OTHER;
     }
 
     /**
@@ -36,4 +40,10 @@ public class GuildedException extends RuntimeException
      * @return The error's description in the JSON returned by Guilded API.
      */
     public String getDescription() {return description;}
+
+    /**
+     * Get the type of the error (TODO).
+     * @return The error's type.
+     */
+    public ExceptionType getType() {return type;}
 }

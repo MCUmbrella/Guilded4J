@@ -185,10 +185,26 @@ public class G4JClient
      * Get a list of the roles assigned to a member.<br>
      * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
      * @param userId The ID of the member to obtain roles from.
+     * @param serverId The ID of the server where the member is.
      * @return An int[] contains the IDs of the roles that the member currently has.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public int[] getMemberRoles(String serverId, String userId)
+    {
+        JSONObject result=new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}",serverId).replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        if(!result.containsKey("roleIds")) return new int[0];
+        JSONArray array=result.getJSONArray("roleIds");
+        Object[] converted=array.toArray();
+        int[] roles=new int[converted.length];
+        for(int i=0;i!=converted.length;i++) roles[i]=((int)converted[i]);
+        return roles;
+    }
+
     @Deprecated
     public int[] getMemberRoles(String userId)
     {
@@ -208,12 +224,42 @@ public class G4JClient
     /**
      * Update/delete a member's nickname.<br>
      * <a href="https://www.guilded.gg/docs/api/members/MemberNicknameUpdate" target=_blank>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
+     * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
      * @return The nickname to be set when setting nickname, {@code null} when deleting nickname.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public String setMemberNickname(String serverId, String userId, @Nullable String nickname)
+    {
+        JSONObject result;
+        if(nickname==null)
+        {
+            String rawString=HttpRequest.delete(NICKNAME_URL.replace("{serverId}",serverId).replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    timeout(httpTimeout).execute().body();
+            if(!JSONUtil.isJson(rawString)) return null;
+            else
+            {
+                result=new JSONObject(rawString);
+                throw new GuildedException(result.getStr("code"),result.getStr("message"));
+            }
+        }
+        else
+        {
+            result=new JSONObject(HttpRequest.put(NICKNAME_URL.replace("{serverId}",serverId).replace("{userId}",userId)).
+                    header("Authorization","Bearer "+authToken).
+                    header("Accept","application/json").
+                    header("Content-type","application/json").
+                    body(new JSONObject().set("nickname",nickname).toString()).
+                    timeout(httpTimeout).execute().body());
+            if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+            return result.get("nickname").toString();
+        }
+    }
+
     @Deprecated
     public String setMemberNickname(String userId, @Nullable String nickname)
     {
@@ -320,12 +366,25 @@ public class G4JClient
     /**
      * Award XP to a member.<br>
      * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
+     * @param serverId The ID of the server where the member is.
      * @param userId Member ID to award XP to.
      * @param amount The amount of XP to award.
      * @return The total XP after this operation.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public int awardUserXp(String serverId, String userId, int amount)
+    {
+        JSONObject result=new JSONObject(HttpRequest.post(USER_XP_URL.replace("{serverId}",serverId).replace("{userId}",userId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body("{\"amount\":"+amount+"}").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return result.getInt("total");
+    }
+
     @Deprecated
     public int awardUserXp(String userId, int amount)
     {
@@ -342,11 +401,28 @@ public class G4JClient
     /**
      * Award XP to all members with a particular role.<br>
      * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
+     * @param serverId The ID of the server where the member is.
      * @param roleId Role ID to award XP to.
      * @param amount The amount of XP to award.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public void awardRoleXp(String serverId, int roleId, int amount)
+    {
+        String result=HttpRequest.post(ROLE_XP_URL.replace("{serverId}",serverId).replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body("{\"amount\":"+amount+"}").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("TeamXpForRoleCreate returned an unexpected JSON string");
+        }
+    }
+
     @Deprecated
     public void awardRoleXp(int roleId, int amount)
     {
@@ -369,12 +445,28 @@ public class G4JClient
     /**
      * Retrieves a member's public social links.<br>
      * <a href="https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead" target=_blank>https://www.guilded.gg/docs/api/socialLinks/MemberSocialLinkRead</a>
+     * @param serverId The ID of the server where the member is.
      * @param userId The target user's ID.
      * @param type The type of social link to retrieve (see {@link SocialMedia} for available types).
      * @return A HashMap with "type", "handle", "serviceId(nullable)" keys.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public HashMap<String, String> getSocialLink(String serverId, String userId, SocialMedia type)
+    {
+        JSONObject result=new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{serverId}",serverId).replace("{userId}",userId).replace("{type}",type.toString().toLowerCase())).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        HashMap<String, String> map=new HashMap<String, String>();
+        map.put("type",(String)result.getByPath("socialLink.type"));
+        map.put("handle",(String)result.getByPath("socialLink.handle"));
+        map.put("serviceId",(String)result.getByPath("socialLink.serviceId"));
+        return map;
+    }
+
     @Deprecated
     public HashMap<String, String> getSocialLink(String userId, SocialMedia type)
     {
@@ -442,11 +534,26 @@ public class G4JClient
     /**
      * Assign role to member.<br>
      * <a href="https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate" target=_blank>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipCreate</a>
+     * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member that the role should be assigned to.
      * @param roleId The role ID to apply to the user.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
+    public void addRoleMember(String serverId, int roleId, String userId)
+    {
+        String result=HttpRequest.put(ROLE_URL.replace("{serverId}",serverId).replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("RoleMembershipCreate returned an unexpected JSON string");
+        }
+    }
+
     @Deprecated
     public void addRoleMember(int roleId, String userId)
     {
@@ -468,6 +575,20 @@ public class G4JClient
      * @param userId The ID of the member that the role should be removed from.
      * @param roleId The role ID to remove from the user.
      */
+    public void removeRoleMember(String serverId, int roleId, String userId)
+    {
+        String result=HttpRequest.delete(ROLE_URL.replace("{serverId}",serverId).replace("{userId}",userId).replace("{roleId}",String.valueOf(roleId))).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
+        }
+    }
+
     @Deprecated
     public void removeRoleMember(int roleId, String userId)
     {

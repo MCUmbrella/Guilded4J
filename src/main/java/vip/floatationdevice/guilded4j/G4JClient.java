@@ -336,6 +336,37 @@ public class G4JClient
         return new ListItem().fromString(result.get("listItem").toString());
     }
 
+////////////////////////////// Docs //////////////////////////////
+
+public Document createDocument(String channelId, String title, String content)
+{
+    //TODO
+    return null;
+}
+
+public Document updateDocument(String channelId, String title, String content)
+{
+    //TODO
+    return null;
+}
+
+public void deleteDocument(String channelId, int docId)
+{
+    //TODO
+}
+
+public Document getDocument(String channelId, int docId)
+{
+    //TODO
+    return null;
+}
+
+public Document[] getChannelDocuments(String channelId)
+{
+    //TODO
+    return null;
+}
+
 ////////////////////////////// Reactions //////////////////////////////
 
     /**

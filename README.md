@@ -17,7 +17,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Delete message - deleteChannelMessage()
 - - [x] Update message - updateChannelMessage()
 - - [x] Get message info - getMessage()
-- - [x] Get last 50 messages - getChannelMessages()
+- - [x] Get last 100 messages - getChannelMessages()
 - [ ] Members
 - - [x] Get member's role(s) - getMemberRoles()
 - - [x] Update/delete nickname - setMemberNickname()
@@ -25,6 +25,12 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Create forum thread - createForumThread()
 - [ ] List
 - - [x] Create list item - createListItem()
+- [ ] Document
+- - [ ] Create document - createDocument()
+- - [ ] Update document - updateDocument()
+- - [ ] Delete document - deleteDocument()
+- - [ ] Get document info - getDocument()
+- - [ ] Get last 50 updated docs - getChannelDocuments()
 - [ ] Reaction
 - - [x] Add reaction - createContentReaction()
 - [x] XP

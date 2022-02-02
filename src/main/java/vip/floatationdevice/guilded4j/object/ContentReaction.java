@@ -62,9 +62,15 @@ public class ContentReaction
     public ContentReaction setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 
     /**
-     * Default constructor.
+     * Generate empty ContentReaction object - make sure to set all the essential fields before using it.
      */
     public ContentReaction(){}
+
+    /**
+     * Generate ContentReaction object from JSON string.
+     * @param jsonString The JSON string.
+     */
+    public ContentReaction(String jsonString) {fromString(jsonString);}
 
     /**
      * Use the given JSON string to set up ContentReaction object.

@@ -85,7 +85,14 @@ public class ForumThread
     public ForumThread(){}
 
     /**
+     * Generate ForumThread object from JSON string.
+     * @param jsonString The JSON string.
+     */
+    public ForumThread(String jsonString) {fromString(jsonString);}
+
+    /**
      * Use the given JSON string to generate ForumThread object.
+     * @param rawString The JSON string.
      * @return ForumThread object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.

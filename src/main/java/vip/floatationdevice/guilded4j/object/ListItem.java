@@ -40,9 +40,25 @@ public class ListItem
     public ListItem setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
     public ListItem setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 
+    /**
+     * Generate empty ListItem object - make sure to set all the essential fields before using it.
+     */
     public ListItem(){}
 
-    @Nullable public ListItem fromString(String rawString)
+    /**
+     * Generate ListItem object from JSON string.
+     * @param jsonString The JSON string.
+     */
+    public ListItem(String jsonString) {fromString(jsonString);}
+
+    /**
+     * Use the given JSON string to generate ListItem object.
+     * @param rawString The JSON string.
+     * @return ListItem object.
+     * @throws IllegalArgumentException when the essential fields are not set.
+     * @throws ClassCastException when the provided String's content isn't JSON format.
+     */
+    public ListItem fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -67,6 +83,10 @@ public class ListItem
         }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
+    /**
+     * Convert the ListItem object to JSON string.
+     * @return A JSON string.
+     */
     @Override
     public String toString()
     {

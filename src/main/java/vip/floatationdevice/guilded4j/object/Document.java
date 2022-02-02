@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * The basic forum thread object in a 'forum' type channel.<br>
+ * The basic document object in a 'doc' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/docs/Doc" target=_blank>https://www.guilded.gg/docs/api/docs/Doc</a>
  */
 public class Document
@@ -79,13 +79,11 @@ public class Document
      * Generate Document object from JSON string.
      * @param jsonString The JSON string.
      */
-    public Document(String jsonString)
-    {
-        fromString(jsonString);
-    }
+    public Document(String jsonString) {fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate Document object.
+     * @param rawString The JSON string.
      * @return Document object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.

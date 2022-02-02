@@ -145,6 +145,12 @@ public class ChatMessage
     public ChatMessage(){}
 
     /**
+     * Generate ChatMessage object from JSON string.
+     * @param jsonString The JSON string.
+     */
+    public ChatMessage(String jsonString) {fromString(jsonString);}
+
+    /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
      * @throws IllegalArgumentException when the essential fields are not set.

@@ -133,7 +133,10 @@ public class G4JDebugger
                 text=scanner.nextLine();
                 if(text.equals("!!")){text=textCache;}
                 if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
-                else if(text.equals("test")){}
+                else if(text.equals("test"))
+                {
+                    //
+                }
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;

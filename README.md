@@ -26,9 +26,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [ ] List
 - - [x] Create list item - createListItem()
 - [ ] Document
-- - [ ] Create document - createDocument()
-- - [ ] Update document - updateDocument()
-- - [ ] Delete document - deleteDocument()
+- - [x] Create document - createDocument()
+- - [x] Update document - updateDocument()
+- - [x] Delete document - deleteDocument()
 - - [ ] Get document info - getDocument()
 - - [ ] Get last 50 updated docs - getChannelDocuments()
 - [ ] Reaction

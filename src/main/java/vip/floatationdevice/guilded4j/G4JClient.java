@@ -32,6 +32,7 @@ public class G4JClient
     NICKNAME_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/nickname",
     FORUM_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/forum",
     LIST_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/list",
+    DOC_CHANNEL_URL="https://www.guilded.gg/api/v1/channels/{channelId}/docs",
     USER_XP_URL="https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
     USER_XP_URL_OLD="https://www.guilded.gg/api/v1/members/{userId}/xp",
     ROLE_XP_URL="https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
@@ -105,6 +106,7 @@ public class G4JClient
         String result=HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}",channelId)+"/"+messageId).
                 header("Authorization","Bearer "+authToken).
                 header("Accept","application/json").
+                header("Content-type","application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -338,34 +340,56 @@ public class G4JClient
 
 ////////////////////////////// Docs //////////////////////////////
 
-public Document createDocument(String channelId, String title, String content)
-{
-    //TODO
-    return null;
-}
+    public Document createDocument(String channelId, String title, String content)
+    {
+        JSONObject result=new JSONObject(HttpRequest.post(DOC_CHANNEL_URL.replace("{channelId}",channelId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body(new JSONObject().set("title",title).set("content",content).toString()).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new Document().fromString(result.get("doc").toString());
+    }
 
-public Document updateDocument(String channelId, String title, String content)
-{
-    //TODO
-    return null;
-}
+    public Document updateDocument(String channelId, int docId, String title, String content)
+    {
+        JSONObject result=new JSONObject(HttpRequest.put(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                body(new JSONObject().set("title",title).set("content",content).toString()).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new Document().fromString(result.get("doc").toString());
+    }
 
-public void deleteDocument(String channelId, int docId)
-{
-    //TODO
-}
+    public void deleteDocument(String channelId, int docId)
+    {
+        String result=HttpRequest.delete(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json=new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"),json.getStr("message"));
+            else throw new ClassCastException("DocDelete returned an unexpected JSON string");
+        }
+    }
 
-public Document getDocument(String channelId, int docId)
-{
-    //TODO
-    return null;
-}
+    public Document getDocument(String channelId, int docId)
+    {
+        //TODO
+        return null;
+    }
 
-public Document[] getChannelDocuments(String channelId)
-{
-    //TODO
-    return null;
-}
+    public Document[] getChannelDocuments(String channelId)
+    {
+        //TODO
+        return null;
+    }
 
 ////////////////////////////// Reactions //////////////////////////////
 

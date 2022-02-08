@@ -341,6 +341,15 @@ public class G4JClient
 
 ////////////////////////////// Docs //////////////////////////////
 
+    /**
+     * Create a new document.<br>
+     * <a href="https://www.guilded.gg/docs/api/docs/DocCreate" target=_blank>https://www.guilded.gg/docs/api/docs/DocCreate</a>
+     * @param title The title of the document.
+     * @param content The content of the document.
+     * @return The newly created doc's Document object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public Document createDocument(String channelId, String title, String content)
     {
         JSONObject result=new JSONObject(HttpRequest.post(DOC_CHANNEL_URL.replace("{channelId}",channelId)).
@@ -353,6 +362,16 @@ public class G4JClient
         return new Document().fromString(result.get("doc").toString());
     }
 
+    /**
+     * Update a document.<br>
+     * <a href="https://www.guilded.gg/docs/api/docs/DocUpdate" target=_blank>https://www.guilded.gg/docs/api/docs/DocUpdate</a>
+     * @param docId The id of the document to update.
+     * @param title The new title of the document.
+     * @param content The new content of the document.
+     * @return The updated doc's Document object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public Document updateDocument(String channelId, int docId, String title, String content)
     {
         JSONObject result=new JSONObject(HttpRequest.put(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
@@ -365,6 +384,14 @@ public class G4JClient
         return new Document().fromString(result.get("doc").toString());
     }
 
+    /**
+     * Delete a document.<br>
+     * <a href="https://www.guilded.gg/docs/api/docs/DocDelete" target=_blank>https://www.guilded.gg/docs/api/docs/DocDelete</a>
+     * @param channelId The id of the channel the document is in.
+     * @param docId The id of the document to delete.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public void deleteDocument(String channelId, int docId)
     {
         String result=HttpRequest.delete(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
@@ -380,6 +407,14 @@ public class G4JClient
         }
     }
 
+    /**
+     * Get a document.<br>
+     * <a href="https://www.guilded.gg/docs/api/docs/DocRead" target=_blank>https://www.guilded.gg/docs/api/docs/DocRead</a>
+     * @param docId The id of the document.
+     * @return The doc's Document object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public Document getDocument(String channelId, int docId)
     {
         JSONObject result=new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
@@ -391,6 +426,14 @@ public class G4JClient
         return new Document().fromString(result.get("doc").toString());
     }
 
+    /**
+     * Get a list of the latest 50 docs from a channel.<br>
+     * <a href="https://www.guilded.gg/docs/api/docs/DocReadMany" target=_blank>https://www.guilded.gg/docs/api/docs/DocReadMany</a>
+     * @param channelId The id of the channel.
+     * @return A list of the latest 50 docs from the channel.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public Document[] getChannelDocuments(String channelId)
     {
         JSONObject result=new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}",channelId)).

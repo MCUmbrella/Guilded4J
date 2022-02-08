@@ -177,7 +177,8 @@ public class G4JClient
         JSONArray array=result.getJSONArray("messages");
         Object[] converted=array.toArray();
         ChatMessage[] messages=new ChatMessage[converted.length];
-        for(int i=0;i!=converted.length;i++) messages[i]=(new ChatMessage().fromString((new JSONObject(converted[i]).toString())));
+        for(int i=0;i!=converted.length;i++)
+            messages[i]=new ChatMessage().fromString(converted[i].toString());
         return messages;
     }
 
@@ -381,14 +382,30 @@ public class G4JClient
 
     public Document getDocument(String channelId, int docId)
     {
-        //TODO
-        return null;
+        JSONObject result=new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}",channelId)+"/"+docId).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        return new Document().fromString(result.get("doc").toString());
     }
 
     public Document[] getChannelDocuments(String channelId)
     {
-        //TODO
-        return null;
+        JSONObject result=new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}",channelId)).
+                header("Authorization","Bearer "+authToken).
+                header("Accept","application/json").
+                header("Content-type","application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"),result.getStr("message"));
+        System.out.println(result);
+        JSONArray docs=result.getJSONArray("docs");
+        Object[] converted=docs.toArray();
+        Document[] documents=new Document[converted.length];
+        for(int i=0;i!=converted.length;i++)
+            documents[i]=new Document().fromString(converted[i].toString());
+        return documents;
     }
 
 ////////////////////////////// Reactions //////////////////////////////

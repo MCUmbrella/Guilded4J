@@ -25,12 +25,12 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Create forum thread - createForumThread()
 - [ ] List
 - - [x] Create list item - createListItem()
-- [ ] Document
+- [x] Document
 - - [x] Create document - createDocument()
 - - [x] Update document - updateDocument()
 - - [x] Delete document - deleteDocument()
-- - [ ] Get document info - getDocument()
-- - [ ] Get last 50 updated docs - getChannelDocuments()
+- - [x] Get document info - getDocument()
+- - [x] Get last 50 updated docs - getChannelDocuments()
 - [ ] Reaction
 - - [x] Add reaction - createContentReaction()
 - [x] XP

@@ -11,9 +11,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * Simple message object.<br>
  * <a href="https://www.guilded.gg/docs/api/chat/ChatMessage" target=_blank>https://www.guilded.gg/docs/api/chat/ChatMessage</a>
@@ -71,25 +68,25 @@ public class ChatMessage
      * Get the UUID of the bot who created the message.
      * @return A UUID string of the bot who created the message. If the creator isn't bot, return {@code null}.
      */
-    @Nullable public String getBotCreatorId(){return createdByBotId;}
+    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the UUID of the webhook who created the message.
      * @return A UUID string of the webhook who created the message. If the creator isn't webhook, return {@code null}.
      */
-    @Nullable public String getWebhookCreatorId(){return createdByWebhookId;}
+    public String getWebhookCreatorId(){return createdByWebhookId;}
 
     /**
      * Get the last update time of the message.
      * @return A string looks like the return value of getCreationTime(). If the message has never been changed, return {@code null}.
      */
-    @Nullable public String getUpdateTime(){return updatedAt;}
+    public String getUpdateTime(){return updatedAt;}
 
     /**
      * Get a list of UUIDs of the messages that this message replies to.
      * @return An array of UUID Strings, if the message isn't a reply, return {@code null}.
      */
-    @Nullable public String[] getReplyMessageIds(){return replyMessageIds;}
+    public String[] getReplyMessageIds(){return replyMessageIds;}
 
 
     /**
@@ -97,7 +94,7 @@ public class ChatMessage
      * @return {@code true} if the message is a private reply, {@code false} if not,
      * {@code null} if the message is not replying to any messages.
      */
-    @Nullable public Boolean isPrivateReply()
+    public Boolean isPrivateReply()
     {
         return replyMessageIds!=null?
                 isPrivate!=null
@@ -156,7 +153,7 @@ public class ChatMessage
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ChatMessage fromString(@Nonnull String rawString)
+    public ChatMessage fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {

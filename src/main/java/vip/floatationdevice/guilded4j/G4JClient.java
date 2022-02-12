@@ -14,7 +14,6 @@ import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 
 /**
@@ -77,7 +76,7 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public ChatMessage createChannelMessage(String channelId, String content, @Nullable String[] replyMessageIds, @Nullable Boolean isPrivate)
+    public ChatMessage createChannelMessage(String channelId, String content, String[] replyMessageIds, Boolean isPrivate)
     {
         JSONObject result=new JSONObject(HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}",channelId)).
                 header("Authorization","Bearer "+authToken).
@@ -234,7 +233,7 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public String setMemberNickname(String serverId, String userId, @Nullable String nickname)
+    public String setMemberNickname(String serverId, String userId, String nickname)
     {
         JSONObject result;
         if(nickname==null)
@@ -264,7 +263,7 @@ public class G4JClient
     }
 
     @Deprecated
-    public String setMemberNickname(String userId, @Nullable String nickname)
+    public String setMemberNickname(String userId, String nickname)
     {
         JSONObject result;
         if(nickname==null)
@@ -327,7 +326,7 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public ListItem createListItem(String channelId, String message, @Nullable String note)
+    public ListItem createListItem(String channelId, String message, String note)
     {
         JSONObject result=new JSONObject(HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}",channelId)).
                 header("Authorization","Bearer "+authToken).

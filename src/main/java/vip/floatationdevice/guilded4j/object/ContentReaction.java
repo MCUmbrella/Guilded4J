@@ -10,9 +10,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * The reaction emote object.<br>
  * <a href="https://www.guilded.gg/docs/api/reactions/ContentReaction" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReaction</a>
@@ -46,18 +43,18 @@ public class ContentReaction
      * Get the UUID of the bot who created the reaction.
      * @return A UUID string of the bot who created the reaction. If the creator isn't bot, return {@code null}.
      */
-    @Nullable public String getBotCreatorId(){return createdByBotId;}
+    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the UUID of the webhook who created the reaction.
      * @return A UUID string of the webhook who created the reaction. If the creator isn't webhook, return {@code null}.
      */
-    @Nullable public String getWebhookCreatorId(){return createdByWebhookId;}
+    public String getWebhookCreatorId(){return createdByWebhookId;}
 
     public ContentReaction setId(int id){this.id=id;return this;}
     public ContentReaction setServerId(String serverId){this.serverId=serverId;return this;}
-    public ContentReaction setCreationTime(@Nonnull String createdAt){this.createdAt=createdAt;return this;}
-    public ContentReaction setCreatorId(@Nonnull String createdBy){this.createdBy=createdBy;return this;}
+    public ContentReaction setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
+    public ContentReaction setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
     public ContentReaction setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
     public ContentReaction setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 

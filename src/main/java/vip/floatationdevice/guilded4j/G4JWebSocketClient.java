@@ -26,7 +26,8 @@ import java.net.URISyntaxException;
 public class G4JWebSocketClient extends WebSocketClient
 {
 
-    protected String authToken, lastMessageId;
+    String authToken, lastMessageId;
+    int heartbeatIntervalMs=20000;
     private boolean dump=false;
     private static URI initURI(){try{return new URI("wss://api.guilded.gg/v1/websocket");}catch(URISyntaxException e){/*this is impossible*/return null;}}
 
@@ -42,7 +43,7 @@ public class G4JWebSocketClient extends WebSocketClient
     public G4JWebSocketClient(String token)
     {
         super(WEBSOCKET_URI);
-        this.setAuthToken(token);
+        this.setAuthToken(token).setHeartbeatInterval(heartbeatIntervalMs);
     }
 
     /**
@@ -54,7 +55,7 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         super(WEBSOCKET_URI);
         this.lastMessageId=lastMessageId;
-        this.setAuthToken(token);
+        this.setAuthToken(token).setHeartbeatInterval(heartbeatIntervalMs);
     }
 
     /**
@@ -231,11 +232,33 @@ public class G4JWebSocketClient extends WebSocketClient
      * Initialize or reset Guilded bot access token.
      * @param token The bot API access token (without "Bearer" prefix).
      */
-    public void setAuthToken(String token)
+    public G4JWebSocketClient setAuthToken(String token)
     {
         authToken=token;
         this.clearHeaders();
         this.addHeader("Authorization","Bearer "+authToken);
         if(lastMessageId!=null) this.addHeader("guilded-last-message-id",lastMessageId);
+        return this;
+    }
+
+    /**
+     * Set heartbeat interval.
+     * @param ms The interval in milliseconds.
+     */
+    public G4JWebSocketClient setHeartbeatInterval(int ms)
+    {
+        if(ms<1000) ms=1000;
+        this.heartbeatIntervalMs=ms;
+        this.setConnectionLostTimeout(ms/1000);
+        return this;
+    }
+
+    /**
+     * Get the heartbeat interval.
+     * @return The interval in milliseconds.
+     */
+    public int getHeartbeatInterval()
+    {
+        return heartbeatIntervalMs;
     }
 }

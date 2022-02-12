@@ -10,9 +10,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
@@ -22,21 +19,21 @@ public class ListItem
     private String id, serverId, channelId, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
 
     public String getId(){return id;}
-    @Nullable public String getChannelId(){return channelId;}
+    public String getChannelId(){return channelId;}
     public String getMessage(){return message;}
-    @Nullable public String getNote(){return note;}
+    public String getNote(){return note;}
     public String getCreationTime(){return createdAt;}
     public String getCreatorId(){return createdBy;}
-    @Nullable public String getBotCreatorId(){return createdByBotId;}
-    @Nullable public String getWebhookCreatorId(){return createdByWebhookId;}
+    public String getBotCreatorId(){return createdByBotId;}
+    public String getWebhookCreatorId(){return createdByWebhookId;}
 
-    public ListItem setId(@Nonnull String id){this.id=id;return this;}
+    public ListItem setId(String id){this.id=id;return this;}
     public ListItem setServerId(String serverId){this.serverId=serverId;return this;}
-    public ListItem setChannelId(@Nonnull String channelId){this.channelId=channelId;return this;}
-    public ListItem setMessage(@Nonnull String message){this.message=message;return this;}
+    public ListItem setChannelId(String channelId){this.channelId=channelId;return this;}
+    public ListItem setMessage(String message){this.message=message;return this;}
     public ListItem setNote(String note){this.note=note;return this;}
-    public ListItem setCreationTime(@Nonnull String createdAt){this.createdAt=createdAt;return this;}
-    public ListItem setCreatorId(@Nonnull String createdBy){this.createdBy=createdBy;return this;}
+    public ListItem setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
+    public ListItem setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
     public ListItem setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
     public ListItem setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 

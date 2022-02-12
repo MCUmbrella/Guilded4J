@@ -5,7 +5,6 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import javax.annotation.Nullable;
 import java.util.EventObject;
 
 /**
@@ -38,25 +37,25 @@ public class GuildedEvent extends EventObject
      * Get the WebSocket message ID.
      * @return The WebSocket message ID used for replaying events after a disconnect.
      */
-    @Nullable public String getEventID(){return this.eventID;}
+    public String getEventID(){return this.eventID;}
 
     /**
      * Get the WebSocket event's name.
      * @return Event name for the given WebSocket message.
      */
-    @Nullable public String getEventType(){return this.eventType;}
+    public String getEventType(){return this.eventType;}
 
     /**
      * Get the ID of the server the event was sent to.
      * @return The server ID.
      */
-    @Nullable public String getServerID(){return this.serverID;}
+    public String getServerID(){return this.serverID;}
 
     /**
      * Get the original WebSocket message of the event.
      * @return A JSON string that contains the original data received.
      */
-    @Nullable public String getRawString(){return this.rawString;}
+    public String getRawString(){return this.rawString;}
 
     public GuildedEvent setOpCode(int op){this.op=op;return this;}
     public GuildedEvent setEventID(String s){this.eventID=s;return this;}

@@ -10,9 +10,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * The basic forum thread object in a 'forum' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/forums/ForumThread" target=_blank>https://www.guilded.gg/docs/api/forums/ForumThread</a>
@@ -35,17 +32,17 @@ public class ForumThread
     /**
      * Get the UUID of the channel to which the thread belongs.
      */
-    @Nullable public String getChannelId(){return channelId;}
+    public String getChannelId(){return channelId;}
 
     /**
      * Get the title of the thread.
      */
-    @Nullable public String getTitle(){return title;}//TODO: get an accurate answer on whether its optional or not
+    public String getTitle(){return title;}//TODO: get an accurate answer on whether its optional or not
 
     /**
      * Get the content of the thread.
      */
-    @Nullable public String getContent(){return content;}//TODO: get an accurate answer on whether its optional or not
+    public String getContent(){return content;}//TODO: get an accurate answer on whether its optional or not
 
     /**
      * Get the ISO 8601 timestamp string that the forum thread was created at.
@@ -67,15 +64,15 @@ public class ForumThread
      * Get the ID of the webhook who created this forum thread.
      * @return A UUID string of the webhook who created the thread. If the creator isn't webhook, return {@code null}.
      */
-    @Nullable public String getWebhookCreatorId(){return createdByWebhookId;}
+    public String getWebhookCreatorId(){return createdByWebhookId;}
 
     public ForumThread setId(int id){this.id=id;return this;}
     public ForumThread setServerId(String serverId){this.serverId=serverId;return this;}
     public ForumThread setChannelId(String channelId){this.channelId=channelId;return this;}
     public ForumThread setTitle(String title){this.title=title;return this;}
     public ForumThread setContent(String content){this.content=content;return this;}
-    public ForumThread setCreationTime(@Nonnull String createdAt){this.createdAt=createdAt;return this;}
-    public ForumThread setCreatorId(@Nonnull String createdBy){this.createdBy=createdBy;return this;}
+    public ForumThread setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
+    public ForumThread setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
     public ForumThread setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
     public ForumThread setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 
@@ -97,7 +94,7 @@ public class ForumThread
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    @Nullable public ForumThread fromString(String rawString)
+    public ForumThread fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {

@@ -35,12 +35,13 @@ public class G4JDebugger
         @Subscribe
         public void onInit(GuildedWebSocketInitializedEvent e)
         {
-            System.out.print("\n[i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+prompt());
+            System.out.print("\n["+DateUtil.date()+"] [i] WebSocket client logged in (last message ID: "+e.getLastMessageId()+", heartbeat: "+e.getHeartbeatInterval()+"ms)"+prompt());
+            client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
         }
         @Subscribe
         public void onDisconnect(GuildedWebSocketClosedEvent e)
         {
-            System.out.print("\n[i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason()+prompt());
+            System.out.print("\n["+DateUtil.date()+"] [i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason()+prompt());
         }
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
@@ -51,12 +52,12 @@ public class G4JDebugger
         @Subscribe
         public void onXP(TeamXpAddedEvent e)
         {
-            if(dumpEnabled) System.out.print("\n[D] "+Arrays.toString(e.getUserIds())+": +"+e.getXpAmount()+" XP"+prompt());
+            if(dumpEnabled) System.out.print("\n["+DateUtil.date()+"] [D] "+Arrays.toString(e.getUserIds())+": +"+e.getXpAmount()+" XP"+prompt());
         }
         @Subscribe
         public void onNicknameChange(TeamMemberUpdatedEvent e)
         {
-            if(dumpEnabled) System.out.print("\n[D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+prompt());
+            if(dumpEnabled) System.out.print("\n["+DateUtil.date()+"] [D] "+e.getUserInfo().getUserId()+(e.getUserInfo().getNickname()==null?": nickname cleared":": nickname changed to '"+e.getUserInfo().getNickname()+"'")+prompt());
         }
         @Subscribe
         public void onRoleChange(TeamRolesUpdatedEvent e)
@@ -64,7 +65,7 @@ public class G4JDebugger
             User[] users=e.getMembers();
             if (dumpEnabled)
             {
-                System.out.println("[D] Member role changes:");
+                System.out.println("\n["+DateUtil.date()+"] [D] Member role changes:");
                 for(User user:users) System.out.println("    "+user.getUserId()+": "+Arrays.toString(user.getRoleIds()));
                 System.out.print(prompt());
             }
@@ -72,7 +73,7 @@ public class G4JDebugger
         @Subscribe
         public void UnknownGuildedEvent(UnknownGuildedEvent e)
         {
-            System.out.print("\n[!] Unknown event received: \n"+new JSONObject(e.getRawString()).toStringPretty()+prompt());
+            System.out.print("\n["+DateUtil.date()+"] [!] Unknown event received: \n"+new JSONObject(e.getRawString()).toStringPretty()+prompt());
         }
     }
     static class G4JSession implements Serializable
@@ -88,7 +89,7 @@ public class G4JDebugger
                 o.writeObject(this);
                 o.close();
                 return true;
-            }catch(Throwable e){System.err.println("[X] Failed to save session: "+e);return false;}
+            }catch(Throwable e){System.err.println("["+DateUtil.date()+"] [X] Failed to save session: "+e);return false;}
         }
         public Boolean restore()
         {
@@ -99,7 +100,7 @@ public class G4JDebugger
                 this.savedWorkdir=session.savedWorkdir;
                 i.close();
                 return true;
-            }catch(java.io.FileNotFoundException e){return false;}catch(Throwable e){System.err.println("[X] Failed to restore session: "+e);return false;}
+            }catch(java.io.FileNotFoundException e){return false;}catch(Throwable e){System.err.println("["+DateUtil.date()+"] [X] Failed to restore session: "+e);return false;}
         }
     }
     final static Scanner scanner=new Scanner(System.in);
@@ -113,14 +114,14 @@ public class G4JDebugger
         {
             client=new G4JClient(session.savedToken);
             workdir=session.savedWorkdir;
-            System.out.println("[i] Restoring session");
+            System.out.println("["+DateUtil.date()+"] [i] Restoring session");
         }
         else
         {
             System.out.print("Enter AuthToken: ");
             token=scanner.nextLine();
             client=new G4JClient(token);
-            System.out.println("[i] Logging in");
+            System.out.println("["+DateUtil.date()+"] [i] Logging in");
         }
         client.ws.eventBus.register(new GuildedEventListener());
         client.ws.connect();
@@ -132,7 +133,7 @@ public class G4JDebugger
             {
                 text=scanner.nextLine();
                 if(text.equals("!!")){text=textCache;}
-                if(text.equals("save")){if(session.save()){System.out.print("[i] G4JSession saved");}}
+                if(text.equals("save")){if(session.save()){System.out.print("["+DateUtil.date()+"] [i] G4JSession saved");}}
                 else if(text.equals("test"))
                 {
                     //
@@ -140,13 +141,13 @@ public class G4JDebugger
                 else if(text.equals("dump"))
                 {
                     dumpEnabled=!dumpEnabled;
-                    System.out.print("[i] Dump status: "+client.ws.toggleDump());
+                    System.out.print("["+DateUtil.date()+"] [i] Dump status: "+client.ws.toggleDump());
                 }
-                else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("[i] Updated AuthToken");client.setAuthToken(token);client.ws.setAuthToken(token);}
-                else if(text.equals("disconnect")){System.out.print("[i] Disconnecting");client.ws.close();}
-                else if(text.equals("pwd")){System.out.print("[i] Currently in channel: "+workdir);}
-                else if(text.startsWith("cd ")&&text.length()==39){System.out.print("[i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
-                else if(text.equals("cd")){System.out.print("[i] Clear target channel");workdir="(init)";}
+                else if(text.startsWith("token ")&&text.length()>6){token=text.substring(6);System.out.print("["+DateUtil.date()+"] [i] Updated AuthToken");client.setAuthToken(token);client.ws.setAuthToken(token);}
+                else if(text.equals("disconnect")){System.out.print("["+DateUtil.date()+"] [i] Disconnecting");client.ws.close();}
+                else if(text.equals("pwd")){System.out.print("["+DateUtil.date()+"] [i] Currently in channel: "+workdir);}
+                else if(text.startsWith("cd ")&&text.length()==39){System.out.print("["+DateUtil.date()+"] [i] Change target channel to "+text.substring(3));workdir=text.substring(3);}
+                else if(text.equals("cd")){System.out.print("["+DateUtil.date()+"] [i] Clear target channel");workdir="(init)";}
                 else if(text.equals("ls"))
                 {
                     if(workdir.length()!=36) notifyCD();
@@ -228,14 +229,14 @@ public class G4JDebugger
                         int result=client.awardUserXp(parsed[1],Integer.parseInt(parsed[2]));
                         if(dumpEnabled) System.out.print(RESULT_PFX+result);
                     }
-                    else System.err.println("[X] Usage: addxp <(string)userId> <(int)amount>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: addxp <(string)userId> <(int)amount>");
                 }
                 else if(text.startsWith("addrolexp ")&&text.length()>12)
                 {
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[1]).matches()&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                         client.awardRoleXp(Integer.parseInt(parsed[1]),Integer.parseInt(parsed[2]));
-                    else System.err.println("[X] Usage: addrolexp <(int)roleId> <(int)amount>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: addrolexp <(int)roleId> <(int)amount>");
                 }
                 else if(text.startsWith("react ")&&text.length()>8)
                 {
@@ -243,7 +244,7 @@ public class G4JDebugger
                     String[] parsed=text.split(" ");
                     if(parsed.length==3&&Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
                         client.createContentReaction(workdir,parsed[1],Integer.parseInt(parsed[2]));
-                    else System.err.println("[X] Usage: react <contentId> <(int)emoteId>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: react <contentId> <(int)emoteId>");
                 }
                 else if(text.startsWith("lsrole ")&&text.length()==15){System.out.print(Arrays.toString(client.getMemberRoles(text.substring(7))));}
                 else if(text.startsWith("nick "))
@@ -251,7 +252,7 @@ public class G4JDebugger
                     String[] arguments=text.split(" ");
                     if(arguments.length<3)
                     {
-                        System.err.println("[X] Usage: nick <userID> <nickname>");
+                        System.err.println("["+DateUtil.date()+"] [X] Usage: nick <userID> <nickname>");
                     }
                     else
                     {
@@ -274,7 +275,7 @@ public class G4JDebugger
                         HashMap<String,String> result=client.getSocialLink(arguments[1],SocialMedia.valueOf(arguments[2].toUpperCase()));
                         System.out.print(RESULT_PFX+result);
                     }
-                    else System.err.println("[X] Usage: smlink <userID> <socialMediaName>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: smlink <userID> <socialMediaName>");
                 }
                 else if (text.equals("mkthread"))
                 {
@@ -294,55 +295,55 @@ public class G4JDebugger
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.addGroupMember(arguments[1],arguments[2]);
-                    else System.err.println("[X] Usage: groupadd <groupId> <userId>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: groupadd <groupId> <userId>");
                 }
                 else if (text.startsWith("groupkick"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.removeGroupMember(arguments[1],arguments[2]);
-                    else System.err.println("[X] Usage: groupkick <groupId> <userId>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: groupkick <groupId> <userId>");
                 }
                 else if (text.startsWith("roleadd"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.addRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
-                    else System.err.println("[X] Usage: roleadd <roleId> <userId>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: roleadd <roleId> <userId>");
                 }
                 else if (text.startsWith("rolekick"))
                 {
                     String[] arguments=text.split(" ");
                     if(arguments.length==3) client.removeRoleMember(Integer.parseInt(arguments[1]),arguments[2]);
-                    else System.err.println("[X] Usage: rolekick <roleId> <userId>");
+                    else System.err.println("["+DateUtil.date()+"] [X] Usage: rolekick <roleId> <userId>");
                 }
                 else if(text.equals("reconnect")){System.out.print("[i] Reconnecting");if(client.ws!=null){client.ws.reconnect();}}
                 else if(text.equals("exit")){System.out.println("[i] Exiting");client.ws.close();session.save();break;}
                 else if(text.equals("help")) System.out.print(helpText);
-                else{System.out.print("[!] Type 'help' to get available commands and usages");}
+                else{System.out.print("["+DateUtil.date()+"] [!] Type 'help' to get available commands and usages");}
             }
             catch (NoSuchElementException e)
             {
-                System.out.println("[i] Exiting");client.ws.close();session.save();break;
+                System.out.println("["+DateUtil.date()+"] [i] Exiting");client.ws.close();session.save();break;
             }
             catch (GuildedException e)
             {
-                System.err.println("[X] Operation failed\n    "+e.getCode()+": "+e.getDescription());
+                System.err.println("["+DateUtil.date()+"] [X] Operation failed\n    "+e.getCode()+": "+e.getDescription());
             }
             catch(Exception e)
             {
                 StringWriter esw = new StringWriter();
                 e.printStackTrace(new PrintWriter(esw));
-                System.err.println("\n[X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
+                System.err.println("\n["+DateUtil.date()+"] [X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n"+esw+"===========End stacktrace===========");
             }
             catch(Throwable e)
             {
-                System.err.println("\n[X] A fatal error occurred. Program will exit");
+                System.err.println("\n["+DateUtil.date()+"] [X] A fatal error occurred. Program will exit");
                 e.printStackTrace();
                 System.exit(-1);
             }
             textCache=text;
         }
     }
-    final static String helpText="COMMANDS:\n" +
+    final static String helpText="["+DateUtil.date()+"] [i] COMMANDS:\n" +
             " > token <AuthToken>\n" +
             "    Update AuthToken\n" +
             " > disconnect\n" +
@@ -393,6 +394,6 @@ public class G4JDebugger
             "    Remove the specified role from specified user\n"+
             " > exit\n" +
             "    Log out and exit";
-    static void notifyCD(){System.err.println("[X] Specify a list channel UUID first");}
-    final static String RESULT_PFX="\n[D] Result:\n";
+    static void notifyCD(){System.err.println("["+DateUtil.date()+"] [X] Specify a list channel UUID first");}
+    final static String RESULT_PFX="\n["+DateUtil.date()+"] [D] Result:\n";
 }

@@ -14,90 +14,146 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic document object in a 'doc' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/docs/Doc" target=_blank>https://www.guilded.gg/docs/api/docs/Doc</a>
  */
-public class Document
-{
+public class Document {
     int id;
     String serverId, channelId, title, content, createdAt, createdBy, updatedAt, updatedBy;
 
     /**
+     * Generate empty Document object - make sure to set all the essential fields before using it.
+     */
+    public Document() {
+    }
+
+    /**
+     * Generate Document object from JSON string.
+     *
+     * @param jsonString The JSON string.
+     */
+    public Document(String jsonString) {
+        fromString(jsonString);
+    }
+
+    /**
      * Get the ID of the document.
      */
-    public int getId(){return id;}
+    public int getId() {
+        return id;
+    }
+
+    public Document setId(int id) {
+        this.id = id;
+        return this;
+    }
 
     /**
      * Get the server ID of the document.
      */
-    public String getServerId(){return serverId;}
+    public String getServerId() {
+        return serverId;
+    }
+
+    public Document setServerId(String serverId) {
+        this.serverId = serverId;
+        return this;
+    }
 
     /**
      * Get the channel ID of the document.
      */
-    public String getChannelId(){return channelId;}
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public Document setChannelId(String channelId) {
+        this.channelId = channelId;
+        return this;
+    }
 
     /**
      * Get the title of the document.
      */
-    public String getTitle(){return title;}
+    public String getTitle() {
+        return title;
+    }
+
+    public Document setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 
     /**
      * Get the content of the document.
      */
-    public String getContent(){return content;}
+    public String getContent() {
+        return content;
+    }
+
+    public Document setContent(String content) {
+        this.content = content;
+        return this;
+    }
 
     /**
      * Get the ISO 8601 timestamp string that the doc was created at.
      */
-    public String getCreationTime(){return createdAt;}
+    public String getCreationTime() {
+        return createdAt;
+    }
+
+    public Document setCreationTime(String createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
 
     /**
      * Get the user ID of the user who created the document.
      */
-    public String getCreatorId(){return createdBy;}
+    public String getCreatorId() {
+        return createdBy;
+    }
+
+    public Document setCreatorId(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
 
     /**
      * Get the ISO 8601 timestamp string that the doc was updated at.
+     *
      * @return The timestamp string. If the document has not been updated, return {@code null}.
      */
-    public String getUpdateTime(){return updatedAt;}
+    public String getUpdateTime() {
+        return updatedAt;
+    }
+
+    public Document setUpdateTime(String updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
 
     /**
      * Get the user ID of the user who last updated the document.
      */
-    public String getUpdatedBy(){return updatedBy;}
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
 
-    public Document setId(int id){this.id=id; return this;}
-    public Document setServerId(String serverId){this.serverId=serverId; return this;}
-    public Document setChannelId(String channelId){this.channelId=channelId; return this;}
-    public Document setTitle(String title){this.title=title; return this;}
-    public Document setContent(String content){this.content=content; return this;}
-    public Document setCreationTime(String createdAt){this.createdAt=createdAt; return this;}
-    public Document setCreatorId(String createdBy){this.createdBy=createdBy; return this;}
-    public Document setUpdateTime(String updatedAt){this.updatedAt=updatedAt; return this;}
-    public Document setUpdatedBy(String updatedBy){this.updatedBy=updatedBy; return this;}
-
-    /**
-     * Generate empty Document object - make sure to set all the essential fields before using it.
-     */
-    public Document(){}
-
-    /**
-     * Generate Document object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public Document(String jsonString) {fromString(jsonString);}
+    public Document setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
 
     /**
      * Use the given JSON string to generate Document object.
+     *
      * @param rawString The JSON string.
      * @return Document object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
+     * @throws ClassCastException       when the provided String's content isn't JSON format.
      */
-    public Document fromString(String rawString)
-    {
-        if(JSONUtil.isJson(rawString))
-        {
-            JSONObject json=new JSONObject(rawString);
+    public Document fromString(String rawString) {
+        if (JSONUtil.isJson(rawString)) {
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("serverId"),
@@ -116,27 +172,26 @@ public class Document
                     .setCreatorId(json.getStr("createdBy"))
                     .setUpdateTime(json.getStr("updatedAt"))
                     .setUpdatedBy(json.getStr("updatedBy"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        } else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**
      * Convert the ForumThread object to JSON string.
+     *
      * @return A JSON string.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("title",title)
-                .set("content",content)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("updatedAt",updatedAt)
-                .set("updatedBy",updatedBy)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("title", title)
+                .set("content", content)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("updatedAt", updatedAt)
+                .set("updatedBy", updatedBy)
                 .toString();
     }
 }

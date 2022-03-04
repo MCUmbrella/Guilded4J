@@ -11,13 +11,30 @@ package vip.floatationdevice.guilded4j.enums;
  * The type of {@link vip.floatationdevice.guilded4j.exception.GuildedException} that was thrown.
  */
 @SuppressWarnings("unused")
-public enum ExceptionType
-{
-    /** 400 */ BAD_REQUEST,
-    /** 401 */ UNAUTHORIZED,
-    /** 403 */ FORBIDDEN,
-    /** 404 */ NOT_FOUND,
-    /** 409 */ CONFLICTED,
-    /** 500-504 */ INTERNAL_SERVER_ERROR,
+public enum ExceptionType {
+    /**
+     * 400
+     */
+    BAD_REQUEST,
+    /**
+     * 401
+     */
+    UNAUTHORIZED,
+    /**
+     * 403
+     */
+    FORBIDDEN,
+    /**
+     * 404
+     */
+    NOT_FOUND,
+    /**
+     * 409
+     */
+    CONFLICTED,
+    /**
+     * 500-504
+     */
+    INTERNAL_SERVER_ERROR,
     OTHER
 }

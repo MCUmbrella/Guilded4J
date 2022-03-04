@@ -14,52 +14,112 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
-public class ListItem
-{
+public class ListItem {
     private String id, serverId, channelId, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
-
-    public String getId(){return id;}
-    public String getChannelId(){return channelId;}
-    public String getMessage(){return message;}
-    public String getNote(){return note;}
-    public String getCreationTime(){return createdAt;}
-    public String getCreatorId(){return createdBy;}
-    public String getBotCreatorId(){return createdByBotId;}
-    public String getWebhookCreatorId(){return createdByWebhookId;}
-
-    public ListItem setId(String id){this.id=id;return this;}
-    public ListItem setServerId(String serverId){this.serverId=serverId;return this;}
-    public ListItem setChannelId(String channelId){this.channelId=channelId;return this;}
-    public ListItem setMessage(String message){this.message=message;return this;}
-    public ListItem setNote(String note){this.note=note;return this;}
-    public ListItem setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
-    public ListItem setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
-    public ListItem setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
-    public ListItem setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
 
     /**
      * Generate empty ListItem object - make sure to set all the essential fields before using it.
      */
-    public ListItem(){}
+    public ListItem() {
+    }
 
     /**
      * Generate ListItem object from JSON string.
+     *
      * @param jsonString The JSON string.
      */
-    public ListItem(String jsonString) {fromString(jsonString);}
+    public ListItem(String jsonString) {
+        fromString(jsonString);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public ListItem setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public ListItem setChannelId(String channelId) {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public ListItem setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public ListItem setNote(String note) {
+        this.note = note;
+        return this;
+    }
+
+    public String getCreationTime() {
+        return createdAt;
+    }
+
+    public ListItem setCreationTime(String createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public String getCreatorId() {
+        return createdBy;
+    }
+
+    public ListItem setCreatorId(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public String getBotCreatorId() {
+        return createdByBotId;
+    }
+
+    public ListItem setBotCreatorId(String createdByBotId) {
+        this.createdByBotId = createdByBotId;
+        return this;
+    }
+
+    public String getWebhookCreatorId() {
+        return createdByWebhookId;
+    }
+
+    public ListItem setWebhookCreatorId(String createdByWebhookId) {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
+
+    public ListItem setServerId(String serverId) {
+        this.serverId = serverId;
+        return this;
+    }
 
     /**
      * Use the given JSON string to generate ListItem object.
+     *
      * @param rawString The JSON string.
      * @return ListItem object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
+     * @throws ClassCastException       when the provided String's content isn't JSON format.
      */
-    public ListItem fromString(String rawString)
-    {
-        if(JSONUtil.isJson(rawString))
-        {
-            JSONObject json=new JSONObject(rawString);
+    public ListItem fromString(String rawString) {
+        if (JSONUtil.isJson(rawString)) {
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("serverId"),
@@ -77,26 +137,26 @@ public class ListItem
                     .setCreatorId(json.getStr("createdBy"))
                     .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        } else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**
      * Convert the ListItem object to JSON string.
+     *
      * @return A JSON string.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("message",message)
-                .set("note",note)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("createdByBotId",createdByBotId)
-                .set("createdByWebhookId",createdByWebhookId)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("message", message)
+                .set("note", note)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("createdByBotId", createdByBotId)
+                .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }
 }

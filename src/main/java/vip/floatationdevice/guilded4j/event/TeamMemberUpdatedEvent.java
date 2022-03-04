@@ -11,24 +11,26 @@ import vip.floatationdevice.guilded4j.object.User;
  * Event fired when a member's nickname is updated.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated</a>
  */
-public class TeamMemberUpdatedEvent extends GuildedEvent
-{
+public class TeamMemberUpdatedEvent extends GuildedEvent {
     private final User userInfo;
 
     /**
      * Generate TeamMemberUpdatedEvent using the 2 given essential keys.
-     * @param id The ID of the member.
+     *
+     * @param id       The ID of the member.
      * @param nickname The nickname that was just updated for the user.
      */
-    public TeamMemberUpdatedEvent(Object source, String id, String nickname)
-    {
+    public TeamMemberUpdatedEvent(Object source, String id, String nickname) {
         super(source);
-        this.userInfo=new User(id).setNickname(nickname);
+        this.userInfo = new User(id).setNickname(nickname);
     }
 
     /**
      * Get the member's information as User object.
+     *
      * @return the User object representing the member whose nickname was updated.
      */
-    public User getUserInfo() {return userInfo;}
+    public User getUserInfo() {
+        return userInfo;
+    }
 }

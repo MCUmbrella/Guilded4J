@@ -10,8 +10,7 @@ package vip.floatationdevice.guilded4j.enums;
  * Used in {@link vip.floatationdevice.guilded4j.G4JClient#getSocialLink}
  */
 @SuppressWarnings("unused")
-public enum SocialMedia
-{
+public enum SocialMedia {
     TWITCH,
     BNET,
     PSN,

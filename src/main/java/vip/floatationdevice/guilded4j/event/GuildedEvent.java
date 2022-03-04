@@ -57,14 +57,37 @@ public class GuildedEvent extends EventObject
      */
     public String getRawString(){return this.rawString;}
 
-    public GuildedEvent setOpCode(int op){this.op=op;return this;}
-    public GuildedEvent setEventID(String s){this.eventID=s;return this;}
-    public GuildedEvent setServerID(String serverID){this.serverID=serverID;return this;}
-    public GuildedEvent setEventType(String t){this.eventType=t;return this;}
+    public GuildedEvent setOpCode(int op)
+    {
+        this.op = op;
+        return this;
+    }
+
+    public GuildedEvent setEventID(String s)
+    {
+        this.eventID = s;
+        return this;
+    }
+
+    public GuildedEvent setServerID(String serverID)
+    {
+        this.serverID = serverID;
+        return this;
+    }
+
+    public GuildedEvent setEventType(String t)
+    {
+        this.eventType = t;
+        return this;
+    }
 
     /**
      * Set the original WebSocket message of the event.
      * @param rawString A JSON string that contains the original data received.
      */
-    public GuildedEvent setRawString(String rawString){this.rawString=rawString;return this;}
+    public GuildedEvent setRawString(String rawString)
+    {
+        this.rawString = rawString;
+        return this;
+    }
 }

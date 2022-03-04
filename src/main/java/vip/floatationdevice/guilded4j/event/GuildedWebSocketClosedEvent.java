@@ -26,9 +26,9 @@ public class GuildedWebSocketClosedEvent extends EventObject
     public GuildedWebSocketClosedEvent(Object source, int code, String reason, Boolean remote)
     {
         super(source);
-        this.code=code;
-        this.reason=reason;
-        this.remote=remote;
+        this.code = code;
+        this.reason = reason;
+        this.remote = remote;
     }
 
     /**

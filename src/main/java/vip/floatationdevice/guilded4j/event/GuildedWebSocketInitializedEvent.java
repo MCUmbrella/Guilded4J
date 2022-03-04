@@ -22,8 +22,8 @@ public class GuildedWebSocketInitializedEvent extends GuildedEvent
     public GuildedWebSocketInitializedEvent(Object source, String lastMessageId, int heartbeatIntervalMs)
     {
         super(source);
-        this.lastMessageId=lastMessageId;
-        this.heartbeatIntervalMs=heartbeatIntervalMs;
+        this.lastMessageId = lastMessageId;
+        this.heartbeatIntervalMs = heartbeatIntervalMs;
         super.setEventID(lastMessageId);
     }
 

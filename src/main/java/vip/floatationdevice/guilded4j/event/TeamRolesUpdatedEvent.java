@@ -22,7 +22,7 @@ public class TeamRolesUpdatedEvent extends GuildedEvent
     public TeamRolesUpdatedEvent(Object source, User[] memberRoleIds)
     {
         super(source);
-        this.memberRoleIds=memberRoleIds;
+        this.memberRoleIds = memberRoleIds;
     }
 
     /**

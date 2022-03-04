@@ -13,5 +13,5 @@ public class UnknownGuildedEvent extends GuildedEvent
     /**
      * Default constructor.
      */
-    public UnknownGuildedEvent(Object source) {super(source);}
+    public UnknownGuildedEvent(Object source){super(source);}
 }

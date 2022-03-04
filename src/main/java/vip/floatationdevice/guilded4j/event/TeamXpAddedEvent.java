@@ -21,8 +21,8 @@ public class TeamXpAddedEvent extends GuildedEvent
     public TeamXpAddedEvent(Object source, int xpAmount, String[] userIds)
     {
         super(source);
-        this.xpAmount=xpAmount;
-        this.userIds=userIds;
+        this.xpAmount = xpAmount;
+        this.userIds = userIds;
     }
 
     /**

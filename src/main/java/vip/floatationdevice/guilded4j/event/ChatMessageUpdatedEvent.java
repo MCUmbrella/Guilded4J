@@ -22,7 +22,7 @@ public class ChatMessageUpdatedEvent extends GuildedEvent
     public ChatMessageUpdatedEvent(Object source, ChatMessage msgObject)
     {
         super(source);
-        this.msgObj=msgObject;
+        this.msgObj = msgObject;
     }
 
     /**

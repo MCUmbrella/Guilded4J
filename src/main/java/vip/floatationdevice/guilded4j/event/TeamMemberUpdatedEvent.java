@@ -23,12 +23,12 @@ public class TeamMemberUpdatedEvent extends GuildedEvent
     public TeamMemberUpdatedEvent(Object source, String id, String nickname)
     {
         super(source);
-        this.userInfo=new User(id).setNickname(nickname);
+        this.userInfo = new User(id).setNickname(nickname);
     }
 
     /**
      * Get the member's information as User object.
      * @return the User object representing the member whose nickname was updated.
      */
-    public User getUserInfo() {return userInfo;}
+    public User getUserInfo(){return userInfo;}
 }

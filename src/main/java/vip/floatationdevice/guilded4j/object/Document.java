@@ -65,15 +65,59 @@ public class Document
      */
     public String getUpdatedBy(){return updatedBy;}
 
-    public Document setId(int id){this.id=id; return this;}
-    public Document setServerId(String serverId){this.serverId=serverId; return this;}
-    public Document setChannelId(String channelId){this.channelId=channelId; return this;}
-    public Document setTitle(String title){this.title=title; return this;}
-    public Document setContent(String content){this.content=content; return this;}
-    public Document setCreationTime(String createdAt){this.createdAt=createdAt; return this;}
-    public Document setCreatorId(String createdBy){this.createdBy=createdBy; return this;}
-    public Document setUpdateTime(String updatedAt){this.updatedAt=updatedAt; return this;}
-    public Document setUpdatedBy(String updatedBy){this.updatedBy=updatedBy; return this;}
+    public Document setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public Document setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    public Document setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public Document setTitle(String title)
+    {
+        this.title = title;
+        return this;
+    }
+
+    public Document setContent(String content)
+    {
+        this.content = content;
+        return this;
+    }
+
+    public Document setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public Document setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public Document setUpdateTime(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public Document setUpdatedBy(String updatedBy)
+    {
+        this.updatedBy = updatedBy;
+        return this;
+    }
 
     /**
      * Generate empty Document object - make sure to set all the essential fields before using it.
@@ -84,7 +128,7 @@ public class Document
      * Generate Document object from JSON string.
      * @param jsonString The JSON string.
      */
-    public Document(String jsonString) {fromString(jsonString);}
+    public Document(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate Document object.
@@ -97,7 +141,7 @@ public class Document
     {
         if(JSONUtil.isJson(rawString))
         {
-            JSONObject json=new JSONObject(rawString);
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("serverId"),
@@ -128,15 +172,15 @@ public class Document
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("title",title)
-                .set("content",content)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("updatedAt",updatedAt)
-                .set("updatedBy",updatedBy)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("title", title)
+                .set("content", content)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("updatedAt", updatedAt)
+                .set("updatedBy", updatedBy)
                 .toString();
     }
 }

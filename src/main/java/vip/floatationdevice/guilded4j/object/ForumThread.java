@@ -58,7 +58,8 @@ public class ForumThread
      * Broken because of the bot object migration.
      * @return Always null.
      */
-    @Deprecated public String getBotCreatorId(){return createdByBotId;}
+    @Deprecated
+    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the ID of the webhook who created this forum thread.
@@ -66,15 +67,59 @@ public class ForumThread
      */
     public String getWebhookCreatorId(){return createdByWebhookId;}
 
-    public ForumThread setId(int id){this.id=id;return this;}
-    public ForumThread setServerId(String serverId){this.serverId=serverId;return this;}
-    public ForumThread setChannelId(String channelId){this.channelId=channelId;return this;}
-    public ForumThread setTitle(String title){this.title=title;return this;}
-    public ForumThread setContent(String content){this.content=content;return this;}
-    public ForumThread setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
-    public ForumThread setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
-    public ForumThread setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
-    public ForumThread setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
+    public ForumThread setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public ForumThread setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    public ForumThread setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public ForumThread setTitle(String title)
+    {
+        this.title = title;
+        return this;
+    }
+
+    public ForumThread setContent(String content)
+    {
+        this.content = content;
+        return this;
+    }
+
+    public ForumThread setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ForumThread setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ForumThread setBotCreatorId(String createdByBotId)
+    {
+        this.createdByBotId = createdByBotId;
+        return this;
+    }
+
+    public ForumThread setWebhookCreatorId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
 
     /**
      * Generate empty ForumThread object - make sure to set all the essential fields before using it.
@@ -85,7 +130,7 @@ public class ForumThread
      * Generate ForumThread object from JSON string.
      * @param jsonString The JSON string.
      */
-    public ForumThread(String jsonString) {fromString(jsonString);}
+    public ForumThread(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate ForumThread object.
@@ -98,7 +143,7 @@ public class ForumThread
     {
         if(JSONUtil.isJson(rawString))
         {
-            JSONObject json=new JSONObject(rawString);
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("serverId"),
@@ -127,15 +172,15 @@ public class ForumThread
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("title",title)
-                .set("content",content)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("createdByBotId",createdByBotId)
-                .set("createdByWebhookId",createdByWebhookId)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("title", title)
+                .set("content", content)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("createdByBotId", createdByBotId)
+                .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }
 }

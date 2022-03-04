@@ -19,23 +19,74 @@ public class ListItem
     private String id, serverId, channelId, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
 
     public String getId(){return id;}
+
     public String getChannelId(){return channelId;}
+
     public String getMessage(){return message;}
+
     public String getNote(){return note;}
+
     public String getCreationTime(){return createdAt;}
+
     public String getCreatorId(){return createdBy;}
+
     public String getBotCreatorId(){return createdByBotId;}
+
     public String getWebhookCreatorId(){return createdByWebhookId;}
 
-    public ListItem setId(String id){this.id=id;return this;}
-    public ListItem setServerId(String serverId){this.serverId=serverId;return this;}
-    public ListItem setChannelId(String channelId){this.channelId=channelId;return this;}
-    public ListItem setMessage(String message){this.message=message;return this;}
-    public ListItem setNote(String note){this.note=note;return this;}
-    public ListItem setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
-    public ListItem setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
-    public ListItem setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
-    public ListItem setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
+    public ListItem setId(String id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public ListItem setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    public ListItem setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public ListItem setMessage(String message)
+    {
+        this.message = message;
+        return this;
+    }
+
+    public ListItem setNote(String note)
+    {
+        this.note = note;
+        return this;
+    }
+
+    public ListItem setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ListItem setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ListItem setBotCreatorId(String createdByBotId)
+    {
+        this.createdByBotId = createdByBotId;
+        return this;
+    }
+
+    public ListItem setWebhookCreatorId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
 
     /**
      * Generate empty ListItem object - make sure to set all the essential fields before using it.
@@ -46,7 +97,7 @@ public class ListItem
      * Generate ListItem object from JSON string.
      * @param jsonString The JSON string.
      */
-    public ListItem(String jsonString) {fromString(jsonString);}
+    public ListItem(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate ListItem object.
@@ -59,7 +110,7 @@ public class ListItem
     {
         if(JSONUtil.isJson(rawString))
         {
-            JSONObject json=new JSONObject(rawString);
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("serverId"),
@@ -77,7 +128,8 @@ public class ListItem
                     .setCreatorId(json.getStr("createdBy"))
                     .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        }
+        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**
@@ -88,15 +140,15 @@ public class ListItem
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("message",message)
-                .set("note",note)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("createdByBotId",createdByBotId)
-                .set("createdByWebhookId",createdByWebhookId)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("message", message)
+                .set("note", note)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("createdByBotId", createdByBotId)
+                .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }
 }

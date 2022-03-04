@@ -33,17 +33,17 @@ public class GuildedException extends RuntimeException
      * Get the error code.
      * @return The error code in the JSON returned by Guilded API.
      */
-    public String getCode() {return code;}
+    public String getCode(){return code;}
 
     /**
      * Get the description of the error.
      * @return The error's description in the JSON returned by Guilded API.
      */
-    public String getDescription() {return description;}
+    public String getDescription(){return description;}
 
     /**
      * Get the type of the error (TODO).
      * @return The error's type.
      */
-    public ExceptionType getType() {return type;}
+    public ExceptionType getType(){return type;}
 }

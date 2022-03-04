@@ -20,7 +20,7 @@ public class ResumeEvent extends GuildedEvent
     public ResumeEvent(Object source, String lastMessageId)
     {
         super(source);
-        this.lastMessageId=lastMessageId;
+        this.lastMessageId = lastMessageId;
         super.setEventID(lastMessageId);
     }
 

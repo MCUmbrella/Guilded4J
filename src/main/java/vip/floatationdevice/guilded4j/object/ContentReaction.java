@@ -51,12 +51,41 @@ public class ContentReaction
      */
     public String getWebhookCreatorId(){return createdByWebhookId;}
 
-    public ContentReaction setId(int id){this.id=id;return this;}
-    public ContentReaction setServerId(String serverId){this.serverId=serverId;return this;}
-    public ContentReaction setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
-    public ContentReaction setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
-    public ContentReaction setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
-    public ContentReaction setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
+    public ContentReaction setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public ContentReaction setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    public ContentReaction setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ContentReaction setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ContentReaction setBotCreatorId(String createdByBotId)
+    {
+        this.createdByBotId = createdByBotId;
+        return this;
+    }
+
+    public ContentReaction setWebhookCreatorId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
 
     /**
      * Generate empty ContentReaction object - make sure to set all the essential fields before using it.
@@ -67,7 +96,7 @@ public class ContentReaction
      * Generate ContentReaction object from JSON string.
      * @param jsonString The JSON string.
      */
-    public ContentReaction(String jsonString) {fromString(jsonString);}
+    public ContentReaction(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to set up ContentReaction object.
@@ -80,7 +109,7 @@ public class ContentReaction
     {
         if(JSONUtil.isJson(rawString))
         {
-            JSONObject json=new JSONObject(rawString);
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("createdAt"),
@@ -92,7 +121,8 @@ public class ContentReaction
                     .setCreatorId(json.getStr("createdBy"))
                     .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        }
+        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**
@@ -103,12 +133,12 @@ public class ContentReaction
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("serverId",serverId)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("createdByBotId",createdByBotId)
-                .set("createdByWebhookId",createdByWebhookId)
+                .set("id", id)
+                .set("serverId", serverId)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("createdByBotId", createdByBotId)
+                .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }
 }

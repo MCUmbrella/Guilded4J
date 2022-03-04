@@ -18,7 +18,7 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class ChatMessage
 {
-    private String id,type,serverId,channelId,content,createdAt,createdBy,createdByBotId,createdByWebhookId,updatedAt;
+    private String id, type, serverId, channelId, content, createdAt, createdBy, createdByBotId, createdByWebhookId, updatedAt;
     private Boolean isPrivate;
     private String[] replyMessageIds;
 
@@ -96,11 +96,11 @@ public class ChatMessage
      */
     public Boolean isPrivateReply()
     {
-        return replyMessageIds!=null?
-                isPrivate!=null
-                        ?isPrivate
-                        :false
-                :null;
+        return replyMessageIds != null ?
+                isPrivate != null
+                        ? isPrivate
+                        : false
+                : null;
     }
 
     /**
@@ -114,27 +114,86 @@ public class ChatMessage
      * @return {@code true} if the message is created by bot, {@code false} if not.
      */
     @Deprecated
-    public Boolean isBotMessage(){return createdByBotId!=null;}
+    public Boolean isBotMessage(){return createdByBotId != null;}
 
     /**
      * Check if the message is created by a webhook.
      * @return {@code true} if the message is created by webhook, {@code false} if not.
      */
-    public Boolean isWebhookMessage(){return createdByWebhookId!=null;}
+    public Boolean isWebhookMessage(){return createdByWebhookId != null;}
 
 
-    public ChatMessage setMsgId(String id){this.id=id;return this;}
-    public ChatMessage setType(String type){this.type=type;return this;}
-    public ChatMessage setServerId(String serverId){this.serverId=serverId;return this;}
-    public ChatMessage setChannelId(String channelId){this.channelId=channelId;return this;}
-    public ChatMessage setContent(String content){this.content=content;return this;}
-    public ChatMessage setCreationTime(String createdAt){this.createdAt=createdAt;return this;}
-    public ChatMessage setCreatorId(String createdBy){this.createdBy=createdBy;return this;}
-    public ChatMessage setBotCreatorId(String createdByBotId){this.createdByBotId=createdByBotId;return this;}
-    public ChatMessage setWebhookCreatorId(String createdByWebhookId){this.createdByWebhookId=createdByWebhookId;return this;}
-    public ChatMessage setUpdateTime(String updatedAt){this.updatedAt=updatedAt;return this;}
-    public ChatMessage setPrivateReply(Boolean isPrivate){this.isPrivate=isPrivate;return this;}
-    public ChatMessage setReplyMessageIds(String[] replyMessageIds){this.replyMessageIds=replyMessageIds;return this;}
+    public ChatMessage setMsgId(String id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    public ChatMessage setType(String type)
+    {
+        this.type = type;
+        return this;
+    }
+
+    public ChatMessage setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    public ChatMessage setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public ChatMessage setContent(String content)
+    {
+        this.content = content;
+        return this;
+    }
+
+    public ChatMessage setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ChatMessage setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ChatMessage setBotCreatorId(String createdByBotId)
+    {
+        this.createdByBotId = createdByBotId;
+        return this;
+    }
+
+    public ChatMessage setWebhookCreatorId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
+
+    public ChatMessage setUpdateTime(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public ChatMessage setPrivateReply(Boolean isPrivate)
+    {
+        this.isPrivate = isPrivate;
+        return this;
+    }
+
+    public ChatMessage setReplyMessageIds(String[] replyMessageIds)
+    {
+        this.replyMessageIds = replyMessageIds;
+        return this;
+    }
 
     /**
      * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
@@ -145,7 +204,7 @@ public class ChatMessage
      * Generate ChatMessage object from JSON string.
      * @param jsonString The JSON string.
      */
-    public ChatMessage(String jsonString) {fromString(jsonString);}
+    public ChatMessage(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate ChatMessage object.
@@ -157,7 +216,7 @@ public class ChatMessage
     {
         if(JSONUtil.isJson(rawString))
         {
-            JSONObject json=new JSONObject(rawString);
+            JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("type"),
@@ -166,9 +225,10 @@ public class ChatMessage
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            Object[] rawReplyMessageIds=json.containsKey("replyMessageIds")?json.getJSONArray("replyMessageIds").toArray():null;
-            String[] replyMessageIds=rawReplyMessageIds!=null?new String[rawReplyMessageIds.length]:null;
-            if(rawReplyMessageIds!=null) for(int i=0;i<rawReplyMessageIds.length;i++) replyMessageIds[i]=rawReplyMessageIds[i].toString();
+            Object[] rawReplyMessageIds = json.containsKey("replyMessageIds") ? json.getJSONArray("replyMessageIds").toArray() : null;
+            String[] replyMessageIds = rawReplyMessageIds != null ? new String[rawReplyMessageIds.length] : null;
+            if(rawReplyMessageIds != null) for(int i = 0; i < rawReplyMessageIds.length; i++)
+                replyMessageIds[i] = rawReplyMessageIds[i].toString();
             return this.setMsgId(json.getStr("id"))
                     .setType(json.getStr("type"))
                     .setServerId(json.getStr("serverId"))
@@ -181,7 +241,8 @@ public class ChatMessage
                     .setUpdateTime(json.getStr("updatedAt"))
                     .setPrivateReply(json.getBool("isPrivate"))
                     .setReplyMessageIds(replyMessageIds);
-        }else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        }
+        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     /**
@@ -192,18 +253,18 @@ public class ChatMessage
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("id",id)
-                .set("type",type)
-                .set("serverId",serverId)
-                .set("channelId",channelId)
-                .set("createdAt",createdAt)
-                .set("createdBy",createdBy)
-                .set("createdByBotId",createdByBotId)
-                .set("createdByWebhookId",createdByWebhookId)
-                .set("updatedAt",updatedAt)
-                .set("content",content)
+                .set("id", id)
+                .set("type", type)
+                .set("serverId", serverId)
+                .set("channelId", channelId)
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("createdByBotId", createdByBotId)
+                .set("createdByWebhookId", createdByWebhookId)
+                .set("updatedAt", updatedAt)
+                .set("content", content)
                 .set("isPrivate", isPrivate)
-                .set("replyMessageIds",replyMessageIds==null?null:new JSONArray(replyMessageIds))
+                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
                 .toString();
     }
 }

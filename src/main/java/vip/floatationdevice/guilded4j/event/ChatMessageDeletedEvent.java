@@ -24,9 +24,9 @@ public class ChatMessageDeletedEvent extends GuildedEvent
     public ChatMessageDeletedEvent(Object source, String id, String channelId, String deletedAt)
     {
         super(source);
-        this.id=id;
-        this.channelId=channelId;
-        this.deletedAt=deletedAt;
+        this.id = id;
+        this.channelId = channelId;
+        this.deletedAt = deletedAt;
     }
 
     /**

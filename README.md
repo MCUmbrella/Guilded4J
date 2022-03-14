@@ -7,6 +7,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 # Using:
 - [Refer to the Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
 - [Refer to the Javadoc](http://docs.floatationdevice.vip/guilded4j/)
+- [Some example bots](https://github.com/MCUmbrella/Guilded4J-Examples)
 # CAUTION:
 - The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
 - The API is only available to users who participate in the early access for now.<br>

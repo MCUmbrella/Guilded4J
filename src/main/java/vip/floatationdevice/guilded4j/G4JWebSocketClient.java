@@ -185,6 +185,7 @@ public class G4JWebSocketClient extends WebSocketClient
                                         json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : (String) json.getByPath("d.userInfo.nickname"))
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
+                         break;
                     }
                     case "teamRolesUpdated":
                     case "TeamRolesUpdated":

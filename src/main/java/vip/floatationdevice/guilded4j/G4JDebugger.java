@@ -25,28 +25,24 @@ import java.util.regex.Pattern;
 public class G4JDebugger
 {
     static Boolean dumpEnabled = false;
-
-    static String parseMessage(ChatMessage m, Boolean prompt)
-    {
-        return prompt ? "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getMsgId() + ") <" + m.getCreatorId() + "> " + m.getContent() + prompt()
-                : "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getChannelId() + "] (" + m.getMsgId() + ") <" + m.getCreatorId() + "> " + m.getContent();
-    }
-
-    static String prompt(){return "\n[" + workdir + "] #";}
+    final static Scanner scanner = new Scanner(System.in);
+    static String workChannel = "";
+    static String workServer = "";
+    static G4JClient client;
 
     static class GuildedEventListener
     {
         @Subscribe
         public void onInit(GuildedWebSocketInitializedEvent e)
         {
-            System.out.print("\n[" + DateUtil.date() + "] [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" + prompt());
+            System.out.print("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" + prompt());
             client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
         }
 
         @Subscribe
         public void onDisconnect(GuildedWebSocketClosedEvent e)
         {
-            System.out.print("\n[" + DateUtil.date() + "] [i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason() + prompt());
+            System.out.print("\n" + datePfx() + " [i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason() + prompt());
         }
 
         @Subscribe
@@ -60,14 +56,14 @@ public class G4JDebugger
         public void onXP(TeamXpAddedEvent e)
         {
             if(dumpEnabled)
-                System.out.print("\n[" + DateUtil.date() + "] [D] " + Arrays.toString(e.getUserIds()) + ": +" + e.getXpAmount() + " XP" + prompt());
+                System.out.print("\n" + datePfx() + " [D] " + Arrays.toString(e.getUserIds()) + ": +" + e.getXpAmount() + " XP" + prompt());
         }
 
         @Subscribe
         public void onNicknameChange(TeamMemberUpdatedEvent e)
         {
             if(dumpEnabled)
-                System.out.print("\n[" + DateUtil.date() + "] [D] " + e.getUserInfo().getUserId() + (e.getUserInfo().getNickname() == null ? ": nickname cleared" : ": nickname changed to '" + e.getUserInfo().getNickname() + "'") + prompt());
+                System.out.print("\n" + datePfx() + " [D] " + e.getUserInfo().getUserId() + (e.getUserInfo().getNickname() == null ? ": nickname cleared" : ": nickname changed to '" + e.getUserInfo().getNickname() + "'") + prompt());
         }
 
         @Subscribe
@@ -76,7 +72,7 @@ public class G4JDebugger
             User[] users = e.getMembers();
             if(dumpEnabled)
             {
-                System.out.println("\n[" + DateUtil.date() + "] [D] Member role changes:");
+                System.out.println("\n" + datePfx() + " [D] Member role changes:");
                 for(User user : users)
                     System.out.println("    " + user.getUserId() + ": " + Arrays.toString(user.getRoleIds()));
                 System.out.print(prompt());
@@ -86,30 +82,68 @@ public class G4JDebugger
         @Subscribe
         public void UnknownGuildedEvent(UnknownGuildedEvent e)
         {
-            System.out.print("\n[" + DateUtil.date() + "] [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
+            System.out.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
         }
     }
 
+    static boolean workChannelValid()
+    {
+        try
+        {
+            UUID.fromString(workChannel);
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.err.println(datePfx() + "[X] Specify a channel UUID first");
+            return false;
+        }
+    }
+
+    static boolean workServerValid()
+    {
+        if(workServer.length() == 8)
+            return true;
+        else
+        {
+            System.err.println(datePfx() + "[X] Specify a server ID first");
+            return false;
+        }
+    }
+
+    static String resultPfx(){return datePfx() + "[D] Result:\n";}
+
+    static String datePfx(){return "[" + DateUtil.date() + "]";}
+
+    static String parseMessage(ChatMessage m, Boolean prompt)
+    {
+        return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getMsgId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
+    }
+
+    static String prompt(){return "\n[" + workServer + "/" + workChannel + "] #";}
+
     static class G4JSession implements Serializable
     {
-        public String savedToken = "";
-        public String savedWorkdir = "";
+        public static final long serialVersionUID = 2L;
+        public String savedToken;
+        public String savedChannelId;
+        public String savedServerId;
 
-        public Boolean save()
+        public void save()
         {
             try
             {
                 this.savedToken = client.authToken;
-                this.savedWorkdir = workdir;
+                this.savedChannelId = workChannel;
+                this.savedServerId = workServer;
                 ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("G4JSession.dat"));
                 o.writeObject(this);
                 o.close();
-                return true;
+                System.out.println(datePfx() + " [i] Session saved");
             }
-            catch(Throwable e)
+            catch(Exception e)
             {
-                System.err.println("[" + DateUtil.date() + "] [X] Failed to save session: " + e);
-                return false;
+                System.err.println(datePfx() + " [X] Failed to save session: " + e);
             }
         }
 
@@ -120,22 +154,20 @@ public class G4JDebugger
                 ObjectInputStream i = new ObjectInputStream(new FileInputStream("G4JSession.dat"));
                 G4JSession session = (G4JSession) i.readObject();
                 this.savedToken = session.savedToken;
-                this.savedWorkdir = session.savedWorkdir;
+                this.savedChannelId = session.savedChannelId;
+                this.savedServerId = session.savedServerId;
                 i.close();
+                System.out.println(datePfx() + " [i] Session restored");
                 return true;
             }
             catch(java.io.FileNotFoundException e) {return false;}
-            catch(Throwable e)
+            catch(Exception e)
             {
-                System.err.println("[" + DateUtil.date() + "] [X] Failed to restore session: " + e);
+                System.err.println(datePfx() + " [X] Failed to restore session: " + e);
                 return false;
             }
         }
     }
-
-    final static Scanner scanner = new Scanner(System.in);
-    static String workdir = "(init)";
-    static G4JClient client;
 
     public static void main(String[] args)
     {
@@ -144,17 +176,18 @@ public class G4JDebugger
         if(session.restore())
         {
             client = new G4JClient(session.savedToken);
-            workdir = session.savedWorkdir;
-            System.out.println("[" + DateUtil.date() + "] [i] Restoring session");
+            workChannel = session.savedChannelId;
+            workServer = session.savedServerId;
         }
         else
         {
             System.out.print("Enter AuthToken: ");
             token = scanner.nextLine();
             client = new G4JClient(token);
-            System.out.println("[" + DateUtil.date() + "] [i] Logging in");
+            System.out.println(datePfx() + " [i] Logging in");
         }
         client.ws.eventBus.register(new GuildedEventListener());
+        System.out.println(datePfx() + " [i] Connecting to Guilded");
         client.ws.connect();
         String text = null;//typed command
         String textCache = "";//previous command
@@ -164,285 +197,356 @@ public class G4JDebugger
             {
                 text = scanner.nextLine();
                 if(text.equals("!!")) {text = textCache;}
-                if(text.equals("save"))
+                String[] commands = text.split(" ");
+                switch(commands[0].toLowerCase())
                 {
-                    if(session.save()) {System.out.print("[" + DateUtil.date() + "] [i] G4JSession saved");}
-                }
-                else if(text.equals("test"))
-                {
-                    //
-                }
-                else if(text.equals("dump"))
-                {
-                    dumpEnabled = !dumpEnabled;
-                    System.out.print("[" + DateUtil.date() + "] [i] Dump status: " + client.ws.toggleDump());
-                }
-                else if(text.startsWith("token ") && text.length() > 6)
-                {
-                    token = text.substring(6);
-                    System.out.print("[" + DateUtil.date() + "] [i] Updated AuthToken");
-                    client.setAuthToken(token);
-                    client.ws.setAuthToken(token);
-                }
-                else if(text.equals("disconnect"))
-                {
-                    System.out.print("[" + DateUtil.date() + "] [i] Disconnecting");
-                    client.ws.close();
-                }
-                else if(text.equals("pwd"))
-                {
-                    System.out.print("[" + DateUtil.date() + "] [i] Currently in channel: " + workdir);
-                }
-                else if(text.startsWith("cd ") && text.length() == 39)
-                {
-                    System.out.print("[" + DateUtil.date() + "] [i] Change target channel to " + text.substring(3));
-                    workdir = text.substring(3);
-                }
-                else if(text.equals("cd"))
-                {
-                    System.out.print("[" + DateUtil.date() + "] [i] Clear target channel");
-                    workdir = "(init)";
-                }
-                else if(text.equals("ls"))
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else
+                    case "help":
                     {
-                        ChatMessage[] msgs = client.getChannelMessages(workdir);
-                        for(int i = msgs.length - 1; i >= 0; i--) System.out.print(parseMessage(msgs[i], false));
+                        System.out.print(datePfx() + helpText);
+                        break;
                     }
-                }
-                else if(text.startsWith("send ") && text.length() > 5)
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else
+                    case "exit":
                     {
-                        String result = client.createChannelMessage(workdir, text.substring(5), null, null).toString();
-                        if(dumpEnabled) System.out.print(RESULT_PFX + new JSONObject(result).toStringPretty());
+                        System.out.println(datePfx() + " [i] Exiting");
+                        client.ws.close();
+                        session.save();
+                        System.exit(0);
                     }
-                }
-                else if(text.equals("reply"))
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else
+                    case "disconnect":
                     {
-                        System.out.println("[i] UUID of the message(s) replying to: (1 UUID per line, empty line to end)");
-                        ArrayList<String> uuids = new ArrayList<String>();
-                        Scanner s = new Scanner(System.in);
-                        String uuid;
-                        boolean isPrivate;
-                        for(; ; )
+                        System.out.print(datePfx() + " [i] Disconnecting");
+                        client.ws.close();
+                        break;
+                    }
+                    case "reconnect":
+                    {
+                        System.out.print(datePfx() + " [i] Reconnecting");
+                        if(client.ws != null) {client.ws.reconnect();}
+                        break;
+                    }
+                    case "pwd":
+                    {
+                        System.out.print(datePfx() + " [i] Channel: " + (workChannel.isEmpty() ? "not set" : workChannel) + ". Server: " + (workServer.isEmpty() ? "not set" : workServer));
+                        break;
+                    }
+                    case "cd":
+                    {
+                        if(commands.length == 2)
                         {
+                            UUID.fromString(commands[1]);
+                            workChannel = commands[1];
+                            System.out.print(datePfx() + " [i] Channel set to " + workChannel);
+                        }
+                        else
+                        {
+                            workChannel = "";
+                            System.out.println(datePfx() + " [i] Channel cleared");
+                        }
+                        break;
+                    }
+                    case "scd":
+                    {
+                        if(commands.length == 2)
+                        {
+                            if(commands[1].length() == 8)
+                            {
+                                workServer = commands[1];
+                                System.out.print(datePfx() + " [i] Server set to " + workServer);
+                            }
+                            else System.err.println(datePfx() + " [X] Invalid server ID");
+                        }
+                        else
+                        {
+                            workServer = "";
+                            System.out.println(datePfx() + " [i] Server cleared");
+                        }
+                        break;
+                    }
+                    case "save":
+                    {
+                        session.save();
+                        break;
+                    }
+                    case "dump":
+                    {
+                        dumpEnabled = !dumpEnabled;
+                        System.out.print(datePfx() + " [i] Dump status changed to: " + client.ws.toggleDump());
+                        break;
+                    }
+                    case "token":
+                    {
+                        if(commands.length == 2)
+                        {
+                            client.setAuthToken(commands[1]);
+                            client.ws.setAuthToken(commands[1]);
+                            System.out.print(datePfx() + " [i] Updated AuthToken");
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: token <token>");
+                        break;
+                    }
+                    case "ls":
+                    {
+                        if(workChannelValid())
+                        {
+                            ChatMessage[] msgs = client.getChannelMessages(workChannel);
+                            for(int i = msgs.length - 1; i >= 0; i--) System.out.print(parseMessage(msgs[i], false));
+                        }
+                        break;
+                    }
+                    case "send":
+                    {
+                        if(workChannelValid() && commands.length > 1)
+                        {
+                            String result = client.createChannelMessage(workChannel, text.substring(5), null, null).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        else break;
+                    }
+                    case "reply":
+                    {
+                        if(workChannelValid())
+                        {
+                            System.out.println("[i] UUID of the message(s) replying to: (1 UUID per line, empty line to end)");
+                            ArrayList<String> uuids = new ArrayList<String>();
+                            Scanner s = new Scanner(System.in);
+                            String raw;
+                            boolean isPrivate;
+                            for(int a = 0; a != 5; a++)
+                            {
+                                System.out.print("? ");
+                                raw = s.nextLine();
+                                if(raw.isEmpty()) break;
+                                UUID.fromString(raw);
+                                if(!uuids.contains(raw)) uuids.add(raw);
+                            }
+                            String[] uuidArray = new String[uuids.size()];
+                            uuids.toArray(uuidArray);
+                            if(uuidArray.length == 0)
+                            {
+                                System.out.print("[X] No UUID given");
+                                continue;
+                            }
+                            System.out.println("[i] Private reply? [true/false]");
                             System.out.print("? ");
-                            uuid = s.nextLine();
-                            if(uuid.length() != 36) break;
-                            else if(!uuids.contains(uuid)) uuids.add(uuid);
+                            isPrivate = Boolean.parseBoolean(s.nextLine());
+                            System.out.println("[i] Message content:");
+                            System.out.print("? ");
+                            String result = client.createChannelMessage(workChannel, s.nextLine(), uuidArray, isPrivate).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
-                        String[] uuidArray = new String[uuids.size()];
-                        uuids.toArray(uuidArray);
-                        if(uuidArray.length == 0)
+                        break;
+                    }
+                    case "rm":
+                    {
+                        if(workChannelValid() && commands.length == 2)
                         {
-                            System.out.print("[X] No UUID given");
-                            continue;
+                            UUID.fromString(commands[1]);
+                            client.deleteChannelMessage(workChannel, commands[1]);
                         }
-                        System.out.println("[i] Private reply? [true/false]");
-                        System.out.print("? ");
-                        isPrivate = Boolean.parseBoolean(s.nextLine());
-                        System.out.println("[i] Message content:");
-                        System.out.print("? ");
-                        String result = client.createChannelMessage(workdir, s.nextLine(), uuidArray, isPrivate).toString();
-                        if(dumpEnabled) System.out.print(RESULT_PFX + new JSONObject(result).toStringPretty());
+                        else break;
                     }
-                }
-                else if(text.startsWith("rm ") && text.length() == 39)
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else client.deleteChannelMessage(workdir, text.substring(3));
-                }
-                else if(text.startsWith("update ") && text.length() > 44)
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else
+                    case "update":
                     {
-                        ChatMessage result = client.updateChannelMessage(workdir, text.substring(7, 43), text.substring(44));
-                        if(dumpEnabled)
-                            System.out.print(RESULT_PFX + new JSONObject(result.toString()).toStringPretty());
-                    }
-                }
-                else if(text.startsWith("get ") && text.length() == 40)
-                {
-                    System.out.print(new JSONObject(client.getMessage(workdir, text.substring(4)).toString()).toStringPretty());
-                }
-                else if(text.equals("mkitem"))
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    else
-                    {
-                        Scanner s = new Scanner(System.in);
-                        String message, note;
-                        System.out.print("[i] Enter the list item's display message:\n? ");
-                        message = s.nextLine();
-                        if(message.length() < 1)
+                        if(workChannelValid() && commands.length > 2)
                         {
-                            System.err.println("[X] Message too short");
-                            continue;
+                            UUID.fromString(commands[1]);
+                            ChatMessage result = client.updateChannelMessage(workChannel, commands[1], text.substring(44));
+                            if(dumpEnabled)
+                                System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
-                        System.out.print("[i] Enter the note (optional):\n? ");
-                        note = s.nextLine();
-                        if(note.length() < 1) note = null;
-                        String result = client.createListItem(workdir, message, note).toString();
-                        if(dumpEnabled) System.out.print(RESULT_PFX + new JSONObject(result).toStringPretty());
+                        else break;
                     }
-                }
-                else if(text.startsWith("addxp ") && text.length() > 15)
-                {
-                    String[] parsed = text.split(" ");
-                    if(parsed.length == 3 && parsed[1].length() == 8 && Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
+                    case "get":
                     {
-                        int result = client.awardUserXp(parsed[1], Integer.parseInt(parsed[2]));
-                        if(dumpEnabled) System.out.print(RESULT_PFX + result);
+                        if(commands.length == 2)
+                        {
+                            UUID.fromString(commands[1]);
+                            System.out.print(new JSONObject(client.getMessage(workChannel, commands[1]).toString()).toStringPretty());
+                        }
+                        break;
                     }
-                    else
-                        System.err.println("[" + DateUtil.date() + "] [X] Usage: addxp <(string)userId> <(int)amount>");
-                }
-                else if(text.startsWith("addrolexp ") && text.length() > 12)
-                {
-                    String[] parsed = text.split(" ");
-                    if(parsed.length == 3 && Pattern.compile("[0-9]*").matcher(parsed[1]).matches() && Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
-                        client.awardRoleXp(Integer.parseInt(parsed[1]), Integer.parseInt(parsed[2]));
-                    else
-                        System.err.println("[" + DateUtil.date() + "] [X] Usage: addrolexp <(int)roleId> <(int)amount>");
-                }
-                else if(text.startsWith("react ") && text.length() > 8)
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    String[] parsed = text.split(" ");
-                    if(parsed.length == 3 && Pattern.compile("[0-9]*").matcher(parsed[2]).matches())
-                        client.createContentReaction(workdir, parsed[1], Integer.parseInt(parsed[2]));
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: react <contentId> <(int)emoteId>");
-                }
-                else if(text.startsWith("lsrole ") && text.length() == 15)
-                {
-                    System.out.print(Arrays.toString(client.getMemberRoles(text.substring(7))));
-                }
-                else if(text.startsWith("nick "))
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length < 3)
+                    case "mkitem":
                     {
-                        System.err.println("[" + DateUtil.date() + "] [X] Usage: nick <userID> <nickname>");
+                        if(workChannelValid())
+                        {
+                            Scanner s = new Scanner(System.in);
+                            String message, note;
+                            System.out.print("[i] Enter the list item's display message:\n? ");
+                            message = s.nextLine();
+                            if(message.isEmpty())
+                            {
+                                System.err.println("[X] Message too short");
+                                continue;
+                            }
+                            System.out.print("[i] Enter the note (optional):\n? ");
+                            note = s.nextLine();
+                            if(note.isEmpty()) note = null;
+                            String result = client.createListItem(workChannel, message, note).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        break;
                     }
-                    else
+                    case "addxp":
                     {
-                        String nick = "";
-                        for(int i = 2; i != arguments.length; i++) nick += (arguments[i] + " ");
-                        String result = client.setMemberNickname(arguments[1], nick.trim());
-                        if(dumpEnabled) System.out.print(RESULT_PFX + result);
+                        if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
+                        {
+                            int result = client.awardUserXp(workServer, commands[1], Integer.parseInt(commands[2]));
+                            if(dumpEnabled) System.out.print(resultPfx() + result);
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: addxp <(string)userId> <(int)amount>");
+                        break;
                     }
-                }
-                else if(text.startsWith("rmnick ") && text.length() == 15)
-                {
-                    String result = client.setMemberNickname(text.substring(7), null);
-                    if(dumpEnabled) System.out.print(RESULT_PFX + result);
-                }
-                else if(text.startsWith("smlink ") && text.length() > 15)
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length == 3)
+                    case "addrolexp":
                     {
-                        HashMap<String, String> result = client.getSocialLink(arguments[1], SocialMedia.valueOf(arguments[2].toUpperCase()));
-                        System.out.print(RESULT_PFX + result);
+                        if(commands.length == 3)
+                        {
+                            client.awardRoleXp(workServer, Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: addrolexp <(int)roleId> <(int)amount>");
+                        break;
                     }
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: smlink <userID> <socialMediaName>");
-                }
-                else if(text.equals("mkthread"))
-                {
-                    if(workdir.length() != 36) notifyCD();
-                    Scanner s = new Scanner(System.in);
-                    String title, content;
-                    System.out.print("[i] Enter title:\n? ");
-                    title = s.nextLine();
-                    if(title.length() < 1)
+                    case "react":
                     {
-                        System.err.println("[X] Title too short");
-                        continue;
+                        if(workChannelValid() && commands.length == 3)
+                            client.createContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
+                        else
+                            System.err.println(datePfx() + " [X] Usage: react <contentId> <(int)emoteId>");
+                        break;
                     }
-                    System.out.print("[i] Enter content:\n? ");
-                    content = s.nextLine();
-                    if(content.length() < 1)
+                    case "lsrole":
                     {
-                        System.err.println("[X] Content too short");
-                        continue;
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                            System.out.print(Arrays.toString(client.getMemberRoles(workServer, commands[1])));
+                        else
+                            System.err.println(datePfx() + " [X] Usage: lsrole <userId>");
+                        break;
                     }
-                    String result = client.createForumThread(workdir, title, content).toString();
-                    if(dumpEnabled) System.out.print(RESULT_PFX + new JSONObject(result).toStringPretty());
-                }
-                else if(text.startsWith("groupadd"))
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length == 3) client.addGroupMember(arguments[1], arguments[2]);
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: groupadd <groupId> <userId>");
-                }
-                else if(text.startsWith("groupkick"))
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length == 3) client.removeGroupMember(arguments[1], arguments[2]);
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: groupkick <groupId> <userId>");
-                }
-                else if(text.startsWith("roleadd"))
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length == 3) client.addRoleMember(Integer.parseInt(arguments[1]), arguments[2]);
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: roleadd <roleId> <userId>");
-                }
-                else if(text.startsWith("rolekick"))
-                {
-                    String[] arguments = text.split(" ");
-                    if(arguments.length == 3) client.removeRoleMember(Integer.parseInt(arguments[1]), arguments[2]);
-                    else System.err.println("[" + DateUtil.date() + "] [X] Usage: rolekick <roleId> <userId>");
-                }
-                else if(text.equals("reconnect"))
-                {
-                    System.out.print("[i] Reconnecting");
-                    if(client.ws != null) {client.ws.reconnect();}
-                }
-                else if(text.equals("exit"))
-                {
-                    System.out.println("[i] Exiting");
-                    client.ws.close();
-                    session.save();
-                    break;
-                }
-                else if(text.equals("help")) System.out.print(helpText);
-                else
-                {
-                    System.out.print("[" + DateUtil.date() + "] [!] Type 'help' to get available commands and usages");
+                    case "nick":
+                    {
+                        if(workServerValid() && commands.length > 2 && commands[1].length() == 8)
+                        {
+                            String result = client.setMemberNickname(workServer, commands[1], text.substring(14));
+                            if(dumpEnabled) System.out.print(resultPfx() + result);
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: nick <userId> <nickname>");
+                        break;
+                    }
+                    case "rmnick":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                        {
+                            String result = client.setMemberNickname(workServer, commands[1], null);
+                            if(dumpEnabled) System.out.print(resultPfx() + result);
+                        }
+                        break;
+                    }
+                    case "smlink":
+                    {
+                        if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
+                        {
+                            HashMap<String, String> result = client.getSocialLink(workServer, commands[1], SocialMedia.valueOf(commands[2].toUpperCase()));
+                            System.out.print(resultPfx() + result);
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: smlink <userID> <socialMediaName>");
+                        break;
+                    }
+                    case "mkthread":
+                    {
+                        if(workChannelValid())
+                        {
+                            Scanner s = new Scanner(System.in);
+                            String title, content;
+                            System.out.print("[i] Enter title:\n? ");
+                            title = s.nextLine();
+                            if(title.length() < 1)
+                            {
+                                System.err.println("[X] Title too short");
+                                continue;
+                            }
+                            System.out.print("[i] Enter content:\n? ");
+                            content = s.nextLine();
+                            if(content.length() < 1)
+                            {
+                                System.err.println("[X] Content too short");
+                                continue;
+                            }
+                            String result = client.createForumThread(workChannel, title, content).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        break;
+                    }
+                    case "groupadd":
+                    {
+                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
+                            client.addGroupMember(commands[1], commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: groupadd <groupId> <userId>");
+                        break;
+                    }
+                    case "groupkick":
+                    {
+                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
+                            client.removeGroupMember(commands[1], commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: groupkick <groupId> <userId>");
+                        break;
+                    }
+                    case "roleadd":
+                    {
+                        if(commands.length == 3 && commands[2].length() == 8)
+                            client.addRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
+                        break;
+                    }
+                    case "rolekick":
+                    {
+                        if(commands.length == 3 && commands[2].length() == 8)
+                            client.removeRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
+                        break;
+                    }
+                    case "test":
+                    {
+                        //
+                    }
+                    default:
+                    {
+                        System.out.print(datePfx() + " [!] Type 'help' to get available commands and usages");
+                        break;
+                    }
                 }
             }
             catch(NoSuchElementException e)
             {
-                System.out.println("[" + DateUtil.date() + "] [i] Exiting");
+                System.out.println("\n" + datePfx() + " [i] Exiting");
                 client.ws.close();
                 session.save();
                 break;
             }
             catch(GuildedException e)
             {
-                System.err.println("[" + DateUtil.date() + "] [X] Operation failed\n    " + e.getCode() + ": " + e.getDescription());
+                System.err.println(datePfx() + " [X] Operation failed\n    " + e.getCode() + ": " + e.getDescription());
             }
             catch(Exception e)
             {
                 StringWriter esw = new StringWriter();
                 e.printStackTrace(new PrintWriter(esw));
-                System.err.println("\n[" + DateUtil.date() + "] [X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n" + esw + "===========End stacktrace===========");
+                System.err.println(datePfx() + " [X] A Java runtime exception occurred while executing the command\n==========Begin stacktrace==========\n" + esw + "===========End stacktrace===========");
             }
             catch(Throwable e)
             {
-                System.err.println("\n[" + DateUtil.date() + "] [X] A fatal error occurred. Program will exit");
+                System.err.println(datePfx() + " [X] A fatal error occurred. Program will exit");
                 e.printStackTrace();
                 System.exit(-1);
             }
-            textCache = text;
+            if(!text.isEmpty()) textCache = text;
         }
     }
 
@@ -497,8 +601,4 @@ public class G4JDebugger
             "    Remove the specified role from specified user\n" +
             " > exit\n" +
             "    Log out and exit";
-
-    static void notifyCD(){System.err.println("[" + DateUtil.date() + "] [X] Specify a list channel UUID first");}
-
-    final static String RESULT_PFX = "\n[" + DateUtil.date() + "] [D] Result:\n";
 }

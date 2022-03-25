@@ -29,21 +29,15 @@ public class G4JClient
     public static final String
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
             ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
-            ROLES_URL_OLD = "https://www.guilded.gg/api/v1/members/{userId}/roles",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
-            NICKNAME_URL_OLD = "https://www.guilded.gg/api/v1/members/{userId}/nickname",
             FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/forum",
             LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/list",
             DOC_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/docs",
             USER_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
-            USER_XP_URL_OLD = "https://www.guilded.gg/api/v1/members/{userId}/xp",
             ROLE_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
-            ROLE_XP_URL_OLD = "https://www.guilded.gg/api/v1/roles/{roleId}/xp",
             SOCIAL_LINK_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
-            SOCIAL_LINK_URL_OLD = "https://www.guilded.gg/api/v1/members/{userId}/social-links/{type}",
             GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
             ROLE_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles/{roleId}",
-            ROLE_URL_OLD = "https://www.guilded.gg/api/v1/members/{userId}/roles/{roleId}",
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
     String authToken;
@@ -210,22 +204,6 @@ public class G4JClient
         return roles;
     }
 
-    @Deprecated
-    public int[] getMemberRoles(String userId)
-    {
-        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL_OLD.replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        if(!result.containsKey("roleIds")) return new int[0];
-        JSONArray array = result.getJSONArray("roleIds");
-        Object[] converted = array.toArray();
-        int[] roles = new int[converted.length];
-        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
-        return roles;
-    }
-
     /**
      * Update/delete a member's nickname.<br>
      * <a href="https://www.guilded.gg/docs/api/members/MemberNicknameUpdate" target=_blank>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
@@ -239,11 +217,12 @@ public class G4JClient
     public String setMemberNickname(String serverId, String userId, String nickname)
     {
         JSONObject result;
-        if(nickname == null)
+        if(nickname == null) // delete nickname
         {
             String rawString = HttpRequest.delete(NICKNAME_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
                     header("Authorization", "Bearer " + authToken).
                     header("Accept", "application/json").
+                    header("Content-type", "application/json").
                     timeout(httpTimeout).execute().body();
             if(!JSONUtil.isJson(rawString)) return null;
             else
@@ -252,39 +231,9 @@ public class G4JClient
                 throw new GuildedException(result.getStr("code"), result.getStr("message"));
             }
         }
-        else
+        else // update nickname
         {
             result = new JSONObject(HttpRequest.put(NICKNAME_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                    header("Authorization", "Bearer " + authToken).
-                    header("Accept", "application/json").
-                    header("Content-type", "application/json").
-                    body(new JSONObject().set("nickname", nickname).toString()).
-                    timeout(httpTimeout).execute().body());
-            if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-            return result.get("nickname").toString();
-        }
-    }
-
-    @Deprecated
-    public String setMemberNickname(String userId, String nickname)
-    {
-        JSONObject result;
-        if(nickname == null)
-        {
-            String rawString = HttpRequest.delete(NICKNAME_URL_OLD.replace("{userId}", userId)).
-                    header("Authorization", "Bearer " + authToken).
-                    header("Accept", "application/json").
-                    timeout(httpTimeout).execute().body();
-            if(!JSONUtil.isJson(rawString)) return null;
-            else
-            {
-                result = new JSONObject(rawString);
-                throw new GuildedException(result.getStr("code"), result.getStr("message"));
-            }
-        }
-        else
-        {
-            result = new JSONObject(HttpRequest.put(NICKNAME_URL_OLD.replace("{userId}", userId)).
                     header("Authorization", "Bearer " + authToken).
                     header("Accept", "application/json").
                     header("Content-type", "application/json").
@@ -469,6 +418,7 @@ public class G4JClient
         String result = HttpRequest.put(REACTION_URL.replace("{channelId}", channelId).replace("{contentId}", contentId).replace("{emoteId}", Integer.toString(emoteId))).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
+                header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -493,19 +443,6 @@ public class G4JClient
     public int awardUserXp(String serverId, String userId, int amount)
     {
         JSONObject result = new JSONObject(HttpRequest.post(USER_XP_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body("{\"amount\":" + amount + "}").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return result.getInt("total");
-    }
-
-    @Deprecated
-    public int awardUserXp(String userId, int amount)
-    {
-        JSONObject result = new JSONObject(HttpRequest.post(USER_XP_URL_OLD.replace("{userId}", userId)).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
@@ -540,23 +477,6 @@ public class G4JClient
         }
     }
 
-    @Deprecated
-    public void awardRoleXp(int roleId, int amount)
-    {
-        String result = HttpRequest.post(ROLE_XP_URL_OLD.replace("{roleId}", String.valueOf(roleId))).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body("{\"amount\":" + amount + "}").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("TeamXpForRoleCreate returned an unexpected JSON string");
-        }
-    }
-
 ////////////////////////////// Social links //////////////////////////////
 
     /**
@@ -572,22 +492,6 @@ public class G4JClient
     public HashMap<String, String> getSocialLink(String serverId, String userId, SocialMedia type)
     {
         JSONObject result = new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{type}", type.toString().toLowerCase())).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("type", (String) result.getByPath("socialLink.type"));
-        map.put("handle", (String) result.getByPath("socialLink.handle"));
-        map.put("serviceId", (String) result.getByPath("socialLink.serviceId"));
-        return map;
-    }
-
-    @Deprecated
-    public HashMap<String, String> getSocialLink(String userId, SocialMedia type)
-    {
-        JSONObject result = new JSONObject(HttpRequest.get(SOCIAL_LINK_URL_OLD.replace("{userId}", userId).replace("{type}", type.toString().toLowerCase())).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
@@ -671,21 +575,6 @@ public class G4JClient
         }
     }
 
-    @Deprecated
-    public void addRoleMember(int roleId, String userId)
-    {
-        String result = HttpRequest.put(ROLE_URL_OLD.replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("RoleMembershipCreate returned an unexpected JSON string");
-        }
-    }
-
     /**
      * Remove role from member.<br>
      * <a href="https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete" target=_blank>https://www.guilded.gg/docs/api/roleMembership/RoleMembershipDelete</a>
@@ -695,21 +584,6 @@ public class G4JClient
     public void removeRoleMember(String serverId, int roleId, String userId)
     {
         String result = HttpRequest.delete(ROLE_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
-        }
-    }
-
-    @Deprecated
-    public void removeRoleMember(int roleId, String userId)
-    {
-        String result = HttpRequest.delete(ROLE_URL_OLD.replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
                 timeout(httpTimeout).execute().body();

@@ -10,13 +10,18 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
+import java.util.HashMap;
+
 /**
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
-public class ListItem
+public class ListItem //TODO: update
 {
-    private String id, serverId, channelId, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
+    private String
+            id, serverId, channelId, message, createdAt, createdBy, createdByBotId, createdByWebhookId,
+            updatedAt, updatedBy, parentListItemId, completedAt, completedBy;
+    private HashMap<String, String> note;
 
     public String getId(){return id;}
 
@@ -24,7 +29,7 @@ public class ListItem
 
     public String getMessage(){return message;}
 
-    public String getNote(){return note;}
+    public HashMap<String, String> getNote(){return note;}
 
     public String getCreationTime(){return createdAt;}
 
@@ -58,7 +63,7 @@ public class ListItem
         return this;
     }
 
-    public ListItem setNote(String note)
+    public ListItem setNote(HashMap<String, String> note)
     {
         this.note = note;
         return this;

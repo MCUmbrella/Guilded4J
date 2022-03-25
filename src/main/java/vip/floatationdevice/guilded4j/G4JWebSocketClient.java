@@ -204,6 +204,7 @@ public class G4JWebSocketClient extends WebSocketClient
                                 new TeamRolesUpdatedEvent(this, users)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
+                        break;
                     }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                         eventBus.post(new UnknownGuildedEvent(this)

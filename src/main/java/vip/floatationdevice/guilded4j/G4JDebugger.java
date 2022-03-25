@@ -16,7 +16,6 @@ import vip.floatationdevice.guilded4j.object.User;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * A built-in CLI tool for testing and debugging Guilded4J library.

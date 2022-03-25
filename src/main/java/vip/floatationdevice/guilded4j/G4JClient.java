@@ -12,10 +12,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.Document;
-import vip.floatationdevice.guilded4j.object.ForumThread;
-import vip.floatationdevice.guilded4j.object.ListItem;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.util.HashMap;
 
@@ -28,15 +25,17 @@ public class G4JClient
 {
     public static final String
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
-            ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
+            MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",
+            BANS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/bans",
             FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/forum",
-            LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/list",
+            LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/items",
             DOC_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/docs",
             USER_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
             ROLE_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
             SOCIAL_LINK_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
             GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
+            ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             ROLE_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles/{roleId}",
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
@@ -181,30 +180,6 @@ public class G4JClient
 ////////////////////////////// Members //////////////////////////////
 
     /**
-     * Get a list of the roles assigned to a member.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
-     * @param userId The ID of the member to obtain roles from.
-     * @param serverId The ID of the server where the member is.
-     * @return An int[] contains the IDs of the roles that the member currently has.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
-     */
-    public int[] getMemberRoles(String serverId, String userId)
-    {
-        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        if(!result.containsKey("roleIds")) return new int[0];
-        JSONArray array = result.getJSONArray("roleIds");
-        Object[] converted = array.toArray();
-        int[] roles = new int[converted.length];
-        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
-        return roles;
-    }
-
-    /**
      * Update/delete a member's nickname.<br>
      * <a href="https://www.guilded.gg/docs/api/members/MemberNicknameUpdate" target=_blank>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
      * @param serverId The ID of the server where the member is.
@@ -242,6 +217,41 @@ public class G4JClient
             if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
             return result.get("nickname").toString();
         }
+    }
+
+    public TeamMember getServerMember(String serverId, String userId) //TODO: implement
+    {
+        return null;
+    }
+
+    public void kickServerMember(String serverId, String userId) //TODO: implement
+    {
+        return;
+    }
+
+    public TeamMemberSummary[] getServerMembers(String serverId) //TODO: implement
+    {
+        return null;
+    }
+
+    public TeamMemberBan getServerMemberBan(String serverId, String userId) //TODO: implement
+    {
+        return null;
+    }
+
+    public TeamMemberBan banServerMember(String serverId, String userId, String reason) //TODO: implement
+    {
+        return null;
+    }
+
+    public void unbanServerMember(String serverId, String userId) //TODO: implement
+    {
+        return;
+    }
+
+    public void getServerMemberBans(String serverId) //TODO: implement
+    {
+        return;
     }
 
 ////////////////////////////// Forums //////////////////////////////
@@ -288,6 +298,26 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         return new ListItem().fromString(result.get("listItem").toString());
+    }
+
+    public ListItemSummary[] getListItems(String channelId) //TODO: implement
+    {
+        return null;
+    }
+
+    public ListItem getListItem(String channelId, String listItemId) //TODO: implement
+    {
+        return null;
+    }
+
+    public ListItem updateListItem(String channelId, String listItemId, String message, String note) //TODO: implement
+    {
+        return null;
+    }
+
+    public void deleteListItem(String channelId, String listItemId) //TODO: implement
+    {
+        return;
     }
 
 ////////////////////////////// Docs //////////////////////////////
@@ -593,6 +623,30 @@ public class G4JClient
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
             else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
         }
+    }
+
+    /**
+     * Get a list of the roles assigned to a member.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
+     * @param userId The ID of the member to obtain roles from.
+     * @param serverId The ID of the server where the member is.
+     * @return An int[] contains the IDs of the roles that the member currently has.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public int[] getMemberRoles(String serverId, String userId)
+    {
+        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        if(!result.containsKey("roleIds")) return new int[0];
+        JSONArray array = result.getJSONArray("roleIds");
+        Object[] converted = array.toArray();
+        int[] roles = new int[converted.length];
+        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
+        return roles;
     }
 
 //============================== API FUNCTIONS END ==============================

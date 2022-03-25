@@ -20,12 +20,22 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Get message info - getMessage()
 - - [x] Get last 100 messages - getChannelMessages()
 - [ ] Members
-- - [x] Get member's role(s) - getMemberRoles()
 - - [x] Update/delete nickname - setMemberNickname()
+- - [ ] Get member info - getServerMember()
+- - [ ] Kick server member - kickServerMember()
+- - [ ] Get member list - getServerMembers()
+- - [ ] Get member ban info - getServerMemberBan()
+- - [ ] Ban server member - banServerMember()
+- - [ ] Unban server member - unbanServerMember()
+- - [ ] Get member ban list - getServerMemberBans()
 - [ ] Forum
 - - [x] Create forum thread - createForumThread()
 - [ ] List
 - - [x] Create list item - createListItem()
+- - [ ] Get list items - getListItems()
+- - [ ] Get a list item - getListItem()
+- - [ ] Update list item - updateListItem()
+- - [ ] Delete list item - deleteListItem()
 - [x] Document
 - - [x] Create document - createDocument()
 - - [x] Update document - updateDocument()
@@ -43,6 +53,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - - [x] Add group member - addGroupMember()
 - - [x] Remove group member - removeGroupMember()
 - [ ] Role membership
+- - [x] Get member's role(s) - getMemberRoles()
 - - [x] Add role member - addRoleMember()
 - - [x] Remove role member - removeRoleMember()
 - [ ] Event

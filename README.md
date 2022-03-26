@@ -37,11 +37,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [ ] Update list item - updateListItem()
 - [ ] Delete list item - deleteListItem()
 ## Document
-- [x] Create document - createDocument()
-- [x] Update document - updateDocument()
-- [x] Delete document - deleteDocument()
-- [x] Get document info - getDocument()
-- [x] Get last 50 updated docs - getChannelDocuments()
+- [x] Create document - createDoc()
+- [x] Update document - updateDoc()
+- [x] Delete document - deleteDoc()
+- [x] Get document info - getDoc()
+- [x] Get last 50 updated docs - getChannelDocs()
 ## Reaction
 - [x] Add reaction - createContentReaction()
 ## XP

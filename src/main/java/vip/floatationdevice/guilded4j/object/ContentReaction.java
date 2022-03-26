@@ -17,7 +17,7 @@ import vip.floatationdevice.guilded4j.Util;
 public class ContentReaction
 {
     private int id;
-    private String serverId, createdAt, createdBy, createdByBotId, createdByWebhookId;
+    private String serverId, createdAt, createdBy, createdByWebhookId;
 
     /**
      * Get the ID of the reaction emote.
@@ -38,12 +38,6 @@ public class ContentReaction
      * Get the ID of the reaction's creator.
      */
     public String getCreatorId(){return createdBy;}
-
-    /**
-     * Get the UUID of the bot who created the reaction.
-     * @return A UUID string of the bot who created the reaction. If the creator isn't bot, return {@code null}.
-     */
-    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the UUID of the webhook who created the reaction.
@@ -72,12 +66,6 @@ public class ContentReaction
     public ContentReaction setCreatorId(String createdBy)
     {
         this.createdBy = createdBy;
-        return this;
-    }
-
-    public ContentReaction setBotCreatorId(String createdByBotId)
-    {
-        this.createdByBotId = createdByBotId;
         return this;
     }
 
@@ -120,7 +108,6 @@ public class ContentReaction
                     .setServerId(json.getStr("serverId"))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
@@ -137,7 +124,6 @@ public class ContentReaction
                 .set("serverId", serverId)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
-                .set("createdByBotId", createdByBotId)
                 .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }

@@ -140,19 +140,17 @@ public class G4JWebSocketClient extends WebSocketClient
                 {
                     case "ChatMessageCreated":
                     {
-                        JSONObject msgObj = (JSONObject) new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
-                                new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                new ChatMessageCreatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
                     case "ChatMessageUpdated":
                     {
-                        JSONObject msgObj = (JSONObject) new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
-                                new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                new ChatMessageUpdatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -160,19 +158,18 @@ public class G4JWebSocketClient extends WebSocketClient
                     {
                         eventBus.post(
                                 new ChatMessageDeletedEvent(this,
-                                        (String) json.getByPath("d.message.deletedAt"),
-                                        (String) json.getByPath("d.message.id"),
-                                        (String) json.getByPath("d.message.channelId"))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                        json.getByPath("d.message.deletedAt").toString(),
+                                        json.getByPath("d.message.id").toString(),
+                                        json.getByPath("d.message.channelId").toString()
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
                     case "TeamXpAdded":
                     {
-                        JSONArray array = (JSONArray) new JSONObject(rawMessage).getByPath("d.userIds");
-                        Object[] converted = array.toArray();
+                        Object[] converted = ((JSONArray) new JSONObject(rawMessage).getByPath("d.userIds")).toArray();
                         String[] userIds = new String[converted.length];
-                        for(int i = 0; i != converted.length; i++) userIds[i] = ((String) converted[i]);
+                        for(int i = 0; i != converted.length; i++) userIds[i] = (converted[i].toString());
                         eventBus.post(
                                 new TeamXpAddedEvent(this, (Integer) json.getByPath("d.amount"), userIds)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
@@ -183,8 +180,8 @@ public class G4JWebSocketClient extends WebSocketClient
                     {
                         eventBus.post(
                                 new TeamMemberUpdatedEvent(this,
-                                        (String) json.getByPath("d.userInfo.id"),
-                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : (String) json.getByPath("d.userInfo.nickname"))
+                                        json.getByPath("d.userInfo.id").toString(),
+                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : json.getByPath("d.userInfo.nickname").toString())
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                          break;

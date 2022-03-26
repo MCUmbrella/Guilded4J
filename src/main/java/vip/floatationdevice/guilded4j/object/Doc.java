@@ -14,15 +14,15 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic document object in a 'doc' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/docs/Doc" target=_blank>https://www.guilded.gg/docs/api/docs/Doc</a>
  */
-public class Document
+public class Doc
 {
     int id;
     String serverId, channelId, title, content, createdAt, createdBy, updatedAt, updatedBy;
 
     /**
-     * Generate empty Document object - make sure to set all the essential fields before using it.
+     * Generate empty Doc object - make sure to set all the essential fields before using it.
      */
-    public Document(){}
+    public Doc(){}
 
     /**
      * Get the ID of the document.
@@ -70,68 +70,68 @@ public class Document
      */
     public String getUpdatedBy(){return updatedBy;}
 
-    public Document setId(int id)
+    public Doc setId(int id)
     {
         this.id = id;
         return this;
     }
 
-    public Document setServerId(String serverId)
+    public Doc setServerId(String serverId)
     {
         this.serverId = serverId;
         return this;
     }
 
-    public Document setChannelId(String channelId)
+    public Doc setChannelId(String channelId)
     {
         this.channelId = channelId;
         return this;
     }
 
-    public Document setTitle(String title)
+    public Doc setTitle(String title)
     {
         this.title = title;
         return this;
     }
 
-    public Document setContent(String content)
+    public Doc setContent(String content)
     {
         this.content = content;
         return this;
     }
 
-    public Document setCreationTime(String createdAt)
+    public Doc setCreationTime(String createdAt)
     {
         this.createdAt = createdAt;
         return this;
     }
 
-    public Document setCreatorId(String createdBy)
+    public Doc setCreatorId(String createdBy)
     {
         this.createdBy = createdBy;
         return this;
     }
 
-    public Document setUpdateTime(String updatedAt)
+    public Doc setUpdateTime(String updatedAt)
     {
         this.updatedAt = updatedAt;
         return this;
     }
 
-    public Document setUpdatedBy(String updatedBy)
+    public Doc setUpdatedBy(String updatedBy)
     {
         this.updatedBy = updatedBy;
         return this;
     }
 
     /**
-     * Use the given JSON string to generate Document object.
+     * Use the given JSON string to generate Doc object.
      * @param rawString The JSON string.
-     * @return Document object.
+     * @return Doc object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static Document fromString(String rawString)
+    public static Doc fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -145,7 +145,7 @@ public class Document
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            return new Document()
+            return new Doc()
                     .setId(json.getInt("id"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))

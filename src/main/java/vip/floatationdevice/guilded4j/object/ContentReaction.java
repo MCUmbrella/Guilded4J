@@ -105,7 +105,7 @@ public class ContentReaction
      * @throws IllegalArgumentException when the string is missing at least 1 of the 3 essential keys.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ContentReaction fromString(String rawString)
+    public static ContentReaction fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -115,7 +115,8 @@ public class ContentReaction
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            return this.setId(json.getInt("id"))
+            return new ContentReaction()
+                    .setId(json.getInt("id"))
                     .setServerId(json.getStr("serverId"))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
@@ -129,8 +130,7 @@ public class ContentReaction
      * Convert the ContentReaction object to JSON string.
      * @return A JSON string.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

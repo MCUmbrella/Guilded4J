@@ -20,6 +20,11 @@ public class ForumThread
     String serverId, channelId, title, content, createdAt, createdBy, createdByBotId, createdByWebhookId;
 
     /**
+     * Generate empty ForumThread object - make sure to set all the essential fields before using it.
+     */
+    public ForumThread(){}
+
+    /**
      * Get the thread's ID (it is not UUID).
      */
     public int getId(){return id;}
@@ -122,24 +127,13 @@ public class ForumThread
     }
 
     /**
-     * Generate empty ForumThread object - make sure to set all the essential fields before using it.
-     */
-    public ForumThread(){}
-
-    /**
-     * Generate ForumThread object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public ForumThread(String jsonString){fromString(jsonString);}
-
-    /**
      * Use the given JSON string to generate ForumThread object.
      * @param rawString The JSON string.
      * @return ForumThread object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ForumThread fromString(String rawString)
+    public static ForumThread fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -151,7 +145,8 @@ public class ForumThread
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            return this.setId(json.getInt("id"))
+            return new ForumThread()
+                    .setId(json.getInt("id"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setTitle(json.getStr("title"))
@@ -168,8 +163,7 @@ public class ForumThread
      * Convert the ForumThread object to JSON string.
      * @return A JSON string.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

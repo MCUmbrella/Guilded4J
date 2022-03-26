@@ -221,7 +221,13 @@ public class G4JClient
 
     public TeamMember getServerMember(String serverId, String userId) //TODO: implement
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return TeamMember.fromString(result.get("member").toString());
     }
 
     public void kickServerMember(String serverId, String userId) //TODO: implement

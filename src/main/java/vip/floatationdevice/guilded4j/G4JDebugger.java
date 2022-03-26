@@ -13,6 +13,7 @@ import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
+import vip.floatationdevice.guilded4j.object.TeamMember;
 
 import java.io.*;
 import java.util.*;
@@ -116,7 +117,7 @@ public class G4JDebugger
 
     static String parseMessage(ChatMessage m, Boolean prompt)
     {
-        return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getMsgId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
+        return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
     }
 
     static String prompt(){return "\n[" + workServer + "/" + workChannel + "] #";}
@@ -300,7 +301,7 @@ public class G4JDebugger
                             String result = client.createChannelMessage(workChannel, text.substring(5), null, null).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
-                        else break;
+                        break;
                     }
                     case "reply":
                     {
@@ -511,9 +512,30 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
                         break;
                     }
+                    case "member":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                        {
+                            TeamMember member = client.getServerMember(workServer, commands[1]);
+                            System.out.print(
+                                    datePfx() + " [i] Member " + commands[1] + ":\n"
+                                    + "  - Nickname: " + member.getNickname() + "\n"
+                                    + "  - Real name: " + member.getUser().getName() + "\n"
+                                    + "  - User ID: " + member.getUser().getId() + "\n"
+                                    + "  - Type: " + member.getUser().getType() + "\n"
+                                    + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
+                                    + "  - Joined at: " + member.getJoinTime() + "\n"
+                                    + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
+                                    + member
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: member <userId>");
+                        break;
+                    }
                     case "test":
                     {
-                        //
+                        break;
                     }
                     default:
                     {

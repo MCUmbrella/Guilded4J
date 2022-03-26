@@ -23,10 +23,15 @@ public class ChatMessage
     private String[] replyMessageIds;
 
     /**
+     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
+     */
+    public ChatMessage(){}
+
+    /**
      * Get the message's UUID.
      * @return A UUID string that contains the UUID of the message.
      */
-    public String getMsgId(){return id;}
+    public String getId(){return id;}
 
     /**
      * Get the message's type.
@@ -123,7 +128,7 @@ public class ChatMessage
     public Boolean isWebhookMessage(){return createdByWebhookId != null;}
 
 
-    public ChatMessage setMsgId(String id)
+    public ChatMessage setId(String id)
     {
         this.id = id;
         return this;
@@ -196,23 +201,12 @@ public class ChatMessage
     }
 
     /**
-     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
-     */
-    public ChatMessage(){}
-
-    /**
-     * Generate ChatMessage object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public ChatMessage(String jsonString){fromString(jsonString);}
-
-    /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ChatMessage fromString(String jsonString)
+    public static ChatMessage fromString(String jsonString)
     {
         if(JSONUtil.isJson(jsonString))
         {
@@ -229,7 +223,8 @@ public class ChatMessage
             String[] replyMessageIds = rawReplyMessageIds != null ? new String[rawReplyMessageIds.length] : null;
             if(rawReplyMessageIds != null) for(int i = 0; i < rawReplyMessageIds.length; i++)
                 replyMessageIds[i] = rawReplyMessageIds[i].toString();
-            return this.setMsgId(json.getStr("id"))
+            return new ChatMessage()
+                    .setId(json.getStr("id"))
                     .setType(json.getStr("type"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
@@ -249,8 +244,7 @@ public class ChatMessage
      * Convert the ChatMessage object to JSON string.
      * @return A JSON string.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

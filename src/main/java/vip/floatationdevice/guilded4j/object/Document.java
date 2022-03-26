@@ -20,6 +20,11 @@ public class Document
     String serverId, channelId, title, content, createdAt, createdBy, updatedAt, updatedBy;
 
     /**
+     * Generate empty Document object - make sure to set all the essential fields before using it.
+     */
+    public Document(){}
+
+    /**
      * Get the ID of the document.
      */
     public int getId(){return id;}
@@ -120,24 +125,13 @@ public class Document
     }
 
     /**
-     * Generate empty Document object - make sure to set all the essential fields before using it.
-     */
-    public Document(){}
-
-    /**
-     * Generate Document object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public Document(String jsonString){fromString(jsonString);}
-
-    /**
      * Use the given JSON string to generate Document object.
      * @param rawString The JSON string.
      * @return Document object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public Document fromString(String rawString)
+    public static Document fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -151,7 +145,8 @@ public class Document
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            return setId(json.getInt("id"))
+            return new Document()
+                    .setId(json.getInt("id"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setTitle(json.getStr("title"))

@@ -75,7 +75,7 @@ public class TeamMemberSummary
      * Convert the TeamMemberSummary object to a JSON string.
      * @return JSON string.
      */
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("user", user)

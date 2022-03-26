@@ -104,7 +104,7 @@ public class TeamMember
      * Convert TeamMember object to JSON string.
      * @return JSON string.
      */
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("user", user)

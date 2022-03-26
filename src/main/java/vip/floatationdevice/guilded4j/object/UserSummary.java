@@ -87,7 +87,7 @@ public class UserSummary
      * Convert the UserSummary object to a JSON string.
      * @return JSON string.
      */
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

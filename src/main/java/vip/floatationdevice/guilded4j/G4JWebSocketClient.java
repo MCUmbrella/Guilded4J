@@ -12,13 +12,9 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
-import vip.floatationdevice.guilded4j.object.TeamMemberSummary;
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Guilded4J WebSocket event manager, built in by G4JClient, also can be used independently.
@@ -32,19 +28,10 @@ public class G4JWebSocketClient extends WebSocketClient
     int heartbeatIntervalMs = 20000;
     private boolean dump = false;
 
-    private static URI initURI()
-    {
-        try
-        {
-            return new URI("wss://api.guilded.gg/v1/websocket");
-        }
-        catch(URISyntaxException e) {/*this is impossible*/return null;}
-    }
-
     /**
      * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
      */
-    public static final URI WEBSOCKET_URI = initURI();
+    public static final URI WEBSOCKET_URI = URI.create("wss://api.guilded.gg/v1/websocket");
 
     /**
      * Generate a G4JWebSocketClient using the given access token.
@@ -181,8 +168,8 @@ public class G4JWebSocketClient extends WebSocketClient
                         eventBus.post(
                                 new TeamMemberUpdatedEvent(this,
                                         json.getByPath("d.userInfo.id").toString(),
-                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : json.getByPath("d.userInfo.nickname").toString())
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : json.getByPath("d.userInfo.nickname").toString()
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                          break;
                     }
@@ -195,6 +182,28 @@ public class G4JWebSocketClient extends WebSocketClient
                         eventBus.post(
                                 new TeamRolesUpdatedEvent(this, users)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
+                    case "TeamMemberJoined":
+                    {
+                        eventBus.post(
+                                new TeamMemberJoinedEvent(this,
+                                        TeamMember.fromString(json.getByPath("d.member").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
+                    case "TeamMemberRemoved":
+                    {
+                        Object isKick = json.getByPath("d.isKick");
+                        Object isBan = json.getByPath("d.isBan");
+                        eventBus.post(
+                                new TeamMemberRemovedEvent(this,
+                                        json.getByPath("d.userId").toString(),
+                                        Boolean.parseBoolean(isKick == null ? "false" : isKick.toString()),
+                                        Boolean.parseBoolean(isBan == null ? "false" : isBan.toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }

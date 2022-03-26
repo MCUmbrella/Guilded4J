@@ -13,55 +13,57 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - The API is only available to users who participate in the early access for now.<br>
 # Progress:
 `(Waiting for Guilded side to complete basic API functions)`
-- [x] Text
-- - [x] Create message - createChannelMessage()
-- - [x] Delete message - deleteChannelMessage()
-- - [x] Update message - updateChannelMessage()
-- - [x] Get message info - getMessage()
-- - [x] Get last 100 messages - getChannelMessages()
-- [ ] Members
-- - [x] Update/delete nickname - setMemberNickname()
-- - [ ] Get member info - getServerMember()
-- - [ ] Kick server member - kickServerMember()
-- - [ ] Get member list - getServerMembers()
-- - [ ] Get member ban info - getServerMemberBan()
-- - [ ] Ban server member - banServerMember()
-- - [ ] Unban server member - unbanServerMember()
-- - [ ] Get member ban list - getServerMemberBans()
-- [ ] Forum
-- - [x] Create forum thread - createForumThread()
-- [ ] List
-- - [x] Create list item - createListItem()
-- - [ ] Get list items - getListItems()
-- - [ ] Get a list item - getListItem()
-- - [ ] Update list item - updateListItem()
-- - [ ] Delete list item - deleteListItem()
-- [x] Document
-- - [x] Create document - createDocument()
-- - [x] Update document - updateDocument()
-- - [x] Delete document - deleteDocument()
-- - [x] Get document info - getDocument()
-- - [x] Get last 50 updated docs - getChannelDocuments()
-- [ ] Reaction
-- - [x] Add reaction - createContentReaction()
-- [x] XP
-- - [x] Add XP to user - awardUserXp()
-- - [x] Add XP to user group - awardRoleXp()
-- [x] Social links
-- - [x] Get member's social link - getSocialLink()
-- [ ] Group membership
-- - [x] Add group member - addGroupMember()
-- - [x] Remove group member - removeGroupMember()
-- [ ] Role membership
-- - [x] Get member's role(s) - getMemberRoles()
-- - [x] Add role member - addRoleMember()
-- - [x] Remove role member - removeRoleMember()
-- [ ] Event
-- - [x] GuildedWebsocketInitializedEvent
-- - [x] GuildedWebsocketClosedEvent
-- - [x] ChatMessageCreatedEvent
-- - [x] ChatMessageDeletedEvent
-- - [x] ChatMessageUpdatedEvent
-- - [x] TeamXpAddedEvent
-- - [x] TeamMemberUpdatedEvent
-- - [x] TeamRolesUpdatedEvent
+## Text
+- [x] Create message - createChannelMessage()
+- [x] Delete message - deleteChannelMessage()
+- [x] Update message - updateChannelMessage()
+- [x] Get message info - getMessage()
+- [x] Get last 100 messages - getChannelMessages()
+## Members
+- [x] Update/delete nickname - setMemberNickname()
+- [x] Get member info - getServerMember()
+- [x] Kick server member - kickServerMember()
+- [x] Get member list - getServerMembers()
+- [ ] Get member ban info - getServerMemberBan()
+- [ ] Ban server member - banServerMember()
+- [ ] Unban server member - unbanServerMember()
+- [ ] Get member ban list - getServerMemberBans()
+## Forum
+- [x] Create forum thread - createForumThread()
+## List
+- [x] Create list item - createListItem()
+- [ ] Get list items - getListItems()
+- [ ] Get a list item - getListItem()
+- [ ] Update list item - updateListItem()
+- [ ] Delete list item - deleteListItem()
+## Document
+- [x] Create document - createDocument()
+- [x] Update document - updateDocument()
+- [x] Delete document - deleteDocument()
+- [x] Get document info - getDocument()
+- [x] Get last 50 updated docs - getChannelDocuments()
+## Reaction
+- [x] Add reaction - createContentReaction()
+## XP
+- [x] Add XP to user - awardUserXp()
+- [x] Add XP to all users with specified role - awardRoleXp()
+## Social links
+- [x] Get member's social link - getSocialLink()
+## Group membership
+- [x] Add member to group - addGroupMember()
+- [x] Remove member from group - removeGroupMember()
+## Role membership
+- [x] Get member's role(s) - getMemberRoles()
+- [x] Assign role to member - addRoleMember()
+- [x] Remove role from member - removeRoleMember()
+## Event
+- [x] GuildedWebsocketInitializedEvent
+- [x] GuildedWebsocketClosedEvent
+- [x] ChatMessageCreatedEvent
+- [x] ChatMessageDeletedEvent
+- [x] ChatMessageUpdatedEvent
+- [x] TeamMemberJoinedEvent
+- [x] TeamMemberRemovedEvent
+- [x] TeamMemberUpdatedEvent
+- [x] TeamRolesUpdatedEvent
+- [x] TeamXpAddedEvent

@@ -10,6 +10,9 @@ public class Util
     public static void checkNullArgument(Object... objects)
     {
         for(Object object : objects)
+        {
+            //System.out.println(object);
             if(object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
+        }
     }
 }

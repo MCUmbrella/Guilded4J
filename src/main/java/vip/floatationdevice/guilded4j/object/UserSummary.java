@@ -72,8 +72,7 @@ public class UserSummary
             JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(
                     json.getStr("id"),
-                    json.getStr("name"),
-                    json.getStr("createdAt")
+                    json.getStr("name")
             );
             return new UserSummary()
                     .setId(json.getStr("id"))

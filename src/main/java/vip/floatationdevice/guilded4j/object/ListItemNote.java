@@ -1,3 +1,8 @@
+/*
+ Copyright (C) 2021 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
+
 package vip.floatationdevice.guilded4j.object;
 
 /**
@@ -6,7 +11,8 @@ package vip.floatationdevice.guilded4j.object;
  */
 public class ListItemNote
 {
-    private String createdAt, createdBy, content;
+    private final String createdAt, createdBy;
+    private String content;
 
     public ListItemNote(String createdAt, String createdBy, String content)
     {
@@ -24,4 +30,10 @@ public class ListItemNote
      * @return The note's text.
      */
     public String getContent(){return content;}
+
+    public ListItemNote setContent(String content)
+    {
+        this.content = content;
+        return this;
+    }
 }

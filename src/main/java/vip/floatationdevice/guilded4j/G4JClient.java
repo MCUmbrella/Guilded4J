@@ -218,7 +218,7 @@ public class G4JClient
         }
     }
 
-    public TeamMember getServerMember(String serverId, String userId) //TODO: implement
+    public TeamMember getServerMember(String serverId, String userId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
                 header("Authorization", "Bearer " + authToken).
@@ -229,14 +229,33 @@ public class G4JClient
         return TeamMember.fromString(result.get("member").toString());
     }
 
-    public void kickServerMember(String serverId, String userId) //TODO: implement
+    public void kickServerMember(String serverId, String userId)
     {
-        return;
+        String result = HttpRequest.delete(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json = new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
+            else throw new ClassCastException("TeamMemberDelete returned an unexpected JSON string");
+        }
     }
 
-    public TeamMemberSummary[] getServerMembers(String serverId) //TODO: implement
+    public TeamMemberSummary[] getServerMembers(String serverId)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        Object[] converted = result.getJSONArray("members").toArray();
+        TeamMemberSummary[] members = new TeamMemberSummary[converted.length];
+        for(int i = 0; i < converted.length; i++) members[i] = TeamMemberSummary.fromString(converted[i].toString());
+        return members;
     }
 
     public TeamMemberBan getServerMemberBan(String serverId, String userId) //TODO: implement

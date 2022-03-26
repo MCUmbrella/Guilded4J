@@ -28,7 +28,7 @@ public class TeamMemberSummary
      * Get the user summary of the member.
      * @return The user summary.
      */
-    public UserSummary getUserSummary(){return user;}
+    public UserSummary getUser(){return user;}
 
     /**
      * Get the role IDs of the member.

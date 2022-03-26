@@ -18,7 +18,7 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class ChatMessage
 {
-    private String id, type, serverId, channelId, content, createdAt, createdBy, createdByBotId, createdByWebhookId, updatedAt;
+    private String id, type, serverId, channelId, content, createdAt, createdBy, createdByWebhookId, updatedAt;
     private Boolean isPrivate;
     private String[] replyMessageIds;
 
@@ -70,12 +70,6 @@ public class ChatMessage
     public String getCreatorId(){return createdBy;}
 
     /**
-     * Get the UUID of the bot who created the message.
-     * @return A UUID string of the bot who created the message. If the creator isn't bot, return {@code null}.
-     */
-    public String getBotCreatorId(){return createdByBotId;}
-
-    /**
      * Get the UUID of the webhook who created the message.
      * @return A UUID string of the webhook who created the message. If the creator isn't webhook, return {@code null}.
      */
@@ -113,13 +107,6 @@ public class ChatMessage
      * @return {@code true} if the message is created by system, {@code false} if not.
      */
     public Boolean isSystemMessage(){return type.equals("system");}
-
-    /**
-     * This function is broken for now due to the fact that Guilded migrated bot objects to user objects.
-     * @return {@code true} if the message is created by bot, {@code false} if not.
-     */
-    @Deprecated
-    public Boolean isBotMessage(){return createdByBotId != null;}
 
     /**
      * Check if the message is created by a webhook.
@@ -167,12 +154,6 @@ public class ChatMessage
     public ChatMessage setCreatorId(String createdBy)
     {
         this.createdBy = createdBy;
-        return this;
-    }
-
-    public ChatMessage setBotCreatorId(String createdByBotId)
-    {
-        this.createdByBotId = createdByBotId;
         return this;
     }
 
@@ -231,7 +212,6 @@ public class ChatMessage
                     .setContent(json.getStr("content"))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"))
                     .setUpdateTime(json.getStr("updatedAt"))
                     .setPrivateReply(json.getBool("isPrivate"))
@@ -251,14 +231,13 @@ public class ChatMessage
                 .set("type", type)
                 .set("serverId", serverId)
                 .set("channelId", channelId)
+                .set("content", content)
+                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
+                .set("isPrivate", isPrivate)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
-                .set("createdByBotId", createdByBotId)
                 .set("createdByWebhookId", createdByWebhookId)
                 .set("updatedAt", updatedAt)
-                .set("content", content)
-                .set("isPrivate", isPrivate)
-                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
                 .toString();
     }
 }

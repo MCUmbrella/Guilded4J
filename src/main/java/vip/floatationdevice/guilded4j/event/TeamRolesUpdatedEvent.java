@@ -5,7 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
 
 /**
  * Event fired when one or more member's roles are updated.<br>
@@ -13,13 +13,13 @@ import vip.floatationdevice.guilded4j.object.User;
  */
 public class TeamRolesUpdatedEvent extends GuildedEvent
 {
-    private final User[] memberRoleIds;
+    private final MemberRoleSummary[] memberRoleIds;
 
     /**
      * Generate TeamRolesUpdatedEvent with a list of user(s) updated roles.
-     * @param memberRoleIds A {@link User}[] containing the user(s) whose roles have been updated.
+     * @param memberRoleIds A {@link MemberRoleSummary}[] containing the user(s) whose roles have been updated.
      */
-    public TeamRolesUpdatedEvent(Object source, User[] memberRoleIds)
+    public TeamRolesUpdatedEvent(Object source, MemberRoleSummary[] memberRoleIds)
     {
         super(source);
         this.memberRoleIds = memberRoleIds;
@@ -27,10 +27,7 @@ public class TeamRolesUpdatedEvent extends GuildedEvent
 
     /**
      * Get the list of user(s) updated roles.
-     * @return A {@link User}[] containing the user(s) whose roles have been updated.
+     * @return A {@link MemberRoleSummary}[] containing the user(s) whose roles have been updated.
      */
-    public User[] getMembers()
-    {
-        return this.memberRoleIds;
-    }
+    public MemberRoleSummary[] getMembers(){return this.memberRoleIds;}
 }

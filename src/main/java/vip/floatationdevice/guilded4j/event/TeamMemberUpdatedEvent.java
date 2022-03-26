@@ -5,7 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.MemberNicknameSummary;
 
 /**
  * Event fired when a member's nickname is updated.<br>
@@ -13,7 +13,7 @@ import vip.floatationdevice.guilded4j.object.User;
  */
 public class TeamMemberUpdatedEvent extends GuildedEvent
 {
-    private final User userInfo;
+    private final MemberNicknameSummary userInfo;
 
     /**
      * Generate TeamMemberUpdatedEvent using the 2 given essential keys.
@@ -23,12 +23,12 @@ public class TeamMemberUpdatedEvent extends GuildedEvent
     public TeamMemberUpdatedEvent(Object source, String id, String nickname)
     {
         super(source);
-        this.userInfo = new User(id).setNickname(nickname);
+        this.userInfo = new MemberNicknameSummary(id, nickname);
     }
 
     /**
      * Get the member's information as User object.
-     * @return the User object representing the member whose nickname was updated.
+     * @return the TeamMember object representing the member whose nickname was updated.
      */
-    public User getUserInfo(){return userInfo;}
+    public MemberNicknameSummary getUserInfo(){return userInfo;}
 }

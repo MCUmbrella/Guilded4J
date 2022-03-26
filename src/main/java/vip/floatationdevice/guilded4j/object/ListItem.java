@@ -14,9 +14,17 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
-public class ListItem
+public class ListItem //TODO: update
 {
-    private String id, serverId, channelId, message, note, createdAt, createdBy, createdByBotId, createdByWebhookId;
+    private String
+            id, serverId, channelId, message, createdAt, createdBy, createdByWebhookId,
+            updatedAt, updatedBy, parentListItemId, completedAt, completedBy;
+    private ListItemNote note;
+
+    /**
+     * Generate empty ListItem object - make sure to set all the essential fields before using it.
+     */
+    public ListItem(){}
 
     public String getId(){return id;}
 
@@ -24,13 +32,11 @@ public class ListItem
 
     public String getMessage(){return message;}
 
-    public String getNote(){return note;}
+    public ListItemNote getNote(){return note;}
 
     public String getCreationTime(){return createdAt;}
 
     public String getCreatorId(){return createdBy;}
-
-    public String getBotCreatorId(){return createdByBotId;}
 
     public String getWebhookCreatorId(){return createdByWebhookId;}
 
@@ -58,7 +64,7 @@ public class ListItem
         return this;
     }
 
-    public ListItem setNote(String note)
+    public ListItem setNote(ListItemNote note)
     {
         this.note = note;
         return this;
@@ -76,28 +82,11 @@ public class ListItem
         return this;
     }
 
-    public ListItem setBotCreatorId(String createdByBotId)
-    {
-        this.createdByBotId = createdByBotId;
-        return this;
-    }
-
     public ListItem setWebhookCreatorId(String createdByWebhookId)
     {
         this.createdByWebhookId = createdByWebhookId;
         return this;
     }
-
-    /**
-     * Generate empty ListItem object - make sure to set all the essential fields before using it.
-     */
-    public ListItem(){}
-
-    /**
-     * Generate ListItem object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public ListItem(String jsonString){fromString(jsonString);}
 
     /**
      * Use the given JSON string to generate ListItem object.
@@ -106,7 +95,7 @@ public class ListItem
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ListItem fromString(String rawString)
+    public static ListItem fromString(String rawString)
     {
         if(JSONUtil.isJson(rawString))
         {
@@ -119,14 +108,18 @@ public class ListItem
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            return this.setId(json.getStr("id"))
+            return new ListItem()
+                    .setId(json.getStr("id"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setMessage(json.getStr("message"))
-                    .setNote(json.getStr("note"))
+                    .setNote(new ListItemNote(
+                            json.getByPath("note.createdAt").toString(),
+                            json.getByPath("note.createdBy").toString(),
+                            json.getByPath("note.content").toString()
+                    ))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
@@ -136,8 +129,7 @@ public class ListItem
      * Convert the ListItem object to JSON string.
      * @return A JSON string.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)
@@ -147,7 +139,6 @@ public class ListItem
                 .set("note", note)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
-                .set("createdByBotId", createdByBotId)
                 .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }

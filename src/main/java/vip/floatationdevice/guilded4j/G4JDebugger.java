@@ -12,11 +12,12 @@ import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
+import vip.floatationdevice.guilded4j.object.TeamMember;
+import vip.floatationdevice.guilded4j.object.TeamMemberSummary;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * A built-in CLI tool for testing and debugging Guilded4J library.
@@ -69,14 +70,25 @@ public class G4JDebugger
         @Subscribe
         public void onRoleChange(TeamRolesUpdatedEvent e)
         {
-            User[] users = e.getMembers();
+            MemberRoleSummary[] users = e.getMembers();
             if(dumpEnabled)
             {
                 System.out.println("\n" + datePfx() + " [D] Member role changes:");
-                for(User user : users)
+                for(MemberRoleSummary user : users)
                     System.out.println("    " + user.getUserId() + ": " + Arrays.toString(user.getRoleIds()));
                 System.out.print(prompt());
             }
+        }
+
+        @Subscribe
+        public void onMemberJoined(TeamMemberJoinedEvent e)
+        {
+            System.out.println("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server with ID " + e.getServerID() + prompt());
+        }
+        @Subscribe
+        public void onMemberRemoved(TeamMemberRemovedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server with ID " + e.getServerID() + " (reason: " + e.getReason() + ")" + prompt());
         }
 
         @Subscribe
@@ -117,7 +129,7 @@ public class G4JDebugger
 
     static String parseMessage(ChatMessage m, Boolean prompt)
     {
-        return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getMsgId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
+        return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
     }
 
     static String prompt(){return "\n[" + workServer + "/" + workChannel + "] #";}
@@ -301,7 +313,7 @@ public class G4JDebugger
                             String result = client.createChannelMessage(workChannel, text.substring(5), null, null).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
-                        else break;
+                        break;
                     }
                     case "reply":
                     {
@@ -344,7 +356,7 @@ public class G4JDebugger
                             UUID.fromString(commands[1]);
                             client.deleteChannelMessage(workChannel, commands[1]);
                         }
-                        else break;
+                        break;
                     }
                     case "update":
                     {
@@ -355,7 +367,7 @@ public class G4JDebugger
                             if(dumpEnabled)
                                 System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
-                        else break;
+                        break;
                     }
                     case "get":
                     {
@@ -512,9 +524,54 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
                         break;
                     }
+                    case "member":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                        {
+                            TeamMember member = client.getServerMember(workServer, commands[1]);
+                            System.out.print(
+                                    datePfx() + " [i] Member " + commands[1] + ":\n"
+                                    + "  - Nickname: " + member.getNickname() + "\n"
+                                    + "  - Real name: " + member.getUser().getName() + "\n"
+                                    + "  - User ID: " + member.getUser().getId() + "\n"
+                                    + "  - Type: " + member.getUser().getType() + "\n"
+                                    + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
+                                    + "  - Joined at: " + member.getJoinTime() + "\n"
+                                    + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
+                                    + member
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: member <userId>");
+                        break;
+                    }
+                    case "kick":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                            client.kickServerMember(workServer, commands[1]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: kick <userId>");
+                        break;
+                    }
+                    case "lsmember":
+                    {
+                        if(workServerValid())
+                        {
+                            TeamMemberSummary[] members = client.getServerMembers(workServer);
+                            for(TeamMemberSummary member : members)
+                                System.out.println(
+                                        "=============================="
+                                        + "\n  - Name: " + member.getUser().getName()
+                                        + "\n  - ID: " + member.getUser().getId()
+                                        + "\n  - Type: " + member.getUser().getType()
+                                        + "\n  - Roles: " + Arrays.toString(member.getRoleIds())
+                                );
+                        }
+                        break;
+                    }
                     case "test":
                     {
-                        //
+                        break;
                     }
                     default:
                     {

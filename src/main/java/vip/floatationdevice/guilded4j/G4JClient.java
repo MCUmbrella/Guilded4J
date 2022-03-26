@@ -12,10 +12,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.Document;
-import vip.floatationdevice.guilded4j.object.ForumThread;
-import vip.floatationdevice.guilded4j.object.ListItem;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.util.HashMap;
 
@@ -28,15 +25,17 @@ public class G4JClient
 {
     public static final String
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
-            ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
+            MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",
+            BANS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/bans",
             FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/forum",
-            LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/list",
+            LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/items",
             DOC_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/docs",
             USER_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
             ROLE_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
             SOCIAL_LINK_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
             GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
+            ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             ROLE_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles/{roleId}",
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
 
@@ -86,7 +85,7 @@ public class G4JClient
                         .toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new ChatMessage().fromString(result.get("message").toString());
+        return ChatMessage.fromString(result.get("message").toString());
     }
 
     /**
@@ -131,7 +130,7 @@ public class G4JClient
                 body(new JSONObject().set("content", content).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new ChatMessage().fromString(result.get("message").toString());
+        return ChatMessage.fromString(result.get("message").toString());
     }
 
     /**
@@ -151,7 +150,7 @@ public class G4JClient
                         timeout(httpTimeout).execute().body()
         ));
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new ChatMessage().fromString(result.get("message").toString());
+        return ChatMessage.fromString(result.get("message").toString());
     }
 
     /**
@@ -170,39 +169,14 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray array = result.getJSONArray("messages");
-        Object[] converted = array.toArray();
+        Object[] converted = result.getJSONArray("messages").toArray();
         ChatMessage[] messages = new ChatMessage[converted.length];
         for(int i = 0; i != converted.length; i++)
-            messages[i] = new ChatMessage().fromString(converted[i].toString());
+            messages[i] = ChatMessage.fromString(converted[i].toString());
         return messages;
     }
 
 ////////////////////////////// Members //////////////////////////////
-
-    /**
-     * Get a list of the roles assigned to a member.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
-     * @param userId The ID of the member to obtain roles from.
-     * @param serverId The ID of the server where the member is.
-     * @return An int[] contains the IDs of the roles that the member currently has.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
-     */
-    public int[] getMemberRoles(String serverId, String userId)
-    {
-        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        if(!result.containsKey("roleIds")) return new int[0];
-        JSONArray array = result.getJSONArray("roleIds");
-        Object[] converted = array.toArray();
-        int[] roles = new int[converted.length];
-        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
-        return roles;
-    }
 
     /**
      * Update/delete a member's nickname.<br>
@@ -244,6 +218,66 @@ public class G4JClient
         }
     }
 
+    public TeamMember getServerMember(String serverId, String userId)
+    {
+        JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return TeamMember.fromString(result.get("member").toString());
+    }
+
+    public void kickServerMember(String serverId, String userId)
+    {
+        String result = HttpRequest.delete(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isJson(result))
+        {
+            JSONObject json = new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
+            else throw new ClassCastException("TeamMemberDelete returned an unexpected JSON string");
+        }
+    }
+
+    public TeamMemberSummary[] getServerMembers(String serverId)
+    {
+        JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        Object[] converted = result.getJSONArray("members").toArray();
+        TeamMemberSummary[] members = new TeamMemberSummary[converted.length];
+        for(int i = 0; i < converted.length; i++) members[i] = TeamMemberSummary.fromString(converted[i].toString());
+        return members;
+    }
+
+    public TeamMemberBan getServerMemberBan(String serverId, String userId) //TODO: implement
+    {
+        return null;
+    }
+
+    public TeamMemberBan banServerMember(String serverId, String userId, String reason) //TODO: implement
+    {
+        return null;
+    }
+
+    public void unbanServerMember(String serverId, String userId) //TODO: implement
+    {
+        return;
+    }
+
+    public void getServerMemberBans(String serverId) //TODO: implement
+    {
+        return;
+    }
+
 ////////////////////////////// Forums //////////////////////////////
 
     /**
@@ -264,7 +298,7 @@ public class G4JClient
                 body(new JSONObject().set("title", title).set("content", content).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new ForumThread().fromString(result.get("forumThread").toString());
+        return ForumThread.fromString(result.get("forumThread").toString());
     }
 
 ////////////////////////////// List items //////////////////////////////
@@ -287,7 +321,27 @@ public class G4JClient
                 body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message", message).set("note", note).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new ListItem().fromString(result.get("listItem").toString());
+        return ListItem.fromString(result.get("listItem").toString());
+    }
+
+    public ListItemSummary[] getListItems(String channelId) //TODO: implement
+    {
+        return null;
+    }
+
+    public ListItem getListItem(String channelId, String listItemId) //TODO: implement
+    {
+        return null;
+    }
+
+    public ListItem updateListItem(String channelId, String listItemId, String message, String note) //TODO: implement
+    {
+        return null;
+    }
+
+    public void deleteListItem(String channelId, String listItemId) //TODO: implement
+    {
+        return;
     }
 
 ////////////////////////////// Docs //////////////////////////////
@@ -297,11 +351,11 @@ public class G4JClient
      * <a href="https://www.guilded.gg/docs/api/docs/DocCreate" target=_blank>https://www.guilded.gg/docs/api/docs/DocCreate</a>
      * @param title The title of the document.
      * @param content The content of the document.
-     * @return The newly created doc's Document object.
+     * @return The newly created doc's Doc object.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public Document createDocument(String channelId, String title, String content)
+    public Doc createDoc(String channelId, String title, String content)
     {
         JSONObject result = new JSONObject(HttpRequest.post(DOC_CHANNEL_URL.replace("{channelId}", channelId)).
                 header("Authorization", "Bearer " + authToken).
@@ -310,7 +364,7 @@ public class G4JClient
                 body(new JSONObject().set("title", title).set("content", content).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new Document().fromString(result.get("doc").toString());
+        return Doc.fromString(result.get("doc").toString());
     }
 
     /**
@@ -319,11 +373,11 @@ public class G4JClient
      * @param docId The id of the document to update.
      * @param title The new title of the document.
      * @param content The new content of the document.
-     * @return The updated doc's Document object.
+     * @return The updated doc's Doc object.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public Document updateDocument(String channelId, int docId, String title, String content)
+    public Doc updateDoc(String channelId, int docId, String title, String content)
     {
         JSONObject result = new JSONObject(HttpRequest.put(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
                 header("Authorization", "Bearer " + authToken).
@@ -332,7 +386,7 @@ public class G4JClient
                 body(new JSONObject().set("title", title).set("content", content).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new Document().fromString(result.get("doc").toString());
+        return Doc.fromString(result.get("doc").toString());
     }
 
     /**
@@ -343,7 +397,7 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public void deleteDocument(String channelId, int docId)
+    public void deleteDoc(String channelId, int docId)
     {
         String result = HttpRequest.delete(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
                 header("Authorization", "Bearer " + authToken).
@@ -362,11 +416,11 @@ public class G4JClient
      * Get a document.<br>
      * <a href="https://www.guilded.gg/docs/api/docs/DocRead" target=_blank>https://www.guilded.gg/docs/api/docs/DocRead</a>
      * @param docId The id of the document.
-     * @return The doc's Document object.
+     * @return The doc's Doc object.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public Document getDocument(String channelId, int docId)
+    public Doc getDoc(String channelId, int docId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
                 header("Authorization", "Bearer " + authToken).
@@ -374,7 +428,7 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return new Document().fromString(result.get("doc").toString());
+        return Doc.fromString(result.get("doc").toString());
     }
 
     /**
@@ -385,7 +439,7 @@ public class G4JClient
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public Document[] getChannelDocuments(String channelId)
+    public Doc[] getChannelDocs(String channelId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}", channelId)).
                 header("Authorization", "Bearer " + authToken).
@@ -394,12 +448,11 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         System.out.println(result);
-        JSONArray docs = result.getJSONArray("docs");
-        Object[] converted = docs.toArray();
-        Document[] documents = new Document[converted.length];
+        Object[] converted = result.getJSONArray("docs").toArray();
+        Doc[] docs = new Doc[converted.length];
         for(int i = 0; i != converted.length; i++)
-            documents[i] = new Document().fromString(converted[i].toString());
-        return documents;
+            docs[i] = Doc.fromString(converted[i].toString());
+        return docs;
     }
 
 ////////////////////////////// Reactions //////////////////////////////
@@ -519,6 +572,7 @@ public class G4JClient
         String result = HttpRequest.put(GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId)).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
+                header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -541,6 +595,7 @@ public class G4JClient
         String result = HttpRequest.delete(GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId)).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
+                header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -566,6 +621,7 @@ public class G4JClient
         String result = HttpRequest.put(ROLE_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
+                header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -586,6 +642,7 @@ public class G4JClient
         String result = HttpRequest.delete(ROLE_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
+                header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
         if(JSONUtil.isJson(result))
         {
@@ -593,6 +650,30 @@ public class G4JClient
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
             else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
         }
+    }
+
+    /**
+     * Get a list of the roles assigned to a member.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/RoleMembershipReadMany" target=_blank>https://www.guilded.gg/docs/api/members/RoleMembershipReadMany</a>
+     * @param userId The ID of the member to obtain roles from.
+     * @param serverId The ID of the server where the member is.
+     * @return An int[] contains the IDs of the roles that the member currently has.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public int[] getMemberRoles(String serverId, String userId)
+    {
+        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        if(!result.containsKey("roleIds")) return new int[0];
+        Object[] converted = result.getJSONArray("roleIds").toArray();
+        int[] roles = new int[converted.length];
+        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
+        return roles;
     }
 
 //============================== API FUNCTIONS END ==============================

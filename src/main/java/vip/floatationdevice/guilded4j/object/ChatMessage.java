@@ -18,15 +18,20 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class ChatMessage
 {
-    private String id, type, serverId, channelId, content, createdAt, createdBy, createdByBotId, createdByWebhookId, updatedAt;
+    private String id, type, serverId, channelId, content, createdAt, createdBy, createdByWebhookId, updatedAt;
     private Boolean isPrivate;
     private String[] replyMessageIds;
+
+    /**
+     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
+     */
+    public ChatMessage(){}
 
     /**
      * Get the message's UUID.
      * @return A UUID string that contains the UUID of the message.
      */
-    public String getMsgId(){return id;}
+    public String getId(){return id;}
 
     /**
      * Get the message's type.
@@ -63,12 +68,6 @@ public class ChatMessage
      * @return An 8-char-long string looks like "Ann6LewA", "8414gw5d" or some other familiar things. If the creator isn't a user, it will always be "Ann6LewA"
      */
     public String getCreatorId(){return createdBy;}
-
-    /**
-     * Get the UUID of the bot who created the message.
-     * @return A UUID string of the bot who created the message. If the creator isn't bot, return {@code null}.
-     */
-    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the UUID of the webhook who created the message.
@@ -110,20 +109,13 @@ public class ChatMessage
     public Boolean isSystemMessage(){return type.equals("system");}
 
     /**
-     * This function is broken for now due to the fact that Guilded migrated bot objects to user objects.
-     * @return {@code true} if the message is created by bot, {@code false} if not.
-     */
-    @Deprecated
-    public Boolean isBotMessage(){return createdByBotId != null;}
-
-    /**
      * Check if the message is created by a webhook.
      * @return {@code true} if the message is created by webhook, {@code false} if not.
      */
     public Boolean isWebhookMessage(){return createdByWebhookId != null;}
 
 
-    public ChatMessage setMsgId(String id)
+    public ChatMessage setId(String id)
     {
         this.id = id;
         return this;
@@ -165,12 +157,6 @@ public class ChatMessage
         return this;
     }
 
-    public ChatMessage setBotCreatorId(String createdByBotId)
-    {
-        this.createdByBotId = createdByBotId;
-        return this;
-    }
-
     public ChatMessage setWebhookCreatorId(String createdByWebhookId)
     {
         this.createdByWebhookId = createdByWebhookId;
@@ -196,27 +182,16 @@ public class ChatMessage
     }
 
     /**
-     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
-     */
-    public ChatMessage(){}
-
-    /**
-     * Generate ChatMessage object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public ChatMessage(String jsonString){fromString(jsonString);}
-
-    /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ChatMessage fromString(String rawString)
+    public static ChatMessage fromString(String jsonString)
     {
-        if(JSONUtil.isJson(rawString))
+        if(JSONUtil.isJson(jsonString))
         {
-            JSONObject json = new JSONObject(rawString);
+            JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("type"),
@@ -229,14 +204,14 @@ public class ChatMessage
             String[] replyMessageIds = rawReplyMessageIds != null ? new String[rawReplyMessageIds.length] : null;
             if(rawReplyMessageIds != null) for(int i = 0; i < rawReplyMessageIds.length; i++)
                 replyMessageIds[i] = rawReplyMessageIds[i].toString();
-            return this.setMsgId(json.getStr("id"))
+            return new ChatMessage()
+                    .setId(json.getStr("id"))
                     .setType(json.getStr("type"))
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setContent(json.getStr("content"))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"))
                     .setUpdateTime(json.getStr("updatedAt"))
                     .setPrivateReply(json.getBool("isPrivate"))
@@ -249,22 +224,20 @@ public class ChatMessage
      * Convert the ChatMessage object to JSON string.
      * @return A JSON string.
      */
-    @Override
-    public String toString()
+    @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)
                 .set("type", type)
                 .set("serverId", serverId)
                 .set("channelId", channelId)
+                .set("content", content)
+                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
+                .set("isPrivate", isPrivate)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
-                .set("createdByBotId", createdByBotId)
                 .set("createdByWebhookId", createdByWebhookId)
                 .set("updatedAt", updatedAt)
-                .set("content", content)
-                .set("isPrivate", isPrivate)
-                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
                 .toString();
     }
 }

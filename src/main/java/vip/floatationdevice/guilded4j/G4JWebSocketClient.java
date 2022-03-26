@@ -12,11 +12,9 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Guilded4J WebSocket event manager, built in by G4JClient, also can be used independently.
@@ -30,19 +28,10 @@ public class G4JWebSocketClient extends WebSocketClient
     int heartbeatIntervalMs = 20000;
     private boolean dump = false;
 
-    private static URI initURI()
-    {
-        try
-        {
-            return new URI("wss://api.guilded.gg/v1/websocket");
-        }
-        catch(URISyntaxException e) {/*this is impossible*/return null;}
-    }
-
     /**
      * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
      */
-    public static final URI WEBSOCKET_URI = initURI();
+    public static final URI WEBSOCKET_URI = URI.create("wss://api.guilded.gg/v1/websocket");
 
     /**
      * Generate a G4JWebSocketClient using the given access token.
@@ -138,19 +127,17 @@ public class G4JWebSocketClient extends WebSocketClient
                 {
                     case "ChatMessageCreated":
                     {
-                        JSONObject msgObj = (JSONObject) new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
-                                new ChatMessageCreatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                new ChatMessageCreatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
                     case "ChatMessageUpdated":
                     {
-                        JSONObject msgObj = (JSONObject) new JSONObject(rawMessage).getByPath("d.message");
                         eventBus.post(
-                                new ChatMessageUpdatedEvent(this, new ChatMessage().fromString(msgObj.toString()))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                new ChatMessageUpdatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
@@ -158,19 +145,18 @@ public class G4JWebSocketClient extends WebSocketClient
                     {
                         eventBus.post(
                                 new ChatMessageDeletedEvent(this,
-                                        (String) json.getByPath("d.message.deletedAt"),
-                                        (String) json.getByPath("d.message.id"),
-                                        (String) json.getByPath("d.message.channelId"))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                        json.getByPath("d.message.deletedAt").toString(),
+                                        json.getByPath("d.message.id").toString(),
+                                        json.getByPath("d.message.channelId").toString()
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;
                     }
                     case "TeamXpAdded":
                     {
-                        JSONArray array = (JSONArray) new JSONObject(rawMessage).getByPath("d.userIds");
-                        Object[] converted = array.toArray();
+                        Object[] converted = ((JSONArray) new JSONObject(rawMessage).getByPath("d.userIds")).toArray();
                         String[] userIds = new String[converted.length];
-                        for(int i = 0; i != converted.length; i++) userIds[i] = ((String) converted[i]);
+                        for(int i = 0; i != converted.length; i++) userIds[i] = (converted[i].toString());
                         eventBus.post(
                                 new TeamXpAddedEvent(this, (Integer) json.getByPath("d.amount"), userIds)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
@@ -181,29 +167,45 @@ public class G4JWebSocketClient extends WebSocketClient
                     {
                         eventBus.post(
                                 new TeamMemberUpdatedEvent(this,
-                                        (String) json.getByPath("d.userInfo.id"),
-                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : (String) json.getByPath("d.userInfo.nickname"))
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
+                                        json.getByPath("d.userInfo.id").toString(),
+                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : json.getByPath("d.userInfo.nickname").toString()
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                          break;
                     }
                     case "teamRolesUpdated":
                     case "TeamRolesUpdated":
                     {
-                        JSONArray memberRoleIds = (JSONArray) json.getByPath("d.memberRoleIds");
-                        User[] users = new User[memberRoleIds.size()];
-                        for(int i = 0; i != memberRoleIds.size(); i++)
-                        {
-                            JSONObject temp = (JSONObject) memberRoleIds.get(i);
-                            Object[] rawRoles = temp.getJSONArray("roleIds").toArray();
-                            int[] roles = new int[rawRoles.length];
-                            for(int a = 0; a != rawRoles.length; a++) roles[a] = (int) rawRoles[a];
-                            users[i] = new User(temp.getStr("userId")).setRoleIds(roles);
-                        }
+                        Object[] memberRoleIds = ((JSONArray) json.getByPath("d.memberRoleIds")).toArray();
+                        MemberRoleSummary[] users = new MemberRoleSummary[memberRoleIds.length];
+                        for(int i = 0; i != memberRoleIds.length; i++) users[i] = MemberRoleSummary.fromString(memberRoleIds[i].toString());
                         eventBus.post(
                                 new TeamRolesUpdatedEvent(this, users)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
+                        break;
+                    }
+                    case "TeamMemberJoined":
+                    {
+                        eventBus.post(
+                                new TeamMemberJoinedEvent(this,
+                                        TeamMember.fromString(json.getByPath("d.member").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
+                    case "TeamMemberRemoved":
+                    {
+                        Object isKick = json.getByPath("d.isKick");
+                        Object isBan = json.getByPath("d.isBan");
+                        eventBus.post(
+                                new TeamMemberRemovedEvent(this,
+                                        json.getByPath("d.userId").toString(),
+                                        Boolean.parseBoolean(isKick == null ? "false" : isKick.toString()),
+                                        Boolean.parseBoolean(isBan == null ? "false" : isBan.toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
                     }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                         eventBus.post(new UnknownGuildedEvent(this)

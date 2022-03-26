@@ -212,11 +212,11 @@ public class ChatMessage
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public ChatMessage fromString(String rawString)
+    public ChatMessage fromString(String jsonString)
     {
-        if(JSONUtil.isJson(rawString))
+        if(JSONUtil.isJson(jsonString))
         {
-            JSONObject json = new JSONObject(rawString);
+            JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(
                     json.getStr("id"),
                     json.getStr("type"),

@@ -13,6 +13,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
+import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
+import vip.floatationdevice.guilded4j.object.TeamMemberSummary;
 import vip.floatationdevice.guilded4j.object.User;
 
 import java.net.URI;
@@ -190,16 +192,9 @@ public class G4JWebSocketClient extends WebSocketClient
                     case "teamRolesUpdated":
                     case "TeamRolesUpdated":
                     {
-                        JSONArray memberRoleIds = (JSONArray) json.getByPath("d.memberRoleIds");
-                        User[] users = new User[memberRoleIds.size()];
-                        for(int i = 0; i != memberRoleIds.size(); i++)
-                        {
-                            JSONObject temp = (JSONObject) memberRoleIds.get(i);
-                            Object[] rawRoles = temp.getJSONArray("roleIds").toArray();
-                            int[] roles = new int[rawRoles.length];
-                            for(int a = 0; a != rawRoles.length; a++) roles[a] = (int) rawRoles[a];
-                            users[i] = new User(temp.getStr("userId")).setRoleIds(roles);
-                        }
+                        Object[] memberRoleIds = ((JSONArray) json.getByPath("d.memberRoleIds")).toArray();
+                        MemberRoleSummary[] users = new MemberRoleSummary[memberRoleIds.length];
+                        for(int i = 0; i != memberRoleIds.length; i++) users[i] = MemberRoleSummary.fromString(memberRoleIds[i].toString());
                         eventBus.post(
                                 new TeamRolesUpdatedEvent(this, users)
                                         .setOpCode(op).setEventID(eventID).setServerID(serverID)

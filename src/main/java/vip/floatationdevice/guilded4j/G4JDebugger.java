@@ -12,7 +12,7 @@ import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
 
 import java.io.*;
 import java.util.*;
@@ -68,11 +68,11 @@ public class G4JDebugger
         @Subscribe
         public void onRoleChange(TeamRolesUpdatedEvent e)
         {
-            User[] users = e.getMembers();
+            MemberRoleSummary[] users = e.getMembers();
             if(dumpEnabled)
             {
                 System.out.println("\n" + datePfx() + " [D] Member role changes:");
-                for(User user : users)
+                for(MemberRoleSummary user : users)
                     System.out.println("    " + user.getUserId() + ": " + Arrays.toString(user.getRoleIds()));
                 System.out.print(prompt());
             }

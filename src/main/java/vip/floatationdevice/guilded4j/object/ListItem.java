@@ -10,18 +10,34 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
-import java.util.HashMap;
-
 /**
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
 public class ListItem //TODO: update
 {
+    class ListItemNote
+    {
+        private String createdAt, createdBy, content;
+
+        public ListItemNote(String createdAt, String createdBy, String content)
+        {
+            this.createdAt = createdAt;
+            this.createdBy = createdBy;
+            this.content = content;
+        }
+
+        public String getCreationTime(){return createdAt;}
+
+        public String getCreator(){return createdBy;}
+
+        public String getContent(){return content;}
+    }
+
     private String
             id, serverId, channelId, message, createdAt, createdBy, createdByBotId, createdByWebhookId,
             updatedAt, updatedBy, parentListItemId, completedAt, completedBy;
-    private HashMap<String, String> note;
+    private ListItemNote note;
 
     public String getId(){return id;}
 
@@ -29,7 +45,7 @@ public class ListItem //TODO: update
 
     public String getMessage(){return message;}
 
-    public HashMap<String, String> getNote(){return note;}
+    public ListItemNote getNote(){return note;}
 
     public String getCreationTime(){return createdAt;}
 
@@ -63,7 +79,7 @@ public class ListItem //TODO: update
         return this;
     }
 
-    public ListItem setNote(HashMap<String, String> note)
+    public ListItem setNote(ListItemNote note)
     {
         this.note = note;
         return this;
@@ -128,7 +144,11 @@ public class ListItem //TODO: update
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setMessage(json.getStr("message"))
-                    .setNote(json.getStr("note"))
+                    .setNote(new ListItemNote(
+                            json.getByPath("note.createdAt").toString(),
+                            json.getByPath("note.createdBy").toString(),
+                            json.getByPath("note.content").toString()
+                    ))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
                     .setBotCreatorId(json.getStr("createdByBotId"))

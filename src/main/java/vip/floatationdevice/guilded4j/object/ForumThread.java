@@ -37,12 +37,12 @@ public class ForumThread
     /**
      * Get the title of the thread.
      */
-    public String getTitle(){return title;}//TODO: get an accurate answer on whether its optional or not
+    public String getTitle(){return title;}//TODO: it has been marked as 'optional' for a few months but I still can't believe it
 
     /**
      * Get the content of the thread.
      */
-    public String getContent(){return content;}//TODO: get an accurate answer on whether its optional or not
+    public String getContent(){return content;}//TODO: ↑
 
     /**
      * Get the ISO 8601 timestamp string that the forum thread was created at.

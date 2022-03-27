@@ -189,7 +189,7 @@ public class ChatMessage
      */
     public static ChatMessage fromString(String jsonString)
     {
-        if(JSONUtil.isJson(jsonString))
+        if(JSONUtil.isTypeJSON(jsonString))
         {
             JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(

@@ -23,7 +23,7 @@ public class ListItemNote
 
     public String getCreationTime(){return createdAt;}
 
-    public String getCreator(){return createdBy;}
+    public String getCreatorId(){return createdBy;}
 
     /**
      * Get the displayable content of the note.

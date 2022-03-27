@@ -79,7 +79,7 @@ public class User
      */
     public static User fromString(String jsonString)
     {
-        if(JSONUtil.isJson(jsonString))
+        if(JSONUtil.isTypeJSON(jsonString))
         {
             JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(

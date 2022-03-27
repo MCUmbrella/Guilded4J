@@ -97,7 +97,7 @@ public class ListItem //TODO: update
      */
     public static ListItem fromString(String rawString)
     {
-        if(JSONUtil.isJson(rawString))
+        if(JSONUtil.isTypeJSON(rawString))
         {
             JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(

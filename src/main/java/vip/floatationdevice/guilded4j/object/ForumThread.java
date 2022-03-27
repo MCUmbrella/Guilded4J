@@ -17,7 +17,7 @@ import vip.floatationdevice.guilded4j.Util;
 public class ForumThread
 {
     int id;
-    String serverId, channelId, title, content, createdAt, createdBy, createdByBotId, createdByWebhookId;
+    String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId;
 
     /**
      * Generate empty ForumThread object - make sure to set all the essential fields before using it.
@@ -58,13 +58,6 @@ public class ForumThread
      * The ID of the user who created this forum thread.
      */
     public String getCreatorId(){return createdBy;}
-
-    /**
-     * Broken because of the bot object migration.
-     * @return Always null.
-     */
-    @Deprecated
-    public String getBotCreatorId(){return createdByBotId;}
 
     /**
      * Get the ID of the webhook who created this forum thread.
@@ -114,12 +107,6 @@ public class ForumThread
         return this;
     }
 
-    public ForumThread setBotCreatorId(String createdByBotId)
-    {
-        this.createdByBotId = createdByBotId;
-        return this;
-    }
-
     public ForumThread setWebhookCreatorId(String createdByWebhookId)
     {
         this.createdByWebhookId = createdByWebhookId;
@@ -135,7 +122,7 @@ public class ForumThread
      */
     public static ForumThread fromString(String rawString)
     {
-        if(JSONUtil.isJson(rawString))
+        if(JSONUtil.isTypeJSON(rawString))
         {
             JSONObject json = new JSONObject(rawString);
             Util.checkNullArgument(
@@ -153,7 +140,6 @@ public class ForumThread
                     .setContent(json.getStr("content"))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setBotCreatorId(json.getStr("createdByBotId"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
@@ -173,7 +159,6 @@ public class ForumThread
                 .set("content", content)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
-                .set("createdByBotId", createdByBotId)
                 .set("createdByWebhookId", createdByWebhookId)
                 .toString();
     }

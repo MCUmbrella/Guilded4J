@@ -54,7 +54,7 @@ public class TeamMemberSummary
      */
     public static TeamMemberSummary fromString(String jsonString)
     {
-        if(JSONUtil.isJson(jsonString))
+        if(JSONUtil.isTypeJSON(jsonString))
         {
             JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(

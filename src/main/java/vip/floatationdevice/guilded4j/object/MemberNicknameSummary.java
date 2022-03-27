@@ -29,7 +29,7 @@ public class MemberNicknameSummary
 
     public static MemberNicknameSummary fromString(String jsonString)
     {
-        if(JSONUtil.isJson(jsonString))
+        if(JSONUtil.isTypeJSON(jsonString))
         {
             JSONObject json = new JSONObject(jsonString);
             return new MemberNicknameSummary(

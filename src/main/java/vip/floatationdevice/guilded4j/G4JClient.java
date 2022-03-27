@@ -103,7 +103,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -198,7 +198,7 @@ public class G4JClient
                     header("Accept", "application/json").
                     header("Content-type", "application/json").
                     timeout(httpTimeout).execute().body();
-            if(!JSONUtil.isJson(rawString)) return null;
+            if(!JSONUtil.isTypeJSON(rawString)) return null;
             else
             {
                 result = new JSONObject(rawString);
@@ -236,7 +236,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -404,7 +404,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -473,7 +473,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -522,7 +522,7 @@ public class G4JClient
                 header("Content-type", "application/json").
                 body("{\"amount\":" + amount + "}").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -574,7 +574,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -597,7 +597,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -623,7 +623,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
@@ -644,7 +644,7 @@ public class G4JClient
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body();
-        if(JSONUtil.isJson(result))
+        if(JSONUtil.isTypeJSON(result))
         {
             JSONObject json = new JSONObject(result);
             if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));

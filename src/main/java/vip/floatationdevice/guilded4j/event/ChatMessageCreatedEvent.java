@@ -13,21 +13,21 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
  */
 public class ChatMessageCreatedEvent extends GuildedEvent
 {
-    private final ChatMessage msgObj;
+    private final ChatMessage message;
 
     /**
      * Generate ChatMessageCreatedEvent using the given ChatMessage object.
-     * @param msgObject The newly created message object.
+     * @param message The newly created message object.
      */
-    public ChatMessageCreatedEvent(Object source, ChatMessage msgObject)
+    public ChatMessageCreatedEvent(Object source, ChatMessage message)
     {
         super(source);
-        this.msgObj = msgObject;
+        this.message = message;
     }
 
     /**
      * Get the ChatMessage object of the event.
      * @return A ChatMessage object.
      */
-    public ChatMessage getChatMessageObject(){return this.msgObj;}
+    public ChatMessage getChatMessageObject(){return message;}
 }

@@ -20,11 +20,6 @@ public class TeamMemberSummary
     int[] roleIds;
 
     /**
-     * Generate empty TeamMemberSummary object.
-     */
-    public TeamMemberSummary() {}
-
-    /**
      * Get the user summary of the member.
      * @return The user summary.
      */

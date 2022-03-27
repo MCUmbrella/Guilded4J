@@ -19,11 +19,6 @@ public class UserSummary
     String id, type, name;
 
     /**
-     * Generate empty UserSummary object.
-     */
-    public UserSummary(){}
-
-    /**
      * Get the ID of the user.
      * @return The ID of the user.
      */

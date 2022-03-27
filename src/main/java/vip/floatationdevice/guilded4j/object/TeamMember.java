@@ -22,11 +22,6 @@ public class TeamMember
     String joinedAt;
 
     /**
-     * Generate empty TeamMember object.
-     */
-    public TeamMember(){}
-
-    /**
      * Get the member's user object.
      * @return The member's user object.
      */

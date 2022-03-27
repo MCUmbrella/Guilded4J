@@ -76,17 +76,6 @@ public class ContentReaction
     }
 
     /**
-     * Generate empty ContentReaction object - make sure to set all the essential fields before using it.
-     */
-    public ContentReaction(){}
-
-    /**
-     * Generate ContentReaction object from JSON string.
-     * @param jsonString The JSON string.
-     */
-    public ContentReaction(String jsonString){fromString(jsonString);}
-
-    /**
      * Use the given JSON string to set up ContentReaction object.
      * @param rawString A JSON string.
      * @return ContentReaction object.

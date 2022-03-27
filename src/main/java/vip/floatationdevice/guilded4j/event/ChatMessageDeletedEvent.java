@@ -39,7 +39,7 @@ public class ChatMessageDeletedEvent extends GuildedEvent
      * Get the deleted message's UUID.
      * @return A UUID string. Remember that the message referred to by this UUID no longer exists.
      */
-    public String getMsgId(){return this.id;}
+    public String getMessageId(){return this.id;}
 
     /**
      * Get the UUID of the deleted message's channel.

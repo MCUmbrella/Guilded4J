@@ -21,11 +21,6 @@ public class ListItem //TODO: update
             updatedAt, updatedBy, parentListItemId, completedAt, completedBy;
     private ListItemNote note;
 
-    /**
-     * Generate empty ListItem object - make sure to set all the essential fields before using it.
-     */
-    public ListItem(){}
-
     public String getId(){return id;}
 
     public String getChannelId(){return channelId;}

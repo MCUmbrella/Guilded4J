@@ -20,11 +20,6 @@ public class ForumThread
     String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId;
 
     /**
-     * Generate empty ForumThread object - make sure to set all the essential fields before using it.
-     */
-    public ForumThread(){}
-
-    /**
      * Get the thread's ID (it is not UUID).
      */
     public int getId(){return id;}

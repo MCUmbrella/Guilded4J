@@ -19,11 +19,6 @@ public class User
     private String id, type, name, createdAt;
 
     /**
-     * Generate empty User object.
-     */
-    public User(){}
-
-    /**
      * Get the ID of the user.
      * @return The ID of the user.
      */

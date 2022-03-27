@@ -20,11 +20,6 @@ public class Doc
     String serverId, channelId, title, content, createdAt, createdBy, updatedAt, updatedBy;
 
     /**
-     * Generate empty Doc object - make sure to set all the essential fields before using it.
-     */
-    public Doc(){}
-
-    /**
      * Get the ID of the document.
      */
     public int getId(){return id;}

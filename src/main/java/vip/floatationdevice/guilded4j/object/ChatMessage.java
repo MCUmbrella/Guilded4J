@@ -23,11 +23,6 @@ public class ChatMessage
     private String[] replyMessageIds;
 
     /**
-     * Generate empty ChatMessage object - make sure to set all the essential fields before using it.
-     */
-    public ChatMessage(){}
-
-    /**
      * Get the message's UUID.
      * @return A UUID string that contains the UUID of the message.
      */

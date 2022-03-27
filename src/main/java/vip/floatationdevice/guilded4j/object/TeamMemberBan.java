@@ -20,11 +20,6 @@ public class TeamMemberBan
     private String reason, createdAt, createdBy;
 
     /**
-     * Generate empty TeamMemberBan object.
-     */
-    public TeamMemberBan(){}
-
-    /**
      * Get the UserSummary object of the user who was banned.
      * @return The banned user's UserSummary object.
      */

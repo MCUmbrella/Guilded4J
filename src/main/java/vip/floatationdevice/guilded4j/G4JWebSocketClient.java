@@ -208,12 +208,15 @@ public class G4JWebSocketClient extends WebSocketClient
                         break;
                     }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
+                    {
                         eventBus.post(new UnknownGuildedEvent(this)
                                 .setOpCode(op)
                                 .setEventID(eventID)
                                 .setEventType(eventType)
                                 .setServerID(serverID)
                                 .setRawString(rawMessage));
+                        break;
+                    }
                 }
                 break;
             }

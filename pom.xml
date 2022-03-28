@@ -6,7 +6,7 @@
 
     <groupId>vip.floatationdevice</groupId>
     <artifactId>guilded4j</artifactId>
-    <version>1.0-SNAPSHOT5</version>
+    <version>1.0-SNAPSHOT6</version>
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -31,12 +31,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
+            <version>1.7.36</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
+            <version>1.7.36</version>
         </dependency>
     </dependencies>
 

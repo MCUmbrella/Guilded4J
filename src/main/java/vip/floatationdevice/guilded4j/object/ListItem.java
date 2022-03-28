@@ -14,26 +14,84 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic item object in a 'list' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItem" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItem</a>
  */
-public class ListItem //TODO: update
+public class ListItem
 {
     private String
             id, serverId, channelId, message, createdAt, createdBy, createdByWebhookId,
             updatedAt, updatedBy, parentListItemId, completedAt, completedBy;
     private ListItemNote note;
 
+    /**
+     * Get the UUID of this list item.
+     */
     public String getId(){return id;}
 
+    /**
+     * Get the UUID of the server this list item is in.
+     */
     public String getChannelId(){return channelId;}
 
+    /**
+     * Get the message of the list item.
+     */
     public String getMessage(){return message;}
 
+    /**
+     * Get the note of this list item.
+     * @return The note's ListItemNote object.
+     */
     public ListItemNote getNote(){return note;}
 
+    /**
+     * Get the time this list item was created.
+     * @return The ISO 8601 timestamp that the list item was created at.
+     */
     public String getCreationTime(){return createdAt;}
 
+    /**
+     * Get the ID of the user who created this list item.
+     * @return The ID of the user who created this list item.<br>
+     * <b>NOTE:</b><br>
+     * If this event has createdByWebhookId present, this field will still be populated, but can be ignored.<br>
+     * In this case, the value of this field will always be 'Ann6LewA'.
+     */
     public String getCreatorId(){return createdBy;}
 
+    /**
+     * Get the ID of the webhook that created this list item.
+     * @return The ID of the webhook who created this list item. If this list item was not created by a webhook, return {@code null}.
+     */
     public String getWebhookCreatorId(){return createdByWebhookId;}
+
+    /**
+     * Get the time this list item was last updated.
+     * @return The ISO 8601 timestamp that the list item was last updated at. If this list item has never been updated, return {@code null}.
+     */
+    public String getUpdateTime(){return updatedAt;}
+
+    /**
+     * Get the ID of the user who updated this list item.
+     * @return The ID of the user who updated this list item. If this list item has never been updated, return {@code null}.
+     */
+    public String getUpdaterId(){return updatedBy;}
+
+    /**
+     * Get the ID of the parent list item.
+     * @return The ID of the parent list item if this list item is nested, otherwise {@code null}.
+     */
+    public String getParentListItemId(){return parentListItemId;}
+
+    /**
+     * Get the time this list item was completed.
+     * @return The ISO 8601 timestamp that the list item was completed at. If this list item is not completed, return {@code null}.
+     */
+    public String getCompletionTime(){return completedAt;}
+
+    /**
+     * Get the ID of the user who completed this list item.
+     * @return The ID of the user who completed this list item. If this list item is not completed, return {@code null}.
+     */
+    public String getCompleterId(){return completedBy;}
 
     public ListItem setId(String id)
     {
@@ -83,6 +141,36 @@ public class ListItem //TODO: update
         return this;
     }
 
+    public ListItem setUpdateTime(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public ListItem setUpdaterId(String updatedBy)
+    {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public ListItem setParentListItemId(String parentListItemId)
+    {
+        this.parentListItemId = parentListItemId;
+        return this;
+    }
+
+    public ListItem setCompletionTime(String completedAt)
+    {
+        this.completedAt = completedAt;
+        return this;
+    }
+
+    public ListItem setCompleterId(String completedBy)
+    {
+        this.completedBy = completedBy;
+        return this;
+    }
+
     /**
      * Use the given JSON string to generate ListItem object.
      * @param rawString The JSON string.
@@ -111,11 +199,16 @@ public class ListItem //TODO: update
                     .setNote(new ListItemNote(
                             json.getByPath("note.createdAt").toString(),
                             json.getByPath("note.createdBy").toString(),
-                            json.getByPath("note.content").toString()
+                            null
                     ))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
-                    .setWebhookCreatorId(json.getStr("createdByWebhookId"));
+                    .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+                    .setUpdateTime(json.getStr("updatedAt"))
+                    .setUpdaterId(json.getStr("updatedBy"))
+                    .setParentListItemId(json.getStr("parentListItemId"))
+                    .setCompletionTime(json.getStr("completedAt"))
+                    .setCompleterId(json.getStr("completedBy"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
@@ -131,10 +224,15 @@ public class ListItem //TODO: update
                 .set("serverId", serverId)
                 .set("channelId", channelId)
                 .set("message", message)
-                .set("note", note)
+                .set("note", new JSONObject(note.toString()))
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
                 .set("createdByWebhookId", createdByWebhookId)
+                .set("updatedAt", updatedAt)
+                .set("updatedBy", updatedBy)
+                .set("parentListItemId", parentListItemId)
+                .set("completedAt", completedAt)
+                .set("completedBy", completedBy)
                 .toString();
     }
 }

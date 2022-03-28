@@ -5,6 +5,9 @@
 
 package vip.floatationdevice.guilded4j.object;
 
+import cn.hutool.json.JSONConfig;
+import cn.hutool.json.JSONObject;
+
 /**
  * This class represents a note in a ListItem object.
  * This class is not present in the official API.
@@ -35,5 +38,14 @@ public class ListItemNote
     {
         this.content = content;
         return this;
+    }
+
+    @Override public String toString()
+    {
+        return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                .set("createdAt", createdAt)
+                .set("createdBy", createdBy)
+                .set("content", content)
+                .toString();
     }
 }

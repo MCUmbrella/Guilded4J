@@ -73,7 +73,7 @@ public class TeamMemberSummary
     @Override public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("user", user)
+                .set("user", new JSONObject(user.toString()))
                 .set("roleIds", roleIds)
                 .toString();
     }

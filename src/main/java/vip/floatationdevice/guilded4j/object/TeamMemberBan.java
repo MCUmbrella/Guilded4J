@@ -80,7 +80,6 @@ public class TeamMemberBan
             JSONObject json = new JSONObject(jsonString);
             Util.checkNullArgument(
                     json.get("user"),
-                    json.get("reason"),
                     json.get("createdAt"),
                     json.get("createdBy")
             );

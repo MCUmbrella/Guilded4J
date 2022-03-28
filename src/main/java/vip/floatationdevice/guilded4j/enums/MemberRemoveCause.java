@@ -1,10 +1,10 @@
 package vip.floatationdevice.guilded4j.enums;
 
 /**
- * The reason a member was removed from a server.
+ * The cause of a member being removed from a server.
  */
 @SuppressWarnings("unused")
-public enum MemberRemoveReason
+public enum MemberRemoveCause
 {
     /**
      * The member was kicked.

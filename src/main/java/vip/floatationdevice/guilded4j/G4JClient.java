@@ -169,10 +169,10 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        Object[] converted = result.getJSONArray("messages").toArray();
-        ChatMessage[] messages = new ChatMessage[converted.length];
-        for(int i = 0; i != converted.length; i++)
-            messages[i] = ChatMessage.fromString(converted[i].toString());
+        JSONArray messagesJson = result.getJSONArray("messages");
+        ChatMessage[] messages = new ChatMessage[messagesJson.size()];
+        for(int i = 0; i != messagesJson.size(); i++)
+            messages[i] = ChatMessage.fromString(messagesJson.get(i).toString());
         return messages;
     }
 
@@ -218,6 +218,15 @@ public class G4JClient
         }
     }
 
+    /**
+     * Get a server member by ID.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberRead/a>
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the member.
+     * @return The member's TeamMember object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public TeamMember getServerMember(String serverId, String userId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
@@ -229,6 +238,14 @@ public class G4JClient
         return TeamMember.fromString(result.get("member").toString());
     }
 
+    /**
+     * Kick a member from the server.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberDelete</a>
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the member.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public void kickServerMember(String serverId, String userId)
     {
         String result = HttpRequest.delete(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
@@ -244,6 +261,14 @@ public class G4JClient
         }
     }
 
+    /**
+     * Get a list of all members in the server.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberReadMany</a>
+     * @param serverId The ID of the server where the members are.
+     * @return A list of TeamMemberSummary objects for each member in the server.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public TeamMemberSummary[] getServerMembers(String serverId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId)).
@@ -252,30 +277,100 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        Object[] converted = result.getJSONArray("members").toArray();
-        TeamMemberSummary[] members = new TeamMemberSummary[converted.length];
-        for(int i = 0; i < converted.length; i++) members[i] = TeamMemberSummary.fromString(converted[i].toString());
+        JSONArray membersJson = result.getJSONArray("members");
+        TeamMemberSummary[] members = new TeamMemberSummary[membersJson.size()];
+        for(int i = 0; i < membersJson.size(); i++)
+            members[i] = TeamMemberSummary.fromString(membersJson.get(i).toString());
         return members;
     }
 
-    public TeamMemberBan getServerMemberBan(String serverId, String userId) //TODO: implement
+    /**
+     * Get a ban information of the member.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanRead</a>
+     * NOTE: If the member is not banned, a GuildedException will be thrown.
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the member.
+     * @return A TeamMemberBan object of the banned member.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public TeamMemberBan getServerMemberBan(String serverId, String userId)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return TeamMemberBan.fromString(result.get("serverMemberBan").toString());
     }
 
-    public TeamMemberBan banServerMember(String serverId, String userId, String reason) //TODO: implement
+    /**
+     * Ban a server member.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanCreate" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanCreate</a>
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the user to ban from this server.
+     * @param reason The reason for the ban.
+     * @return A TeamMemberBan object of the banned member.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public TeamMemberBan banServerMember(String serverId, String userId, String reason)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.post(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                body(reason == null ? "{}" : new JSONObject().set("reason", reason).toString()).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return TeamMemberBan.fromString(result.get("serverMemberBan").toString());
     }
 
-    public void unbanServerMember(String serverId, String userId) //TODO: implement
+    /**
+     * Unban a server member.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanDelete</a>
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the user to unban from this server.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public void unbanServerMember(String serverId, String userId)
     {
-        return;
+        String result = HttpRequest.delete(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isTypeJSON(result))
+        {
+            JSONObject json = new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
+            else throw new ClassCastException("TeamMemberDelete returned an unexpected JSON string");
+        }
     }
 
-    public void getServerMemberBans(String serverId) //TODO: implement
+    /**
+     * Get all ban information of a server.<br>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany</a>
+     * @param serverId The ID of the server to get ban information of.
+     * @return A list of TeamMemberBan objects of the banned members.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public TeamMemberBan[] getServerMemberBans(String serverId)
     {
-        return;
+        JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        JSONArray bansJson = result.getJSONArray("serverMemberBans");
+        TeamMemberBan[] bans = new TeamMemberBan[bansJson.size()];
+        for(int i = 0; i < bansJson.size(); i++)
+            bans[i] = TeamMemberBan.fromString(bansJson.get(i).toString());
+        return bans;
     }
 
 ////////////////////////////// Forums //////////////////////////////
@@ -448,10 +543,10 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         System.out.println(result);
-        Object[] converted = result.getJSONArray("docs").toArray();
-        Doc[] docs = new Doc[converted.length];
-        for(int i = 0; i != converted.length; i++)
-            docs[i] = Doc.fromString(converted[i].toString());
+        JSONArray docsJson = result.getJSONArray("docs");
+        Doc[] docs = new Doc[docsJson.size()];
+        for(int i = 0; i != docsJson.size(); i++)
+            docs[i] = Doc.fromString(docsJson.get(i).toString());
         return docs;
     }
 
@@ -670,9 +765,9 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         if(!result.containsKey("roleIds")) return new int[0];
-        Object[] converted = result.getJSONArray("roleIds").toArray();
-        int[] roles = new int[converted.length];
-        for(int i = 0; i != converted.length; i++) roles[i] = ((int) converted[i]);
+        JSONArray rolesJson = result.getJSONArray("roleIds");
+        int[] roles = new int[rolesJson.size()];
+        for(int i = 0; i != rolesJson.size(); i++) roles[i] = ((int) rolesJson.get(i));
         return roles;
     }
 

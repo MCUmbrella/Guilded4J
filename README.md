@@ -24,10 +24,10 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get member info - getServerMember()
 - [x] Kick server member - kickServerMember()
 - [x] Get member list - getServerMembers()
-- [ ] Get member ban info - getServerMemberBan()
-- [ ] Ban server member - banServerMember()
-- [ ] Unban server member - unbanServerMember()
-- [ ] Get member ban list - getServerMemberBans()
+- [x] Get member ban info - getServerMemberBan()
+- [x] Ban server member - banServerMember()
+- [x] Unban server member - unbanServerMember()
+- [x] Get member ban list - getServerMemberBans()
 ## Forum
 - [x] Create forum thread - createForumThread()
 ## List

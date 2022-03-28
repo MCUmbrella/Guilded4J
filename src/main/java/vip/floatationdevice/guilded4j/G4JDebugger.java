@@ -11,10 +11,7 @@ import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
-import vip.floatationdevice.guilded4j.object.TeamMember;
-import vip.floatationdevice.guilded4j.object.TeamMemberSummary;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.io.*;
 import java.util.*;
@@ -134,18 +131,19 @@ public class G4JDebugger
         @Subscribe
         public void onMemberJoined(TeamMemberJoinedEvent e)
         {
-            System.out.println("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server with ID " + e.getServerID() + prompt());
+            System.out.print("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server " + e.getServerID() + prompt());
         }
+
         @Subscribe
         public void onMemberRemoved(TeamMemberRemovedEvent e)
         {
-            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server with ID " + e.getServerID() + " (reason: " + e.getReason() + ")" + prompt());
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server " + e.getServerID() + " (cause: " + e.getCause() + ")" + prompt());
         }
 
         @Subscribe
         public void onUnknownGuildedEvent(UnknownGuildedEvent e)
         {
-            System.out.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
+            System.err.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
         }
     }
 
@@ -580,8 +578,7 @@ public class G4JDebugger
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
                             TeamMember member = client.getServerMember(workServer, commands[1]);
-                            System.out.print(
-                                    datePfx() + " [i] Member " + commands[1] + ":\n"
+                            System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
                                     + "  - Nickname: " + member.getNickname() + "\n"
                                     + "  - Real name: " + member.getUser().getName() + "\n"
                                     + "  - User ID: " + member.getUser().getId() + "\n"
@@ -589,7 +586,6 @@ public class G4JDebugger
                                     + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
                                     + "  - Joined at: " + member.getJoinTime() + "\n"
                                     + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
-                                    + member
                             );
                         }
                         else
@@ -610,8 +606,7 @@ public class G4JDebugger
                         {
                             TeamMemberSummary[] members = client.getServerMembers(workServer);
                             for(TeamMemberSummary member : members)
-                                System.out.println(
-                                        "=============================="
+                                System.out.println("=============================="
                                         + "\n  - Name: " + member.getUser().getName()
                                         + "\n  - ID: " + member.getUser().getId()
                                         + "\n  - Type: " + member.getUser().getType()
@@ -620,8 +615,65 @@ public class G4JDebugger
                         }
                         break;
                     }
+                    case "getban":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                        {
+                            TeamMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
+                            System.out.print(datePfx() + " [i] Ban for " + commands[1] + ":\n"
+                                    + "  - Name: " + ban.getUser().getName() + "\n"
+                                    + "  - ID: " + ban.getUser().getId() + "\n"
+                                    + "  - Reason: " + ban.getReason() + "\n"
+                                    + "  - Created at: " + ban.getCreationTime() + "\n"
+                                    + "  - Created by: " + ban.getCreatorId()
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: getban <userId>");
+                        break;
+                    }
+                    case "ban":
+                    {
+                        if(workServerValid() && commands.length > 1 && commands[1].length() == 8)
+                        {
+                            String reason = commands.length == 2 ? null : text.substring(13);
+                            TeamMemberBan ban = client.banServerMember(workServer, commands[1], reason);
+                            System.out.print("\n" + datePfx() + " [i] Banned" + ban.getUser().getName() + "\n"
+                                    + "  - ID: " + ban.getUser().getId() + "\n"
+                                    + "  - Reason: " + ban.getReason()
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: ban <userId> [reason]");
+                        break;
+                    }
+                    case "unban":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                            client.unbanServerMember(workServer, commands[1]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: unban <userId>");
+                        break;
+                    }
+                    case "lsban":
+                    {
+                        if(workServerValid())
+                        {
+                            TeamMemberBan[] bans = client.getServerMemberBans(workServer);
+                            for(TeamMemberBan ban : bans)
+                                System.out.println("=============================="
+                                        + "\n  - Name: " + ban.getUser().getName()
+                                        + "\n  - ID: " + ban.getUser().getId()
+                                        + "\n  - Reason: " + ban.getReason()
+                                        + "\n  - Created at: " + ban.getCreationTime()
+                                        + "\n  - Created by: " + ban.getCreatorId()
+                                );
+                        }
+                        break;
+                    }
                     case "test":
                     {
+                        System.out.println(client.getServerMemberBan(workServer, "8412wg5d"));
                         break;
                     }
                     default:

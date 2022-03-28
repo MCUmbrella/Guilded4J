@@ -5,7 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.enums.MemberRemoveReason;
+import vip.floatationdevice.guilded4j.enums.MemberRemoveCause;
 
 /**
  * Event fired when a member is removed from a server.
@@ -14,7 +14,7 @@ import vip.floatationdevice.guilded4j.enums.MemberRemoveReason;
 public class TeamMemberRemovedEvent extends GuildedEvent
 {
     private final String userId;
-    private final MemberRemoveReason reason;
+    private final MemberRemoveCause cause;
 
     /**
      * Generate TeamMemberRemovedEvent with given parameters.
@@ -23,9 +23,9 @@ public class TeamMemberRemovedEvent extends GuildedEvent
     {
         super(source);
         this.userId = userId;
-        if (isBan) reason = MemberRemoveReason.BAN;
-        else if (isKick) reason = MemberRemoveReason.KICK;
-        else reason = MemberRemoveReason.LEAVE;
+        if (isBan) cause = MemberRemoveCause.BAN;
+        else if (isKick) cause = MemberRemoveCause.KICK;
+        else cause = MemberRemoveCause.LEAVE;
     }
 
     /**
@@ -34,8 +34,8 @@ public class TeamMemberRemovedEvent extends GuildedEvent
     public String getUserId(){return userId;}
 
     /**
-     * Get the reason of the member removal.
-     * @return MemberRemoveReason: KICK, BAN, LEAVE
+     * Get the cause of the member removal.
+     * @return MemberRemoveCause: KICK, BAN, LEAVE
      */
-    public MemberRemoveReason getReason(){return reason;}
+    public MemberRemoveCause getCause(){return cause;}
 }

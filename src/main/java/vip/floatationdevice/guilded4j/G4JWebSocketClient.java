@@ -58,7 +58,6 @@ public class G4JWebSocketClient extends WebSocketClient
     /**
      * Used to post events or register an event listener class.<br>
      * Write your own event listener class and use {@code eventBus.register()} to receive events.
-     * See {@link G4JDebugger} for example uses.
      */
     public EventBus eventBus = new EventBus();
 

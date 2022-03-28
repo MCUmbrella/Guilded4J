@@ -22,62 +22,113 @@ import java.util.*;
 @SuppressWarnings({"unused"})
 public class G4JDebugger
 {
-    final static String helpText = "[" + DateUtil.date() + "] [i] COMMANDS:\n" +
-            " > token <AuthToken>\n" +
-            "    Update AuthToken\n" +
-            " > disconnect\n" +
-            " > reconnect\n" +
-            " > dump\n" +
-            "    Toggle dump command result & WebSocket events\n" +
-            " > pwd\n" +
-            "    Print the current channel UUID\n" +
-            " > cd [UUID]\n" +
-            "    Change/clear the target channel UUID\n" +
-            " > send <string>\n" +
-            "    Send the typed string\n" +
-            " > reply\n" +
-            "    Make a reply to up to 5 messages\n" +
-            " > rm <UUID>\n" +
-            "    Delete a message with specified UUID\n" +
-            " > update <UUID> <string>\n" +
-            "    Update a message with specified UUID\n" +
-            " > get <UUID>\n" +
-            "    Get the raw message object string from specified UUID\n" +
-            " > mkitem\n" +
-            "    Create a list item in the list channel\n" +
-            " > addxp <(string)userId> <(int)amount>\n" +
-            "    Add XP to specified user\n" +
-            " > addrolexp <(int)roleId> <(int)amount>\n" +
-            "    Add XP to all users with specified role\n" +
-            " > react <(?)contentId> <(int)emoteId>\n" +
-            "    Add a reaction to specified content\n" +
-            " > lsrole <userId>\n" +
-            "    Print the specified user's role ID(s)\n" +
-            " > nick <userId> <(string)nickname>\n" +
-            "    Set the specified user's nickname\n" +
-            " > rmnick <userId>\n" +
-            "    Remove the specified user's nickname\n" +
-            " > smlink <userID> <(string)socialMediaName>\n" +
-            "    Get the social media link of the specified user.\n" +
-            "    Available: twitch, bnet, psn, xbox, steam, origin,\n" +
-            "    youtube, twitter, facebook, switch, patreon, roblox\n" +
-            " > mkthread\n" +
-            "    Create a forum thread in the forum channel\n" +
-            " > groupadd <(string)groupId> <userId>\n" +
-            "    Add the specified user to the specified group\n" +
-            " > groupkick <(string)groupId> <userId>\n" +
-            "    Remove the specified user from the specified group\n" +
-            " > roleadd <(int)roleId> <userId>\n" +
-            "    Give the specified role to specified user\n" +
-            " > rolekick <(int)roleId> <userId>\n" +
-            "    Remove the specified role from specified user\n" +
-            " > exit\n" +
-            "    Log out and exit";
+    final static String helpIndexText = datePfx() + " [i] Usage: help <pageNum>\n" +
+            " 0: Basic\n" +
+            " 1: Chat channel management\n" +
+            " 2: Forum channel management\n" +
+            " 3: List channel management\n" +
+            " 4: XP management\n" +
+            " 5: Reaction management\n" +
+            " 6: Group management\n" +
+            " 7: Role management\n" +
+            " 8: Server member management\n";
+    final static String[] helpText = new String[]{
+            datePfx() + " [i] Basic:\n" +
+                    " > exit\n" +
+                    "    Log out, save the current session and exit\n" +
+                    " > disconnect\n" +
+                    "    Close WebSocket connection\n" +
+                    " > reconnect\n" +
+                    "    Reconnect WebSocket\n" +
+                    " > pwd\n" +
+                    "    Print the current channel and server UUID\n" +
+                    " > cd [UUID]\n" +
+                    "    Change/clear the target channel UUID\n" +
+                    " > scd [ID]\n" +
+                    "    Change/clear the target server ID\n" +
+                    " > save\n" +
+                    "    Save the session now\n" +
+                    " > dump\n" +
+                    "    Toggle dump command result & WebSocket events\n" +
+                    " > token <AuthToken>\n" +
+                    "    Update AuthToken\n",
+            datePfx() + " [i] Chat channel management:\n" +
+                    " > ls\n" +
+                    "    List messages in the current channel\n" +
+                    " > send <text>\n" +
+                    "    Send a chat message\n" +
+                    " > reply\n" +
+                    "    Make a reply to up to 5 messages\n" +
+                    " > rm <(UUID)messageId>\n" +
+                    "    Delete a message with specified UUID\n" +
+                    " > update <(UUID)messageId> <text>\n" +
+                    "    Update a message with specified UUID\n" +
+                    " > get <(UUID)messageId>\n" +
+                    "    Get the raw message object string from specified UUID\n",
+            datePfx() + " [i] Forum channel management:\n" +
+                    " > mkthread\n" +
+                    "    Create a forum thread in the forum channel\n",
+            datePfx() + " [i] List channel management:\n" +
+                    " > lsitem\n" +
+                    "    List items in the current channel\n" +
+                    " > mkitem <message>\n" +
+                    "    Create a list item in the list channel\n" +
+                    " > rmitem <(UUID)itemId>\n" +
+                    "    Remove a list item with specified UUID\n" +
+                    " > updateitem <(UUID)itemId> <message>\n" +
+                    "    Update a list item with specified UUID\n" +
+                    " > getitem <(UUID)itemId>\n" +
+                    "    Get the information of a list item with specified UUID\n",
+            datePfx() + " [i] XP management:\n" +
+                    " > addxp <userId> <(int)amount>\n" +
+                    "    Add XP to specified user\n" +
+                    " > addrolexp <(int)roleId> <(int)amount>\n" +
+                    "    Add XP to all users with specified role\n",
+            datePfx() + " [i] Reaction management:\n" +
+                    " > react <(?)contentId> <(int)emoteId>\n" +
+                    "    Add a reaction to specified content\n",
+            datePfx() + " [i] Group management:\n" +
+                    " > groupadd <groupId> <userId>\n" +
+                    "    Add a user to a group\n" +
+                    " > groupkick <groupId> <userId>\n" +
+                    "    Remove a user from a group\n",
+            datePfx() + " [i] Role management:\n" +
+                    " > lsrole <userId>\n" +
+                    "    Print the specified user's role ID(s)\n" +
+                    " > roleadd <(int)roleId> <userId>\n" +
+                    "    Give the specified role to specified user\n" +
+                    " > rolekick <(int)roleId> <userId>\n" +
+                    "    Remove the specified role from specified user\n",
+            datePfx() + " [i] Server member management:\n" +
+                    " > lsmember\n" +
+                    "    List members in the current server\n" +
+                    " > member <userId>\n" +
+                    "    Get the information of the specified member\n" +
+                    " > nick <userId> <nickname>\n" +
+                    "    Set the specified user's nickname\n" +
+                    " > rmnick <userId>\n" +
+                    "    Remove the specified user's nickname\n" +
+                    " > social <userId> <socialMediaType>\n" +
+                    "    Get the social media link of the specified user.\n" +
+                    "    Available: twitch, bnet, psn, xbox, steam, origin,\n" +
+                    "    youtube, twitter, facebook, switch, patreon, roblox\n" +
+                    " > kick <userId>\n" +
+                    "    Kick the specified user from the current server\n" +
+                    " > lsban\n" +
+                    "    List bans in the current server\n" +
+                    " > ban <userId> [reason]\n" +
+                    "    Ban the specified user from the current server\n" +
+                    " > unban <userId>\n" +
+                    "    Unban the specified user from the current server\n" +
+                    " > getban <userId>\n" +
+                    "    Get the ban information of the specified user\n"
+    };
     static Boolean dumpEnabled = false;
     final static Scanner scanner = new Scanner(System.in);
     static String workChannel = "";
     static String workServer = "";
     static G4JClient client;
+    static String token;
 
     static class GuildedEventListener
     {
@@ -181,7 +232,7 @@ public class G4JDebugger
         return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
     }
 
-    static String prompt(){return "\n[" + workServer + "/" + workChannel + "] #";}
+    static String prompt(){return "\n[/" + workServer + "/" + workChannel + "] #";}
 
     static class G4JSession implements Serializable
     {
@@ -194,13 +245,13 @@ public class G4JDebugger
         {
             try
             {
-                this.savedToken = client.authToken;
+                this.savedToken = token;
                 this.savedChannelId = workChannel;
                 this.savedServerId = workServer;
                 ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("G4JSession.dat"));
                 o.writeObject(this);
                 o.close();
-                System.out.println(datePfx() + " [i] Session saved");
+                System.out.println(datePfx() + " [i] Session saved\n" + this);
             }
             catch(Exception e)
             {
@@ -218,7 +269,7 @@ public class G4JDebugger
                 this.savedChannelId = session.savedChannelId;
                 this.savedServerId = session.savedServerId;
                 i.close();
-                System.out.println(datePfx() + " [i] Session restored");
+                System.out.println(datePfx() + " [i] Session restored\n" + this);
                 return true;
             }
             catch(FileNotFoundException e) {return false;}
@@ -228,22 +279,33 @@ public class G4JDebugger
                 return false;
             }
         }
+
+        @Override
+        public String toString()
+        {
+            String tokenSummary = savedToken.length() < 10 ? "***" : savedToken.substring(0, 5) + "..." + savedToken.substring(savedToken.length() - 5);
+            return "Token: " + tokenSummary + "\n" +
+                    "Channel UUID: " + savedChannelId + "\n" +
+                    "Server ID: " + savedServerId;
+        }
     }
 
     public static void main(String[] args)
     {
         G4JSession session = new G4JSession();
-        String token;
         if(session.restore())
         {
-            client = new G4JClient(session.savedToken);
+            token = session.savedToken;
             workChannel = session.savedChannelId;
             workServer = session.savedServerId;
+            client = new G4JClient(token);
         }
         else
         {
             System.out.print("Enter AuthToken: ");
             token = scanner.nextLine();
+            if(token.length() < 10)
+                System.err.println("[!] The length of this token is suspiciously short.\n    Make sure you copy it correctly. The program will proceed anyway.\n    You can reset it anytime using the 'token' command.");
             client = new G4JClient(token);
             System.out.println(datePfx() + " [i] Logging in");
         }
@@ -263,7 +325,10 @@ public class G4JDebugger
                 {
                     case "help":
                     {
-                        System.out.print(datePfx() + helpText);
+                        if(commands.length == 2)
+                            System.out.print(helpText[Integer.parseInt(commands[1])]);
+                        else
+                            System.out.print(helpIndexText);
                         break;
                     }
                     case "exit":
@@ -338,6 +403,7 @@ public class G4JDebugger
                     {
                         if(commands.length == 2)
                         {
+                            token = commands[1];
                             client.setAuthToken(commands[1]);
                             client.ws.setAuthToken(commands[1]);
                             System.out.print(datePfx() + " [i] Updated AuthToken");
@@ -427,6 +493,53 @@ public class G4JDebugger
                         }
                         break;
                     }
+                    case "mkthread":
+                    {
+                        if(workChannelValid())
+                        {
+                            Scanner s = new Scanner(System.in);
+                            String title, content;
+                            System.out.print("[i] Enter title:\n? ");
+                            title = s.nextLine();
+                            if(title.length() < 1)
+                            {
+                                System.err.println("[X] Title too short");
+                                continue;
+                            }
+                            System.out.print("[i] Enter content:\n? ");
+                            content = s.nextLine();
+                            if(content.length() < 1)
+                            {
+                                System.err.println("[X] Content too short");
+                                continue;
+                            }
+                            String result = client.createForumThread(workChannel, title, content).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        break;
+                    }
+                    case "lsitem":
+                    {
+                        if(workChannelValid())
+                        {
+                            ListItemSummary[] items = client.getListItems(workChannel);
+                            for(ListItemSummary item : items)
+                                System.out.println("==============================\n" +
+                                        "  - Message: " + item.getMessage() + "\n" +
+                                        "  - Note:\n" +
+                                        "      Created at: " + item.getNote().getCreationTime() + "\n" +
+                                        "      Created by: " + item.getNote().getCreatorId() + "\n" +
+                                        "  - ID: " + item.getId() + "\n" +
+                                        "  - Created at: " + item.getCreationTime() + "\n" +
+                                        "  - Created by: " + item.getCreatorId() + "\n" +
+                                        "  - Updated at: " + item.getUpdateTime() + "\n" +
+                                        "  - Updated by: " + item.getUpdaterId() + "\n" +
+                                        "  - Completed at: " + item.getCompletionTime() + "\n" +
+                                        "  - Completed by: " + item.getCompleterId()
+                                );
+                        }
+                        break;
+                    }
                     case "mkitem":
                     {
                         if(workChannelValid() && commands.length > 1)
@@ -494,28 +607,6 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: getitem <(UUID)itemId>");
                         break;
                     }
-                    case "lsitem":
-                    {
-                        if(workChannelValid())
-                        {
-                            ListItemSummary[] items = client.getListItems(workChannel);
-                            for(ListItemSummary item : items)
-                                System.out.println("==============================\n" +
-                                        "  - Message: " + item.getMessage() + "\n" +
-                                        "  - Note:\n" +
-                                        "      Created at: " + item.getNote().getCreationTime() + "\n" +
-                                        "      Created by: " + item.getNote().getCreatorId() + "\n" +
-                                        "  - ID: " + item.getId() + "\n" +
-                                        "  - Created at: " + item.getCreationTime() + "\n" +
-                                        "  - Created by: " + item.getCreatorId() + "\n" +
-                                        "  - Updated at: " + item.getUpdateTime() + "\n" +
-                                        "  - Updated by: " + item.getUpdaterId() + "\n" +
-                                        "  - Completed at: " + item.getCompletionTime() + "\n" +
-                                        "  - Completed by: " + item.getCompleterId()
-                                );
-                        }
-                        break;
-                    }
                     case "addxp":
                     {
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
@@ -545,12 +636,78 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: react <contentId> <(int)emoteId>");
                         break;
                     }
+                    case "groupadd":
+                    {
+                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
+                            client.addGroupMember(commands[1], commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: groupadd <groupId> <userId>");
+                        break;
+                    }
+                    case "groupkick":
+                    {
+                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
+                            client.removeGroupMember(commands[1], commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: groupkick <groupId> <userId>");
+                        break;
+                    }
                     case "lsrole":
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                             System.out.print(Arrays.toString(client.getMemberRoles(workServer, commands[1])));
                         else
                             System.err.println(datePfx() + " [X] Usage: lsrole <userId>");
+                        break;
+                    }
+                    case "roleadd":
+                    {
+                        if(commands.length == 3 && commands[2].length() == 8)
+                            client.addRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
+                        break;
+                    }
+                    case "rolekick":
+                    {
+                        if(commands.length == 3 && commands[2].length() == 8)
+                            client.removeRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                        else
+                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
+                        break;
+                    }
+                    case "lsmember":
+                    {
+                        if(workServerValid())
+                        {
+                            TeamMemberSummary[] members = client.getServerMembers(workServer);
+                            for(TeamMemberSummary member : members)
+                                System.out.println("=============================="
+                                        + "\n  - Name: " + member.getUser().getName()
+                                        + "\n  - ID: " + member.getUser().getId()
+                                        + "\n  - Type: " + member.getUser().getType()
+                                        + "\n  - Roles: " + Arrays.toString(member.getRoleIds())
+                                );
+                        }
+                        break;
+                    }
+                    case "member":
+                    {
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
+                        {
+                            TeamMember member = client.getServerMember(workServer, commands[1]);
+                            System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
+                                    + "  - Nickname: " + member.getNickname() + "\n"
+                                    + "  - Real name: " + member.getUser().getName() + "\n"
+                                    + "  - User ID: " + member.getUser().getId() + "\n"
+                                    + "  - Type: " + member.getUser().getType() + "\n"
+                                    + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
+                                    + "  - Joined at: " + member.getJoinTime() + "\n"
+                                    + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: member <userId>");
                         break;
                     }
                     case "nick":
@@ -573,7 +730,7 @@ public class G4JDebugger
                         }
                         break;
                     }
-                    case "smlink":
+                    case "social":
                     {
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
                         {
@@ -581,83 +738,7 @@ public class G4JDebugger
                             System.out.print(resultPfx() + result);
                         }
                         else
-                            System.err.println(datePfx() + " [X] Usage: smlink <userID> <socialMediaName>");
-                        break;
-                    }
-                    case "mkthread":
-                    {
-                        if(workChannelValid())
-                        {
-                            Scanner s = new Scanner(System.in);
-                            String title, content;
-                            System.out.print("[i] Enter title:\n? ");
-                            title = s.nextLine();
-                            if(title.length() < 1)
-                            {
-                                System.err.println("[X] Title too short");
-                                continue;
-                            }
-                            System.out.print("[i] Enter content:\n? ");
-                            content = s.nextLine();
-                            if(content.length() < 1)
-                            {
-                                System.err.println("[X] Content too short");
-                                continue;
-                            }
-                            String result = client.createForumThread(workChannel, title, content).toString();
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
-                        }
-                        break;
-                    }
-                    case "groupadd":
-                    {
-                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
-                            client.addGroupMember(commands[1], commands[2]);
-                        else
-                            System.err.println(datePfx() + " [X] Usage: groupadd <groupId> <userId>");
-                        break;
-                    }
-                    case "groupkick":
-                    {
-                        if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
-                            client.removeGroupMember(commands[1], commands[2]);
-                        else
-                            System.err.println(datePfx() + " [X] Usage: groupkick <groupId> <userId>");
-                        break;
-                    }
-                    case "roleadd":
-                    {
-                        if(commands.length == 3 && commands[2].length() == 8)
-                            client.addRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
-                        else
-                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
-                        break;
-                    }
-                    case "rolekick":
-                    {
-                        if(commands.length == 3 && commands[2].length() == 8)
-                            client.removeRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
-                        else
-                            System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
-                        break;
-                    }
-                    case "member":
-                    {
-                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
-                        {
-                            TeamMember member = client.getServerMember(workServer, commands[1]);
-                            System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
-                                    + "  - Nickname: " + member.getNickname() + "\n"
-                                    + "  - Real name: " + member.getUser().getName() + "\n"
-                                    + "  - User ID: " + member.getUser().getId() + "\n"
-                                    + "  - Type: " + member.getUser().getType() + "\n"
-                                    + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
-                                    + "  - Joined at: " + member.getJoinTime() + "\n"
-                                    + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
-                            );
-                        }
-                        else
-                            System.err.println(datePfx() + " [X] Usage: member <userId>");
+                            System.err.println(datePfx() + " [X] Usage: social <userID> <socialMediaName>");
                         break;
                     }
                     case "kick":
@@ -668,36 +749,20 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: kick <userId>");
                         break;
                     }
-                    case "lsmember":
+                    case "lsban":
                     {
                         if(workServerValid())
                         {
-                            TeamMemberSummary[] members = client.getServerMembers(workServer);
-                            for(TeamMemberSummary member : members)
+                            TeamMemberBan[] bans = client.getServerMemberBans(workServer);
+                            for(TeamMemberBan ban : bans)
                                 System.out.println("=============================="
-                                        + "\n  - Name: " + member.getUser().getName()
-                                        + "\n  - ID: " + member.getUser().getId()
-                                        + "\n  - Type: " + member.getUser().getType()
-                                        + "\n  - Roles: " + Arrays.toString(member.getRoleIds())
+                                        + "\n  - Name: " + ban.getUser().getName()
+                                        + "\n  - ID: " + ban.getUser().getId()
+                                        + "\n  - Reason: " + ban.getReason()
+                                        + "\n  - Created at: " + ban.getCreationTime()
+                                        + "\n  - Created by: " + ban.getCreatorId()
                                 );
                         }
-                        break;
-                    }
-                    case "getban":
-                    {
-                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
-                        {
-                            TeamMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
-                            System.out.print(datePfx() + " [i] Ban for " + commands[1] + ":\n"
-                                    + "  - Name: " + ban.getUser().getName() + "\n"
-                                    + "  - ID: " + ban.getUser().getId() + "\n"
-                                    + "  - Reason: " + ban.getReason() + "\n"
-                                    + "  - Created at: " + ban.getCreationTime() + "\n"
-                                    + "  - Created by: " + ban.getCreatorId()
-                            );
-                        }
-                        else
-                            System.err.println(datePfx() + " [X] Usage: getban <userId>");
                         break;
                     }
                     case "ban":
@@ -723,25 +788,27 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: unban <userId>");
                         break;
                     }
-                    case "lsban":
+                    case "getban":
                     {
-                        if(workServerValid())
+                        if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            TeamMemberBan[] bans = client.getServerMemberBans(workServer);
-                            for(TeamMemberBan ban : bans)
-                                System.out.println("=============================="
-                                        + "\n  - Name: " + ban.getUser().getName()
-                                        + "\n  - ID: " + ban.getUser().getId()
-                                        + "\n  - Reason: " + ban.getReason()
-                                        + "\n  - Created at: " + ban.getCreationTime()
-                                        + "\n  - Created by: " + ban.getCreatorId()
-                                );
+                            TeamMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
+                            System.out.print(datePfx() + " [i] Ban for " + commands[1] + ":\n"
+                                    + "  - Name: " + ban.getUser().getName() + "\n"
+                                    + "  - ID: " + ban.getUser().getId() + "\n"
+                                    + "  - Reason: " + ban.getReason() + "\n"
+                                    + "  - Created at: " + ban.getCreationTime() + "\n"
+                                    + "  - Created by: " + ban.getCreatorId()
+                            );
                         }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: getban <userId>");
                         break;
                     }
                     case "test":
                     {
-                        System.out.println(client.getServerMemberBan(workServer, "8412wg5d"));
+                        System.out.println(new JSONObject(System.getenv()).toStringPretty());
+                        System.out.println(new JSONObject(System.getProperties()).toStringPretty());
                         break;
                     }
                     default:

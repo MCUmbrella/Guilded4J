@@ -196,11 +196,7 @@ public class ListItemSummary
                     .setServerId(json.getStr("serverId"))
                     .setChannelId(json.getStr("channelId"))
                     .setMessage(json.getStr("message"))
-                    .setNote(new ListItemNote(
-                            json.getByPath("note.createdAt").toString(),
-                            json.getByPath("note.createdBy").toString(),
-                            json.getByPath("note.content").toString()
-                    ))
+                    .setNote(json.get("note") == null ? null : ListItemNote.fromString(json.get("note").toString()))
                     .setCreationTime(json.getStr("createdAt"))
                     .setCreatorId(json.getStr("createdBy"))
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"))

@@ -32,10 +32,10 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Create forum thread - createForumThread()
 ## List
 - [x] Create list item - createListItem()
-- [ ] Get list items - getListItems()
-- [ ] Get a list item - getListItem()
-- [ ] Update list item - updateListItem()
-- [ ] Delete list item - deleteListItem()
+- [x] Get list items - getListItems()
+- [x] Get a list item - getListItem()
+- [x] Update list item - updateListItem()
+- [x] Delete list item - deleteListItem()
 ## Document
 - [x] Create document - createDoc()
 - [x] Update document - updateDoc()

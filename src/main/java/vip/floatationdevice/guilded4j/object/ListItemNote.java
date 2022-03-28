@@ -7,6 +7,7 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 
 /**
  * This class represents a note in a ListItem object.
@@ -38,6 +39,20 @@ public class ListItemNote
     {
         this.content = content;
         return this;
+    }
+
+    public static ListItemNote fromString(String rawString)
+    {
+        if(JSONUtil.isTypeJSON(rawString))
+        {
+            JSONObject json = new JSONObject(rawString);
+            return new ListItemNote(
+                    json.getStr("createdAt"),
+                    json.getStr("createdBy"),
+                    json.getStr("content")
+            );
+        }
+        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
     @Override public String toString()

@@ -419,24 +419,97 @@ public class G4JClient
         return ListItem.fromString(result.get("listItem").toString());
     }
 
-    public ListItemSummary[] getListItems(String channelId) //TODO: implement
+    /**
+     * Get list items within a channel.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemReadMany" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemReadMany</a>
+     * @param channelId The UUID of the channel.
+     * @return A list of ListItemSummary objects. (the maximum number of items returned is not mentioned in the API documentation for now)
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public ListItemSummary[] getListItems(String channelId)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.get(LIST_CHANNEL_URL.replace("{channelId}", channelId)).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        JSONArray itemsJson = result.getJSONArray("listItems");
+        ListItemSummary[] items = new ListItemSummary[itemsJson.size()];
+        for(int i = 0; i < itemsJson.size(); i++)
+            items[i] = ListItemSummary.fromString(itemsJson.get(i).toString());
+        return items;
     }
 
-    public ListItem getListItem(String channelId, String listItemId) //TODO: implement
+    /**
+     * Get a list item.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemRead" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemRead</a>
+     * @param channelId The UUID of the channel.
+     * @param listItemId The UUID of the list item.
+     * @return The item's ListItem object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public ListItem getListItem(String channelId, String listItemId)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.get(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return ListItem.fromString(result.get("listItem").toString());
     }
 
-    public ListItem updateListItem(String channelId, String listItemId, String message, String note) //TODO: implement
+    /**
+     * Update a list item.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemUpdate" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemUpdate</a>
+     * @param channelId The UUID of the channel.
+     * @param listItemId The UUID of the list item.
+     * @param message The item's new name.
+     * @param note The item's new note text (can be null).
+     * @return The updated item's ListItem object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public ListItem updateListItem(String channelId, String listItemId, String message, String note)
     {
-        return null;
+        JSONObject result = new JSONObject(HttpRequest.put(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("message", message)
+                        .set("note", new ListItemNote(null, null, note))
+                        .toString()
+                ).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return ListItem.fromString(result.get("listItem").toString());
     }
 
-    public void deleteListItem(String channelId, String listItemId) //TODO: implement
+    /**
+     * Delete a list item.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemDelete" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemDelete</a>
+     * @param channelId The UUID of the channel.
+     * @param listItemId The UUID of the list item.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public void deleteListItem(String channelId, String listItemId)
     {
-        return;
+        String result = HttpRequest.delete(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isTypeJSON(result))
+        {
+            JSONObject json = new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
+            else throw new ClassCastException("ListItemDelete returned an unexpected JSON string");
+        }
     }
 
 ////////////////////////////// Docs //////////////////////////////

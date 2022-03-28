@@ -429,22 +429,90 @@ public class G4JDebugger
                     }
                     case "mkitem":
                     {
-                        if(workChannelValid())
+                        if(workChannelValid() && commands.length > 1)
                         {
-                            Scanner s = new Scanner(System.in);
-                            String message, note;
-                            System.out.print("[i] Enter the list item's display message:\n? ");
-                            message = s.nextLine();
-                            if(message.isEmpty())
-                            {
-                                System.err.println("[X] Message too short");
-                                continue;
-                            }
+                            String message = text.substring(commands[0].length() + 1);
                             System.out.print("[i] Enter the note (optional):\n? ");
-                            note = s.nextLine();
+                            String note = new Scanner(System.in).nextLine();
                             if(note.isEmpty()) note = null;
                             String result = client.createListItem(workChannel, message, note).toString();
+                            System.out.print(datePfx() + " [i] Item created. ID: " + ListItem.fromString(result).getId());
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: mkitem <message>");
+                        break;
+                    }
+                    case "rmitem":
+                    {
+                        if(workChannelValid() && commands.length == 2)
+                        {
+                            UUID.fromString(commands[1]);
+                            client.deleteListItem(workChannel, commands[1]);
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: rmitem <(UUID)itemId>");
+                        break;
+                    }
+                    case "updateitem":
+                    {
+                        if(workChannelValid() && commands.length > 2)
+                        {
+                            UUID.fromString(commands[1]);
+                            String message = text.substring(commands[0].length() + commands[1].length() + 2);
+                            System.out.print("[i] Enter the note (optional):\n? ");
+                            String note = new Scanner(System.in).nextLine();
+                            if(note.isEmpty()) note = null;
+                            String result = client.updateListItem(workChannel, commands[1], message, note).toString();
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: updateitem <(UUID)itemId> <(String)message>");
+                        break;
+                    }
+                    case "getitem":
+                    {
+                        if(workChannelValid() && commands.length == 2)
+                        {
+                            UUID.fromString(commands[1]);
+                            ListItem item = client.getListItem(workChannel, commands[1]);
+                            System.out.print(datePfx() + " [i] Item: " + item.getMessage() + "\n" +
+                                    "  - Note:\n" +
+                                    "      Content: " + item.getNote().getContent() + "\n" +
+                                    "      Created at: " + item.getNote().getCreationTime() + "\n" +
+                                    "      Created by: " + item.getNote().getCreatorId() + "\n" +
+                                    "  - ID: " + item.getId() + "\n" +
+                                    "  - Created at: " + item.getCreationTime() + "\n" +
+                                    "  - Created by: " + item.getCreatorId() + "\n" +
+                                    "  - Updated at: " + item.getUpdateTime() + "\n" +
+                                    "  - Updated by: " + item.getUpdaterId() + "\n" +
+                                    "  - Completed at: " + item.getCompletionTime() + "\n" +
+                                    "  - Completed by: " + item.getCompleterId()
+                            );
+                        }
+                        else
+                            System.err.println(datePfx() + " [X] Usage: getitem <(UUID)itemId>");
+                        break;
+                    }
+                    case "lsitem":
+                    {
+                        if(workChannelValid())
+                        {
+                            ListItemSummary[] items = client.getListItems(workChannel);
+                            for(ListItemSummary item : items)
+                                System.out.println("==============================\n" +
+                                        "  - Message: " + item.getMessage() + "\n" +
+                                        "  - Note:\n" +
+                                        "      Created at: " + item.getNote().getCreationTime() + "\n" +
+                                        "      Created by: " + item.getNote().getCreatorId() + "\n" +
+                                        "  - ID: " + item.getId() + "\n" +
+                                        "  - Created at: " + item.getCreationTime() + "\n" +
+                                        "  - Created by: " + item.getCreatorId() + "\n" +
+                                        "  - Updated at: " + item.getUpdateTime() + "\n" +
+                                        "  - Updated by: " + item.getUpdaterId() + "\n" +
+                                        "  - Completed at: " + item.getCompletionTime() + "\n" +
+                                        "  - Completed by: " + item.getCompleterId()
+                                );
                         }
                         break;
                     }

@@ -223,11 +223,11 @@ public class G4JClient
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberRead/a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
-     * @return The member's TeamMember object.
+     * @return The member's ServerMember object.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public TeamMember getServerMember(String serverId, String userId)
+    public ServerMember getServerMember(String serverId, String userId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
                 header("Authorization", "Bearer " + authToken).
@@ -235,7 +235,7 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return TeamMember.fromString(result.get("member").toString());
+        return ServerMember.fromString(result.get("member").toString());
     }
 
     /**

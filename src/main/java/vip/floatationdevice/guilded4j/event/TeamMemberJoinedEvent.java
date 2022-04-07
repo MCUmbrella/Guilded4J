@@ -5,7 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.object.TeamMember;
+import vip.floatationdevice.guilded4j.object.ServerMember;
 
 /**
  * Event that is fired when a user joins a server.<br>
@@ -13,12 +13,12 @@ import vip.floatationdevice.guilded4j.object.TeamMember;
  */
 public class TeamMemberJoinedEvent extends GuildedEvent
 {
-    private final TeamMember member;
+    private final ServerMember member;
 
     /**
-     * Generate TeamMemberJoinedEvent with given TeamMember object.
+     * Generate TeamMemberJoinedEvent with given ServerMember object.
      */
-    public TeamMemberJoinedEvent(Object source, TeamMember member)
+    public TeamMemberJoinedEvent(Object source, ServerMember member)
     {
         super(source);
         this.member = member;
@@ -26,7 +26,7 @@ public class TeamMemberJoinedEvent extends GuildedEvent
 
     /**
      * Get the member that joined the server.
-     * @return The member's TeamMember object.
+     * @return The member's ServerMember object.
      */
-    public TeamMember getMember(){return member;}
+    public ServerMember getMember(){return member;}
 }

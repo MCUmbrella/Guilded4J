@@ -14,7 +14,7 @@ import vip.floatationdevice.guilded4j.Util;
  * Represents a member of a server.
  * <a href="https://www.guilded.gg/docs/api/members/TeamMember" target=_blank>https://www.guilded.gg/docs/api/members/TeamMember</a>
  */
-public class TeamMember
+public class ServerMember
 {
     User user;
     int[] roleIds;
@@ -45,35 +45,35 @@ public class TeamMember
      */
     public String getJoinTime(){return joinedAt;}
 
-    public TeamMember setUser(User user)
+    public ServerMember setUser(User user)
     {
         this.user = user;
         return this;
     }
 
-    public TeamMember setRoleIds(int[] roleIds)
+    public ServerMember setRoleIds(int[] roleIds)
     {
         this.roleIds = roleIds;
         return this;
     }
 
-    public TeamMember setNickname(String nickname)
+    public ServerMember setNickname(String nickname)
     {
         this.nickname = nickname;
         return this;
     }
 
-    public TeamMember setJoinTime(String joinedAt)
+    public ServerMember setJoinTime(String joinedAt)
     {
         this.joinedAt = joinedAt;
         return this;
     }
 
     /**
-     * Generate TeamMember object from JSON string.
+     * Generate ServerMember object from JSON string.
      * @param jsonString The JSON data.
      */
-    public static TeamMember fromString(String jsonString)
+    public static ServerMember fromString(String jsonString)
     {
         if(JSONUtil.isTypeJSON(jsonString))
         {
@@ -86,7 +86,7 @@ public class TeamMember
             Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
             int[] roleIds = new int[rawRoleIds.length];
             for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int)rawRoleIds[i];
-            return new TeamMember()
+            return new ServerMember()
                     .setUser(User.fromString(json.getJSONObject("user").toString()))
                     .setRoleIds(roleIds)
                     .setNickname(json.getStr("nickname"))
@@ -96,7 +96,7 @@ public class TeamMember
     }
 
     /**
-     * Convert TeamMember object to JSON string.
+     * Convert ServerMember object to JSON string.
      * @return JSON string.
      */
     @Override public String toString()

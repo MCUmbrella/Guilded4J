@@ -695,7 +695,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            TeamMember member = client.getServerMember(workServer, commands[1]);
+                            ServerMember member = client.getServerMember(workServer, commands[1]);
                             System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
                                     + "  - Nickname: " + member.getNickname() + "\n"
                                     + "  - Real name: " + member.getUser().getName() + "\n"

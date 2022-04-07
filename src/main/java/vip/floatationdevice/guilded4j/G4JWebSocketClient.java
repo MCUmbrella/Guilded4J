@@ -188,7 +188,7 @@ public class G4JWebSocketClient extends WebSocketClient
                     {
                         eventBus.post(
                                 new TeamMemberJoinedEvent(this,
-                                        TeamMember.fromString(json.getByPath("d.member").toString())
+                                        ServerMember.fromString(json.getByPath("d.member").toString())
                                 ).setOpCode(op).setEventID(eventID).setServerID(serverID)
                         );
                         break;

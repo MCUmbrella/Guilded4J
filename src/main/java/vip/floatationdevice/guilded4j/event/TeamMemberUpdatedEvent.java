@@ -28,7 +28,7 @@ public class TeamMemberUpdatedEvent extends GuildedEvent
 
     /**
      * Get the member's information as User object.
-     * @return the TeamMember object representing the member whose nickname was updated.
+     * @return the ServerMember object representing the member whose nickname was updated.
      */
     public MemberNicknameSummary getUserInfo(){return userInfo;}
 }

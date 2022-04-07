@@ -680,8 +680,8 @@ public class G4JDebugger
                     {
                         if(workServerValid())
                         {
-                            TeamMemberSummary[] members = client.getServerMembers(workServer);
-                            for(TeamMemberSummary member : members)
+                            ServerMemberSummary[] members = client.getServerMembers(workServer);
+                            for(ServerMemberSummary member : members)
                                 System.out.println("=============================="
                                         + "\n  - Name: " + member.getUser().getName()
                                         + "\n  - ID: " + member.getUser().getId()

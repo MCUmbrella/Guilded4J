@@ -14,7 +14,7 @@ import vip.floatationdevice.guilded4j.Util;
  * Represents a short summary of a server member.
  * <a href="https://www.guilded.gg/docs/api/members/TeamMemberSummary" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberSummary</a>
  */
-public class TeamMemberSummary
+public class ServerMemberSummary
 {
     UserSummary user;
     int[] roleIds;
@@ -31,23 +31,23 @@ public class TeamMemberSummary
      */
     public int[] getRoleIds(){return roleIds;}
 
-    public TeamMemberSummary setUser(UserSummary user)
+    public ServerMemberSummary setUser(UserSummary user)
     {
         this.user = user;
         return this;
     }
 
-    public TeamMemberSummary setRoleIds(int[] roleIds)
+    public ServerMemberSummary setRoleIds(int[] roleIds)
     {
         this.roleIds = roleIds;
         return this;
     }
 
     /**
-     * Generate a TeamMemberSummary object from a JSON string.
+     * Generate a ServerMemberSummary object from a JSON string.
      * @param jsonString The JSON string.
      */
-    public static TeamMemberSummary fromString(String jsonString)
+    public static ServerMemberSummary fromString(String jsonString)
     {
         if(JSONUtil.isTypeJSON(jsonString))
         {
@@ -59,7 +59,7 @@ public class TeamMemberSummary
             Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
             int[] roleIds = new int[rawRoleIds.length];
             for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int)rawRoleIds[i];
-            return new TeamMemberSummary()
+            return new ServerMemberSummary()
                     .setUser(UserSummary.fromString(json.get("user").toString()))
                     .setRoleIds(roleIds);
         }
@@ -67,7 +67,7 @@ public class TeamMemberSummary
     }
 
     /**
-     * Convert the TeamMemberSummary object to a JSON string.
+     * Convert the ServerMemberSummary object to a JSON string.
      * @return JSON string.
      */
     @Override public String toString()

@@ -265,11 +265,11 @@ public class G4JClient
      * Get a list of all members in the server.<br>
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberReadMany</a>
      * @param serverId The ID of the server where the members are.
-     * @return A list of TeamMemberSummary objects for each member in the server.
+     * @return A list of ServerMemberSummary objects for each member in the server.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public TeamMemberSummary[] getServerMembers(String serverId)
+    public ServerMemberSummary[] getServerMembers(String serverId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId)).
                 header("Authorization", "Bearer " + authToken).
@@ -278,9 +278,9 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         JSONArray membersJson = result.getJSONArray("members");
-        TeamMemberSummary[] members = new TeamMemberSummary[membersJson.size()];
+        ServerMemberSummary[] members = new ServerMemberSummary[membersJson.size()];
         for(int i = 0; i < membersJson.size(); i++)
-            members[i] = TeamMemberSummary.fromString(membersJson.get(i).toString());
+            members[i] = ServerMemberSummary.fromString(membersJson.get(i).toString());
         return members;
     }
 

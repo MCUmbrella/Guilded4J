@@ -14,7 +14,7 @@ import vip.floatationdevice.guilded4j.Util;
  * Represents a ban on a member.
  * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBan" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBan</a>
  */
-public class TeamMemberBan
+public class ServerMemberBan
 {
     private UserSummary user;
     private String reason, createdAt, createdBy;
@@ -43,37 +43,37 @@ public class TeamMemberBan
      */
     public String getCreatorId(){return createdBy;}
 
-    public TeamMemberBan setUser(UserSummary user)
+    public ServerMemberBan setUser(UserSummary user)
     {
         this.user = user;
         return this;
     }
 
-    public TeamMemberBan setReason(String reason)
+    public ServerMemberBan setReason(String reason)
     {
         this.reason = reason;
         return this;
     }
 
-    public TeamMemberBan setCreationTime(String createdAt)
+    public ServerMemberBan setCreationTime(String createdAt)
     {
         this.createdAt = createdAt;
         return this;
     }
 
-    public TeamMemberBan setCreatorId(String createdBy)
+    public ServerMemberBan setCreatorId(String createdBy)
     {
         this.createdBy = createdBy;
         return this;
     }
 
     /**
-     * Generate a TeamMemberBan object from the given JSON string.
-     * @return TeamMemberBan object.
+     * Generate a ServerMemberBan object from the given JSON string.
+     * @return ServerMemberBan object.
      * @throws IllegalArgumentException when the essential fields are not set.
      * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static TeamMemberBan fromString(String jsonString)
+    public static ServerMemberBan fromString(String jsonString)
     {
         if(JSONUtil.isTypeJSON(jsonString))
         {
@@ -83,7 +83,7 @@ public class TeamMemberBan
                     json.get("createdAt"),
                     json.get("createdBy")
             );
-            return new TeamMemberBan()
+            return new ServerMemberBan()
                     .setUser(UserSummary.fromString(json.getStr("user")))
                     .setReason(json.getStr("reason"))
                     .setCreationTime(json.getStr("createdAt"))
@@ -93,7 +93,7 @@ public class TeamMemberBan
     }
 
     /**
-     * Convert the TeamMemberBan object to a JSON string.
+     * Convert the ServerMemberBan object to a JSON string.
      * @return JSON string.
      */
     public String toString()

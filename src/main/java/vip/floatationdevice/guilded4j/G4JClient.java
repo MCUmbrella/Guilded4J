@@ -290,11 +290,11 @@ public class G4JClient
      * NOTE: If the member is not banned, a GuildedException will be thrown.
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
-     * @return A TeamMemberBan object of the banned member.
+     * @return A ServerMemberBan object of the banned member.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public TeamMemberBan getServerMemberBan(String serverId, String userId)
+    public ServerMemberBan getServerMemberBan(String serverId, String userId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
                 header("Authorization", "Bearer " + authToken).
@@ -302,7 +302,7 @@ public class G4JClient
                 header("Content-type", "application/json").
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return TeamMemberBan.fromString(result.get("serverMemberBan").toString());
+        return ServerMemberBan.fromString(result.get("serverMemberBan").toString());
     }
 
     /**
@@ -311,11 +311,11 @@ public class G4JClient
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the user to ban from this server.
      * @param reason The reason for the ban.
-     * @return A TeamMemberBan object of the banned member.
+     * @return A ServerMemberBan object of the banned member.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public TeamMemberBan banServerMember(String serverId, String userId, String reason)
+    public ServerMemberBan banServerMember(String serverId, String userId, String reason)
     {
         JSONObject result = new JSONObject(HttpRequest.post(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
                 header("Authorization", "Bearer " + authToken).
@@ -324,7 +324,7 @@ public class G4JClient
                 body(reason == null ? "{}" : new JSONObject().set("reason", reason).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return TeamMemberBan.fromString(result.get("serverMemberBan").toString());
+        return ServerMemberBan.fromString(result.get("serverMemberBan").toString());
     }
 
     /**
@@ -354,11 +354,11 @@ public class G4JClient
      * Get all ban information of a server.<br>
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany</a>
      * @param serverId The ID of the server to get ban information of.
-     * @return A list of TeamMemberBan objects of the banned members.
+     * @return A list of ServerMemberBan objects of the banned members.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public TeamMemberBan[] getServerMemberBans(String serverId)
+    public ServerMemberBan[] getServerMemberBans(String serverId)
     {
         JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId)).
                 header("Authorization", "Bearer " + authToken).
@@ -367,9 +367,9 @@ public class G4JClient
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         JSONArray bansJson = result.getJSONArray("serverMemberBans");
-        TeamMemberBan[] bans = new TeamMemberBan[bansJson.size()];
+        ServerMemberBan[] bans = new ServerMemberBan[bansJson.size()];
         for(int i = 0; i < bansJson.size(); i++)
-            bans[i] = TeamMemberBan.fromString(bansJson.get(i).toString());
+            bans[i] = ServerMemberBan.fromString(bansJson.get(i).toString());
         return bans;
     }
 

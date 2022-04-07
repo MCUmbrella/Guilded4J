@@ -753,8 +753,8 @@ public class G4JDebugger
                     {
                         if(workServerValid())
                         {
-                            TeamMemberBan[] bans = client.getServerMemberBans(workServer);
-                            for(TeamMemberBan ban : bans)
+                            ServerMemberBan[] bans = client.getServerMemberBans(workServer);
+                            for(ServerMemberBan ban : bans)
                                 System.out.println("=============================="
                                         + "\n  - Name: " + ban.getUser().getName()
                                         + "\n  - ID: " + ban.getUser().getId()
@@ -770,7 +770,7 @@ public class G4JDebugger
                         if(workServerValid() && commands.length > 1 && commands[1].length() == 8)
                         {
                             String reason = commands.length == 2 ? null : text.substring(13);
-                            TeamMemberBan ban = client.banServerMember(workServer, commands[1], reason);
+                            ServerMemberBan ban = client.banServerMember(workServer, commands[1], reason);
                             System.out.print("\n" + datePfx() + " [i] Banned" + ban.getUser().getName() + "\n"
                                     + "  - ID: " + ban.getUser().getId() + "\n"
                                     + "  - Reason: " + ban.getReason()
@@ -792,7 +792,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            TeamMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
+                            ServerMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
                             System.out.print(datePfx() + " [i] Ban for " + commands[1] + ":\n"
                                     + "  - Name: " + ban.getUser().getName() + "\n"
                                     + "  - ID: " + ban.getUser().getId() + "\n"

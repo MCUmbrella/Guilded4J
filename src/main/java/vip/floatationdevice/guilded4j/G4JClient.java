@@ -36,8 +36,8 @@ public class G4JClient
             SOCIAL_LINK_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
             GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
             ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
-            ROLE_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles/{roleId}",
-            REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}";
+            REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}",
+            WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks";
 
     String authToken;
     int httpTimeout = 20000;
@@ -786,7 +786,7 @@ public class G4JClient
      */
     public void addRoleMember(String serverId, int roleId, String userId)
     {
-        String result = HttpRequest.put(ROLE_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
+        String result = HttpRequest.put(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
@@ -807,7 +807,7 @@ public class G4JClient
      */
     public void removeRoleMember(String serverId, int roleId, String userId)
     {
-        String result = HttpRequest.delete(ROLE_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{roleId}", String.valueOf(roleId))).
+        String result = HttpRequest.delete(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId).
                 header("Authorization", "Bearer " + authToken).
                 header("Accept", "application/json").
                 header("Content-type", "application/json").
@@ -842,6 +842,33 @@ public class G4JClient
         int[] roles = new int[rolesJson.size()];
         for(int i = 0; i != rolesJson.size(); i++) roles[i] = ((int) rolesJson.get(i));
         return roles;
+    }
+
+////////////////////////////// Webhooks //////////////////////////////
+
+    public Webhook createWebhook(String serverId, String name, String channelId)
+    {//TODO: implement
+        return null;
+    }
+
+    public Webhook[] getWebhooks(String serverId, String channelId)
+    {//TODO: implement
+        return null;
+    }
+
+    public Webhook updateWebhook(String serverId, String webhookId, String name, String channelId)
+    {//TODO: implement
+        return null;
+    }
+
+    public void deleteWebhook(String serverId, String webhookId)
+    {//TODO: implement
+        ;
+    }
+
+    public Webhook getWebhook(String serverId, String webhookId)
+    {//TODO: implement
+        return null;
     }
 
 //============================== API FUNCTIONS END ==============================

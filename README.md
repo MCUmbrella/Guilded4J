@@ -56,6 +56,12 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get member's role(s) - getMemberRoles()
 - [x] Assign role to member - addRoleMember()
 - [x] Remove role from member - removeRoleMember()
+## Webhooks
+- [ ] Create webhook - createWebhook()
+- [ ] Get webhooks - getWebhooks()
+- [ ] Update webhook - updateWebhook()
+- [ ] Delete webhook - deleteWebhook()
+- [ ] Get webhook info - getWebhook()
 ## Event
 - [x] GuildedWebsocketInitializedEvent
 - [x] GuildedWebsocketClosedEvent
@@ -64,6 +70,10 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ChatMessageUpdatedEvent
 - [x] TeamMemberJoinedEvent
 - [x] TeamMemberRemovedEvent
+- [ ] TeamMemberBannedEvent
+- [ ] TeamMemberUnbannedEvent
 - [x] TeamMemberUpdatedEvent
 - [x] TeamRolesUpdatedEvent
 - [x] TeamXpAddedEvent
+- [ ] TeamWebhookCreatedEvent
+- [ ] TeamWebhookUpdatedEvent

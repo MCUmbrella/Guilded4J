@@ -70,8 +70,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ChatMessageUpdatedEvent
 - [x] TeamMemberJoinedEvent
 - [x] TeamMemberRemovedEvent
-- [ ] TeamMemberBannedEvent
-- [ ] TeamMemberUnbannedEvent
+- [x] TeamMemberBannedEvent
+- [x] TeamMemberUnbannedEvent
 - [x] TeamMemberUpdatedEvent
 - [x] TeamRolesUpdatedEvent
 - [x] TeamXpAddedEvent

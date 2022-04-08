@@ -206,6 +206,24 @@ public class G4JWebSocketClient extends WebSocketClient
                         );
                         break;
                     }
+                    case "TeamMemberBanned":
+                    {
+                        eventBus.post(
+                                new TeamMemberBannedEvent(this,
+                                        ServerMemberBan.fromString(json.getByPath("d.serverMemberBan").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
+                    case "TeamMemberUnbanned":
+                    {
+                        eventBus.post(
+                                new TeamMemberUnbannedEvent(this,
+                                        ServerMemberBan.fromString(json.getByPath("d.serverMemberBan").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                     {
                         eventBus.post(new UnknownGuildedEvent(this)

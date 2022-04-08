@@ -5,10 +5,28 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class TeamMemberUnbannedEvent extends GuildedEvent //TODO: implement
+import vip.floatationdevice.guilded4j.object.ServerMemberBan;
+
+/**
+ * Event fired when a server member is unbanned.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberUnbanned">https://www.guilded.gg/docs/api/websockets/TeamMemberUnbanned</a>
+ */
+public class TeamMemberUnbannedEvent extends GuildedEvent
 {
-    public TeamMemberUnbannedEvent(Object source)
+    private final ServerMemberBan serverMemberBan;
+
+    public TeamMemberUnbannedEvent(Object source, ServerMemberBan serverMemberBan)
     {
         super(source);
+        this.serverMemberBan = serverMemberBan;
+    }
+
+    /**
+     * Get the ban that was applied to the member.
+     * @return The ServerMemberBan object.
+     */
+    public ServerMemberBan getServerMemberBan()
+    {
+        return serverMemberBan;
     }
 }

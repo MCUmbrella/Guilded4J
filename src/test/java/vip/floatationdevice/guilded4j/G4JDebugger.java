@@ -192,6 +192,18 @@ public class G4JDebugger
         }
 
         @Subscribe
+        public void onBan(TeamMemberBannedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " in server " + e.getServerID() + " got banned. Reason: " + e.getServerMemberBan().getReason() + prompt());
+        }
+
+        @Subscribe
+        public void onUnban(TeamMemberUnbannedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " unbanned from server " + e.getServerID() + prompt());
+        }
+
+        @Subscribe
         public void onUnknownGuildedEvent(UnknownGuildedEvent e)
         {
             System.err.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());

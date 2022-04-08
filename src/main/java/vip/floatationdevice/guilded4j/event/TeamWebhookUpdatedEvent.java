@@ -5,10 +5,28 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class TeamWebhookUpdatedEvent extends GuildedEvent //TODO: Implement
+import vip.floatationdevice.guilded4j.object.Webhook;
+
+/**
+ * Event fired when a webhook is updated.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamWebhookUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamWebhookUpdated</a>
+ */
+public class TeamWebhookUpdatedEvent extends GuildedEvent
 {
-    public TeamWebhookUpdatedEvent(Object source)
+    private final Webhook webhook;
+
+    public TeamWebhookUpdatedEvent(Object source, Webhook webhook)
     {
         super(source);
+        this.webhook = webhook;
+    }
+
+    /**
+     * Gets the webhook that was updated.
+     * @return The updated Webhook object.
+     */
+    public Webhook getWebhook()
+    {
+        return webhook;
     }
 }

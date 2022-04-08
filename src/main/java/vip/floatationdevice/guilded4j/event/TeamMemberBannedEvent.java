@@ -9,7 +9,7 @@ import vip.floatationdevice.guilded4j.object.ServerMemberBan;
 
 /**
  * Event fired when a server member gets banned.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberBanned">https://www.guilded.gg/docs/api/websockets/TeamMemberBanned</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberBanned" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberBanned</a>
  */
 public class TeamMemberBannedEvent extends GuildedEvent
 {

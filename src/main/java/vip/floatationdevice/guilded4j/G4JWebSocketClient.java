@@ -224,6 +224,24 @@ public class G4JWebSocketClient extends WebSocketClient
                         );
                         break;
                     }
+                    case "TeamWebhookCreated":
+                    {
+                        eventBus.post(
+                                new TeamWebhookCreatedEvent(this,
+                                        Webhook.fromString(json.getByPath("d.webhook").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
+                    case "TeamWebhookUpdated":
+                    {
+                        eventBus.post(
+                                new TeamWebhookUpdatedEvent(this,
+                                        Webhook.fromString(json.getByPath("d.webhook").toString())
+                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
+                        );
+                        break;
+                    }
                     default: //no implemented GuildedEvents matched? post raw event with the event name and original string
                     {
                         eventBus.post(new UnknownGuildedEvent(this)

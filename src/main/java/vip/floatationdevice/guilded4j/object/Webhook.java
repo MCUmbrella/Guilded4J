@@ -11,7 +11,7 @@ import vip.floatationdevice.guilded4j.Util;
 
 /**
  * The Webhook object.<br>
- * <a href="https://www.guilded.gg/docs/api/webhook/Webhook">https://www.guilded.gg/docs/api/webhook/Webhook</a>
+ * <a href="https://www.guilded.gg/docs/api/webhook/Webhook" target=_blank>https://www.guilded.gg/docs/api/webhook/Webhook</a>
  */
 public class Webhook
 {

@@ -11,7 +11,7 @@ import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * Represents a short summary of a user (or bot).
+ * Represents a short summary of a user (or bot).<br>
  * <a href="https://www.guilded.gg/docs/api/members/UserSummary" target=_blank>https://www.guilded.gg/docs/api/members/UserSummary</a>
  */
 public class UserSummary

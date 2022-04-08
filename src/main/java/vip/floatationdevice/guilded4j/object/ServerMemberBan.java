@@ -11,7 +11,7 @@ import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * Represents a ban on a member.
+ * Represents a ban on a member.<br>
  * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBan" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBan</a>
  */
 public class ServerMemberBan

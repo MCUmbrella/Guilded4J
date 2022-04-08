@@ -11,7 +11,7 @@ import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * Represents a member of a server.
+ * Represents a member of a server.<br>
  * <a href="https://www.guilded.gg/docs/api/members/TeamMember" target=_blank>https://www.guilded.gg/docs/api/members/TeamMember</a>
  */
 public class ServerMember

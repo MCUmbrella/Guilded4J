@@ -11,7 +11,7 @@ import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * A summary of a list item.
+ * A summary of a list item.<br>
  * <a href="https://www.guilded.gg/docs/api/listItems/ListItemSummary" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemSummary</a>
  */
 public class ListItemSummary

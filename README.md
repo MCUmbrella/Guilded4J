@@ -57,11 +57,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Assign role to member - addRoleMember()
 - [x] Remove role from member - removeRoleMember()
 ## Webhooks
-- [ ] Create webhook - createWebhook()
-- [ ] Get webhooks - getWebhooks()
-- [ ] Update webhook - updateWebhook()
-- [ ] Delete webhook - deleteWebhook()
-- [ ] Get webhook info - getWebhook()
+- [x] Create webhook - createWebhook()
+- [x] Get webhooks - getWebhooks()
+- [x] Update webhook - updateWebhook()
+- [x] Delete webhook - deleteWebhook()
+- [x] Get webhook info - getWebhook()
 ## Event
 - [x] GuildedWebsocketInitializedEvent
 - [x] GuildedWebsocketClosedEvent

@@ -1,18 +1,19 @@
-# Guilded4J
-#### Guilded API wrapper for Java development
-<br>
+![Guilded4J](https://user-images.githubusercontent.com/40854260/163506743-1fdac3d2-f585-46d4-b365-c60ca5208eae.png)
+_Guilded API wrapper for Java development_
 
 Build status: [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
 Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))<br>
 # Using:
-- [Refer to the Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
-- [Refer to the Javadoc](http://docs.floatationdevice.vip/guilded4j/)
+- [Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
+- [Javadoc](http://docs.floatationdevice.vip/guilded4j/)
 - [Some example bots](https://github.com/MCUmbrella/Guilded4J-Examples)
 # CAUTION:
 - The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
 - The API is only available to users who participate in the early access for now.<br>
-# Progress:
-`(Waiting for Guilded side to complete basic API functions)`
+# Implemented features / Progress:
+<details><summary>Click me</summary>
+<p>
+
 ## Text
 - [x] Create message - createChannelMessage()
 - [x] Delete message - deleteChannelMessage()
@@ -77,3 +78,6 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] TeamXpAddedEvent
 - [x] TeamWebhookCreatedEvent
 - [x] TeamWebhookUpdatedEvent
+
+</p>
+</details>

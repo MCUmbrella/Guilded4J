@@ -135,7 +135,9 @@ public class G4JDebugger
         @Subscribe
         public void onInit(GuildedWebSocketInitializedEvent e)
         {
-            System.out.print("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" + prompt());
+            System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
+            Bot self = e.getSelf();
+            System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (ID: " + self.getId() + ", bot ID: " + self.getBotId() + ")" + prompt());
             client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
         }
 

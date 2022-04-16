@@ -7,6 +7,10 @@ public class G4JTest
      */
     public static void main(String[] args)
     {
-        System.out.println("OK");
+        G4JDebugger.G4JSession session = new G4JDebugger.G4JSession();
+        session.restore();
+        G4JWebSocketClient ws = new G4JWebSocketClient(session.savedToken);
+        ws.toggleDump();
+        ws.connect();
     }
 }

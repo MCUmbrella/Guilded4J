@@ -21,6 +21,7 @@ public class ChatMessage
     private String id, type, serverId, channelId, content, createdAt, createdBy, createdByWebhookId, updatedAt;
     private Boolean isPrivate;
     private String[] replyMessageIds;
+    private Embed[] embeds;
 
     /**
      * Get the message's UUID.
@@ -81,6 +82,12 @@ public class ChatMessage
      * @return An array of UUID Strings, if the message isn't a reply, return {@code null}.
      */
     public String[] getReplyMessageIds(){return replyMessageIds;}
+
+    /**
+     * Get the embeds of the message.
+     * @return An array of {@link Embed} objects.
+     */
+    public Embed[] getEmbeds(){return embeds;}
 
 
     /**
@@ -176,6 +183,12 @@ public class ChatMessage
         return this;
     }
 
+    public ChatMessage setEmbeds(Embed[] embeds)
+    {
+        this.embeds = embeds;
+        return this;
+    }
+
     /**
      * Use the given JSON string to generate ChatMessage object.
      * @return ChatMessage object.
@@ -195,10 +208,14 @@ public class ChatMessage
                     json.getStr("createdAt"),
                     json.getStr("createdBy")
             );
-            Object[] rawReplyMessageIds = json.containsKey("replyMessageIds") ? json.getJSONArray("replyMessageIds").toArray() : null;
-            String[] replyMessageIds = rawReplyMessageIds != null ? new String[rawReplyMessageIds.length] : null;
-            if(rawReplyMessageIds != null) for(int i = 0; i < rawReplyMessageIds.length; i++)
-                replyMessageIds[i] = rawReplyMessageIds[i].toString();
+            JSONArray replyMessageIdsArray = json.getJSONArray("replyMessageIds");
+            String[] replyMessageIds = replyMessageIdsArray != null ? new String[replyMessageIdsArray.size()] : null;
+            if(replyMessageIdsArray != null) for(int i = 0; i < replyMessageIdsArray.size(); i++)
+                replyMessageIds[i] = replyMessageIdsArray.get(i).toString();
+            JSONArray embedsArray = json.getJSONArray("embeds");
+            Embed[] embeds = embedsArray != null ? new Embed[embedsArray.size()] : null;
+            if(embedsArray != null) for(int i = 0; i < embedsArray.size(); i++)
+                embeds[i] = Embed.fromString(embedsArray.get(i).toString());
             return new ChatMessage()
                     .setId(json.getStr("id"))
                     .setType(json.getStr("type"))
@@ -210,7 +227,8 @@ public class ChatMessage
                     .setWebhookCreatorId(json.getStr("createdByWebhookId"))
                     .setUpdateTime(json.getStr("updatedAt"))
                     .setPrivateReply(json.getBool("isPrivate"))
-                    .setReplyMessageIds(replyMessageIds);
+                    .setReplyMessageIds(replyMessageIds)
+                    .setEmbeds(embeds);
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
@@ -233,6 +251,7 @@ public class ChatMessage
                 .set("createdBy", createdBy)
                 .set("createdByWebhookId", createdByWebhookId)
                 .set("updatedAt", updatedAt)
+                .set("embeds", embeds == null ? null : new JSONArray(embeds))
                 .toString();
     }
 }

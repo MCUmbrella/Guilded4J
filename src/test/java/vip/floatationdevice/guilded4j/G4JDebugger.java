@@ -492,7 +492,7 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length > 2)
                         {
                             UUID.fromString(commands[1]);
-                            ChatMessage result = client.updateChannelMessage(workChannel, commands[1], text.substring(44));
+                            ChatMessage result = client.updateChannelMessage(workChannel, commands[1], text.substring(44), null);
                             if(dumpEnabled)
                                 System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
@@ -821,8 +821,19 @@ public class G4JDebugger
                     }
                     case "test":
                     {
-                        System.out.println(new JSONObject(System.getenv()).toStringPretty());
-                        System.out.println(new JSONObject(System.getProperties()).toStringPretty());
+                        client.createChannelMessage(workChannel,
+                                "Test message",
+                                new Embed[]{
+                                        new Embed().setTitle("A man has fallen into the river in LEGO city. <@8412wg5d>")
+                                                .setDescription("Start the new rescue helicopter.")
+                                                .setFooterText("HEY!")
+                                                .setFooterIconUrl("https://s3-us-west-2.amazonaws.com/www.guilded.gg/ContentMedia/827e3071cdb75e9b914524f670911ff3-Full.webp")
+                                                .setColor(0x00ff00)
+                                },
+                                null,
+                                null,
+                                null
+                                );
                         break;
                     }
                     default:

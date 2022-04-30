@@ -825,7 +825,7 @@ public class G4JDebugger
                                 "Test message",
                                 new Embed[]{
                                         new Embed().setTitle("A man has fallen into the river in LEGO city. <@8412wg5d>")
-                                                .setDescription("Start the new rescue helicopter.")
+                                                .setDescription("Start the new rescue helicopter!")
                                                 .setFooterText("HEY!")
                                                 .setFooterIconUrl("https://s3-us-west-2.amazonaws.com/www.guilded.gg/ContentMedia/827e3071cdb75e9b914524f670911ff3-Full.webp")
                                                 .setColor(0x00ff00)
@@ -833,7 +833,19 @@ public class G4JDebugger
                                 null,
                                 null,
                                 null
-                                );
+                        );
+                        client.createChannelMessage(workChannel,
+                                null,
+                                new Embed[]{
+                                        new Embed().setAuthorName("Build the helicopter!")
+                                                .setTitle("Prepare the lifeline,")
+                                                .setDescription("lower the stretcher and make the rescue.")
+                                                .setFields(new EmbedField[]{new EmbedField().setName("The new emergency collection").setValue("from LEGO City.")})
+                                },
+                                null,
+                                null,
+                                null
+                        );
                         break;
                     }
                     default:

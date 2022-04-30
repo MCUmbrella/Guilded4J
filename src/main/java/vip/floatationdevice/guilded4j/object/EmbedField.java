@@ -15,7 +15,7 @@ import cn.hutool.json.JSONUtil;
  */
 public class EmbedField
 {
-    private String name, value;
+    private String name, value = "";
     private boolean inline;
 
     /**

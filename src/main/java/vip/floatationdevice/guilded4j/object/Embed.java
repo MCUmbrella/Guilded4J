@@ -17,7 +17,7 @@ import cn.hutool.json.JSONUtil;
  */
 public class Embed
 {
-    private String title, description, url, footerIconUrl, footerText, timestamp, thumbnailUrl, imageUrl, authorName, authorUrl, authorIconUrl;
+    private String title, description, url, footerIconUrl, footerText = "", timestamp, thumbnailUrl, imageUrl, authorName, authorUrl, authorIconUrl;
     private int color = 0;
     private EmbedField[] fields;
 

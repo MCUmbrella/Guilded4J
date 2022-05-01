@@ -16,7 +16,7 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class UserSummary
 {
-    String id, type, name;
+    String id, type, name, avatar;
 
     /**
      * Get the ID of the user.
@@ -36,6 +36,12 @@ public class UserSummary
      */
     public String getName(){return name;}
 
+    /**
+     * Get the avatar image URL of the user.
+     * @return URL string of the avatar image associated with the user.
+     */
+    public String getAvatar(){return avatar;}
+
     public UserSummary setId(String id)
     {
         this.id = id;
@@ -51,6 +57,12 @@ public class UserSummary
     public UserSummary setName(String name)
     {
         this.name = name;
+        return this;
+    }
+
+    public UserSummary setAvatar(String avatar)
+    {
+        this.avatar = avatar;
         return this;
     }
 
@@ -72,7 +84,8 @@ public class UserSummary
             return new UserSummary()
                     .setId(json.getStr("id"))
                     .setType(json.getStr("type"))
-                    .setName(json.getStr("name"));
+                    .setName(json.getStr("name"))
+                    .setAvatar(json.getStr("avatar"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
@@ -87,6 +100,7 @@ public class UserSummary
                 .set("id", id)
                 .set("type", type)
                 .set("name", name)
+                .set("avatar", avatar)
                 .toString();
     }
 }

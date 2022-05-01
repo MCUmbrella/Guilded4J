@@ -16,7 +16,7 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class User
 {
-    private String id, type, name, createdAt;
+    private String id, type, name, avatar, banner, createdAt;
 
     /**
      * Get the ID of the user.
@@ -35,6 +35,18 @@ public class User
      * @return The real name of the user.
      */
     public String getName(){return name;}
+
+    /**
+     * Get the avatar image URL of the user.
+     * @return URL string of the avatar image associated with the user.
+     */
+    public String getAvatar(){return avatar;}
+
+    /**
+     * Get the banner image URL of the user.
+     * @return URL string of the banner image associated with the user.
+     */
+    public String getBanner(){return banner;}
 
     /**
      * Get the user's creation date.
@@ -57,6 +69,18 @@ public class User
     public User setName(String name)
     {
         this.name = name;
+        return this;
+    }
+
+    public User setAvatar(String avatar)
+    {
+        this.avatar = avatar;
+        return this;
+    }
+
+    public User setBanner(String banner)
+    {
+        this.banner = banner;
         return this;
     }
 
@@ -86,6 +110,8 @@ public class User
                     .setId(json.getStr("id"))
                     .setType(json.getStr("type"))
                     .setName(json.getStr("name"))
+                    .setAvatar(json.getStr("avatar"))
+                    .setBanner(json.getStr("banner"))
                     .setCreationTime(json.getStr("createdAt"));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
@@ -101,6 +127,8 @@ public class User
                 .set("id", id)
                 .set("type", type)
                 .set("name", name)
+                .set("avatar", avatar)
+                .set("banner", banner)
                 .set("createdAt", createdAt)
                 .toString();
     }

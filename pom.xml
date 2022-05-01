@@ -6,7 +6,7 @@
 
     <groupId>vip.floatationdevice</groupId>
     <artifactId>guilded4j</artifactId>
-    <version>1.0-SNAPSHOT8</version>
+    <version>1.0-SNAPSHOT9</version>
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>

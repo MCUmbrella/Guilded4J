@@ -29,6 +29,12 @@ public class G4JWebSocketClient extends WebSocketClient
     private boolean dump = false;
 
     /**
+     * Used to post events or register an event listener class.<br>
+     * Write your own event listener class and use {@code eventBus.register()} to receive events.
+     */
+    public EventBus eventBus = new EventBus();
+
+    /**
      * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
      */
     public static final URI WEBSOCKET_URI = URI.create("wss://api.guilded.gg/v1/websocket");
@@ -56,12 +62,6 @@ public class G4JWebSocketClient extends WebSocketClient
     }
 
     /**
-     * Used to post events or register an event listener class.<br>
-     * Write your own event listener class and use {@code eventBus.register()} to receive events.
-     */
-    public EventBus eventBus = new EventBus();
-
-    /**
      * Toggle printing the received JSON string from WebSocket to stdout.
      * Disabled (dump=false) by default.
      * @return Dumping status after changed.
@@ -71,12 +71,6 @@ public class G4JWebSocketClient extends WebSocketClient
         dump = !dump;
         return dump;
     }
-
-    /**
-     * No current use.
-     */
-    @Override
-    public void onOpen(ServerHandshake h){}
 
 //============================== EVENT MANAGER START ==============================
 
@@ -268,6 +262,12 @@ public class G4JWebSocketClient extends WebSocketClient
 //============================== EVENT MANAGER END ==============================
 
     /**
+     * No current use.
+     */
+    @Override
+    public void onOpen(ServerHandshake h){/* do nothing */}
+
+    /**
      * Posts {@link GuildedWebSocketClosedEvent}.
      * @param remote Is connection closed by remote peer? If so, remote=true.
      */
@@ -281,7 +281,7 @@ public class G4JWebSocketClient extends WebSocketClient
      * No current use.
      */
     @Override
-    public void onError(Exception e){}
+    public void onError(Exception e){/* do nothing */}
 
     /**
      * Initialize or reset Guilded bot access token.
@@ -302,7 +302,7 @@ public class G4JWebSocketClient extends WebSocketClient
      */
     public G4JWebSocketClient setHeartbeatInterval(int ms)
     {
-        if(ms < 1000) ms = 1000;
+        if(ms < 1000) throw new IllegalArgumentException("Heartbeat interval must be at least 1000ms");
         this.heartbeatIntervalMs = ms;
         this.setConnectionLostTimeout(ms / 1000);
         return this;

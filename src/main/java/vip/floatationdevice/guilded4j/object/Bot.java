@@ -19,11 +19,6 @@ public class Bot extends User
 {
     private String createdBy, botId;
 
-    public Bot()
-    {
-        super();
-    }
-
     /**
      * Get the ID of the user who created this bot.
      */

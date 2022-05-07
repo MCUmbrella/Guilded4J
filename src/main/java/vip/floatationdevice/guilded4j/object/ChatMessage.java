@@ -95,7 +95,7 @@ public class ChatMessage
      * @return {@code true} if the message is a private reply, {@code false} if not,
      * {@code null} if the message is not replying to any messages.
      */
-    public Boolean isPrivateReply()
+    public Boolean isPrivate()
     {
         return replyMessageIds != null ?
                 isPrivate != null

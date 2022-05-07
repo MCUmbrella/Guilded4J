@@ -7,6 +7,8 @@ package vip.floatationdevice.guilded4j;
 
 public class Util
 {
+    public static final String UUID_REGEX = "^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}$";
+
     public static void checkNullArgument(Object... objects)
     {
         for(Object object : objects)
@@ -15,4 +17,6 @@ public class Util
             if(object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
         }
     }
+
+    public static boolean isUUID(Object o){return o != null && o.toString().matches(UUID_REGEX);}
 }

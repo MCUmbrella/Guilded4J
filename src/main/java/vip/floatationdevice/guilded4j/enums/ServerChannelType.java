@@ -58,8 +58,8 @@ public enum ServerChannelType
 
     /**
      * Gets the ServerChannelType from a string.
-     * @param s The name of the ServerChannelType.
-     * @return The ServerChannelType.
+     * @param s The string to get the ServerChannelType from.
+     * @return The ServerChannelType object.
      */
     public static ServerChannelType fromString(String s)
     {

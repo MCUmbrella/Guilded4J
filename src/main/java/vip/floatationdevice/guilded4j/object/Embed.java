@@ -11,14 +11,13 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
 /**
- * Rich content sections associated with the message.
- * Properties with "webhook-markdown" support allow for the following: link, italic, bold, strikethrough, underline, inline code, block code, reaction, and mention.
- * This object is not part of the official Guilded API.
+ * Rich content sections associated with the message.<br>
+ * <a href="https://www.guilded.gg/docs/api/chat/ChatEmbed" target=_blank>https://www.guilded.gg/docs/api/chat/ChatEmbed</a>
  */
 public class Embed
 {
     private String title, description, url, footerIconUrl, footerText = "", timestamp, thumbnailUrl, imageUrl, authorName, authorUrl, authorIconUrl;
-    private int color = 0;
+    private Integer color;
     private EmbedField[] fields;
 
     /**
@@ -152,12 +151,20 @@ public class Embed
         return this;
     }
 
-    public Embed setColor(int color)
+    /**
+     * Set the color of the left border of the embed.
+     * @param color Decimal value of the color that the left border should be (min: 0 or 0x000000, max: 16777215 or 0xffffff).
+     */
+    public Embed setColor(Integer color)
     {
         this.color = color;
         return this;
     }
 
+    /**
+     * Set the fields in the embed.
+     * @param fields Table-like cells to add to the embed (max items 25).
+     */
     public Embed setFields(EmbedField[] fields)
     {
         this.fields = fields;

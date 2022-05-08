@@ -64,9 +64,36 @@ public class G4JClient
 //============================== API FUNCTIONS START ==============================
 ////////////////////////////// Channels //////////////////////////////
 
+    /**
+     * Create a channel in the specified server.
+     * @param name The name of the channel (min length 1; max length 100).
+     * @param topic The topic of the channel (max length 512).
+     * @param isPublic Whether the channel can be accessed from users who are not member of the server (default false).
+     * @param type The type of channel to create.
+     * @param serverId The server that the channel should be created in.
+     * @param groupId The group that the channel should be created in (optional). If not provided, channel will be created in the "Server home" group.
+     * @param categoryId The category the channel should go in (optional). If not provided, channel will be a top-level channel.
+     * @return The created channel's ServerChannel object.
+     */
     public ServerChannel createServerChannel(String name, String topic, Boolean isPublic, ServerChannelType type, String serverId, String groupId, Integer categoryId)
     {
-        return null; //TODO: implement
+        JSONObject result = new JSONObject(HttpRequest.post(CHANNELS_URL).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("name", name)
+                        .set("topic", topic)
+                        .set("isPublic", isPublic)
+                        .set("type", type.toString().toLowerCase())
+                        .set("serverId", serverId)
+                        .set("groupId", groupId)
+                        .set("categoryId", categoryId)
+                        .toString()).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return ServerChannel.fromString(result.get("channel").toString());
+
     }
 
     public ServerChannel getServerChannel(String channelId)

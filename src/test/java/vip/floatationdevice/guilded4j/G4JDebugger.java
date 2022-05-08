@@ -8,6 +8,7 @@ package vip.floatationdevice.guilded4j;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
+import vip.floatationdevice.guilded4j.enums.ServerChannelType;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
@@ -820,33 +821,34 @@ public class G4JDebugger
                             System.err.println(datePfx() + " [X] Usage: getban <userId>");
                         break;
                     }
+                    case "mkch":
+                    {
+                        if(workServerValid() && commands.length == 2)
+                        {
+                            String topic;
+                            Boolean isPublic = null;
+                            ServerChannelType type;
+                            String groupId;
+                            Integer categoryId = null;
+                            System.out.print(datePfx() + " [i] Topic (empty for none):\n? ");
+                            topic = scanner.nextLine();
+                            System.out.print(datePfx() + " [i] Public? (true/false):\n? ");
+                            try{isPublic = Boolean.parseBoolean(scanner.nextLine());}catch(Exception ignored){}
+                            System.out.print(datePfx() + " [i] Type: " + Arrays.toString(ServerChannelType.values()) + "\n? ");
+                            type = ServerChannelType.fromString(scanner.nextLine());
+                            System.out.print(datePfx() + " [i] Group ID (empty to create in server home):\n? ");
+                            groupId = scanner.nextLine();
+                            System.out.print(datePfx() + " [i] Category ID (empty to create on top level):\n? ");
+                            try{categoryId = Integer.parseInt(scanner.nextLine());}catch(Exception ignored){}
+                            String result = client.createServerChannel(commands[1], topic, isPublic, type, workServer, groupId, categoryId).toString();
+                            if(dumpEnabled)
+                                System.out.println(datePfx() + " [i] Result: " + result);
+                        }
+                        else System.err.println(datePfx() + " [X] Usage: mkch <name>");
+                        break;
+                    }
                     case "test":
                     {
-                        client.createChannelMessage(workChannel,
-                                "Test message",
-                                new Embed[]{
-                                        new Embed().setTitle("A man has fallen into the river in LEGO city. <@8412wg5d>")
-                                                .setDescription("Start the new rescue helicopter!")
-                                                .setFooterText("HEY!")
-                                                .setFooterIconUrl("https://s3-us-west-2.amazonaws.com/www.guilded.gg/ContentMedia/827e3071cdb75e9b914524f670911ff3-Full.webp")
-                                                .setColor(0x00ff00)
-                                },
-                                null,
-                                null,
-                                null
-                        );
-                        client.createChannelMessage(workChannel,
-                                null,
-                                new Embed[]{
-                                        new Embed().setAuthorName("Build the helicopter!")
-                                                .setTitle("Prepare the lifeline,")
-                                                .setDescription("lower the stretcher and make the rescue.")
-                                                .setFields(new EmbedField[]{new EmbedField().setName("The new emergency collection").setValue("from LEGO City.")})
-                                },
-                                null,
-                                null,
-                                null
-                        );
                         break;
                     }
                     default:

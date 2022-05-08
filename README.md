@@ -64,7 +64,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Delete webhook - deleteWebhook()
 - [x] Get webhook info - getWebhook()
 ## Channels
-- [ ] Create channel - createServerChannel()
+- [x] Create channel - createServerChannel()
 - [ ] Update channel - updateServerChannel()
 - [ ] Delete channel - deleteServerChannel()
 - [ ] Get channel info - getServerChannel()

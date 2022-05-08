@@ -65,7 +65,8 @@ public class G4JClient
 ////////////////////////////// Channels //////////////////////////////
 
     /**
-     * Create a channel in the specified server.
+     * Create a channel in the specified server.<br>
+     * <a href="https://www.guilded.gg/docs/api/channels/ChannelCreate" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelCreate</a>
      * @param name The name of the channel (min length 1; max length 100).
      * @param topic The topic of the channel (max length 512).
      * @param isPublic Whether the channel can be accessed from users who are not member of the server (default false).
@@ -99,7 +100,8 @@ public class G4JClient
     }
 
     /**
-     * Get a channel by its UUID.
+     * Get a channel by its UUID.<br>
+     * <a href="https://www.guilded.gg/docs/api/channels/ChannelRead" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelRead</a>
      * @param channelId The ID of the channel.
      * @return The channel's ServerChannel object.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -115,9 +117,26 @@ public class G4JClient
         return ServerChannel.fromString(result.get("channel").toString());
     }
 
+    /**
+     * Delete a channel by its UUID.
+     * <a href="https://www.guilded.gg/docs/api/channels/ChannelDelete" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelDelete</a>
+     * @param channelId The ID of the channel.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public void deleteServerChannel(String channelId)
     {
-        //TODO: implement
+        String result = HttpRequest.delete(CHANNELS_URL + "/" + channelId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                timeout(httpTimeout).execute().body();
+        if(JSONUtil.isTypeJSON(result))
+        {
+            JSONObject json = new JSONObject(result);
+            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
+            else throw new ClassCastException("ChannelDelete returned an unexpected JSON string");
+        }
     }
 
     public ServerChannel updateServerChannel()

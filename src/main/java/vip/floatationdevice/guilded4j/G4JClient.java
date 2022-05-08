@@ -10,6 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import vip.floatationdevice.guilded4j.enums.ServerChannelType;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 public class G4JClient
 {
     public static final String
+            CHANNELS_URL = "https://www.guilded.gg/api/v1/channels",
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
             MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",
@@ -60,6 +62,33 @@ public class G4JClient
         ws = new G4JWebSocketClient(authToken, lastMessageId);
     }
 //============================== API FUNCTIONS START ==============================
+////////////////////////////// Channels //////////////////////////////
+
+    public ServerChannel createServerChannel(String name, String topic, Boolean isPublic, ServerChannelType type, String serverId, String groupId, Integer categoryId)
+    {
+        return null; //TODO: implement
+    }
+
+    public ServerChannel getServerChannel(String channelId)
+    {
+        return null; //TODO: implement
+    }
+
+    public void deleteServerChannel(String channelId)
+    {
+        //TODO: implement
+    }
+
+    public ServerChannel updateServerChannel()
+    {
+        return null; //TODO: wait
+    }
+
+    public ServerChannel[] getServerChannels()
+    {
+        return null; //TODO: wait
+    }
+
 ////////////////////////////// Chat & messaging //////////////////////////////
 
     /**

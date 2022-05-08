@@ -842,10 +842,16 @@ public class G4JDebugger
                             try{categoryId = Integer.parseInt(scanner.nextLine());}catch(Exception ignored){}
                             String result = client.createServerChannel(commands[1], topic, isPublic, type, workServer, groupId, categoryId).toString();
                             if(dumpEnabled)
-                                System.out.println(datePfx() + " [i] Result: " + result);
+                                System.out.print(datePfx() + " [i] Result: " + result);
                         }
                         else System.err.println(datePfx() + " [X] Usage: mkch <name>");
                         break;
+                    }
+                    case "channel":
+                    {
+                        if(workServerValid() && commands.length == 2)
+                            System.out.print(datePfx() + " [i] Channel " + commands[1] + ":\n" + new JSONObject(client.getServerChannel(commands[1]).toString()).toStringPretty());
+                        else System.err.println(datePfx() + " [X] Usage: channel <channelId>");
                     }
                     case "test":
                     {

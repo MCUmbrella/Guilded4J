@@ -74,6 +74,8 @@ public class G4JClient
      * @param groupId The group that the channel should be created in (optional). If not provided, channel will be created in the "Server home" group.
      * @param categoryId The category the channel should go in (optional). If not provided, channel will be a top-level channel.
      * @return The created channel's ServerChannel object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerChannel createServerChannel(String name, String topic, Boolean isPublic, ServerChannelType type, String serverId, String groupId, Integer categoryId)
     {
@@ -96,9 +98,21 @@ public class G4JClient
 
     }
 
+    /**
+     * Get a channel by its UUID.
+     * @param channelId The ID of the channel.
+     * @return The channel's ServerChannel object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
     public ServerChannel getServerChannel(String channelId)
     {
-        return null; //TODO: implement
+        JSONObject result = new JSONObject(HttpRequest.get(CHANNELS_URL + "/" + channelId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return ServerChannel.fromString(result.get("channel").toString());
     }
 
     public void deleteServerChannel(String channelId)

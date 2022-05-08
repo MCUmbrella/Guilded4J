@@ -439,7 +439,7 @@ public class G4JDebugger
                     {
                         if(workChannelValid() && commands.length > 1)
                         {
-                            String result = client.createChannelMessage(workChannel, text.substring(5), null, null).toString();
+                            String result = client.createChannelMessage(workChannel, text.substring(5), null, null, null, null).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
@@ -453,6 +453,7 @@ public class G4JDebugger
                             Scanner s = new Scanner(System.in);
                             String raw;
                             boolean isPrivate;
+                            boolean isSilent;
                             for(int a = 0; a != 5; a++)
                             {
                                 System.out.print("? ");
@@ -468,12 +469,12 @@ public class G4JDebugger
                                 System.out.print("[X] No UUID given");
                                 continue;
                             }
-                            System.out.println("[i] Private reply? [true/false]");
-                            System.out.print("? ");
+                            System.out.print("[i] Reply privately? [true/false]\n? ");
                             isPrivate = Boolean.parseBoolean(s.nextLine());
-                            System.out.println("[i] Message content:");
-                            System.out.print("? ");
-                            String result = client.createChannelMessage(workChannel, s.nextLine(), uuidArray, isPrivate).toString();
+                            System.out.print("[i] Reply silently? [true/false]\n? ");
+                            isSilent = Boolean.parseBoolean(s.nextLine());
+                            System.out.print("[i] Message content:\n? ");
+                            String result = client.createChannelMessage(workChannel, s.nextLine(), null, uuidArray, isPrivate, isSilent).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;

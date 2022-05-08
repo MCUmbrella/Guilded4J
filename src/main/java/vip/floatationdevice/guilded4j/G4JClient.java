@@ -67,33 +67,6 @@ public class G4JClient
      * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageCreate" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
      * @param channelId The ID of the channel.
      * @param content The message content to create.
-     * @param replyMessageIds The ID of the message(s) to reply to (maximum of 5, null if not replying).
-     * @param isPrivate If set, this message will only be seen by those mentioned or replied to.
-     * @return The newly created message's ChatMessage object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
-     */
-    @Deprecated public ChatMessage createChannelMessage(String channelId, String content, String[] replyMessageIds, Boolean isPrivate)
-    {
-        JSONObject result = new JSONObject(HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("content", content)
-                        .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
-                        .set("isPrivate", isPrivate)
-                        .toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ChatMessage.fromString(result.get("message").toString());
-    }
-
-    /**
-     * Create a channel message.<br>
-     * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageCreate" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageCreate</a>
-     * @param channelId The ID of the channel.
-     * @param content The message content to create.
      * @param embeds Rich content sections associated with the message (can be null).
      * @param replyMessageIds The ID of the message(s) to reply to (maximum of 5, null if not replying).
      * @param isPrivate If set, this message will only be seen by those mentioned or replied to.
@@ -165,18 +138,6 @@ public class G4JClient
                         .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(embed -> new JSONObject(embed.toString())).toArray()))
                         .toString()
                 ).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ChatMessage.fromString(result.get("message").toString());
-    }
-
-    @Deprecated public ChatMessage updateChannelMessage(String channelId, String messageId, String content)
-    {
-        JSONObject result = new JSONObject(HttpRequest.put(MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject().set("content", content).toString()).
                 timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         return ChatMessage.fromString(result.get("message").toString());

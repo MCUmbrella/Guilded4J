@@ -93,7 +93,7 @@ public class G4JWebSocketClient extends WebSocketClient
             case 1: //welcome event
             {
                 eventBus.post(
-                        new GuildedWebSocketInitializedEvent(this,
+                        new GuildedWebSocketWelcomeEvent(this,
                                 (String) json.getByPath("d.lastMessageId"),
                                 (Integer) json.getByPath("d.heartbeatIntervalMs"),
                                 Bot.fromString(json.getByPath("d.user").toString())

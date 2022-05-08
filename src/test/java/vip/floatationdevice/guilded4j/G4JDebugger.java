@@ -133,7 +133,7 @@ public class G4JDebugger
     static class GuildedEventListener
     {
         @Subscribe
-        public void onInit(GuildedWebSocketInitializedEvent e)
+        public void onInit(GuildedWebSocketWelcomeEvent e)
         {
             System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
             Bot self = e.getSelf();

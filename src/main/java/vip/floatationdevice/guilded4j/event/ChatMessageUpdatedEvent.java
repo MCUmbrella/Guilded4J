@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 
 /**
@@ -15,14 +16,10 @@ public class ChatMessageUpdatedEvent extends GuildedEvent
 {
     private final ChatMessage message;
 
-    /**
-     * Generate ChatMessageUpdatedEvent using the given ChatMessage object.
-     * @param message The newly created message object.
-     */
-    public ChatMessageUpdatedEvent(Object source, ChatMessage message)
+    public ChatMessageUpdatedEvent(Object source, String json)
     {
-        super(source);
-        this.message = message;
+        super(source, json);
+        this.message = ChatMessage.fromString(new JSONObject(json).getByPath("d.message").toString());
     }
 
     /**

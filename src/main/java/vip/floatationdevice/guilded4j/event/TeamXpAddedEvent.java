@@ -5,6 +5,9 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+
 /**
  * Event that is fired when XP is added to user(s).
  */
@@ -13,16 +16,16 @@ public class TeamXpAddedEvent extends GuildedEvent
     private final int xpAmount;
     private final String[] userIds;
 
-    /**
-     * Default constructor.
-     * @param xpAmount The amount of XP added.
-     * @param userIds The IDs of the users that received XP.
-     */
-    public TeamXpAddedEvent(Object source, int xpAmount, String[] userIds)
+    public TeamXpAddedEvent(Object source, String json)
     {
-        super(source);
-        this.xpAmount = xpAmount;
+        super(source, json);
+        JSONObject j = new JSONObject(json);
+        JSONArray userIdsArray = (JSONArray) j.getByPath("d.userIds");
+        String[] userIds = new String[userIdsArray.size()];
+        for(int i = 0; i < userIdsArray.size(); i++)
+            userIds[i] = userIdsArray.get(i).toString();
         this.userIds = userIds;
+        this.xpAmount = (int) j.getByPath("d.xpAmount");
     }
 
     /**

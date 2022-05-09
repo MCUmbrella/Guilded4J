@@ -5,6 +5,8 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
+
 import java.util.EventObject;
 
 /**
@@ -12,18 +14,22 @@ import java.util.EventObject;
  */
 public class GuildedEvent extends EventObject
 {
-    int op;// "op" key in the WebSocket message
+    Integer op;// "op" key in the WebSocket message
     String eventID;// "s" key in the WebSocket message
     String eventType;// "t" key in the WebSocket message
     String serverID;// usually located in "d.serverId"
     String rawString;
 
-    /**
-     * Default constructor.
-     */
-    public GuildedEvent(Object source)
+    //public GuildedEvent(Object source){super(source);}
+    public GuildedEvent(Object source, String json)
     {
         super(source);
+        setRawString(json);
+        JSONObject j = new JSONObject(json);
+        setOpCode(j.getInt("op"));
+        setEventID(j.getStr("s"));
+        setEventType(j.getStr("t"));
+        setServerID(j.getByPath("d.serverId") == null ? null : j.getByPath("d.serverId").toString());
     }
 
     /**
@@ -31,7 +37,7 @@ public class GuildedEvent extends EventObject
      * @return The operation code:
      * 0(normal), 1(WebSocket connection opened), 2(replay done and ready to resume), 8(invalid lastMessageId), or 9(unknown)
      */
-    public int getOpCode(){return this.op;}
+    public Integer getOpCode(){return this.op;}
 
     /**
      * Get the WebSocket message ID.
@@ -57,7 +63,7 @@ public class GuildedEvent extends EventObject
      */
     public String getRawString(){return this.rawString;}
 
-    public GuildedEvent setOpCode(int op)
+    public GuildedEvent setOpCode(Integer op)
     {
         this.op = op;
         return this;

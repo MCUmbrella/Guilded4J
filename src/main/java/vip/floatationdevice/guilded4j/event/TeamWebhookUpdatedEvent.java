@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.Webhook;
 
 /**
@@ -15,10 +16,10 @@ public class TeamWebhookUpdatedEvent extends GuildedEvent
 {
     private final Webhook webhook;
 
-    public TeamWebhookUpdatedEvent(Object source, Webhook webhook)
+    public TeamWebhookUpdatedEvent(Object source, String json)
     {
-        super(source);
-        this.webhook = webhook;
+        super(source, json);
+        this.webhook = Webhook.fromString(new JSONObject(json).getByPath("d.webhook").toString());
     }
 
     /**

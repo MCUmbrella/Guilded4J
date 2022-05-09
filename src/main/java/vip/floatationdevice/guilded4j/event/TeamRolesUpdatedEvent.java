@@ -5,6 +5,8 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.MemberRoleSummary;
 
 /**
@@ -15,14 +17,14 @@ public class TeamRolesUpdatedEvent extends GuildedEvent
 {
     private final MemberRoleSummary[] memberRoleIds;
 
-    /**
-     * Generate TeamRolesUpdatedEvent with a list of user(s) updated roles.
-     * @param memberRoleIds A {@link MemberRoleSummary}[] containing the user(s) whose roles have been updated.
-     */
-    public TeamRolesUpdatedEvent(Object source, MemberRoleSummary[] memberRoleIds)
+    public TeamRolesUpdatedEvent(Object source, String json)
     {
-        super(source);
-        this.memberRoleIds = memberRoleIds;
+        super(source, json);
+        JSONObject j = new JSONObject(json);
+        JSONArray memberRoleIdsArray = (JSONArray) j.getByPath("d.memberRoleIds");
+        this.memberRoleIds = new MemberRoleSummary[memberRoleIdsArray.size()];
+        for(int i = 0; i < memberRoleIdsArray.size(); i++)
+            this.memberRoleIds[i] = MemberRoleSummary.fromString(memberRoleIdsArray.get(i).toString());
     }
 
     /**

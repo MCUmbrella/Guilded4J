@@ -70,7 +70,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get channel info - getServerChannel()
 - [ ] Get channel list - getServerChannels()
 ## Event
-- [x] GuildedWebsocketInitializedEvent
+- [x] GuildedWebsocketWelcomeEvent
 - [x] GuildedWebsocketClosedEvent
 - [x] ChatMessageCreatedEvent
 - [x] ChatMessageDeletedEvent
@@ -84,6 +84,17 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] TeamXpAddedEvent
 - [x] TeamWebhookCreatedEvent
 - [x] TeamWebhookUpdatedEvent
+- [ ] TeamChannelCreatedEvent
+- [ ] TeamChannelUpdatedEvent
+- [ ] TeamChannelDeletedEvent
+- [ ] DocCreatedEvent
+- [ ] DocUpdatedEvent
+- [ ] DocDeletedEvent
+- [ ] ListItemCreatedEvent
+- [ ] ListItemUpdatedEvent
+- [ ] ListItemDeletedEvent
+- [ ] ListItemCompletedEvent
+- [ ] ListItemUncompletedEvent
 
 </p>
 </details>

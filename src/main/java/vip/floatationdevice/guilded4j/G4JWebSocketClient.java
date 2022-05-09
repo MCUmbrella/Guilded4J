@@ -5,15 +5,15 @@
 
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 /**
@@ -25,7 +25,7 @@ public class G4JWebSocketClient extends WebSocketClient
 {
 
     String authToken, lastMessageId;
-    int heartbeatIntervalMs = 20000;
+    int heartbeatIntervalMs = 22500;
     private boolean dump = false;
 
     /**
@@ -105,74 +105,17 @@ public class G4JWebSocketClient extends WebSocketClient
             }
             case 0: //normal event
             {
-                switch(eventType)
+                try
+                {// eventBus.post(new xxxEvent(this, rawMessage)) in reflection
+                    Class<?> eventClass = Class.forName("vip.floatationdevice.guilded4j.event." + String.valueOf(eventType.charAt(0)).toUpperCase() + eventType.substring(1) + "Event");
+                    Constructor<?> constructor = eventClass.getConstructor(Object.class, String.class);
+                    Object event = constructor.newInstance(this, rawMessage);
+                    eventBus.post(event);
+                }
+                catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                       InstantiationException | IllegalAccessException e)
                 {
-                    case "ChatMessageCreated":
-                    {
-                        eventBus.post(new ChatMessageCreatedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "ChatMessageUpdated":
-                    {
-                        eventBus.post(new ChatMessageUpdatedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "ChatMessageDeleted":
-                    {
-                        eventBus.post(new ChatMessageDeletedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamXpAdded":
-                    {
-                        eventBus.post(new TeamXpAddedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamMemberUpdated":
-                    {
-                        eventBus.post(new TeamMemberUpdatedEvent(this, rawMessage));
-                         break;
-                    }
-                    case "teamRolesUpdated":
-                    case "TeamRolesUpdated":
-                    {
-                        eventBus.post(new TeamRolesUpdatedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamMemberJoined":
-                    {
-                        eventBus.post(new TeamMemberJoinedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamMemberRemoved":
-                    {
-                        eventBus.post(new TeamMemberRemovedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamMemberBanned":
-                    {
-                        eventBus.post(new TeamMemberBannedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamMemberUnbanned":
-                    {
-                        eventBus.post(new TeamMemberUnbannedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamWebhookCreated":
-                    {
-                        eventBus.post(new TeamWebhookCreatedEvent(this, rawMessage));
-                        break;
-                    }
-                    case "TeamWebhookUpdated":
-                    {
-                        eventBus.post(new TeamWebhookUpdatedEvent(this, rawMessage));
-                        break;
-                    }
-                    default: //no implemented GuildedEvents matched? post raw event with the event name and original string
-                    {
-                        eventBus.post(new UnknownGuildedEvent(this, rawMessage));
-                        break;
-                    }
+                    eventBus.post(new UnknownGuildedEvent(this, rawMessage).setReason(e));
                 }
                 break;
             }

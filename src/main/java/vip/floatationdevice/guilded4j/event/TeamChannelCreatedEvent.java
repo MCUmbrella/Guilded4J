@@ -1,4 +1,4 @@
-package vip.floatationdevice.guilded4j.event.channel;
+package vip.floatationdevice.guilded4j.event;
 
 public class TeamChannelCreatedEvent
 {

@@ -3,9 +3,7 @@
  Licensed under the MIT License. See LICENSE in the project root for license information.
 */
 
-package vip.floatationdevice.guilded4j.event.misc;
-
-import vip.floatationdevice.guilded4j.event.GuildedEvent;
+package vip.floatationdevice.guilded4j.event;
 
 /**
  * Event that is fired when XP is added to user(s).

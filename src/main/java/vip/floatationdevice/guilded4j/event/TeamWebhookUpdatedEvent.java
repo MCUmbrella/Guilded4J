@@ -3,9 +3,8 @@
  Licensed under the MIT License. See LICENSE in the project root for license information.
 */
 
-package vip.floatationdevice.guilded4j.event.webhook;
+package vip.floatationdevice.guilded4j.event;
 
-import vip.floatationdevice.guilded4j.event.GuildedEvent;
 import vip.floatationdevice.guilded4j.object.Webhook;
 
 /**

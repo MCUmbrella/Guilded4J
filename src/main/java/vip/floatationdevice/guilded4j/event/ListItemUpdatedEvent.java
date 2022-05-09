@@ -1,4 +1,4 @@
-package vip.floatationdevice.guilded4j.event.list;
+package vip.floatationdevice.guilded4j.event;
 
 public class ListItemUpdatedEvent
 {

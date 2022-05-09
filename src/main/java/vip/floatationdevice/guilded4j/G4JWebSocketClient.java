@@ -11,6 +11,13 @@ import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.event.member.*;
+import vip.floatationdevice.guilded4j.event.message.ChatMessageCreatedEvent;
+import vip.floatationdevice.guilded4j.event.message.ChatMessageDeletedEvent;
+import vip.floatationdevice.guilded4j.event.message.ChatMessageUpdatedEvent;
+import vip.floatationdevice.guilded4j.event.misc.TeamXpAddedEvent;
+import vip.floatationdevice.guilded4j.event.webhook.TeamWebhookCreatedEvent;
+import vip.floatationdevice.guilded4j.event.webhook.TeamWebhookUpdatedEvent;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 

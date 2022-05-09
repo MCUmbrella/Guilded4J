@@ -11,6 +11,9 @@ import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.enums.ServerChannelType;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.event.member.*;
+import vip.floatationdevice.guilded4j.event.message.ChatMessageCreatedEvent;
+import vip.floatationdevice.guilded4j.event.misc.TeamXpAddedEvent;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
 

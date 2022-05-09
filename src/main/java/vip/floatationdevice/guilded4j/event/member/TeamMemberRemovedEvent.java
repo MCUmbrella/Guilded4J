@@ -3,9 +3,10 @@
  Licensed under the MIT License. See LICENSE in the project root for license information.
 */
 
-package vip.floatationdevice.guilded4j.event;
+package vip.floatationdevice.guilded4j.event.member;
 
 import vip.floatationdevice.guilded4j.enums.MemberRemoveCause;
+import vip.floatationdevice.guilded4j.event.GuildedEvent;
 
 /**
  * Event fired when a member is removed from a server.

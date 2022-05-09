@@ -1,4 +1,4 @@
-package vip.floatationdevice.guilded4j.event;
+package vip.floatationdevice.guilded4j.event.doc;
 
 public class DocCreatedEvent
 {

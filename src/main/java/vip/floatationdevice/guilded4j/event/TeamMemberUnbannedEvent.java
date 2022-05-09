@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ServerMemberBan;
 
 /**
@@ -15,10 +16,10 @@ public class TeamMemberUnbannedEvent extends GuildedEvent
 {
     private final ServerMemberBan serverMemberBan;
 
-    public TeamMemberUnbannedEvent(Object source, ServerMemberBan serverMemberBan)
+    public TeamMemberUnbannedEvent(Object source, String json)
     {
-        super(source);
-        this.serverMemberBan = serverMemberBan;
+        super(source, json);
+        this.serverMemberBan = ServerMemberBan.fromString(new JSONObject(json).getByPath("d.serverMemberBan").toString());
     }
 
     /**

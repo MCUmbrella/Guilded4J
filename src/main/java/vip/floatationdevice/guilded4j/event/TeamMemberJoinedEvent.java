@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ServerMember;
 
 /**
@@ -15,13 +16,10 @@ public class TeamMemberJoinedEvent extends GuildedEvent
 {
     private final ServerMember member;
 
-    /**
-     * Generate TeamMemberJoinedEvent with given ServerMember object.
-     */
-    public TeamMemberJoinedEvent(Object source, ServerMember member)
+    public TeamMemberJoinedEvent(Object source, String json)
     {
-        super(source);
-        this.member = member;
+        super(source, json);
+        this.member = ServerMember.fromString(new JSONObject(json).getByPath("d.member").toString());
     }
 
     /**

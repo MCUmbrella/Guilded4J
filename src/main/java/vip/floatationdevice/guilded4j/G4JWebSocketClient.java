@@ -5,15 +5,15 @@
 
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.object.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 /**
@@ -25,7 +25,7 @@ public class G4JWebSocketClient extends WebSocketClient
 {
 
     String authToken, lastMessageId;
-    int heartbeatIntervalMs = 20000;
+    int heartbeatIntervalMs = 22500;
     private boolean dump = false;
 
     /**
@@ -83,31 +83,19 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         JSONObject json = new JSONObject(rawMessage);
         if(dump) System.out.println("\n" + json.toStringPretty());
-        int op = json.getInt("op");//operation code: 0, 1, 2, 8, 9
-        String eventID = json.getStr("s");//event id (aka. lastMessageId)
+        Integer op = json.getInt("op");//operation code: 0, 1, 2, 8, 9
         String eventType = json.getStr("t");//hope they wont change this key name in the future
-        String serverID = (String) json.getByPath("d.serverId");// null if op != 0
 
         switch(op)
         {
             case 1: //welcome event
             {
-                eventBus.post(
-                        new GuildedWebSocketWelcomeEvent(this,
-                                (String) json.getByPath("d.lastMessageId"),
-                                (Integer) json.getByPath("d.heartbeatIntervalMs"),
-                                Bot.fromString(json.getByPath("d.user").toString())
-                        ).setOpCode(op)
-                );
+                eventBus.post(new GuildedWebSocketWelcomeEvent(this, rawMessage));
                 break;
             }
             case 2: //resume event
             {
-                eventBus.post(
-                        new ResumeEvent(this,
-                                (String) json.getByPath("d.s")
-                        ).setOpCode(op)
-                );
+                eventBus.post(new ResumeEvent(this, rawMessage));
                 break;
             }
             case 8: //error replaying
@@ -117,144 +105,23 @@ public class G4JWebSocketClient extends WebSocketClient
             }
             case 0: //normal event
             {
-                switch(eventType)
+                try
+                {// eventBus.post(new xxxEvent(this, rawMessage)) in reflection
+                    Class<?> eventClass = Class.forName("vip.floatationdevice.guilded4j.event." + String.valueOf(eventType.charAt(0)).toUpperCase() + eventType.substring(1) + "Event");
+                    Constructor<?> constructor = eventClass.getConstructor(Object.class, String.class);
+                    Object event = constructor.newInstance(this, rawMessage);
+                    eventBus.post(event);
+                }
+                catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                       InstantiationException | IllegalAccessException e)
                 {
-                    case "ChatMessageCreated":
-                    {
-                        eventBus.post(
-                                new ChatMessageCreatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "ChatMessageUpdated":
-                    {
-                        eventBus.post(
-                                new ChatMessageUpdatedEvent(this, ChatMessage.fromString(new JSONObject(rawMessage).getByPath("d.message").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "ChatMessageDeleted":
-                    {
-                        eventBus.post(
-                                new ChatMessageDeletedEvent(this,
-                                        json.getByPath("d.message.deletedAt").toString(),
-                                        json.getByPath("d.message.id").toString(),
-                                        json.getByPath("d.message.channelId").toString()
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamXpAdded":
-                    {
-                        Object[] converted = ((JSONArray) new JSONObject(rawMessage).getByPath("d.userIds")).toArray();
-                        String[] userIds = new String[converted.length];
-                        for(int i = 0; i != converted.length; i++) userIds[i] = (converted[i].toString());
-                        eventBus.post(
-                                new TeamXpAddedEvent(this, (Integer) json.getByPath("d.amount"), userIds)
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamMemberUpdated":
-                    {
-                        eventBus.post(
-                                new TeamMemberUpdatedEvent(this,
-                                        json.getByPath("d.userInfo.id").toString(),
-                                        json.getByPath("d.userInfo.nickname") instanceof cn.hutool.json.JSONNull ? null : json.getByPath("d.userInfo.nickname").toString()
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                         break;
-                    }
-                    case "teamRolesUpdated":
-                    case "TeamRolesUpdated":
-                    {
-                        Object[] memberRoleIds = ((JSONArray) json.getByPath("d.memberRoleIds")).toArray();
-                        MemberRoleSummary[] users = new MemberRoleSummary[memberRoleIds.length];
-                        for(int i = 0; i != memberRoleIds.length; i++) users[i] = MemberRoleSummary.fromString(memberRoleIds[i].toString());
-                        eventBus.post(
-                                new TeamRolesUpdatedEvent(this, users)
-                                        .setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamMemberJoined":
-                    {
-                        eventBus.post(
-                                new TeamMemberJoinedEvent(this,
-                                        ServerMember.fromString(json.getByPath("d.member").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamMemberRemoved":
-                    {
-                        Object isKick = json.getByPath("d.isKick");
-                        Object isBan = json.getByPath("d.isBan");
-                        eventBus.post(
-                                new TeamMemberRemovedEvent(this,
-                                        json.getByPath("d.userId").toString(),
-                                        Boolean.parseBoolean(isKick == null ? "false" : isKick.toString()),
-                                        Boolean.parseBoolean(isBan == null ? "false" : isBan.toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamMemberBanned":
-                    {
-                        eventBus.post(
-                                new TeamMemberBannedEvent(this,
-                                        ServerMemberBan.fromString(json.getByPath("d.serverMemberBan").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamMemberUnbanned":
-                    {
-                        eventBus.post(
-                                new TeamMemberUnbannedEvent(this,
-                                        ServerMemberBan.fromString(json.getByPath("d.serverMemberBan").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamWebhookCreated":
-                    {
-                        eventBus.post(
-                                new TeamWebhookCreatedEvent(this,
-                                        Webhook.fromString(json.getByPath("d.webhook").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    case "TeamWebhookUpdated":
-                    {
-                        eventBus.post(
-                                new TeamWebhookUpdatedEvent(this,
-                                        Webhook.fromString(json.getByPath("d.webhook").toString())
-                                ).setOpCode(op).setEventID(eventID).setServerID(serverID)
-                        );
-                        break;
-                    }
-                    default: //no implemented GuildedEvents matched? post raw event with the event name and original string
-                    {
-                        eventBus.post(new UnknownGuildedEvent(this)
-                                .setOpCode(op)
-                                .setEventID(eventID)
-                                .setEventType(eventType)
-                                .setServerID(serverID)
-                                .setRawString(rawMessage));
-                        break;
-                    }
+                    eventBus.post(new UnknownGuildedEvent(this, rawMessage).setReason(e));
                 }
                 break;
             }
             default: //unknown opcode or opcode not present
             {
-                eventBus.post(new UnknownGuildedEvent(this)
-                        .setOpCode(op)
-                        .setRawString(rawMessage));
+                eventBus.post(new UnknownGuildedEvent(this, rawMessage));
                 break;
             }
         }

@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.enums.MemberRemoveCause;
 
 /**
@@ -16,15 +17,15 @@ public class TeamMemberRemovedEvent extends GuildedEvent
     private final String userId;
     private final MemberRemoveCause cause;
 
-    /**
-     * Generate TeamMemberRemovedEvent with given parameters.
-     */
-    public TeamMemberRemovedEvent(Object source, String userId, boolean isKick, boolean isBan)
+    public TeamMemberRemovedEvent(Object source, String json)
     {
-        super(source);
-        this.userId = userId;
-        if (isBan) cause = MemberRemoveCause.BAN;
-        else if (isKick) cause = MemberRemoveCause.KICK;
+        super(source, json);
+        JSONObject j = new JSONObject(json);
+        Object isKick = j.getByPath("d.isKick");
+        Object isBan = j.getByPath("d.isBan");
+        this.userId = j.getByPath("d.userId").toString();
+        if(Boolean.parseBoolean(isKick == null ? "false" : isKick.toString())) cause = MemberRemoveCause.BAN;
+        else if(Boolean.parseBoolean(isBan == null ? "false" : isBan.toString())) cause = MemberRemoveCause.KICK;
         else cause = MemberRemoveCause.LEAVE;
     }
 

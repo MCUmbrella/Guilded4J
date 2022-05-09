@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.Bot;
 
 /**
@@ -17,17 +18,13 @@ public class GuildedWebSocketWelcomeEvent extends GuildedEvent
     private final int heartbeatIntervalMs;
     private final Bot self;
 
-    /**
-     * Generate GuildedWebSocketWelcomeEvent using the given keys.
-     * @param lastMessageId Message ID used for replaying events after a disconnect.
-     * @param heartbeatIntervalMs Heartbeat / keepalive interval (milliseconds).
-     */
-    public GuildedWebSocketWelcomeEvent(Object source, String lastMessageId, int heartbeatIntervalMs, Bot self)
+    public GuildedWebSocketWelcomeEvent(Object source, String json)
     {
-        super(source);
-        this.lastMessageId = lastMessageId;
-        this.heartbeatIntervalMs = heartbeatIntervalMs;
-        this.self = self;
+        super(source, json);
+        JSONObject j = new JSONObject(json);
+        this.lastMessageId = j.getByPath("d.lastMessageId").toString();
+        this.heartbeatIntervalMs = Integer.parseInt(j.getByPath("d.heartbeatIntervalMs").toString());
+        this.self = Bot.fromString(j.getByPath("d.user").toString());
         super.setEventID(lastMessageId);
     }
 

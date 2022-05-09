@@ -5,6 +5,8 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
+
 /**
  * Event fired when a chat message is deleted.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted" target=_blank>https://www.guilded.gg/docs/api/websockets/ChatMessageDeleted</a>
@@ -15,18 +17,13 @@ public class ChatMessageDeletedEvent extends GuildedEvent
     private final String id;
     private final String channelId;
 
-    /**
-     * Generate ChatMessageDeletedEvent using 3 given essential keys.
-     * @param id The UUID of the deleted message.
-     * @param channelId The UUID of the channel which the message belongs.
-     * @param deletedAt The deletion time of the message.
-     */
-    public ChatMessageDeletedEvent(Object source, String id, String channelId, String deletedAt)
+    public ChatMessageDeletedEvent(Object source, String json)
     {
-        super(source);
-        this.id = id;
-        this.channelId = channelId;
-        this.deletedAt = deletedAt;
+        super(source, json);
+        JSONObject j = new JSONObject(json);
+        this.deletedAt = j.getByPath("d.message.deletedAt").toString();
+        this.id = j.getByPath("d.message.id").toString();
+        this.channelId = j.getByPath("d.message.channelId").toString();
     }
 
     /**

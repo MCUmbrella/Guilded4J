@@ -10,8 +10,19 @@ package vip.floatationdevice.guilded4j.event;
  */
 public class UnknownGuildedEvent extends GuildedEvent
 {
+    private Exception reason = null;
+
+    public UnknownGuildedEvent(Object source, String json){super(source, json);}
+
     /**
-     * Default constructor.
+     * Gets the reason for the GuildedEvent being unknown.
+     * @return The exception that caused the event to be unknown (only set if an exception was thrown in the reflection process).
      */
-    public UnknownGuildedEvent(Object source){super(source);}
+    public Exception getReason(){return this.reason;}
+
+    public UnknownGuildedEvent setReason(Exception reason)
+    {
+        this.reason = reason;
+        return this;
+    }
 }

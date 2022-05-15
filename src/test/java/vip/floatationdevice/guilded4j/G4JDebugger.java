@@ -865,6 +865,7 @@ public class G4JDebugger
                         if(workServerValid() && commands.length == 2)
                             System.out.print(datePfx() + " [i] Channel " + commands[1] + ":\n" + new JSONObject(client.getServerChannelManager().getServerChannel(commands[1]).toString()).toStringPretty());
                         else System.err.println(datePfx() + " [X] Usage: channel <channelId>");
+                        break;
                     }
                     case "mem":
                     {

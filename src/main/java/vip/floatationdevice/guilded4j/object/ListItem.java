@@ -91,7 +91,7 @@ public class ListItem
      * Get the ID of the user who completed this list item.
      * @return The ID of the user who completed this list item. If this list item is not completed, return {@code null}.
      */
-    public String getCompleterId(){return completedBy;}
+    public String getCompletedBy(){return completedBy;}
 
     public ListItem setId(String id)
     {

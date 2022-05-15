@@ -90,11 +90,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] DocCreatedEvent
 - [x] DocUpdatedEvent
 - [x] DocDeletedEvent
-- [ ] ListItemCreatedEvent
-- [ ] ListItemUpdatedEvent
-- [ ] ListItemDeletedEvent
-- [ ] ListItemCompletedEvent
-- [ ] ListItemUncompletedEvent
+- [x] ListItemCreatedEvent
+- [x] ListItemUpdatedEvent
+- [x] ListItemDeletedEvent
+- [x] ListItemCompletedEvent
+- [x] ListItemUncompletedEvent
 
 </p>
 </details>

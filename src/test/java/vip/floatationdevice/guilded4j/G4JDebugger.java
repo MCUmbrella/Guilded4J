@@ -629,7 +629,7 @@ public class G4JDebugger
                                     "  - Updated at: " + item.getUpdateTime() + "\n" +
                                     "  - Updated by: " + item.getUpdaterId() + "\n" +
                                     "  - Completed at: " + item.getCompletionTime() + "\n" +
-                                    "  - Completed by: " + item.getCompleterId()
+                                    "  - Completed by: " + item.getCompletedBy()
                             );
                         }
                         else

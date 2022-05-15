@@ -84,9 +84,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] TeamXpAddedEvent
 - [x] TeamWebhookCreatedEvent
 - [x] TeamWebhookUpdatedEvent
-- [ ] TeamChannelCreatedEvent
-- [ ] TeamChannelUpdatedEvent
-- [ ] TeamChannelDeletedEvent
+- [x] TeamChannelCreatedEvent
+- [x] TeamChannelUpdatedEvent
+- [x] TeamChannelDeletedEvent
 - [x] DocCreatedEvent
 - [x] DocUpdatedEvent
 - [x] DocDeletedEvent

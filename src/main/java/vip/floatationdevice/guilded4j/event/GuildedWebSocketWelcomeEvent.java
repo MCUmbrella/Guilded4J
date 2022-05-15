@@ -11,6 +11,8 @@ import vip.floatationdevice.guilded4j.object.Bot;
 /**
  * Event that is fired when the event manager's WebSocket connection has been opened and successfully logged in.
  * This is a Guilded4J's custom event, meaning that there is no event in the Guilded API called this name.
+ * NOTE: trying to find the bot's home server ID by GuildedWebSocketWelcomeEvent.getServerId() is not possible, because
+ * this event's serverId is always null. There's currently no way to get the bot's home server ID by using the API.
  */
 public class GuildedWebSocketWelcomeEvent extends GuildedEvent
 {

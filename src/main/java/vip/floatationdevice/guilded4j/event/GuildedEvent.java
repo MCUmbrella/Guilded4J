@@ -29,7 +29,7 @@ public class GuildedEvent extends EventObject
         setOpCode(j.getInt("op"));
         setEventID(j.getStr("s"));
         setEventType(j.getStr("t"));
-        setServerID(j.getByPath("d.serverId") == null ? null : j.getByPath("d.serverId").toString());
+        setServerID((String) j.getByPath("d.serverId"));
     }
 
     /**

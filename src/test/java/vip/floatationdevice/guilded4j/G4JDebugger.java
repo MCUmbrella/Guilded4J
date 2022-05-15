@@ -151,7 +151,7 @@ public class G4JDebugger
         {
             System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
             self = e.getSelf();
-            System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (ID: " + self.getId() + ", bot ID: " + self.getBotId() + ")" + prompt());
+            System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (user ID: " + self.getId() + ", bot ID: " + self.getBotId() + ", home server ID: " + e.getServerID() + ")" + prompt());
             client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
         }
 
@@ -868,18 +868,18 @@ public class G4JDebugger
                     }
                     case "mem":
                     {
-                        System.out.println(datePfx() + " [i] Memory usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + "MB");
+                        System.out.print(datePfx() + " [i] Memory usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + "MB");
                         break;
                     }
                     case "gc":
                     {
-                        System.out.println(datePfx() + " [i] Garbage collection...");
+                        System.out.print(datePfx() + " [i] Garbage collection...");
                         System.gc();
                         break;
                     }
                     case "whoami":
                     {
-                        System.out.println(datePfx() + " [i] Bot name: " + self.getName() +
+                        System.out.print(datePfx() + " [i] Bot name: " + self.getName() +
                                 "\n User ID: " + self.getId() + ", Bot UUID: " + self.getBotId() +
                                 "\n Created at: " + self.getCreationTime() + ", created by user with ID: " + self.getCreator()
                         );

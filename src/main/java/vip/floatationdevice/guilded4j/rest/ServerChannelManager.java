@@ -79,7 +79,7 @@ public class ServerChannelManager extends RestManager
     }
 
     /**
-     * Delete a channel by its UUID.
+     * Delete a channel by its UUID.<br>
      * <a href="https://www.guilded.gg/docs/api/channels/ChannelDelete" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelDelete</a>
      * @param channelId The ID of the channel.
      * @throws GuildedException if Guilded API returned an error JSON string.
@@ -100,9 +100,29 @@ public class ServerChannelManager extends RestManager
         }
     }
 
-    public ServerChannel updateServerChannel()
+    /**
+     * Update a channel.<br>
+     * <a href="https://www.guilded.gg/docs/api/channels/ChannelUpdate" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelUpdate</a>
+     * @param channelId The ID of the channel.
+     * @param name The new name of the channel.
+     * @param topic The new topic of the channel.
+     * @param isPublic The new public status of the channel.
+     * @return The updated channel's ServerChannel object.
+     */
+    public ServerChannel updateServerChannel(String channelId, String name, String topic, Boolean isPublic)
     {
-        return null; //TODO: implement
+        JSONObject result = new JSONObject(HttpRequest.patch(CHANNELS_URL + "/" + channelId).
+                header("Authorization", "Bearer " + authToken).
+                header("Accept", "application/json").
+                header("Content-type", "application/json").
+                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).
+                        set("name", name).
+                        set("topic", topic).
+                        set("isPublic", isPublic).
+                        toString()).
+                timeout(httpTimeout).execute().body());
+        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
+        return ServerChannel.fromString(result.get("channel").toString());
     }
 
     public ServerChannel[] getServerChannels()

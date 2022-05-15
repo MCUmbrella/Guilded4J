@@ -1,8 +1,5 @@
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.*;
-import vip.floatationdevice.guilded4j.object.*;
-
 public class G4JTest
 {
     /**

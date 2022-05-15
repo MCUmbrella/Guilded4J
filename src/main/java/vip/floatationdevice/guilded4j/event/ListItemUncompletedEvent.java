@@ -9,7 +9,7 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ListItem;
 
 /**
- * Event fired when a list item is created.<br>
+ * Event fired when a list item is uncompleted.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/ListItemUncompleted" target=_blank>https://www.guilded.gg/docs/api/websockets/ListItemUncompleted</a>
  */
 public class ListItemUncompletedEvent extends GuildedEvent

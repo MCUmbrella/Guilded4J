@@ -9,7 +9,7 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ListItem;
 
 /**
- * Event fired when a list item is created.<br>
+ * Event fired when a list item is updated.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/ListItemUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/ListItemUpdated</a>
  */
 public class ListItemUpdatedEvent extends GuildedEvent

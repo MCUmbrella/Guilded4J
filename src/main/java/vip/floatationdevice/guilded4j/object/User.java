@@ -121,7 +121,8 @@ public class User
      * Convert the User object to a JSON string.
      * @return JSON string.
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

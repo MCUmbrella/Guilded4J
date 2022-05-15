@@ -39,7 +39,7 @@ public class MemberRoleSummary
             );
             Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
             int[] roleIds = new int[rawRoleIds.length];
-            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int)rawRoleIds[i];
+            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
             return new MemberRoleSummary(json.getStr("userId"), roleIds);
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");

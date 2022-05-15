@@ -237,7 +237,8 @@ public class ChatMessage
      * Convert the ChatMessage object to JSON string.
      * @return A JSON string.
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", id)

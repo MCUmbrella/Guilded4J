@@ -55,7 +55,8 @@ public class ListItemNote
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("createdAt", createdAt)

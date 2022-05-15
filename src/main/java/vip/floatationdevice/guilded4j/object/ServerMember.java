@@ -85,7 +85,7 @@ public class ServerMember
             );
             Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
             int[] roleIds = new int[rawRoleIds.length];
-            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int)rawRoleIds[i];
+            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
             return new ServerMember()
                     .setUser(User.fromString(json.getJSONObject("user").toString()))
                     .setRoleIds(roleIds)
@@ -99,7 +99,8 @@ public class ServerMember
      * Convert ServerMember object to JSON string.
      * @return JSON string.
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("user", new JSONObject(user.toString()))

@@ -72,7 +72,8 @@ public class Bot extends User
      * Convert the Bot object to a JSON string.
      * @return The JSON string.
      */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("id", getId())

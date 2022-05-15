@@ -9,7 +9,10 @@ import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
+import vip.floatationdevice.guilded4j.event.ResumeEvent;
+import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import java.lang.reflect.Constructor;
@@ -23,7 +26,6 @@ import java.net.URI;
  */
 public class G4JWebSocketClient extends WebSocketClient
 {
-
     String authToken, lastMessageId;
     int heartbeatIntervalMs = 22500;
     private boolean dump = false;
@@ -112,8 +114,8 @@ public class G4JWebSocketClient extends WebSocketClient
                     Object event = constructor.newInstance(this, rawMessage);
                     eventBus.post(event);
                 }
-                catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                       InstantiationException | IllegalAccessException e)
+                catch(ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                      InstantiationException | IllegalAccessException e)
                 {
                     eventBus.post(new UnknownGuildedEvent(this, rawMessage).setReason(e));
                 }

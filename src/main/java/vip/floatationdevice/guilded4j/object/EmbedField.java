@@ -47,6 +47,7 @@ public class EmbedField
         this.name = name;
         return this;
     }
+
     public EmbedField setValue(String value)
     {
         this.value = value;
@@ -72,7 +73,8 @@ public class EmbedField
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("name", name)

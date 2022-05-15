@@ -32,7 +32,8 @@ public class G4JDebugger
             " 5: Reaction management\n" +
             " 6: Group management\n" +
             " 7: Role management\n" +
-            " 8: Server member management\n";
+            " 8: Server member management\n" +
+            " 9: Channel management\n";
     final static String[] helpText = new String[]{
             datePfx() + " [i] Basic:\n" +
                     " > exit\n" +
@@ -52,8 +53,14 @@ public class G4JDebugger
                     " > dump\n" +
                     "    Toggle dump command result & WebSocket events\n" +
                     " > token <AuthToken>\n" +
-                    "    Update AuthToken\n",
-            datePfx() + " [i] Chat channel management:\n" +
+                    "    Update AuthToken\n" +
+                    " > mem\n" +
+                    "    Print memory usage\n" +
+                    " > gc\n" +
+                    "    Run garbage collector\n" +
+                    " > whoami\n" +
+                    "    Print the current bot's info\n",
+                    datePfx() + " [i] Chat channel management:\n" +
                     " > ls\n" +
                     "    List messages in the current channel\n" +
                     " > send <text>\n" +
@@ -122,7 +129,12 @@ public class G4JDebugger
                     " > unban <userId>\n" +
                     "    Unban the specified user from the current server\n" +
                     " > getban <userId>\n" +
-                    "    Get the ban information of the specified user\n"
+                    "    Get the ban information of the specified user\n",
+            datePfx() + " [i] Channel management:\n" +
+                    " > mkch\n" +
+                    "    Create a new channel\n" +
+                    " > channel <channelId>\n" +
+                    "    Get the information of the specified channel\n"
     };
     static Boolean dumpEnabled = false;
     final static Scanner scanner = new Scanner(System.in);
@@ -130,6 +142,7 @@ public class G4JDebugger
     static String workServer = "";
     static G4JClient client;
     static String token;
+    static Bot self;
 
     static class GuildedEventListener
     {
@@ -137,7 +150,7 @@ public class G4JDebugger
         public void onInit(GuildedWebSocketWelcomeEvent e)
         {
             System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
-            Bot self = e.getSelf();
+            self = e.getSelf();
             System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (ID: " + self.getId() + ", bot ID: " + self.getBotId() + ")" + prompt());
             client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
         }
@@ -431,7 +444,7 @@ public class G4JDebugger
                     {
                         if(workChannelValid())
                         {
-                            ChatMessage[] msgs = client.getChannelMessages(workChannel);
+                            ChatMessage[] msgs = client.getChatMessageManager().getChannelMessages(workChannel);
                             for(int i = msgs.length - 1; i >= 0; i--) System.out.print(parseMessage(msgs[i], false));
                         }
                         break;
@@ -440,7 +453,7 @@ public class G4JDebugger
                     {
                         if(workChannelValid() && commands.length > 1)
                         {
-                            String result = client.createChannelMessage(workChannel, text.substring(5), null, null, null, null).toString();
+                            String result = client.getChatMessageManager().createChannelMessage(workChannel, text.substring(5), null, null, null, null).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
@@ -475,7 +488,7 @@ public class G4JDebugger
                             System.out.print("[i] Reply silently? [true/false]\n? ");
                             isSilent = Boolean.parseBoolean(s.nextLine());
                             System.out.print("[i] Message content:\n? ");
-                            String result = client.createChannelMessage(workChannel, s.nextLine(), null, uuidArray, isPrivate, isSilent).toString();
+                            String result = client.getChatMessageManager().createChannelMessage(workChannel, s.nextLine(), null, uuidArray, isPrivate, isSilent).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
@@ -485,7 +498,7 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length == 2)
                         {
                             UUID.fromString(commands[1]);
-                            client.deleteChannelMessage(workChannel, commands[1]);
+                            client.getChatMessageManager().deleteChannelMessage(workChannel, commands[1]);
                         }
                         break;
                     }
@@ -494,7 +507,7 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length > 2)
                         {
                             UUID.fromString(commands[1]);
-                            ChatMessage result = client.updateChannelMessage(workChannel, commands[1], text.substring(44), null);
+                            ChatMessage result = client.getChatMessageManager().updateChannelMessage(workChannel, commands[1], text.substring(44), null);
                             if(dumpEnabled)
                                 System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
@@ -505,7 +518,7 @@ public class G4JDebugger
                         if(commands.length == 2)
                         {
                             UUID.fromString(commands[1]);
-                            System.out.print(new JSONObject(client.getMessage(workChannel, commands[1]).toString()).toStringPretty());
+                            System.out.print(new JSONObject(client.getChatMessageManager().getMessage(workChannel, commands[1]).toString()).toStringPretty());
                         }
                         break;
                     }
@@ -529,7 +542,7 @@ public class G4JDebugger
                                 System.err.println("[X] Content too short");
                                 continue;
                             }
-                            String result = client.createForumThread(workChannel, title, content).toString();
+                            String result = client.getForumManager().createForumThread(workChannel, title, content).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
@@ -538,7 +551,7 @@ public class G4JDebugger
                     {
                         if(workChannelValid())
                         {
-                            ListItemSummary[] items = client.getListItems(workChannel);
+                            ListItemSummary[] items = client.getListItemManager().getListItems(workChannel);
                             for(ListItemSummary item : items)
                                 System.out.println("==============================\n" +
                                         "  - Message: " + item.getMessage() + "\n" +
@@ -564,7 +577,7 @@ public class G4JDebugger
                             System.out.print("[i] Enter the note (optional):\n? ");
                             String note = new Scanner(System.in).nextLine();
                             if(note.isEmpty()) note = null;
-                            String result = client.createListItem(workChannel, message, note).toString();
+                            String result = client.getListItemManager().createListItem(workChannel, message, note).toString();
                             System.out.print(datePfx() + " [i] Item created. ID: " + ListItem.fromString(result).getId());
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
@@ -577,7 +590,7 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length == 2)
                         {
                             UUID.fromString(commands[1]);
-                            client.deleteListItem(workChannel, commands[1]);
+                            client.getListItemManager().deleteListItem(workChannel, commands[1]);
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: rmitem <(UUID)itemId>");
@@ -592,7 +605,7 @@ public class G4JDebugger
                             System.out.print("[i] Enter the note (optional):\n? ");
                             String note = new Scanner(System.in).nextLine();
                             if(note.isEmpty()) note = null;
-                            String result = client.updateListItem(workChannel, commands[1], message, note).toString();
+                            String result = client.getListItemManager().updateListItem(workChannel, commands[1], message, note).toString();
                             if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         else
@@ -604,7 +617,7 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length == 2)
                         {
                             UUID.fromString(commands[1]);
-                            ListItem item = client.getListItem(workChannel, commands[1]);
+                            ListItem item = client.getListItemManager().getListItem(workChannel, commands[1]);
                             System.out.print(datePfx() + " [i] Item: " + item.getMessage() + "\n" +
                                     "  - Note:\n" +
                                     "      Content: " + item.getNote().getContent() + "\n" +
@@ -627,7 +640,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
                         {
-                            int result = client.awardUserXp(workServer, commands[1], Integer.parseInt(commands[2]));
+                            int result = client.getXPManager().awardUserXp(workServer, commands[1], Integer.parseInt(commands[2]));
                             if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         else
@@ -638,7 +651,7 @@ public class G4JDebugger
                     {
                         if(commands.length == 3)
                         {
-                            client.awardRoleXp(workServer, Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                            client.getXPManager().awardRoleXp(workServer, Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: addrolexp <(int)roleId> <(int)amount>");
@@ -647,7 +660,7 @@ public class G4JDebugger
                     case "react":
                     {
                         if(workChannelValid() && commands.length == 3)
-                            client.createContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
+                            client.getReactionManager().createContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
                         else
                             System.err.println(datePfx() + " [X] Usage: react <contentId> <(int)emoteId>");
                         break;
@@ -655,7 +668,7 @@ public class G4JDebugger
                     case "groupadd":
                     {
                         if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
-                            client.addGroupMember(commands[1], commands[2]);
+                            client.getGroupManager().addGroupMember(commands[1], commands[2]);
                         else
                             System.err.println(datePfx() + " [X] Usage: groupadd <groupId> <userId>");
                         break;
@@ -663,7 +676,7 @@ public class G4JDebugger
                     case "groupkick":
                     {
                         if(commands.length == 3 && commands[1].length() == 8 && commands[2].length() == 8)
-                            client.removeGroupMember(commands[1], commands[2]);
+                            client.getGroupManager().removeGroupMember(commands[1], commands[2]);
                         else
                             System.err.println(datePfx() + " [X] Usage: groupkick <groupId> <userId>");
                         break;
@@ -671,7 +684,7 @@ public class G4JDebugger
                     case "lsrole":
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
-                            System.out.print(Arrays.toString(client.getMemberRoles(workServer, commands[1])));
+                            System.out.print(Arrays.toString(client.getRoleManager().getMemberRoles(workServer, commands[1])));
                         else
                             System.err.println(datePfx() + " [X] Usage: lsrole <userId>");
                         break;
@@ -679,7 +692,7 @@ public class G4JDebugger
                     case "roleadd":
                     {
                         if(commands.length == 3 && commands[2].length() == 8)
-                            client.addRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                            client.getRoleManager().addRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
                         else
                             System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
                         break;
@@ -687,7 +700,7 @@ public class G4JDebugger
                     case "rolekick":
                     {
                         if(commands.length == 3 && commands[2].length() == 8)
-                            client.removeRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
+                            client.getRoleManager().removeRoleMember(workServer, Integer.parseInt(commands[1]), commands[2]);
                         else
                             System.err.println(datePfx() + " [X] Usage: roleadd <(int)roleId> <userId>");
                         break;
@@ -696,7 +709,7 @@ public class G4JDebugger
                     {
                         if(workServerValid())
                         {
-                            ServerMemberSummary[] members = client.getServerMembers(workServer);
+                            ServerMemberSummary[] members = client.getMemberManager().getServerMembers(workServer);
                             for(ServerMemberSummary member : members)
                                 System.out.println("=============================="
                                         + "\n  - Name: " + member.getUser().getName()
@@ -711,7 +724,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            ServerMember member = client.getServerMember(workServer, commands[1]);
+                            ServerMember member = client.getMemberManager().getServerMember(workServer, commands[1]);
                             System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
                                     + "  - Nickname: " + member.getNickname() + "\n"
                                     + "  - Real name: " + member.getUser().getName() + "\n"
@@ -730,7 +743,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length > 2 && commands[1].length() == 8)
                         {
-                            String result = client.setMemberNickname(workServer, commands[1], text.substring(14));
+                            String result = client.getMemberManager().setMemberNickname(workServer, commands[1], text.substring(14));
                             if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         else
@@ -741,7 +754,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            String result = client.setMemberNickname(workServer, commands[1], null);
+                            String result = client.getMemberManager().setMemberNickname(workServer, commands[1], null);
                             if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         break;
@@ -750,7 +763,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
                         {
-                            HashMap<String, String> result = client.getSocialLink(workServer, commands[1], SocialMedia.valueOf(commands[2].toUpperCase()));
+                            HashMap<String, String> result = client.getMemberManager().getSocialLink(workServer, commands[1], SocialMedia.valueOf(commands[2].toUpperCase()));
                             System.out.print(resultPfx() + result);
                         }
                         else
@@ -760,7 +773,7 @@ public class G4JDebugger
                     case "kick":
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
-                            client.kickServerMember(workServer, commands[1]);
+                            client.getMemberManager().kickServerMember(workServer, commands[1]);
                         else
                             System.err.println(datePfx() + " [X] Usage: kick <userId>");
                         break;
@@ -769,7 +782,7 @@ public class G4JDebugger
                     {
                         if(workServerValid())
                         {
-                            ServerMemberBan[] bans = client.getServerMemberBans(workServer);
+                            ServerMemberBan[] bans = client.getMemberManager().getServerMemberBans(workServer);
                             for(ServerMemberBan ban : bans)
                                 System.out.println("=============================="
                                         + "\n  - Name: " + ban.getUser().getName()
@@ -786,7 +799,7 @@ public class G4JDebugger
                         if(workServerValid() && commands.length > 1 && commands[1].length() == 8)
                         {
                             String reason = commands.length == 2 ? null : text.substring(13);
-                            ServerMemberBan ban = client.banServerMember(workServer, commands[1], reason);
+                            ServerMemberBan ban = client.getMemberManager().banServerMember(workServer, commands[1], reason);
                             System.out.print("\n" + datePfx() + " [i] Banned" + ban.getUser().getName() + "\n"
                                     + "  - ID: " + ban.getUser().getId() + "\n"
                                     + "  - Reason: " + ban.getReason()
@@ -799,7 +812,7 @@ public class G4JDebugger
                     case "unban":
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
-                            client.unbanServerMember(workServer, commands[1]);
+                            client.getMemberManager().unbanServerMember(workServer, commands[1]);
                         else
                             System.err.println(datePfx() + " [X] Usage: unban <userId>");
                         break;
@@ -808,7 +821,7 @@ public class G4JDebugger
                     {
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
-                            ServerMemberBan ban = client.getServerMemberBan(workServer, commands[1]);
+                            ServerMemberBan ban = client.getMemberManager().getServerMemberBan(workServer, commands[1]);
                             System.out.print(datePfx() + " [i] Ban for " + commands[1] + ":\n"
                                     + "  - Name: " + ban.getUser().getName() + "\n"
                                     + "  - ID: " + ban.getUser().getId() + "\n"
@@ -833,14 +846,14 @@ public class G4JDebugger
                             System.out.print(datePfx() + " [i] Topic (empty for none):\n? ");
                             topic = scanner.nextLine();
                             System.out.print(datePfx() + " [i] Public? (true/false):\n? ");
-                            try{isPublic = Boolean.parseBoolean(scanner.nextLine());}catch(Exception ignored){}
+                            try {isPublic = Boolean.parseBoolean(scanner.nextLine());}catch(Exception ignored) {}
                             System.out.print(datePfx() + " [i] Type: " + Arrays.toString(ServerChannelType.values()) + "\n? ");
                             type = ServerChannelType.fromString(scanner.nextLine());
                             System.out.print(datePfx() + " [i] Group ID (empty to create in server home):\n? ");
                             groupId = scanner.nextLine();
                             System.out.print(datePfx() + " [i] Category ID (empty to create on top level):\n? ");
-                            try{categoryId = Integer.parseInt(scanner.nextLine());}catch(Exception ignored){}
-                            String result = client.createServerChannel(commands[1], topic, isPublic, type, workServer, groupId, categoryId).toString();
+                            try {categoryId = Integer.parseInt(scanner.nextLine());}catch(Exception ignored) {}
+                            String result = client.getServerChannelManager().createServerChannel(commands[1], topic, isPublic, type, workServer, groupId, categoryId).toString();
                             if(dumpEnabled)
                                 System.out.print(datePfx() + " [i] Result: " + result);
                         }
@@ -850,8 +863,26 @@ public class G4JDebugger
                     case "channel":
                     {
                         if(workServerValid() && commands.length == 2)
-                            System.out.print(datePfx() + " [i] Channel " + commands[1] + ":\n" + new JSONObject(client.getServerChannel(commands[1]).toString()).toStringPretty());
+                            System.out.print(datePfx() + " [i] Channel " + commands[1] + ":\n" + new JSONObject(client.getServerChannelManager().getServerChannel(commands[1]).toString()).toStringPretty());
                         else System.err.println(datePfx() + " [X] Usage: channel <channelId>");
+                    }
+                    case "mem":
+                    {
+                        System.out.println(datePfx() + " [i] Memory usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + "MB");
+                        break;
+                    }
+                    case "gc":
+                    {
+                        System.out.println(datePfx() + " [i] Garbage collection...");
+                        System.gc();
+                        break;
+                    }
+                    case "whoami":
+                    {
+                        System.out.println(datePfx() + " [i] Bot name: " + self.getName() +
+                                "\n User ID: " + self.getId() + ", Bot UUID: " + self.getBotId() +
+                                "\n Created at: " + self.getCreationTime() + ", created by user with ID: " + self.getCreator()
+                        );
                     }
                     case "test":
                     {

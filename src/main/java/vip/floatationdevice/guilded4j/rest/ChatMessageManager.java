@@ -15,6 +15,7 @@ import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.Embed;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import static vip.floatationdevice.guilded4j.G4JClient.MSG_CHANNEL_URL;
 
@@ -49,12 +50,19 @@ public class ChatMessageManager extends RestManager
                 header("Content-type", "application/json").
                 body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                         .set("content", content)
-                        .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(embed -> new JSONObject(embed.toString())).toArray()))//fuck this shit
+                        .set("embeds", embeds == null ? null :
+                                new JSONArray(Arrays.stream(embeds)
+                                        .map(new Function<Embed, JSONObject>(){
+                                            @Override public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
+                                        })
+                                        .toArray()
+                                )
+                        )
                         .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
                         .set("isPrivate", isPrivate)
                         .set("isSilent", isSilent)
-                        .toString()).
-                timeout(httpTimeout).execute().body());
+                        .toString())
+                .timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         return ChatMessage.fromString(result.get("message").toString());
     }
@@ -101,10 +109,16 @@ public class ChatMessageManager extends RestManager
                 header("Content-type", "application/json").
                 body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                         .set("content", content)
-                        .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(embed -> new JSONObject(embed.toString())).toArray()))
-                        .toString()
-                ).
-                timeout(httpTimeout).execute().body());
+                        .set("embeds", embeds == null ? null :
+                                new JSONArray(Arrays.stream(embeds)
+                                        .map(new Function<Embed, JSONObject>(){
+                                            @Override public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
+                                        })
+                                        .toArray()
+                                )
+                        ).toString()
+                )
+                .timeout(httpTimeout).execute().body());
         if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
         return ChatMessage.fromString(result.get("message").toString());
     }
@@ -151,5 +165,4 @@ public class ChatMessageManager extends RestManager
             messages[i] = ChatMessage.fromString(messagesJson.get(i).toString());
         return messages;
     }
-
 }

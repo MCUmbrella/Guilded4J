@@ -6,7 +6,6 @@
 package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -130,35 +129,28 @@ public class Webhook
     }
 
     /**
-     * Generate a Webhook object from the given JSON string.
-     * @return Webhook object.
+     * Generate a Webhook object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static Webhook fromString(String jsonString)
+    public static Webhook fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("name"),
-                    json.getStr("serverId"),
-                    json.getStr("channelId"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            return new Webhook()
-                    .setId(json.getStr("id"))
-                    .setName(json.getStr("name"))
-                    .setServerId(json.getStr("serverId"))
-                    .setChannelId(json.getStr("channelId"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreator(json.getStr("createdBy"))
-                    .setDeletionTime(json.getStr("deletedAt"))
-                    .setToken(json.getStr("token"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("name"),
+                json.getStr("serverId"),
+                json.getStr("channelId"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        return new Webhook()
+                .setId(json.getStr("id"))
+                .setName(json.getStr("name"))
+                .setServerId(json.getStr("serverId"))
+                .setChannelId(json.getStr("channelId"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreator(json.getStr("createdBy"))
+                .setDeletionTime(json.getStr("deletedAt"))
+                .setToken(json.getStr("token"));
     }
 
     /**

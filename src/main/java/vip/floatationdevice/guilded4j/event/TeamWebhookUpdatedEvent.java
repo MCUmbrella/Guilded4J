@@ -19,7 +19,7 @@ public class TeamWebhookUpdatedEvent extends GuildedEvent
     public TeamWebhookUpdatedEvent(Object source, String json)
     {
         super(source, json);
-        this.webhook = Webhook.fromString(new JSONObject(json).getByPath("d.webhook").toString());
+        this.webhook = Webhook.fromJSON((JSONObject) new JSONObject(json).getByPath("d.webhook"));
     }
 
     /**

@@ -5,12 +5,10 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.Webhook;
 
 import static vip.floatationdevice.guilded4j.G4JClient.WEBHOOKS_URL;
@@ -35,17 +33,12 @@ public class WebhookManager extends RestManager
      */
     public Webhook createWebhook(String serverId, String name, String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(WEBHOOKS_URL.replace("{serverId}", serverId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject()
-                        .set("name", name)
-                        .set("channelId", channelId).toString()
-                ).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Webhook.fromString(result.get("webhook").toString());
+        return Webhook.fromJSON(
+                execute(Method.POST,
+                        WEBHOOKS_URL.replace("{serverId}", serverId),
+                        new JSONObject().set("name", name).set("channelId", channelId)
+                ).getJSONObject("webhook")
+        );
     }
 
     /**
@@ -57,15 +50,12 @@ public class WebhookManager extends RestManager
      */
     public Webhook[] getWebhooks(String serverId, String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(WEBHOOKS_URL.replace("{serverId}", serverId) + "?channelId=" + channelId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray webhooksJson = result.getJSONArray("webhooks");
+        JSONArray webhooksJson = execute(Method.GET,
+                WEBHOOKS_URL.replace("{serverId}", serverId) + "?channelId=" + channelId,
+                null
+        ).getJSONArray("webhooks");
         Webhook[] webhooks = new Webhook[webhooksJson.size()];
-        for(int i = 0; i != webhooksJson.size(); i++) webhooks[i] = Webhook.fromString(webhooksJson.get(i).toString());
+        for(int i = 0; i != webhooksJson.size(); i++) webhooks[i] = Webhook.fromJSON(webhooksJson.getJSONObject(i));
         return webhooks;
     }
 
@@ -80,18 +70,10 @@ public class WebhookManager extends RestManager
      */
     public Webhook updateWebhook(String serverId, String webhookId, String name, String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.put(WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("name", name)
-                        .set("channelId", channelId)
-                        .toString()
-                ).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Webhook.fromString(result.get("webhook").toString());
+        return Webhook.fromJSON(execute(Method.PUT,
+                WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId,
+                new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("name", name).set("channelId", channelId)
+        ).getJSONObject("webhook"));
     }
 
     /**
@@ -102,17 +84,7 @@ public class WebhookManager extends RestManager
      */
     public void deleteWebhook(String serverId, String webhookId)
     {
-        String result = HttpRequest.delete(WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("WebhookDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE, WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId, null);
     }
 
     /**
@@ -124,12 +96,11 @@ public class WebhookManager extends RestManager
      */
     public Webhook getWebhook(String serverId, String webhookId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Webhook.fromString(result.get("webhook").toString());
+        return Webhook.fromJSON(
+                execute(Method.GET,
+                        WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId,
+                        null
+                ).getJSONObject("webhook")
+        );
     }
 }

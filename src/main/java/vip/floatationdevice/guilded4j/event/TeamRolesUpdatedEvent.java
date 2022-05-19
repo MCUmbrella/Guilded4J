@@ -20,11 +20,10 @@ public class TeamRolesUpdatedEvent extends GuildedEvent
     public TeamRolesUpdatedEvent(Object source, String json)
     {
         super(source, json);
-        JSONObject j = new JSONObject(json);
-        JSONArray memberRoleIdsArray = (JSONArray) j.getByPath("d.memberRoleIds");
+        JSONArray memberRoleIdsArray = (JSONArray) new JSONObject(json).getByPath("d.memberRoleIds");
         this.memberRoleIds = new MemberRoleSummary[memberRoleIdsArray.size()];
-        for(int i = 0; i < memberRoleIdsArray.size(); i++)
-            this.memberRoleIds[i] = MemberRoleSummary.fromString(memberRoleIdsArray.get(i).toString());
+        for(int i = 0; i != memberRoleIdsArray.size(); i++)
+            this.memberRoleIds[i] = MemberRoleSummary.fromJSON(memberRoleIdsArray.getJSONObject(i));
     }
 
     /**

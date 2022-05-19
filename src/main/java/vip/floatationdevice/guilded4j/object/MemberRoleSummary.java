@@ -6,7 +6,6 @@
 package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -28,20 +27,15 @@ public class MemberRoleSummary
 
     public int[] getRoleIds(){return roleIds;}
 
-    public static MemberRoleSummary fromString(String jsonString)
+    public static MemberRoleSummary fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.get("userId"),
-                    json.get("roleIds")
-            );
-            Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
-            int[] roleIds = new int[rawRoleIds.length];
-            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
-            return new MemberRoleSummary(json.getStr("userId"), roleIds);
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.get("userId"),
+                json.get("roleIds")
+        );
+        Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
+        int[] roleIds = new int[rawRoleIds.length];
+        for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
+        return new MemberRoleSummary(json.getStr("userId"), roleIds);
     }
 }

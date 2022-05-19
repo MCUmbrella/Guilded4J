@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 /**
  * Table-like cells to add to the embed.
@@ -60,17 +59,12 @@ public class EmbedField
         return this;
     }
 
-    public static EmbedField fromString(String jsonString)
+    public static EmbedField fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            return new EmbedField()
-                    .setName(json.getStr("name"))
-                    .setValue(json.getStr("value"))
-                    .setInline(json.getBool("inline") != null ? json.getBool("inline") : false);
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        return new EmbedField()
+                .setName(json.getStr("name"))
+                .setValue(json.getStr("value"))
+                .setInline(json.getBool("inline") != null ? json.getBool("inline") : false);
     }
 
     @Override

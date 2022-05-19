@@ -99,7 +99,8 @@ public class MemberManager extends RestManager
     {
         JSONArray membersJson = execute(Method.GET, MEMBERS_URL.replace("{serverId}", serverId), null).getJSONArray("members");
         ServerMemberSummary[] members = new ServerMemberSummary[membersJson.size()];
-        for(int i = 0; i < membersJson.size(); i++) members[i] = ServerMemberSummary.fromJSON(membersJson.getJSONObject(i));
+        for(int i = 0; i < membersJson.size(); i++)
+            members[i] = ServerMemberSummary.fromJSON(membersJson.getJSONObject(i));
         return members;
     }
 

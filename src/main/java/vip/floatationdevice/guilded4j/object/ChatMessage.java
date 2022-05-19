@@ -210,7 +210,7 @@ public class ChatMessage
         JSONArray embedsArray = json.getJSONArray("embeds");
         Embed[] embeds = embedsArray != null ? new Embed[embedsArray.size()] : null;
         if(embedsArray != null) for(int i = 0; i < embedsArray.size(); i++)
-            embeds[i] = Embed.fromString(embedsArray.get(i).toString());
+            embeds[i] = Embed.fromJSON(embedsArray.getJSONObject(i));
         return new ChatMessage()
                 .setId(json.getStr("id"))
                 .setType(json.getStr("type"))

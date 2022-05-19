@@ -6,7 +6,6 @@
 package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 /**
  * Represents a summary of a member's nickname. This class is not present in the official API
@@ -27,16 +26,11 @@ public class MemberNicknameSummary
 
     public String getUserId(){return id;}
 
-    public static MemberNicknameSummary fromString(String jsonString)
+    public static MemberNicknameSummary fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            return new MemberNicknameSummary(
-                    json.getStr("id"),
-                    json.getStr("nickname")
-            );
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        return new MemberNicknameSummary(
+                json.getStr("id"),
+                json.getStr("nickname")
+        );
     }
 }

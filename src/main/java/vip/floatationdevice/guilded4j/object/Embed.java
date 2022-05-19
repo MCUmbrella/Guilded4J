@@ -8,7 +8,6 @@ package vip.floatationdevice.guilded4j.object;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 /**
  * Rich content sections associated with the message.<br>
@@ -172,40 +171,32 @@ public class Embed
     }
 
     /**
-     * Use the given JSON string to generate an Embed object.
-     * @param jsonString The JSON string to parse.
-     * @return The generated Embed object.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
+     * Use the given JSON object to generate an Embed object.
      */
-    public static Embed fromString(String jsonString)
+    public static Embed fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
+        JSONArray fieldsArray = json.getJSONArray("fields");
+        EmbedField[] fields = null;
+        if(fieldsArray != null)
         {
-            JSONObject json = new JSONObject(jsonString);
-            JSONArray fieldsArray = json.getJSONArray("fields");
-            EmbedField[] fields = null;
-            if(fieldsArray != null)
-            {
-                fields = new EmbedField[fieldsArray.size()];
-                for(int i = 0; i != fieldsArray.size(); i++)
-                    fields[i] = EmbedField.fromString(fieldsArray.get(i).toString());
-            }
-            return new Embed()
-                    .setTitle(json.getStr("title"))
-                    .setDescription(json.getStr("description"))
-                    .setUrl(json.getStr("url"))
-                    .setColor(json.getInt("color"))
-                    .setTimestamp(json.getStr("timestamp"))
-                    .setFooterText(json.getByPath("footer.text") != null ? json.getByPath("footer.text").toString() : null)
-                    .setFooterIconUrl(json.getByPath("footer.icon_url") != null ? json.getByPath("footer.icon_url").toString() : null)
-                    .setThumbnailUrl(json.getByPath("thumbnail.url") != null ? json.getByPath("thumbnail.url").toString() : null)
-                    .setImageUrl(json.getByPath("image.url") != null ? json.getByPath("image.url").toString() : null)
-                    .setAuthorName(json.getByPath("author.name") != null ? json.getByPath("author.name").toString() : null)
-                    .setAuthorUrl(json.getByPath("author.url") != null ? json.getByPath("author.url").toString() : null)
-                    .setAuthorIconUrl(json.getByPath("author.icon_url") != null ? json.getByPath("author.icon_url").toString() : null)
-                    .setFields(fields);
+            fields = new EmbedField[fieldsArray.size()];
+            for(int i = 0; i != fieldsArray.size(); i++)
+                fields[i] = EmbedField.fromJSON(fieldsArray.getJSONObject(i));
         }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        return new Embed()
+                .setTitle(json.getStr("title"))
+                .setDescription(json.getStr("description"))
+                .setUrl(json.getStr("url"))
+                .setColor(json.getInt("color"))
+                .setTimestamp(json.getStr("timestamp"))
+                .setFooterText(json.getByPath("footer.text") != null ? json.getByPath("footer.text").toString() : null)
+                .setFooterIconUrl(json.getByPath("footer.icon_url") != null ? json.getByPath("footer.icon_url").toString() : null)
+                .setThumbnailUrl(json.getByPath("thumbnail.url") != null ? json.getByPath("thumbnail.url").toString() : null)
+                .setImageUrl(json.getByPath("image.url") != null ? json.getByPath("image.url").toString() : null)
+                .setAuthorName(json.getByPath("author.name") != null ? json.getByPath("author.name").toString() : null)
+                .setAuthorUrl(json.getByPath("author.url") != null ? json.getByPath("author.url").toString() : null)
+                .setAuthorIconUrl(json.getByPath("author.icon_url") != null ? json.getByPath("author.icon_url").toString() : null)
+                .setFields(fields);
     }
 
     /**

@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -43,29 +42,23 @@ public class Bot extends User
     }
 
     /**
-     * Generate a Bot object from a JSON string.
-     * @return The Bot object.
+     * Generate a Bot object from a JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static Bot fromString(String jsonString)
+    public static Bot fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("name"),
-                    json.getStr("createdAt")
-            );
-            return (Bot) new Bot()
-                    .setCreator(json.getStr("createdBy"))
-                    .setBotId(json.getStr("botId"))
-                    .setId(json.getStr("id"))
-                    .setName(json.getStr("name"))
-                    .setCreationTime(json.getStr("createdAt"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("name"),
+                json.getStr("createdAt")
+        );
+        return (Bot) new Bot()
+                .setCreator(json.getStr("createdBy"))
+                .setBotId(json.getStr("botId"))
+                // Bot functions end. The rest are inherited from User
+                .setId(json.getStr("id"))
+                .setName(json.getStr("name"))
+                .setCreationTime(json.getStr("createdAt")); // convert it back to Bot
     }
 
     /**

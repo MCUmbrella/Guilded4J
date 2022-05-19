@@ -26,7 +26,7 @@ public class GuildedWebSocketWelcomeEvent extends GuildedEvent
         JSONObject j = new JSONObject(json);
         this.lastMessageId = j.getByPath("d.lastMessageId").toString();
         this.heartbeatIntervalMs = Integer.parseInt(j.getByPath("d.heartbeatIntervalMs").toString());
-        this.self = Bot.fromString(j.getByPath("d.user").toString());
+        this.self = Bot.fromJSON((JSONObject) j.getByPath("d.user"));
         super.setEventID(lastMessageId);
     }
 

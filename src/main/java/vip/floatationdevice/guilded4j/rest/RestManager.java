@@ -56,9 +56,9 @@ public abstract class RestManager
                 .header("Accept", "application/json")
                 .header("Content-type", "application/json")
                 .timeout(httpTimeout);
-        if (body != null) req.body(body.toString());
+        if(body != null) req.body(body.toString());
         HttpResponse res = req.execute();
-        switch (res.getStatus())
+        switch(res.getStatus())
         {
             case 200:
             case 201:

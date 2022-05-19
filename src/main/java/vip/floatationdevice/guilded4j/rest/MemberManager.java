@@ -68,13 +68,6 @@ public class MemberManager extends RestManager
      */
     public ServerMember getServerMember(String serverId, String userId)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ServerMember.fromJSON(result.getJSONObject("member"));*/
         return ServerMember.fromJSON(execute(Method.GET,
                 MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId,
                 null
@@ -91,17 +84,6 @@ public class MemberManager extends RestManager
      */
     public void kickServerMember(String serverId, String userId)
     {
-        /*String result = HttpRequest.delete(MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("TeamMemberDelete returned an unexpected JSON string");
-        }*/
         execute(Method.DELETE, MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId, null);
     }
 
@@ -115,17 +97,6 @@ public class MemberManager extends RestManager
      */
     public ServerMemberSummary[] getServerMembers(String serverId)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.get(MEMBERS_URL.replace("{serverId}", serverId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray membersJson = result.getJSONArray("members");
-        ServerMemberSummary[] members = new ServerMemberSummary[membersJson.size()];
-        for(int i = 0; i < membersJson.size(); i++)
-            members[i] = ServerMemberSummary.fromJSON(membersJson.getJSONObject(i));
-        return members;*/
         JSONArray membersJson = execute(Method.GET, MEMBERS_URL.replace("{serverId}", serverId), null).getJSONArray("members");
         ServerMemberSummary[] members = new ServerMemberSummary[membersJson.size()];
         for(int i = 0; i < membersJson.size(); i++) members[i] = ServerMemberSummary.fromJSON(membersJson.getJSONObject(i));
@@ -144,13 +115,6 @@ public class MemberManager extends RestManager
      */
     public ServerMemberBan getServerMemberBan(String serverId, String userId)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ServerMemberBan.fromJSON(result.getJSONObject("serverMemberBan"));*/
         return ServerMemberBan.fromJSON(
                 execute(Method.GET,
                         BANS_URL.replace("{serverId}", serverId) + "/" + userId,
@@ -171,14 +135,6 @@ public class MemberManager extends RestManager
      */
     public ServerMemberBan banServerMember(String serverId, String userId, String reason)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.post(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(reason == null ? "{}" : new JSONObject().set("reason", reason).toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ServerMemberBan.fromJSON(result.getJSONObject("serverMemberBan"));*/
         return ServerMemberBan.fromJSON(
                 execute(Method.POST,
                         BANS_URL.replace("{serverId}", serverId) + "/" + userId,
@@ -197,17 +153,6 @@ public class MemberManager extends RestManager
      */
     public void unbanServerMember(String serverId, String userId)
     {
-        /*String result = HttpRequest.delete(BANS_URL.replace("{serverId}", serverId) + "/" + userId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("TeamMemberDelete returned an unexpected JSON string");
-        }*/
         execute(Method.DELETE, BANS_URL.replace("{serverId}", serverId) + "/" + userId, null);
     }
 
@@ -221,17 +166,6 @@ public class MemberManager extends RestManager
      */
     public ServerMemberBan[] getServerMemberBans(String serverId)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.get(BANS_URL.replace("{serverId}", serverId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray bansJson = result.getJSONArray("serverMemberBans");
-        ServerMemberBan[] bans = new ServerMemberBan[bansJson.size()];
-        for(int i = 0; i < bansJson.size(); i++)
-            bans[i] = ServerMemberBan.fromJSON(bansJson.getJSONObject(i));
-        return bans;*/
         JSONArray bansJson = execute(Method.GET, BANS_URL.replace("{serverId}", serverId), null).getJSONArray("serverMemberBans");
         ServerMemberBan[] bans = new ServerMemberBan[bansJson.size()];
         for(int i = 0; i < bansJson.size(); i++) bans[i] = ServerMemberBan.fromJSON(bansJson.getJSONObject(i));
@@ -250,12 +184,6 @@ public class MemberManager extends RestManager
      */
     public HashMap<String, String> getSocialLink(String serverId, String userId, SocialMedia type)
     {
-        /*JSONObject result = new JSONObject(HttpRequest.get(SOCIAL_LINK_URL.replace("{serverId}", serverId).replace("{userId}", userId).replace("{type}", type.toString().toLowerCase())).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));*/
         JSONObject result = execute(Method.GET,
                 SOCIAL_LINK_URL
                         .replace("{serverId}", serverId)

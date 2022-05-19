@@ -76,30 +76,22 @@ public class ContentReaction
     }
 
     /**
-     * Use the given JSON string to set up ContentReaction object.
-     * @param rawString A JSON string.
-     * @return ContentReaction object.
-     * @throws IllegalArgumentException when the string is missing at least 1 of the 3 essential keys.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
+     * Use the given JSON object to set up ContentReaction object.
+     * @throws IllegalArgumentException when the essential fields are missing.
      */
-    public static ContentReaction fromString(String rawString)
+    public static ContentReaction fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            return new ContentReaction()
-                    .setId(json.getInt("id"))
-                    .setServerId(json.getStr("serverId"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"))
-                    .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        return new ContentReaction()
+                .setId(json.getInt("id"))
+                .setServerId(json.getStr("serverId"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setWebhookCreatorId(json.getStr("createdByWebhookId"));
     }
 
     /**

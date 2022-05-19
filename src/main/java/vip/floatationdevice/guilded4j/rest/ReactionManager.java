@@ -5,9 +5,7 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.http.Method;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.REACTION_URL;
@@ -33,16 +31,12 @@ public class ReactionManager extends RestManager
      */
     public void createContentReaction(String channelId, String contentId, int emoteId)
     {
-        String result = HttpRequest.put(REACTION_URL.replace("{channelId}", channelId).replace("{contentId}", contentId).replace("{emoteId}", Integer.toString(emoteId))).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("ContentReactionCreate returned an unexpected JSON string");
-        }
+        execute(Method.PUT,
+                REACTION_URL
+                        .replace("{channelId}", channelId)
+                        .replace("{contentId}", contentId)
+                        .replace("{emoteId}", Integer.toString(emoteId)),
+                null
+        );
     }
 }

@@ -19,8 +19,7 @@ public class TeamChannelCreatedEvent extends GuildedEvent
     public TeamChannelCreatedEvent(Object source, String json)
     {
         super(source, json);
-        JSONObject j = new JSONObject(json);
-        this.channel = ServerChannel.fromString(j.getByPath("d.channel").toString());
+        this.channel = ServerChannel.fromJSON((JSONObject) new JSONObject(json).getByPath("d.channel"));
     }
 
     /**

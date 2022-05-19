@@ -182,42 +182,35 @@ public class ServerChannel
     }
 
     /**
-     * Use the given JSON string to generate a ServerChannel object.
-     * @param jsonString The JSON string to parse.
-     * @return The generated ServerChannel object.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
+     * Use the given JSON object to generate a ServerChannel object.
+     * @throws IllegalArgumentException when the essential fields are missing.
      */
-    public static ServerChannel fromString(String jsonString)
+    public static ServerChannel fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("type"),
-                    json.getStr("name"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy"),
-                    json.getStr("serverId"),
-                    json.getStr("groupId")
-            );
-            return new ServerChannel()
-                    .setId(json.getStr("id"))
-                    .setName(json.getStr("name"))
-                    .setTopic(json.getStr("topic"))
-                    .setCreatedAt(json.getStr("createdAt"))
-                    .setCreatedBy(json.getStr("createdBy"))
-                    .setUpdatedAt(json.getStr("updatedAt"))
-                    .setServerId(json.getStr("serverId"))
-                    .setParentId(json.getStr("parentId"))
-                    .setGroupId(json.getStr("groupId"))
-                    .setArchivedAt(json.getStr("archivedAt"))
-                    .setArchivedBy(json.getStr("archivedBy"))
-                    .setType(ServerChannelType.fromString(json.getStr("type")))
-                    .setCategoryId(json.getInt("categoryId"))
-                    .setPublic(json.getBool("isPublic"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("type"),
+                json.getStr("name"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy"),
+                json.getStr("serverId"),
+                json.getStr("groupId")
+        );
+        return new ServerChannel()
+                .setId(json.getStr("id"))
+                .setName(json.getStr("name"))
+                .setTopic(json.getStr("topic"))
+                .setCreatedAt(json.getStr("createdAt"))
+                .setCreatedBy(json.getStr("createdBy"))
+                .setUpdatedAt(json.getStr("updatedAt"))
+                .setServerId(json.getStr("serverId"))
+                .setParentId(json.getStr("parentId"))
+                .setGroupId(json.getStr("groupId"))
+                .setArchivedAt(json.getStr("archivedAt"))
+                .setArchivedBy(json.getStr("archivedBy"))
+                .setType(ServerChannelType.fromString(json.getStr("type")))
+                .setCategoryId(json.getInt("categoryId"))
+                .setPublic(json.getBool("isPublic"));
     }
 
     /**

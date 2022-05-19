@@ -19,7 +19,7 @@ public class TeamMemberJoinedEvent extends GuildedEvent
     public TeamMemberJoinedEvent(Object source, String json)
     {
         super(source, json);
-        this.member = ServerMember.fromString(new JSONObject(json).getByPath("d.member").toString());
+        this.member = ServerMember.fromJSON((JSONObject) new JSONObject(json).getByPath("d.member"));
     }
 
     /**

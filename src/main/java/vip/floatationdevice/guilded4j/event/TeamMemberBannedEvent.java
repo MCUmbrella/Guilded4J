@@ -19,7 +19,7 @@ public class TeamMemberBannedEvent extends GuildedEvent
     public TeamMemberBannedEvent(Object source, String json)
     {
         super(source, json);
-        this.serverMemberBan = ServerMemberBan.fromString(new JSONObject(json).getByPath("d.serverMemberBan").toString());
+        this.serverMemberBan = ServerMemberBan.fromJSON((JSONObject) new JSONObject(json).getByPath("d.serverMemberBan"));
     }
 
     /**

@@ -251,7 +251,7 @@ public class G4JDebugger
         }
     }
 
-    static String resultPfx(){return datePfx() + "[D] Result:\n";}
+    static String resultPfx(){return datePfx() + " [D] Result:\n";}
 
     static String datePfx(){return "[" + DateUtil.date() + "]";}
 
@@ -905,7 +905,7 @@ public class G4JDebugger
             }
             catch(GuildedException e)
             {
-                System.err.println(datePfx() + " [X] Operation failed\n    " + e.getCode() + ": " + e.getDescription());
+                System.err.println(datePfx() + " [X] Operation failed (" + e.getType() +")\n  " + e.getCode() + ": " + e.getDescription());
             }
             catch(Exception e)
             {

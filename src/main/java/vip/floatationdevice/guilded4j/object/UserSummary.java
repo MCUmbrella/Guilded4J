@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -67,27 +66,20 @@ public class UserSummary
     }
 
     /**
-     * Generate a UserSummary object from the given JSON string.
-     * @return UserSummary object.
+     * Generate a UserSummary object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static UserSummary fromString(String jsonString)
+    public static UserSummary fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("name")
-            );
-            return new UserSummary()
-                    .setId(json.getStr("id"))
-                    .setType(json.getStr("type"))
-                    .setName(json.getStr("name"))
-                    .setAvatar(json.getStr("avatar"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("name")
+        );
+        return new UserSummary()
+                .setId(json.getStr("id"))
+                .setType(json.getStr("type"))
+                .setName(json.getStr("name"))
+                .setAvatar(json.getStr("avatar"));
     }
 
     /**

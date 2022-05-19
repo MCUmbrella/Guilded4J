@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -70,29 +69,24 @@ public class ServerMember
     }
 
     /**
-     * Generate ServerMember object from JSON string.
-     * @param jsonString The JSON data.
+     * Generate ServerMember object from JSON object.
+     * @throws IllegalArgumentException when the essential fields are not set.
      */
-    public static ServerMember fromString(String jsonString)
+    public static ServerMember fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.get("user"),
-                    json.get("roleIds"),
-                    json.get("joinedAt")
-            );
-            Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
-            int[] roleIds = new int[rawRoleIds.length];
-            for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
-            return new ServerMember()
-                    .setUser(User.fromString(json.getJSONObject("user").toString()))
-                    .setRoleIds(roleIds)
-                    .setNickname(json.getStr("nickname"))
-                    .setJoinTime(json.getStr("joinedAt"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.get("user"),
+                json.get("roleIds"),
+                json.get("joinedAt")
+        );
+        Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
+        int[] roleIds = new int[rawRoleIds.length];
+        for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
+        return new ServerMember()
+                .setUser(User.fromJSON(json.getJSONObject("user")))
+                .setRoleIds(roleIds)
+                .setNickname(json.getStr("nickname"))
+                .setJoinTime(json.getStr("joinedAt"));
     }
 
     /**

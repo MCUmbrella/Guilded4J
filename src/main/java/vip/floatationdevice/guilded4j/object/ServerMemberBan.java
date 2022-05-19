@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -68,28 +67,21 @@ public class ServerMemberBan
     }
 
     /**
-     * Generate a ServerMemberBan object from the given JSON string.
-     * @return ServerMemberBan object.
+     * Generate a ServerMemberBan object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static ServerMemberBan fromString(String jsonString)
+    public static ServerMemberBan fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.get("user"),
-                    json.get("createdAt"),
-                    json.get("createdBy")
-            );
-            return new ServerMemberBan()
-                    .setUser(UserSummary.fromString(json.getStr("user")))
-                    .setReason(json.getStr("reason"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.get("user"),
+                json.get("createdAt"),
+                json.get("createdBy")
+        );
+        return new ServerMemberBan()
+                .setUser(UserSummary.fromJSON(json.getJSONObject("user")))
+                .setReason(json.getStr("reason"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"));
     }
 
     /**

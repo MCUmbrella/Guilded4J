@@ -37,6 +37,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get a list item - getListItem()
 - [x] Update list item - updateListItem()
 - [x] Delete list item - deleteListItem()
+- [x] Completed list item - completeListItem()
+- [x] Uncomplted list item - uncompleteListItem()
 ## Document
 - [x] Create document - createDoc()
 - [x] Update document - updateDoc()

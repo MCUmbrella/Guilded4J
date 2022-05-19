@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
@@ -172,41 +171,35 @@ public class ListItem
     }
 
     /**
-     * Use the given JSON string to generate ListItem object.
-     * @param rawString The JSON string.
+     * Use the given JSON object to generate ListItem object.
+     * @param json The JSON object.
      * @return ListItem object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static ListItem fromString(String rawString)
+    public static ListItem fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("serverId"),
-                    json.getStr("channelId"),
-                    json.getStr("message"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            return new ListItem()
-                    .setId(json.getStr("id"))
-                    .setServerId(json.getStr("serverId"))
-                    .setChannelId(json.getStr("channelId"))
-                    .setMessage(json.getStr("message"))
-                    .setNote(json.get("note") == null ? null : ListItemNote.fromString(json.get("note").toString()))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"))
-                    .setWebhookCreatorId(json.getStr("createdByWebhookId"))
-                    .setUpdateTime(json.getStr("updatedAt"))
-                    .setUpdaterId(json.getStr("updatedBy"))
-                    .setParentListItemId(json.getStr("parentListItemId"))
-                    .setCompletionTime(json.getStr("completedAt"))
-                    .setCompleterId(json.getStr("completedBy"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("serverId"),
+                json.getStr("channelId"),
+                json.getStr("message"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        return new ListItem()
+                .setId(json.getStr("id"))
+                .setServerId(json.getStr("serverId"))
+                .setChannelId(json.getStr("channelId"))
+                .setMessage(json.getStr("message"))
+                .setNote(json.get("note") == null ? null : ListItemNote.fromJSON(json.getJSONObject("note")))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+                .setUpdateTime(json.getStr("updatedAt"))
+                .setUpdaterId(json.getStr("updatedBy"))
+                .setParentListItemId(json.getStr("parentListItemId"))
+                .setCompletionTime(json.getStr("completedAt"))
+                .setCompleterId(json.getStr("completedBy"));
     }
 
     /**

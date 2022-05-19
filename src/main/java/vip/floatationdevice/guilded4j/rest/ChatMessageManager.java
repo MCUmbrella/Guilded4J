@@ -110,7 +110,7 @@ public class ChatMessageManager extends RestManager
     public ChatMessage getMessage(String channelId, String messageId)
     {
         return ChatMessage.fromJSON(
-                new JSONObject(execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null))
+                execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null)
                         .getJSONObject("message")
         );
     }
@@ -128,7 +128,7 @@ public class ChatMessageManager extends RestManager
         JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
-            messages[i] = ChatMessage.fromJSON((JSONObject) messagesJson.get(i));
+            messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));
         return messages;
     }
 }

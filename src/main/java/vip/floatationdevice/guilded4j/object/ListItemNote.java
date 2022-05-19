@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.object;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 /**
  * This class represents a note in a ListItem object.
@@ -15,19 +14,16 @@ import cn.hutool.json.JSONUtil;
  */
 public class ListItemNote
 {
-    private final String createdAt, createdBy;
+    private String createdAt, createdBy, updatedAt, updatedBy;
     private String content;
-
-    public ListItemNote(String createdAt, String createdBy, String content)
-    {
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.content = content;
-    }
 
     public String getCreationTime(){return createdAt;}
 
     public String getCreatorId(){return createdBy;}
+
+    public String getUpdateTime(){return updatedAt;}
+
+    public String getUpdaterId(){return updatedBy;}
 
     /**
      * Get the displayable content of the note.
@@ -41,18 +37,38 @@ public class ListItemNote
         return this;
     }
 
-    public static ListItemNote fromString(String rawString)
+    public ListItemNote setCreationTime(String createdAt)
     {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            return new ListItemNote(
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy"),
-                    json.getStr("content")
-            );
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ListItemNote setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public ListItemNote setUpdateTime(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public ListItemNote setUpdaterId(String updatedBy)
+    {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public static ListItemNote fromJSON(JSONObject json)
+    {
+        return new ListItemNote()
+                .setContent(json.getStr("content"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setUpdateTime(json.getStr("updatedAt"))
+                .setUpdaterId(json.getStr("updatedBy"));
     }
 
     @Override
@@ -61,6 +77,8 @@ public class ListItemNote
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
+                .set("updatedAt", updatedAt)
+                .set("updatedBy", updatedBy)
                 .set("content", content)
                 .toString();
     }

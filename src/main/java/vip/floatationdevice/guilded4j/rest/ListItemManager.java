@@ -5,14 +5,12 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ListItem;
-import vip.floatationdevice.guilded4j.object.ListItemNote;
 import vip.floatationdevice.guilded4j.object.ListItemSummary;
 
 import static vip.floatationdevice.guilded4j.G4JClient.LIST_CHANNEL_URL;
@@ -38,14 +36,14 @@ public class ListItemManager extends RestManager
      */
     public ListItem createListItem(String channelId, String message, String note)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(LIST_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("message", message).set("note", note).toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ListItem.fromString(result.get("listItem").toString());
+        return ListItem.fromJSON(
+                execute(Method.POST,
+                        LIST_CHANNEL_URL.replace("{channelId}", channelId),
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("message", message)
+                                .set("note", new JSONObject().set("content", note))
+                ).getJSONObject("listItem")
+        );
     }
 
     /**
@@ -58,16 +56,9 @@ public class ListItemManager extends RestManager
      */
     public ListItemSummary[] getListItems(String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(LIST_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray itemsJson = result.getJSONArray("listItems");
+        JSONArray itemsJson = execute(Method.GET, LIST_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("listItems");
         ListItemSummary[] items = new ListItemSummary[itemsJson.size()];
-        for(int i = 0; i < itemsJson.size(); i++)
-            items[i] = ListItemSummary.fromString(itemsJson.get(i).toString());
+        for(int i = 0; i < itemsJson.size(); i++) items[i] = ListItemSummary.fromJSON(itemsJson.getJSONObject(i));
         return items;
     }
 
@@ -82,13 +73,10 @@ public class ListItemManager extends RestManager
      */
     public ListItem getListItem(String channelId, String listItemId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ListItem.fromString(result.get("listItem").toString());
+        return ListItem.fromJSON(
+                execute(Method.GET, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId, null)
+                        .getJSONObject("listItem")
+        );
     }
 
     /**
@@ -104,18 +92,13 @@ public class ListItemManager extends RestManager
      */
     public ListItem updateListItem(String channelId, String listItemId, String message, String note)
     {
-        JSONObject result = new JSONObject(HttpRequest.put(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("message", message)
-                        .set("note", new ListItemNote(null, null, note))
-                        .toString()
-                ).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ListItem.fromString(result.get("listItem").toString());
+        return ListItem.fromJSON(
+                execute(Method.PUT, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId,
+                        new JSONObject()
+                                .set("message", message)
+                                .set("note", new JSONObject().set("content", note))
+                ).getJSONObject("listItem")
+        );
     }
 
     /**
@@ -128,16 +111,28 @@ public class ListItemManager extends RestManager
      */
     public void deleteListItem(String channelId, String listItemId)
     {
-        String result = HttpRequest.delete(LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("ListItemDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId, null);
+    }
+
+    /**
+     * Complete a list item.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemCompleteCreate" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemCompleteCreate</a>
+     * @param channelId The UUID of the channel.
+     * @param listItemId The UUID of the list item.
+     */
+    public void completeListItem(String channelId, String listItemId)
+    {
+        execute(Method.POST, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete", null);
+    }
+
+    /**
+     * Uncomplete a list item.<br>
+     * <a href="https://www.guilded.gg/docs/api/listItems/ListItemCompleteDelete" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemCompleteDelete</a>
+     * @param channelId The UUID of the channel.
+     * @param listItemId The UUID of the list item.
+     */
+    public void uncompleteListItem(String channelId, String listItemId)
+    {
+        execute(Method.DELETE, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete", null);
     }
 }

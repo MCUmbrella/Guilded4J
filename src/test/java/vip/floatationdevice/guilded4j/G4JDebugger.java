@@ -577,9 +577,9 @@ public class G4JDebugger
                             System.out.print("[i] Enter the note (optional):\n? ");
                             String note = new Scanner(System.in).nextLine();
                             if(note.isEmpty()) note = null;
-                            String result = client.getListItemManager().createListItem(workChannel, message, note).toString();
-                            System.out.print(datePfx() + " [i] Item created. ID: " + ListItem.fromString(result).getId());
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
+                            ListItem result = client.getListItemManager().createListItem(workChannel, message, note);
+                            System.out.print(datePfx() + " [i] Item created. ID: " + result.getId());
+                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: mkitem <message>");

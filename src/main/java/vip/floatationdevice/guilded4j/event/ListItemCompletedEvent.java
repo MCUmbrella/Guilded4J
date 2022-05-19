@@ -19,8 +19,7 @@ public class ListItemCompletedEvent extends GuildedEvent
     public ListItemCompletedEvent(Object source, String json)
     {
         super(source, json);
-        JSONObject j = new JSONObject(json);
-        this.listItem = ListItem.fromString(j.getByPath("d.listItem").toString());
+        this.listItem = ListItem.fromJSON((JSONObject) new JSONObject(json).getByPath("d.listItem"));
     }
 
     /**

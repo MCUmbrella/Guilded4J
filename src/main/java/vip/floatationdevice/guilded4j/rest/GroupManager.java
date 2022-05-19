@@ -5,9 +5,7 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.http.Method;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.GROUP_URL;
@@ -32,17 +30,10 @@ public class GroupManager extends RestManager
      */
     public void addGroupMember(String groupId, String userId)
     {
-        String result = HttpRequest.put(GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("GroupMembershipCreate returned an unexpected JSON string");
-        }
+        execute(Method.PUT,
+                GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId),
+                null
+        );
     }
 
     /**
@@ -55,16 +46,9 @@ public class GroupManager extends RestManager
      */
     public void removeGroupMember(String groupId, String userId)
     {
-        String result = HttpRequest.delete(GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("GroupMembershipDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE,
+                GROUP_URL.replace("{groupId}", groupId).replace("{userId}", userId),
+                null
+        );
     }
 }

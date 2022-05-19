@@ -5,10 +5,8 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.ROLES_URL;
@@ -34,17 +32,7 @@ public class RoleManager extends RestManager
      */
     public void addRoleMember(String serverId, int roleId, String userId)
     {
-        String result = HttpRequest.put(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("RoleMembershipCreate returned an unexpected JSON string");
-        }
+        execute(Method.PUT, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId, null);
     }
 
     /**
@@ -55,17 +43,7 @@ public class RoleManager extends RestManager
      */
     public void removeRoleMember(String serverId, int roleId, String userId)
     {
-        String result = HttpRequest.delete(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("RoleMembershipDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId, null);
     }
 
     /**
@@ -79,14 +57,7 @@ public class RoleManager extends RestManager
      */
     public int[] getMemberRoles(String serverId, String userId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        if(!result.containsKey("roleIds")) return new int[0];
-        JSONArray rolesJson = result.getJSONArray("roleIds");
+        JSONArray rolesJson = execute(Method.GET, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId), null).getJSONArray("roleIds");
         int[] roles = new int[rolesJson.size()];
         for(int i = 0; i != rolesJson.size(); i++) roles[i] = ((int) rolesJson.get(i));
         return roles;

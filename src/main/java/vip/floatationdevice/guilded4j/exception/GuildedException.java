@@ -5,6 +5,8 @@
 
 package vip.floatationdevice.guilded4j.exception;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.enums.ExceptionType;
 
 /**
@@ -14,7 +16,7 @@ public class GuildedException extends RuntimeException
 {
     private final String code;
     private final String description;
-    private final ExceptionType type;//TODO
+    private ExceptionType type;
 
     /**
      * Default constructor.
@@ -26,7 +28,6 @@ public class GuildedException extends RuntimeException
         super(code + " - " + message);
         this.code = code;
         this.description = message;
-        this.type = ExceptionType.OTHER;
     }
 
     /**
@@ -42,8 +43,24 @@ public class GuildedException extends RuntimeException
     public String getDescription(){return description;}
 
     /**
-     * Get the type of the error (TODO).
+     * Get the type of the error.
      * @return The error's type.
      */
     public ExceptionType getType(){return type;}
+
+    public GuildedException setType(ExceptionType type)
+    {
+        this.type = type;
+        return this;
+    }
+
+    public static GuildedException fromString(String rawString)
+    {
+        if(JSONUtil.isTypeJSON(rawString))
+        {
+            JSONObject json = new JSONObject(rawString);
+            return new GuildedException(json.getStr("code"), json.getStr("message"));
+        }
+        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+    }
 }

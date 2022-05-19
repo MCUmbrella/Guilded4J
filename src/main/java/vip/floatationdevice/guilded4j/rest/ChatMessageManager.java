@@ -5,11 +5,10 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.Embed;
@@ -44,27 +43,23 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage createChannelMessage(String channelId, String content, Embed[] embeds, String[] replyMessageIds, Boolean isPrivate, Boolean isSilent)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(MSG_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("content", content)
-                        .set("embeds", embeds == null ? null :
-                                new JSONArray(Arrays.stream(embeds)
-                                        .map(new Function<Embed, JSONObject>(){
-                                            @Override public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
-                                        })
-                                        .toArray()
-                                )
+        return ChatMessage.fromJSON(
+                new JSONObject(
+                        execute(Method.POST,
+                                MSG_CHANNEL_URL.replace("{channelId}", channelId),
+                                new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                        .set("content", content)
+                                        .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(new Function<Embed, JSONObject>()
+                                        {
+                                            @Override
+                                            public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
+                                        }).toArray()))
+                                        .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
+                                        .set("isPrivate", isPrivate)
+                                        .set("isSilent", isSilent)
                         )
-                        .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
-                        .set("isPrivate", isPrivate)
-                        .set("isSilent", isSilent)
-                        .toString())
-                .timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ChatMessage.fromString(result.get("message").toString());
+                ).getJSONObject("message")
+        );
     }
 
     /**
@@ -77,17 +72,7 @@ public class ChatMessageManager extends RestManager
      */
     public void deleteChannelMessage(String channelId, String messageId)
     {
-        String result = HttpRequest.delete(MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("ChannelMessageDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null);
     }
 
     /**
@@ -103,24 +88,18 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage updateChannelMessage(String channelId, String messageId, String content, Embed[] embeds)
     {
-        JSONObject result = new JSONObject(HttpRequest.put(MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("content", content)
-                        .set("embeds", embeds == null ? null :
-                                new JSONArray(Arrays.stream(embeds)
-                                        .map(new Function<Embed, JSONObject>(){
-                                            @Override public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
-                                        })
-                                        .toArray()
-                                )
-                        ).toString()
+        return ChatMessage.fromJSON(
+                execute(Method.PUT,
+                        MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId,
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("content", content)
+                                .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(new Function<Embed, JSONObject>()
+                                {
+                                    @Override
+                                    public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
+                                }).toArray()))
                 )
-                .timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ChatMessage.fromString(result.get("message").toString());
+        );
     }
 
     /**
@@ -132,15 +111,10 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage getMessage(String channelId, String messageId)
     {
-        JSONObject result = new JSONObject(new JSONObject(
-                HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId).
-                        header("Authorization", "Bearer " + authToken).
-                        header("Accept", "application/json").
-                        header("Content-type", "application/json").
-                        timeout(httpTimeout).execute().body()
-        ));
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ChatMessage.fromString(result.get("message").toString());
+        return ChatMessage.fromJSON(
+                new JSONObject(execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null))
+                        .getJSONObject("message")
+        );
     }
 
     /**
@@ -153,16 +127,10 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage[] getChannelMessages(String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(MSG_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        JSONArray messagesJson = result.getJSONArray("messages");
+        JSONArray messagesJson = new JSONObject(execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null)).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
-            messages[i] = ChatMessage.fromString(messagesJson.get(i).toString());
+            messages[i] = ChatMessage.fromJSON((JSONObject) messagesJson.get(i));
         return messages;
     }
 }

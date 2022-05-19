@@ -190,47 +190,41 @@ public class ChatMessage
     }
 
     /**
-     * Use the given JSON string to generate ChatMessage object.
+     * Use the given JSON object to generate ChatMessage object.
      * @return ChatMessage object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static ChatMessage fromString(String jsonString)
+    public static ChatMessage fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(jsonString))
-        {
-            JSONObject json = new JSONObject(jsonString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("type"),
-                    json.getStr("channelId"),
-                    json.getStr("content"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            JSONArray replyMessageIdsArray = json.getJSONArray("replyMessageIds");
-            String[] replyMessageIds = replyMessageIdsArray != null ? new String[replyMessageIdsArray.size()] : null;
-            if(replyMessageIdsArray != null) for(int i = 0; i < replyMessageIdsArray.size(); i++)
-                replyMessageIds[i] = replyMessageIdsArray.get(i).toString();
-            JSONArray embedsArray = json.getJSONArray("embeds");
-            Embed[] embeds = embedsArray != null ? new Embed[embedsArray.size()] : null;
-            if(embedsArray != null) for(int i = 0; i < embedsArray.size(); i++)
-                embeds[i] = Embed.fromString(embedsArray.get(i).toString());
-            return new ChatMessage()
-                    .setId(json.getStr("id"))
-                    .setType(json.getStr("type"))
-                    .setServerId(json.getStr("serverId"))
-                    .setChannelId(json.getStr("channelId"))
-                    .setContent(json.getStr("content"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"))
-                    .setWebhookCreatorId(json.getStr("createdByWebhookId"))
-                    .setUpdateTime(json.getStr("updatedAt"))
-                    .setPrivateReply(json.getBool("isPrivate"))
-                    .setReplyMessageIds(replyMessageIds)
-                    .setEmbeds(embeds);
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("type"),
+                json.getStr("channelId"),
+                json.getStr("content"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        JSONArray replyMessageIdsArray = json.getJSONArray("replyMessageIds");
+        String[] replyMessageIds = replyMessageIdsArray != null ? new String[replyMessageIdsArray.size()] : null;
+        if(replyMessageIdsArray != null) for(int i = 0; i < replyMessageIdsArray.size(); i++)
+            replyMessageIds[i] = replyMessageIdsArray.get(i).toString();
+        JSONArray embedsArray = json.getJSONArray("embeds");
+        Embed[] embeds = embedsArray != null ? new Embed[embedsArray.size()] : null;
+        if(embedsArray != null) for(int i = 0; i < embedsArray.size(); i++)
+            embeds[i] = Embed.fromString(embedsArray.get(i).toString());
+        return new ChatMessage()
+                .setId(json.getStr("id"))
+                .setType(json.getStr("type"))
+                .setServerId(json.getStr("serverId"))
+                .setChannelId(json.getStr("channelId"))
+                .setContent(json.getStr("content"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+                .setUpdateTime(json.getStr("updatedAt"))
+                .setPrivateReply(json.getBool("isPrivate"))
+                .setReplyMessageIds(replyMessageIds)
+                .setEmbeds(embeds);
     }
 
     /**

@@ -20,7 +20,7 @@ public class ChatMessageCreatedEvent extends GuildedEvent
     {
         super(source, json);
         JSONObject j = new JSONObject(json);
-        this.message = ChatMessage.fromString(j.getByPath("d.message").toString());
+        this.message = ChatMessage.fromJSON((JSONObject) j.getByPath("d.message"));
     }
 
     /**

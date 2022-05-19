@@ -109,35 +109,29 @@ public class ForumThread
     }
 
     /**
-     * Use the given JSON string to generate ForumThread object.
-     * @param rawString The JSON string.
+     * Use the given JSON object to generate ForumThread object.
+     * @param json The JSON object.
      * @return ForumThread object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static ForumThread fromString(String rawString)
+    public static ForumThread fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("serverId"),
-                    json.getStr("channelId"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            return new ForumThread()
-                    .setId(json.getInt("id"))
-                    .setServerId(json.getStr("serverId"))
-                    .setChannelId(json.getStr("channelId"))
-                    .setTitle(json.getStr("title"))
-                    .setContent(json.getStr("content"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"))
-                    .setWebhookCreatorId(json.getStr("createdByWebhookId"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("serverId"),
+                json.getStr("channelId"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        return new ForumThread()
+                .setId(json.getInt("id"))
+                .setServerId(json.getStr("serverId"))
+                .setChannelId(json.getStr("channelId"))
+                .setTitle(json.getStr("title"))
+                .setContent(json.getStr("content"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setWebhookCreatorId(json.getStr("createdByWebhookId"));
     }
 
     /**

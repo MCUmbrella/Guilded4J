@@ -1,6 +1,6 @@
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ForumThread;
@@ -28,13 +28,11 @@ public class ForumManager extends RestManager
      */
     public ForumThread createForumThread(String channelId, String title, String content)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(FORUM_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject().set("title", title).set("content", content).toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return ForumThread.fromString(result.get("forumThread").toString());
+        return ForumThread.fromJSON(
+                execute(Method.POST,
+                        FORUM_CHANNEL_URL.replace("{channelId}", channelId),
+                        new JSONObject().set("title", title).set("content", content)
+                ).getJSONObject("forumThread")
+        );
     }
 }

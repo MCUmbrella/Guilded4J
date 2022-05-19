@@ -5,9 +5,8 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.ROLE_XP_URL;
@@ -35,14 +34,10 @@ public class XPManager extends RestManager
      */
     public int awardUserXp(String serverId, String userId, int amount)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(USER_XP_URL.replace("{serverId}", serverId).replace("{userId}", userId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body("{\"amount\":" + amount + "}").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return result.getInt("total");
+        return execute(Method.POST,
+                USER_XP_URL.replace("{serverId}", serverId).replace("{userId}", userId),
+                new JSONObject().set("amount", amount)
+        ).getInt("total");
     }
 
     /**
@@ -56,17 +51,9 @@ public class XPManager extends RestManager
      */
     public void awardRoleXp(String serverId, int roleId, int amount)
     {
-        String result = HttpRequest.post(ROLE_XP_URL.replace("{serverId}", serverId).replace("{roleId}", String.valueOf(roleId))).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body("{\"amount\":" + amount + "}").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("TeamXpForRoleCreate returned an unexpected JSON string");
-        }
+        execute(Method.POST,
+                ROLE_XP_URL.replace("{serverId}", serverId).replace("{roleId}", String.valueOf(roleId)),
+                new JSONObject().set("amount", amount)
+        );
     }
 }

@@ -19,8 +19,7 @@ public class DocDeletedEvent extends GuildedEvent
     public DocDeletedEvent(Object source, String json)
     {
         super(source, json);
-        JSONObject j = new JSONObject(json);
-        this.doc = Doc.fromString(j.getByPath("d.doc").toString());
+        this.doc = Doc.fromJSON((JSONObject) new JSONObject(json).getByPath("d.doc"));
     }
 
     /**

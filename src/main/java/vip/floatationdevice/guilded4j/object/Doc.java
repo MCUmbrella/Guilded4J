@@ -120,38 +120,32 @@ public class Doc
     }
 
     /**
-     * Use the given JSON string to generate Doc object.
-     * @param rawString The JSON string.
+     * Use the given JSON object to generate Doc object.
+     * @param json The JSON object.
      * @return Doc object.
      * @throws IllegalArgumentException when the essential fields are not set.
-     * @throws ClassCastException when the provided String's content isn't JSON format.
      */
-    public static Doc fromString(String rawString)
+    public static Doc fromJSON(JSONObject json)
     {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            Util.checkNullArgument(
-                    json.getStr("id"),
-                    json.getStr("serverId"),
-                    json.getStr("channelId"),
-                    json.getStr("title"),
-                    json.getStr("content"),
-                    json.getStr("createdAt"),
-                    json.getStr("createdBy")
-            );
-            return new Doc()
-                    .setId(json.getInt("id"))
-                    .setServerId(json.getStr("serverId"))
-                    .setChannelId(json.getStr("channelId"))
-                    .setTitle(json.getStr("title"))
-                    .setContent(json.getStr("content"))
-                    .setCreationTime(json.getStr("createdAt"))
-                    .setCreatorId(json.getStr("createdBy"))
-                    .setUpdateTime(json.getStr("updatedAt"))
-                    .setUpdatedBy(json.getStr("updatedBy"));
-        }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("serverId"),
+                json.getStr("channelId"),
+                json.getStr("title"),
+                json.getStr("content"),
+                json.getStr("createdAt"),
+                json.getStr("createdBy")
+        );
+        return new Doc()
+                .setId(json.getInt("id"))
+                .setServerId(json.getStr("serverId"))
+                .setChannelId(json.getStr("channelId"))
+                .setTitle(json.getStr("title"))
+                .setContent(json.getStr("content"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setUpdateTime(json.getStr("updatedAt"))
+                .setUpdatedBy(json.getStr("updatedBy"));
     }
 
     /**

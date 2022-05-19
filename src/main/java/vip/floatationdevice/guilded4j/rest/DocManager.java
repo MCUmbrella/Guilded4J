@@ -5,10 +5,9 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
-import cn.hutool.http.HttpRequest;
+import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.Doc;
 
@@ -35,14 +34,12 @@ public class DocManager extends RestManager
      */
     public Doc createDoc(String channelId, String title, String content)
     {
-        JSONObject result = new JSONObject(HttpRequest.post(DOC_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject().set("title", title).set("content", content).toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Doc.fromString(result.get("doc").toString());
+        return Doc.fromJSON(
+                execute(Method.POST,
+                        DOC_CHANNEL_URL.replace("{channelId}", channelId),
+                        new JSONObject().set("title", title).set("content", content)
+                ).getJSONObject("doc")
+        );
     }
 
     /**
@@ -57,14 +54,12 @@ public class DocManager extends RestManager
      */
     public Doc updateDoc(String channelId, int docId, String title, String content)
     {
-        JSONObject result = new JSONObject(HttpRequest.put(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                body(new JSONObject().set("title", title).set("content", content).toString()).
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Doc.fromString(result.get("doc").toString());
+        return Doc.fromJSON(
+                execute(Method.PUT,
+                        DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId,
+                        new JSONObject().set("title", title).set("content", content)
+                ).getJSONObject("doc")
+        );
     }
 
     /**
@@ -77,17 +72,7 @@ public class DocManager extends RestManager
      */
     public void deleteDoc(String channelId, int docId)
     {
-        String result = HttpRequest.delete(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body();
-        if(JSONUtil.isTypeJSON(result))
-        {
-            JSONObject json = new JSONObject(result);
-            if(json.containsKey("code")) throw new GuildedException(json.getStr("code"), json.getStr("message"));
-            else throw new ClassCastException("DocDelete returned an unexpected JSON string");
-        }
+        execute(Method.DELETE, DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId, null);
     }
 
     /**
@@ -100,13 +85,12 @@ public class DocManager extends RestManager
      */
     public Doc getDoc(String channelId, int docId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        return Doc.fromString(result.get("doc").toString());
+        return Doc.fromJSON(
+                execute(Method.GET,
+                        DOC_CHANNEL_URL.replace("{channelId}", channelId).replace("{docId}", String.valueOf(docId)),
+                        null
+                ).getJSONObject("doc")
+        );
     }
 
     /**
@@ -119,17 +103,9 @@ public class DocManager extends RestManager
      */
     public Doc[] getChannelDocs(String channelId)
     {
-        JSONObject result = new JSONObject(HttpRequest.get(DOC_CHANNEL_URL.replace("{channelId}", channelId)).
-                header("Authorization", "Bearer " + authToken).
-                header("Accept", "application/json").
-                header("Content-type", "application/json").
-                timeout(httpTimeout).execute().body());
-        if(result.containsKey("code")) throw new GuildedException(result.getStr("code"), result.getStr("message"));
-        System.out.println(result);
-        JSONArray docsJson = result.getJSONArray("docs");
+        JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("docs");
         Doc[] docs = new Doc[docsJson.size()];
-        for(int i = 0; i != docsJson.size(); i++)
-            docs[i] = Doc.fromString(docsJson.get(i).toString());
+        for (int i = 0; i < docsJson.size(); i++) docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
         return docs;
     }
 }

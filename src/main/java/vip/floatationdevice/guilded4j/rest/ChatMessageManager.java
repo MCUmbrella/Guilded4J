@@ -44,20 +44,18 @@ public class ChatMessageManager extends RestManager
     public ChatMessage createChannelMessage(String channelId, String content, Embed[] embeds, String[] replyMessageIds, Boolean isPrivate, Boolean isSilent)
     {
         return ChatMessage.fromJSON(
-                new JSONObject(
-                        execute(Method.POST,
-                                MSG_CHANNEL_URL.replace("{channelId}", channelId),
-                                new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                                        .set("content", content)
-                                        .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(new Function<Embed, JSONObject>()
-                                        {
-                                            @Override
-                                            public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
-                                        }).toArray()))
-                                        .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
-                                        .set("isPrivate", isPrivate)
-                                        .set("isSilent", isSilent)
-                        )
+                execute(Method.POST,
+                        MSG_CHANNEL_URL.replace("{channelId}", channelId),
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("content", content)
+                                .set("embeds", embeds == null ? null : new JSONArray(Arrays.stream(embeds).map(new Function<Embed, JSONObject>()
+                                {
+                                    @Override
+                                    public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
+                                }).toArray()))
+                                .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
+                                .set("isPrivate", isPrivate)
+                                .set("isSilent", isSilent)
                 ).getJSONObject("message")
         );
     }
@@ -98,7 +96,7 @@ public class ChatMessageManager extends RestManager
                                     @Override
                                     public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
                                 }).toArray()))
-                )
+                ).getJSONObject("message")
         );
     }
 
@@ -127,7 +125,7 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage[] getChannelMessages(String channelId)
     {
-        JSONArray messagesJson = new JSONObject(execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null)).getJSONArray("messages");
+        JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
             messages[i] = ChatMessage.fromJSON((JSONObject) messagesJson.get(i));

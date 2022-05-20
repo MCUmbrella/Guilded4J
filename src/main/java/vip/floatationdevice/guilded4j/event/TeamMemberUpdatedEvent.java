@@ -6,7 +6,7 @@
 package vip.floatationdevice.guilded4j.event;
 
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.object.MemberNicknameSummary;
+import vip.floatationdevice.guilded4j.object.misc.MemberNicknameSummary;
 
 /**
  * Event fired when a member's nickname is updated.<br>

@@ -8,6 +8,7 @@ package vip.floatationdevice.guilded4j.object;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.Util;
+import vip.floatationdevice.guilded4j.object.misc.ListItemNote;
 
 /**
  * A summary of a list item.<br>

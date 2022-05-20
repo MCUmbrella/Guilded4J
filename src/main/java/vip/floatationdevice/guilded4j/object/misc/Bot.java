@@ -3,11 +3,12 @@
  Licensed under the MIT License. See LICENSE in the project root for license information.
 */
 
-package vip.floatationdevice.guilded4j.object;
+package vip.floatationdevice.guilded4j.object.misc;
 
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.Util;
+import vip.floatationdevice.guilded4j.object.User;
 
 /**
  * Represents a bot.

@@ -8,6 +8,7 @@ package vip.floatationdevice.guilded4j.object;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.object.misc.EmbedField;
 
 /**
  * Rich content sections associated with the message.<br>

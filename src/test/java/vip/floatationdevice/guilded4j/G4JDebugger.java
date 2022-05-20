@@ -13,6 +13,8 @@ import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.*;
+import vip.floatationdevice.guilded4j.object.misc.Bot;
+import vip.floatationdevice.guilded4j.object.misc.MemberRoleSummary;
 
 import java.io.*;
 import java.util.*;

@@ -6,7 +6,7 @@
 package vip.floatationdevice.guilded4j.event;
 
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.object.Bot;
+import vip.floatationdevice.guilded4j.object.misc.Bot;
 
 /**
  * Event that is fired when the event manager's WebSocket connection has been opened and successfully logged in.

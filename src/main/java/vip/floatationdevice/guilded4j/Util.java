@@ -52,7 +52,7 @@ public class Util
      * @param c Calendar object
      * @return ISO8601 timestamp (something like "2021-06-15T20:15:01.706Z")
      */
-    public static String dateToIso8601(Calendar c)
+    public static String calendarToIso8601(Calendar c)
     {
         return String.format("%d-%02d-%02dT%02d:%02d:%02d.%03dZ",
                 c.get(Calendar.YEAR),

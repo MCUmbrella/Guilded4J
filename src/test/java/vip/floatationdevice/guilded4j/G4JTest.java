@@ -20,7 +20,7 @@ public class G4JTest
         String iso = "2022-05-20T06:29:31.508Z";
         System.out.println(iso);
         Calendar c = iso8601ToCalendar(iso);
-        System.out.println(dateToIso8601(c));
+        System.out.println(calendarToIso8601(c));
         System.out.println(c.getTimeZone().getDisplayName());
         System.out.println(c.getTime());
         System.out.println(isUUID(UUID.randomUUID()));

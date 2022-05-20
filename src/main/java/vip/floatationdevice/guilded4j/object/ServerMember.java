@@ -19,6 +19,7 @@ public class ServerMember
     int[] roleIds;
     String nickname;
     String joinedAt;
+    Boolean isOwner;
 
     /**
      * Get the member's user object.
@@ -44,6 +45,12 @@ public class ServerMember
      */
     public String getJoinTime(){return joinedAt;}
 
+    /**
+     * Is the member the server owner?
+     * @return True if the member is the server owner, false otherwise.
+     */
+    public boolean isOwner(){return isOwner != null && isOwner;}
+
     public ServerMember setUser(User user)
     {
         this.user = user;
@@ -68,6 +75,12 @@ public class ServerMember
         return this;
     }
 
+    public ServerMember setIsOwner(Boolean isOwner)
+    {
+        this.isOwner = isOwner;
+        return this;
+    }
+
     /**
      * Generate ServerMember object from JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
@@ -86,7 +99,8 @@ public class ServerMember
                 .setUser(User.fromJSON(json.getJSONObject("user")))
                 .setRoleIds(roleIds)
                 .setNickname(json.getStr("nickname"))
-                .setJoinTime(json.getStr("joinedAt"));
+                .setJoinTime(json.getStr("joinedAt"))
+                .setIsOwner(json.getBool("isOwner"));
     }
 
     /**
@@ -101,6 +115,7 @@ public class ServerMember
                 .set("roleIds", roleIds)
                 .set("nickname", nickname)
                 .set("joinedAt", joinedAt)
+                .set("isOwner", isOwner)
                 .toString();
     }
 }

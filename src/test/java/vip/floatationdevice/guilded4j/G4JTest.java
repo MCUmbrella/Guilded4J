@@ -1,10 +1,10 @@
 package vip.floatationdevice.guilded4j;
 
+import vip.floatationdevice.guilded4j.misc.ChatMessageQuery;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.rest.ChatMessageManager;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 import static vip.floatationdevice.guilded4j.Util.*;
 
@@ -17,15 +17,18 @@ public class G4JTest
     {
         G4JDebugger.G4JSession session = new G4JDebugger.G4JSession();
         session.restore();
-        String iso = "2022-05-20T06:29:31.508Z";
-        System.out.println(iso);
-        Calendar c = iso8601ToCalendar(iso);
-        System.out.println(calendarToIso8601(c));
-        System.out.println(c.getTimeZone().getDisplayName());
-        System.out.println(c.getTime());
-        System.out.println(isUUID(UUID.randomUUID()));
-        ChatMessage[] msgs = new ChatMessageManager(session.savedToken).getChannelMessages(session.savedChannelId);
-        for (ChatMessage msg : msgs)
-            System.out.println(iso8601ToCalendar(msg.getCreationTime()).getTime());
+        Calendar after = Calendar.getInstance();
+        after.set(Calendar.HOUR_OF_DAY, 5);
+        after.set(Calendar.MINUTE, 30);
+        System.out.println(after.getTime() + " -> " + calendarToIso8601(after));
+        ChatMessage[] msgs = new ChatMessageManager(session.savedToken)
+                .getChannelMessages(
+                        session.savedChannelId,
+                        new ChatMessageQuery()
+                                .includePrivate()
+                                .after(calendarToIso8601(after))
+                );
+        for(int i = 0; i != msgs.length; i++)
+            System.out.println(msgs[i].getCreationTime() + " -> " + iso8601ToCalendar(msgs[i].getCreationTime()).getTime() + ": " + msgs[i].getContent() + "\t" + msgs[i]);
     }
 }

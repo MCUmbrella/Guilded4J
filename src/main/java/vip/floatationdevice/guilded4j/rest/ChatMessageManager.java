@@ -10,6 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
+import vip.floatationdevice.guilded4j.misc.ChatMessageQuery;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.Embed;
 
@@ -126,6 +127,23 @@ public class ChatMessageManager extends RestManager
     public ChatMessage[] getChannelMessages(String channelId)
     {
         JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("messages");
+        ChatMessage[] messages = new ChatMessage[messagesJson.size()];
+        for(int i = 0; i != messagesJson.size(); i++)
+            messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));
+        return messages;
+    }
+
+    /**
+     * Get a list of the messages using a query.<br>
+     * @param channelId ID of the channel that the messages exist in.
+     * @param query The query to search for.
+     * @return ChatMessage[]
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public ChatMessage[] getChannelMessages(String channelId, ChatMessageQuery query)
+    {
+        JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
             messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));

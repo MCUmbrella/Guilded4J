@@ -31,6 +31,7 @@ public class Util
     public static Calendar iso8601ToCalendar(String s)
     {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         String[] parts = s.split("T"); // [2021-06-15, 20:15:01.706Z]
         String[] dateParts = parts[0].split("-"); // [2021, 06, 15]
         calendar.set(Calendar.YEAR, Integer.parseInt(dateParts[0]));
@@ -43,7 +44,6 @@ public class Util
         calendar.set(Calendar.SECOND, Integer.parseInt(secondsParts[0]));
         if(secondsParts.length > 1)
             calendar.set(Calendar.MILLISECOND, Integer.parseInt(secondsParts[1].substring(0, 3))); // drops 'Z'
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         return calendar;
     }
 
@@ -54,6 +54,7 @@ public class Util
      */
     public static String calendarToIso8601(Calendar c)
     {
+        c.setTimeZone(TimeZone.getTimeZone("UTC"));
         return String.format("%d-%02d-%02dT%02d:%02d:%02d.%03dZ",
                 c.get(Calendar.YEAR),
                 c.get(Calendar.MONTH) + 1,

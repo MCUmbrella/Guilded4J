@@ -1,12 +1,8 @@
 package vip.floatationdevice.guilded4j;
 
-import vip.floatationdevice.guilded4j.misc.ChatMessageQuery;
-import vip.floatationdevice.guilded4j.object.ChatMessage;
-import vip.floatationdevice.guilded4j.rest.ChatMessageManager;
-
-import java.util.Calendar;
-
-import static vip.floatationdevice.guilded4j.Util.*;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 /**
  * Some temporary test code will go here.
@@ -15,20 +11,32 @@ public class G4JTest
 {
     public static void main(String[] args)
     {
-        G4JDebugger.G4JSession session = new G4JDebugger.G4JSession();
-        session.restore();
-        Calendar after = Calendar.getInstance();
-        after.set(Calendar.HOUR_OF_DAY, 5);
-        after.set(Calendar.MINUTE, 30);
-        System.out.println(after.getTime() + " -> " + calendarToIso8601(after));
-        ChatMessage[] msgs = new ChatMessageManager(session.savedToken)
-                .getChannelMessages(
-                        session.savedChannelId,
-                        new ChatMessageQuery()
-                                .includePrivate()
-                                .after(calendarToIso8601(after))
-                );
-        for(int i = 0; i != msgs.length; i++)
-            System.out.println(msgs[i].getCreationTime() + " -> " + iso8601ToCalendar(msgs[i].getCreationTime()).getTime() + ": " + msgs[i].getContent() + "\t" + msgs[i]);
+        GuildedException e = GuildedException.fromString("{\n" +
+                "  \"code\": \"ForbiddenError\",\n" +
+                "  \"message\": \"You do not have the correct permissions to perform this request\",\n" +
+                "  \"meta\": {\n" +
+                "    \"missingPermissions\": [\n" +
+                "      \"Kick / Ban members\",\n" +
+                "      \"AAAAA\",\n" +
+                "      \"B\"\n" +
+                "    ],\n" +
+                "    \"test\": 123432,\n" +
+                "    \"test2\": {\n" +
+                "      \"test2.1\": 2.1\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
+        System.out.println(e);
+        System.out.println(e.getMeta());
+        System.out.println((int) e.getMeta().get("test"));
+        System.out.println(new JSONObject(e.getMeta().get("test2")).getFloat("test2.1"));
+        JSONArray missingPermissions = (JSONArray) e.getMeta().get("missingPermissions");
+        for(Object s : missingPermissions)
+            System.out.println(s);
+        GuildedException e2 = GuildedException.fromString("{\n" +
+                "  \"code\": \"ForbiddenError\",\n" +
+                "  \"message\": \"You do not have the correct permissions to perform this request\",\n" +
+                "}");
+        System.out.println(e2.getMeta());
     }
 }

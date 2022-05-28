@@ -9,6 +9,8 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import vip.floatationdevice.guilded4j.enums.ExceptionType;
 
+import java.util.HashMap;
+
 /**
  * The exception object converted from the error JSON returned by Guilded API.
  */
@@ -17,6 +19,8 @@ public class GuildedException extends RuntimeException
     private final String code;
     private final String description;
     private ExceptionType type;
+
+    private HashMap<String, Object> meta;
 
     /**
      * Default constructor.
@@ -54,12 +58,26 @@ public class GuildedException extends RuntimeException
         return this;
     }
 
+    /**
+     * Get the metadata (The "meta" key in the JSON returned by Guilded API).
+     * This feature is currently not stable, you need to know the type of the metadata you want to get.
+     * @return The metadata HashMap. Null if no meta data is provided.
+     */
+    public HashMap<String, Object> getMeta(){return meta;}
+
+    public GuildedException setMeta(HashMap<String, Object> meta)
+    {
+        this.meta = meta;
+        return this;
+    }
+
     public static GuildedException fromString(String rawString)
     {
         if(JSONUtil.isTypeJSON(rawString))
         {
             JSONObject json = new JSONObject(rawString);
-            return new GuildedException(json.getStr("code"), json.getStr("message"));
+            return new GuildedException(json.getStr("code"), json.getStr("message"))
+                    .setMeta(json.isNull("meta") ? null : json.getJSONObject("meta").toBean(HashMap.class));
         }
         else throw new ClassCastException("The provided String's content can't be converted to JSON object");
     }

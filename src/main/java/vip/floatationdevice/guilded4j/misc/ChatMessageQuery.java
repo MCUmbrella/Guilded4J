@@ -7,11 +7,12 @@ package vip.floatationdevice.guilded4j.misc;
 
 /**
  * The configuration for the chat message query. Will be converted to HTTP query parameters.
+ * This is not part of the official Guilded API.
  */
 public class ChatMessageQuery
 {
     private String before, after;
-    private int limit = 100;
+    private int limit = 50;
     private boolean includePrivate = false;
 
     /**
@@ -36,7 +37,7 @@ public class ChatMessageQuery
 
     /**
      * Limit the number of results returned.
-     * @param limit The maximum number of results to return (0 to 100, default 100).
+     * @param limit The maximum number of results to return (1 to 100, default 50).
      */
     public ChatMessageQuery limit(int limit)
     {

@@ -9,6 +9,7 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
+import vip.floatationdevice.guilded4j.misc.DocQuery;
 import vip.floatationdevice.guilded4j.object.Doc;
 
 import static vip.floatationdevice.guilded4j.G4JClient.DOC_CHANNEL_URL;
@@ -94,16 +95,32 @@ public class DocManager extends RestManager
     }
 
     /**
-     * Get a list of the latest 50 docs from a channel.<br>
+     * Get a list of the latest 25 docs from a channel.<br>
      * <a href="https://www.guilded.gg/docs/api/docs/DocReadMany" target=_blank>https://www.guilded.gg/docs/api/docs/DocReadMany</a>
      * @param channelId The id of the channel.
-     * @return A list of the latest 50 docs from the channel.
+     * @return A list of the latest 25 docs from the channel.
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc[] getChannelDocs(String channelId)
     {
         JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("docs");
+        Doc[] docs = new Doc[docsJson.size()];
+        for(int i = 0; i < docsJson.size(); i++) docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
+        return docs;
+    }
+
+    /**
+     * Get a list of docs using a query.<br>
+     * @param channelId The id of the channel.
+     * @param query The query to search for.
+     * @return Doc[]
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public Doc[] getChannelDocs(String channelId, DocQuery query)
+    {
+        JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("docs");
         Doc[] docs = new Doc[docsJson.size()];
         for(int i = 0; i < docsJson.size(); i++) docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
         return docs;

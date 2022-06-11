@@ -6,6 +6,7 @@
 package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
+import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.Server;
 
 import static vip.floatationdevice.guilded4j.G4JClient.SERVER_URL;
@@ -23,6 +24,8 @@ public class ServerManager extends RestManager
      * Currently, the bot must be a member of the server in order to fetch its information.<br>
      * @param serverId The ID of the server.
      * @return The server's Server object.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Server getServer(String serverId)
     {

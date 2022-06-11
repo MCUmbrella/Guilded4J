@@ -20,6 +20,7 @@ public class G4JClient
 {
     public static final String
             CHANNELS_URL = "https://www.guilded.gg/api/v1/channels",
+            SERVER_URL = "https://www.guilded.gg/api/v1/servers/{serverId}",
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
             MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",

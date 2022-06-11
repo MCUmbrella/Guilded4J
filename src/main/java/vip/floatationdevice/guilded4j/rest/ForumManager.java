@@ -32,7 +32,7 @@ public class ForumManager extends RestManager
                 execute(Method.POST,
                         FORUM_CHANNEL_URL.replace("{channelId}", channelId),
                         new JSONObject().set("title", title).set("content", content)
-                ).getJSONObject("forumThread")
+                ).getJSONObject("forumTopic")
         );
     }
 }

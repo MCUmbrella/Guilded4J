@@ -25,7 +25,7 @@ public class G4JClient
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
             MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",
             BANS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/bans",
-            FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/forum",
+            FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/topics",
             LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/items",
             DOC_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/docs",
             USER_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",

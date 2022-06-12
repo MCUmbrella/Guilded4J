@@ -61,58 +61,95 @@ public class G4JClient
 
     /**
      * Gets the chat message manager.
-     * @return The chat message manager.
      */
     public ChatMessageManager getChatMessageManager()
     {
         return (ChatMessageManager) getManagerOrCreate(ChatMessageManager.class);
     }
 
+    /**
+     * Gets the doc manager.
+     */
     public DocManager getDocManager()
     {
         return (DocManager) getManagerOrCreate(DocManager.class);
     }
 
+    /**
+     * Gets the forum thread manager.
+     */
     public ForumManager getForumManager()
     {
         return (ForumManager) getManagerOrCreate(ForumManager.class);
     }
 
+    /**
+     * Gets the group manager.
+     */
     public GroupManager getGroupManager()
     {
         return (GroupManager) getManagerOrCreate(GroupManager.class);
     }
 
+    /**
+     * Gets the list item manager.
+     */
     public ListItemManager getListItemManager()
     {
         return (ListItemManager) getManagerOrCreate(ListItemManager.class);
     }
 
+    /**
+     * Gets the server member manager.
+     */
     public MemberManager getMemberManager()
     {
         return (MemberManager) getManagerOrCreate(MemberManager.class);
     }
 
+    /**
+     * Gets the reaction manager.
+     */
     public ReactionManager getReactionManager()
     {
         return (ReactionManager) getManagerOrCreate(ReactionManager.class);
     }
 
+    /**
+     * Gets the role manager.
+     */
     public RoleManager getRoleManager()
     {
         return (RoleManager) getManagerOrCreate(RoleManager.class);
     }
 
+    /**
+     * Gets the server manager.
+     */
+    public ServerManager getServerManager()
+    {
+        return (ServerManager) getManagerOrCreate(ServerManager.class);
+    }
+
+    /**
+     * Gets the channel manager.
+     */
     public ServerChannelManager getServerChannelManager()
     {
         return (ServerChannelManager) getManagerOrCreate(ServerChannelManager.class);
     }
 
+    /**
+     * Gets the webhook manager.
+     */
     public WebhookManager getWebhookManager()
     {
         return (WebhookManager) getManagerOrCreate(WebhookManager.class);
     }
 
+    /**
+     * Gets the XP manager.
+     */
     public XPManager getXPManager()
     {
         return (XPManager) getManagerOrCreate(XPManager.class);

@@ -61,6 +61,14 @@ public class G4JClient
 //============================== API FUNCTIONS START ==============================
 
     /**
+     * Gets the calendar event manager.
+     */
+    public CalendarEventManager getCalendarEventManager()
+    {
+        return (CalendarEventManager) getManagerOrCreate(CalendarEventManager.class);
+    }
+
+    /**
      * Gets the chat message manager.
      */
     public ChatMessageManager getChatMessageManager()

@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j;
 
+import vip.floatationdevice.guilded4j.exception.RestManagerCreationException;
 import vip.floatationdevice.guilded4j.rest.*;
 
 import java.lang.reflect.Constructor;
@@ -183,7 +184,7 @@ public class G4JClient
      * Gets the specified REST manager. If the manager is not initialized, create it and add it to the managers list.
      * @param clazz The REST manager class.
      * @return The REST manager (newly created or already existing).
-     * @throws RuntimeException If the REST manager creation fails.
+     * @throws RestManagerCreationException If the REST manager creation fails.
      */
     private RestManager getManagerOrCreate(Class<? extends RestManager> clazz)
     {
@@ -198,7 +199,7 @@ public class G4JClient
         }
         catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e)
         {
-            throw new RuntimeException("Failed to create REST manager", e);
+            throw new RestManagerCreationException("Failed to create REST manager " + clazz.getName(), e);
         }
         managers.add(newManager);
         return newManager;

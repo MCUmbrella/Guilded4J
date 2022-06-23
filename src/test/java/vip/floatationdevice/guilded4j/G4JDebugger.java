@@ -62,7 +62,7 @@ public class G4JDebugger
                     "    Run garbage collector\n" +
                     " > whoami\n" +
                     "    Print the current bot's info\n",
-                    datePfx() + " [i] Chat channel management:\n" +
+            datePfx() + " [i] Chat channel management:\n" +
                     " > ls\n" +
                     "    List messages in the current channel\n" +
                     " > send <text>\n" +
@@ -96,7 +96,9 @@ public class G4JDebugger
                     "    Add XP to all users with specified role\n",
             datePfx() + " [i] Reaction management:\n" +
                     " > react <(?)contentId> <(int)emoteId>\n" +
-                    "    Add a reaction to specified content\n",
+                    "    Add a reaction to specified content\n" +
+                    " > rmreact <(?)contentId> <(int)emoteId>\n" +
+                    "    Remove a reaction from specified content\n",
             datePfx() + " [i] Group management:\n" +
                     " > groupadd <groupId> <userId>\n" +
                     "    Add a user to a group\n" +
@@ -665,6 +667,14 @@ public class G4JDebugger
                             client.getReactionManager().createContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
                         else
                             System.err.println(datePfx() + " [X] Usage: react <contentId> <(int)emoteId>");
+                        break;
+                    }
+                    case "rmreact":
+                    {
+                        if(workChannelValid() && commands.length == 3)
+                            client.getReactionManager().deleteContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
+                        else
+                            System.err.println(datePfx() + " [X] Usage: rmreact <contentId> <(int)emoteId>");
                         break;
                     }
                     case "groupadd":

@@ -47,6 +47,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get last 50 updated docs - getChannelDocs()
 ## Reaction
 - [x] Add reaction - createContentReaction()
+- [x] Remove reaction - deleteContentReaction()
 ## XP
 - [x] Add XP to user - awardUserXp()
 - [x] Add XP to all users with specified role - awardRoleXp()

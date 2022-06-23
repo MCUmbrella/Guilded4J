@@ -39,4 +39,24 @@ public class ReactionManager extends RestManager
                 null
         );
     }
+
+    /**
+     * Remove a reaction emote.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ContentReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReactionDelete</a>
+     * @param channelId Channel UUID where the content exists.
+     * @param contentId The ID of the content.
+     * @param emoteId The ID of the emote to remove.
+     * @throws GuildedException if Guilded API returned an error JSON string.
+     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     */
+    public void deleteContentReaction(String channelId, String contentId, int emoteId)
+    {
+        execute(Method.DELETE,
+                REACTION_URL
+                        .replace("{channelId}", channelId)
+                        .replace("{contentId}", contentId)
+                        .replace("{emoteId}", Integer.toString(emoteId)),
+                null
+        );
+    }
 }

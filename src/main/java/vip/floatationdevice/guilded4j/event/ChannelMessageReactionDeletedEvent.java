@@ -5,7 +5,7 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class ChannelMessageReactionDeletedEvent extends GuildedEvent // TODO: implement
+public class ChannelMessageReactionDeletedEvent extends GuildedEvent // TODO: wait
 {
     public ChannelMessageReactionDeletedEvent(Object source, String json)
     {

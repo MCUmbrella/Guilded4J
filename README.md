@@ -14,12 +14,18 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 <details><summary>Click me</summary>
 <p>
 
-## Text
+## Chat & messaging
 - [x] Create message - createChannelMessage()
 - [x] Delete message - deleteChannelMessage()
 - [x] Update message - updateChannelMessage()
 - [x] Get message info - getMessage()
-- [x] Get last 100 messages - getChannelMessages()
+- [x] Get messages - getChannelMessages()
+## Calendar
+- [ ] Create event - createCalendarEvent()
+- [ ] Delete event - deleteCalendarEvent()
+- [ ] Update event - updateCalendarEvent()
+- [ ] Get event info - getCalendarEvent()
+- [ ] Get events - getCalendarEvents()
 ## Members
 - [x] Update/delete nickname - setMemberNickname()
 - [x] Get member info - getServerMember()
@@ -100,6 +106,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ListItemDeletedEvent
 - [x] ListItemCompletedEvent
 - [x] ListItemUncompletedEvent
+- [ ] CalendarEventCreatedEvent
+- [ ] CalendarEventUpdatedEvent
+- [ ] CalendarEventDeletedEvent
+- [ ] ChannelMessageReactionCreatedEvent
+- [ ] ChannelMessageReactionDeletedEvent
 
 </p>
 </details>

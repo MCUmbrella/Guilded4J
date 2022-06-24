@@ -9,7 +9,7 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.misc.DocQuery;
+import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.Doc;
 
 import static vip.floatationdevice.guilded4j.G4JClient.DOC_CHANNEL_URL;
@@ -118,7 +118,7 @@ public class DocManager extends RestManager
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public Doc[] getChannelDocs(String channelId, DocQuery query)
+    public Doc[] getChannelDocs(String channelId, GObjectQuery query)
     {
         JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("docs");
         Doc[] docs = new Doc[docsJson.size()];

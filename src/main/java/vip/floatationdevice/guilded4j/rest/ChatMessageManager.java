@@ -10,7 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
-import vip.floatationdevice.guilded4j.misc.ChatMessageQuery;
+import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.Embed;
 
@@ -141,7 +141,7 @@ public class ChatMessageManager extends RestManager
      * @throws GuildedException if Guilded API returned an error JSON string.
      * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
-    public ChatMessage[] getChannelMessages(String channelId, ChatMessageQuery query)
+    public ChatMessage[] getChannelMessages(String channelId, GObjectQuery query)
     {
         JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];

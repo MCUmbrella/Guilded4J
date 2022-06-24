@@ -21,11 +21,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get message info - getChannelMessage()
 - [x] Get messages - getChannelMessages()
 ## Calendar
-- [ ] Create event - createCalendarEvent()
-- [ ] Delete event - deleteCalendarEvent()
-- [ ] Update event - updateCalendarEvent()
-- [ ] Get event info - getCalendarEvent()
-- [ ] Get events - getCalendarEvents()
+- [x] Create event - createCalendarEvent()
+- [x] Delete event - deleteCalendarEvent()
+- [x] Update event - updateCalendarEvent()
+- [x] Get event info - getCalendarEvent()
+- [x] Get events - getCalendarEvents()
 ## Members
 - [x] Update/delete nickname - setMemberNickname()
 - [x] Get member info - getServerMember()

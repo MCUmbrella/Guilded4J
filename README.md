@@ -106,9 +106,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ListItemDeletedEvent
 - [x] ListItemCompletedEvent
 - [x] ListItemUncompletedEvent
-- [ ] CalendarEventCreatedEvent
-- [ ] CalendarEventUpdatedEvent
-- [ ] CalendarEventDeletedEvent
+- [x] CalendarEventCreatedEvent
+- [x] CalendarEventUpdatedEvent
+- [x] CalendarEventDeletedEvent
 - [ ] ChannelMessageReactionCreatedEvent
 - [ ] ChannelMessageReactionDeletedEvent
 

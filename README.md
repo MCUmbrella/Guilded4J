@@ -18,7 +18,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Create message - createChannelMessage()
 - [x] Delete message - deleteChannelMessage()
 - [x] Update message - updateChannelMessage()
-- [x] Get message info - getMessage()
+- [x] Get message info - getChannelMessage()
 - [x] Get messages - getChannelMessages()
 ## Calendar
 - [ ] Create event - createCalendarEvent()

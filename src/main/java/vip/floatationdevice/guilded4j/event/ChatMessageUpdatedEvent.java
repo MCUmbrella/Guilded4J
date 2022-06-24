@@ -26,5 +26,5 @@ public class ChatMessageUpdatedEvent extends GuildedEvent
      * Get the ChatMessage object of the event.
      * @return A ChatMessage object.
      */
-    public ChatMessage getChatMessageObject(){return message;}
+    public ChatMessage getChatMessage(){return message;}
 }

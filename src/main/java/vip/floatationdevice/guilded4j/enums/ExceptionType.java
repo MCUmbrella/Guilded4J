@@ -5,8 +5,6 @@
 
 package vip.floatationdevice.guilded4j.enums;
 
-//TODO: use it when Guilded improves the exception handling section of the API doc
-
 /**
  * The type of {@link vip.floatationdevice.guilded4j.exception.GuildedException} that was thrown.
  */

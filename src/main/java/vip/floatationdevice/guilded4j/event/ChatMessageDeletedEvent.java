@@ -16,6 +16,7 @@ public class ChatMessageDeletedEvent extends GuildedEvent
     private final String deletedAt;
     private final String id;
     private final String channelId;
+    private final boolean isPrivate;
 
     public ChatMessageDeletedEvent(Object source, String json)
     {
@@ -24,6 +25,7 @@ public class ChatMessageDeletedEvent extends GuildedEvent
         this.deletedAt = j.getByPath("d.message.deletedAt").toString();
         this.id = j.getByPath("d.message.id").toString();
         this.channelId = j.getByPath("d.message.channelId").toString();
+        this.isPrivate = j.getByPath("d.message.isPrivate") != null && (boolean) j.getByPath("d.message.isPrivate");
     }
 
     /**
@@ -43,4 +45,10 @@ public class ChatMessageDeletedEvent extends GuildedEvent
      * @return A UUID string of the channel which the message belongs.
      */
     public String getChannelId(){return this.channelId;}
+
+    /**
+     * Get whether the deleted message is a private message.
+     * @return A boolean value. True if the message is a private message, otherwise false.
+     */
+    public Boolean isPrivate(){return this.isPrivate;}
 }

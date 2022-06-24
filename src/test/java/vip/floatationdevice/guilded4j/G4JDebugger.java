@@ -168,7 +168,7 @@ public class G4JDebugger
         @Subscribe
         public void onMsg(ChatMessageCreatedEvent e)
         {
-            ChatMessage m = e.getChatMessageObject();
+            ChatMessage m = e.getChatMessage();
             System.out.print(parseMessage(m, true));
         }
 
@@ -227,6 +227,12 @@ public class G4JDebugger
         public void onUnknownGuildedEvent(UnknownGuildedEvent e)
         {
             System.err.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
+        }
+
+        @Subscribe
+        public void onMessageDeleted(ChatMessageDeletedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] Message with ID " + e.getMessageId() + " deleted from channel " + e.getChannelId() + " in server " + e.getServerID() + " (private: " + e.isPrivate() + ")" + prompt());
         }
     }
 

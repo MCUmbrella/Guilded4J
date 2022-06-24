@@ -522,7 +522,7 @@ public class G4JDebugger
                         if(commands.length == 2)
                         {
                             UUID.fromString(commands[1]);
-                            System.out.print(new JSONObject(client.getChatMessageManager().getMessage(workChannel, commands[1]).toString()).toStringPretty());
+                            System.out.print(new JSONObject(client.getChatMessageManager().getChannelMessage(workChannel, commands[1]).toString()).toStringPretty());
                         }
                         break;
                     }

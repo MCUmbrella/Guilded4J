@@ -108,7 +108,7 @@ public class ChatMessageManager extends RestManager
      * @param messageId The ID of the message.
      * @return ChatMessage object of the message with the given UUID.
      */
-    public ChatMessage getMessage(String channelId, String messageId)
+    public ChatMessage getChannelMessage(String channelId, String messageId)
     {
         return ChatMessage.fromJSON(
                 execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null)

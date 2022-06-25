@@ -10,6 +10,7 @@ import vip.floatationdevice.guilded4j.rest.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.Proxy;
 import java.util.ArrayList;
 
 /**
@@ -187,6 +188,16 @@ public class G4JClient
         if(timeoutMs < 0) throw new IllegalArgumentException("HTTP request timeout cannot be negative");
         this.httpTimeout = timeoutMs;
         for(RestManager m : managers) m.setHttpTimeout(httpTimeout);
+    }
+
+    /**
+     * Set the proxy to be used for any network connections (HTTP and WebSocket).
+     * @param proxy The proxy to use. If null or Proxy.NO_PROXY, no proxy will be used.
+     */
+    public void setProxy(Proxy proxy)
+    {
+        for(RestManager m : managers) m.setProxy(proxy);
+        ws.setProxy(proxy == null ? Proxy.NO_PROXY : proxy);
     }
 
     /**

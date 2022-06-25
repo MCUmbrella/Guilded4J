@@ -15,6 +15,8 @@ import vip.floatationdevice.guilded4j.enums.ExceptionType;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.exception.HttpRequestException;
 
+import java.net.Proxy;
+
 /**
  * Class for interacting with the Guilded REST API.
  */
@@ -22,6 +24,7 @@ public abstract class RestManager
 {
     String authToken;
     int httpTimeout = 20000;
+    Proxy proxy;
 
     public RestManager(String authToken){this.authToken = authToken;}
 
@@ -38,6 +41,16 @@ public abstract class RestManager
     public RestManager setHttpTimeout(int timeoutMs)
     {
         this.httpTimeout = timeoutMs;
+        return this;
+    }
+
+    /**
+     * Set the proxy to be used for HTTP requests.
+     * @param proxy The proxy to use. If null or Proxy.NO_PROXY, no proxy will be used.
+     */
+    public RestManager setProxy(Proxy proxy)
+    {
+        this.proxy = proxy == null ? Proxy.NO_PROXY : proxy;
         return this;
     }
 
@@ -62,6 +75,7 @@ public abstract class RestManager
                     .header("Content-type", "application/json")
                     .timeout(httpTimeout);
             if(body != null) req.body(body.toString());
+            if(proxy != Proxy.NO_PROXY) req.setProxy(proxy);
             res = req.execute();
         }
         catch(IORuntimeException e)

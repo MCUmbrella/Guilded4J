@@ -8,7 +8,6 @@ package vip.floatationdevice.guilded4j.rest;
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.Doc;
 
@@ -30,8 +29,6 @@ public class DocManager extends RestManager
      * @param title The title of the document.
      * @param content The content of the document.
      * @return The newly created doc's Doc object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc createDoc(String channelId, String title, String content)
     {
@@ -50,8 +47,6 @@ public class DocManager extends RestManager
      * @param title The new title of the document.
      * @param content The new content of the document.
      * @return The updated doc's Doc object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc updateDoc(String channelId, int docId, String title, String content)
     {
@@ -68,8 +63,6 @@ public class DocManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/docs/DocDelete" target=_blank>https://www.guilded.gg/docs/api/docs/DocDelete</a>
      * @param channelId The id of the channel the document is in.
      * @param docId The id of the document to delete.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void deleteDoc(String channelId, int docId)
     {
@@ -81,8 +74,6 @@ public class DocManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/docs/DocRead" target=_blank>https://www.guilded.gg/docs/api/docs/DocRead</a>
      * @param docId The id of the document.
      * @return The doc's Doc object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc getDoc(String channelId, int docId)
     {
@@ -99,8 +90,6 @@ public class DocManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/docs/DocReadMany" target=_blank>https://www.guilded.gg/docs/api/docs/DocReadMany</a>
      * @param channelId The id of the channel.
      * @return A list of the latest 25 docs from the channel.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc[] getChannelDocs(String channelId)
     {
@@ -111,12 +100,10 @@ public class DocManager extends RestManager
     }
 
     /**
-     * Get a list of docs using a query.<br>
+     * Get a list of docs using a query.
      * @param channelId The id of the channel.
      * @param query The query to search for.
      * @return Doc[]
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public Doc[] getChannelDocs(String channelId, GObjectQuery query)
     {

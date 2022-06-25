@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.ROLE_XP_URL;
 import static vip.floatationdevice.guilded4j.G4JClient.USER_XP_URL;
@@ -29,8 +28,6 @@ public class XPManager extends RestManager
      * @param userId Member ID to award XP to.
      * @param amount The amount of XP to award.
      * @return The total XP after this operation.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public int awardUserXp(String serverId, String userId, int amount)
     {
@@ -46,8 +43,6 @@ public class XPManager extends RestManager
      * @param serverId The ID of the server where the member is.
      * @param roleId Role ID to award XP to.
      * @param amount The amount of XP to award.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void awardRoleXp(String serverId, int roleId, int amount)
     {

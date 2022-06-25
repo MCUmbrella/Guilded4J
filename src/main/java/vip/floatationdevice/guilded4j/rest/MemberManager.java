@@ -9,7 +9,6 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.enums.SocialMedia;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ServerMember;
 import vip.floatationdevice.guilded4j.object.ServerMemberBan;
 import vip.floatationdevice.guilded4j.object.ServerMemberSummary;
@@ -35,8 +34,6 @@ public class MemberManager extends RestManager
      * @param userId The ID of the member.
      * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
      * @return The nickname to be set when setting nickname, {@code null} when deleting nickname.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public String setMemberNickname(String serverId, String userId, String nickname)
     {
@@ -63,8 +60,6 @@ public class MemberManager extends RestManager
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      * @return The member's ServerMember object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerMember getServerMember(String serverId, String userId)
     {
@@ -79,8 +74,6 @@ public class MemberManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberDelete</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void kickServerMember(String serverId, String userId)
     {
@@ -92,8 +85,6 @@ public class MemberManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberReadMany</a>
      * @param serverId The ID of the server where the members are.
      * @return A list of ServerMemberSummary objects for each member in the server.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerMemberSummary[] getServerMembers(String serverId)
     {
@@ -111,8 +102,6 @@ public class MemberManager extends RestManager
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      * @return A ServerMemberBan object of the banned member.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerMemberBan getServerMemberBan(String serverId, String userId)
     {
@@ -131,8 +120,6 @@ public class MemberManager extends RestManager
      * @param userId The ID of the user to ban from this server.
      * @param reason The reason for the ban.
      * @return A ServerMemberBan object of the banned member.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerMemberBan banServerMember(String serverId, String userId, String reason)
     {
@@ -149,8 +136,6 @@ public class MemberManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanDelete</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the user to unban from this server.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void unbanServerMember(String serverId, String userId)
     {
@@ -162,8 +147,6 @@ public class MemberManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany</a>
      * @param serverId The ID of the server to get ban information of.
      * @return A list of ServerMemberBan objects of the banned members.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerMemberBan[] getServerMemberBans(String serverId)
     {
@@ -180,8 +163,6 @@ public class MemberManager extends RestManager
      * @param userId The target user's ID.
      * @param type The type of social link to retrieve (see {@link SocialMedia} for available types).
      * @return A HashMap with "type", "handle", "serviceId(nullable)" keys.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public HashMap<String, String> getSocialLink(String serverId, String userId, SocialMedia type)
     {

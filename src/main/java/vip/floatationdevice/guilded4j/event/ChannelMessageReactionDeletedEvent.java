@@ -5,6 +5,10 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+/**
+ * Not implemented yet.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionDeleted", target=_blank>https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionDeleted</a>
+ */
 public class ChannelMessageReactionDeletedEvent extends GuildedEvent // TODO: wait
 {
     public ChannelMessageReactionDeletedEvent(Object source, String json)

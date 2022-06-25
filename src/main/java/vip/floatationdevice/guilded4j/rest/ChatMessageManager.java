@@ -9,7 +9,6 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 import vip.floatationdevice.guilded4j.object.Embed;
@@ -39,8 +38,6 @@ public class ChatMessageManager extends RestManager
      * @param isPrivate If set, this message will only be seen by those mentioned or replied to.
      * @param isSilent If set, this message will not notify any mentioned users or roles.
      * @return The newly created message's ChatMessage object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ChatMessage createChannelMessage(String channelId, String content, Embed[] embeds, String[] replyMessageIds, Boolean isPrivate, Boolean isSilent)
     {
@@ -66,8 +63,6 @@ public class ChatMessageManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageDelete" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>
      * @param channelId The ID of the channel.
      * @param messageId The ID of the message.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void deleteChannelMessage(String channelId, String messageId)
     {
@@ -82,8 +77,6 @@ public class ChatMessageManager extends RestManager
      * @param content The message content to update.
      * @param embeds The message embeds to update.
      * @return the updated message's ChatMessage object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ChatMessage updateChannelMessage(String channelId, String messageId, String content, Embed[] embeds)
     {
@@ -117,12 +110,10 @@ public class ChatMessageManager extends RestManager
     }
 
     /**
-     * Get a list of the latest 100 messages from a channel.<br>
+     * Get a list of the latest 50 messages from a channel.<br>
      * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageReadMany</a>
      * @param channelId The ID of the channel.
      * @return A ChatMessage[] that contains up to 100 ChatMessage objects.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ChatMessage[] getChannelMessages(String channelId)
     {
@@ -134,12 +125,10 @@ public class ChatMessageManager extends RestManager
     }
 
     /**
-     * Get a list of the messages using a query.<br>
+     * Get a list of the messages using a query.
      * @param channelId ID of the channel that the messages exist in.
      * @param query The query to search for.
      * @return ChatMessage[]
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ChatMessage[] getChannelMessages(String channelId, GObjectQuery query)
     {

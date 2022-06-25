@@ -9,7 +9,6 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ListItem;
 import vip.floatationdevice.guilded4j.object.ListItemSummary;
 
@@ -31,8 +30,6 @@ public class ListItemManager extends RestManager
      * @param message The item's name.
      * @param note The item's note (can be null).
      * @return The newly created item's ListItem object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ListItem createListItem(String channelId, String message, String note)
     {
@@ -51,8 +48,6 @@ public class ListItemManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/listItems/ListItemReadMany" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemReadMany</a>
      * @param channelId The UUID of the channel.
      * @return A list of ListItemSummary objects. (the maximum number of items returned is not mentioned in the API documentation for now)
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ListItemSummary[] getListItems(String channelId)
     {
@@ -68,8 +63,6 @@ public class ListItemManager extends RestManager
      * @param channelId The UUID of the channel.
      * @param listItemId The UUID of the list item.
      * @return The item's ListItem object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ListItem getListItem(String channelId, String listItemId)
     {
@@ -87,8 +80,6 @@ public class ListItemManager extends RestManager
      * @param message The item's new name.
      * @param note The item's new note text (can be null).
      * @return The updated item's ListItem object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ListItem updateListItem(String channelId, String listItemId, String message, String note)
     {
@@ -106,8 +97,6 @@ public class ListItemManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/listItems/ListItemDelete" target=_blank>https://www.guilded.gg/docs/api/listItems/ListItemDelete</a>
      * @param channelId The UUID of the channel.
      * @param listItemId The UUID of the list item.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void deleteListItem(String channelId, String listItemId)
     {

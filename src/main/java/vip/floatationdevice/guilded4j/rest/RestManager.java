@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j.rest;
 
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -12,6 +13,7 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.enums.ExceptionType;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
+import vip.floatationdevice.guilded4j.exception.HttpRequestException;
 
 /**
  * Class for interacting with the Guilded REST API.
@@ -46,18 +48,26 @@ public abstract class RestManager
      * @param body The body of the request (if any).
      * @return The response JSON object. Null if no response body was returned.
      * @throws GuildedException If Guilded returns an error.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
+     * @throws HttpRequestException if an error occurred while sending HTTP request.
      */
     public JSONObject execute(Method method, String url, JSONObject body)
     {
-        HttpRequest req = new HttpRequest(UrlBuilder.of(url))
-                .method(method)
-                .header("Authorization", "Bearer " + authToken)
-                .header("Accept", "application/json")
-                .header("Content-type", "application/json")
-                .timeout(httpTimeout);
-        if(body != null) req.body(body.toString());
-        HttpResponse res = req.execute();
+        HttpResponse res;
+        try
+        {
+            HttpRequest req = new HttpRequest(UrlBuilder.of(url))
+                    .method(method)
+                    .header("Authorization", "Bearer " + authToken)
+                    .header("Accept", "application/json")
+                    .header("Content-type", "application/json")
+                    .timeout(httpTimeout);
+            if(body != null) req.body(body.toString());
+            res = req.execute();
+        }
+        catch(IORuntimeException e)
+        {
+            throw new HttpRequestException(e.getCause().toString(), e);
+        }
         switch(res.getStatus())
         {
             case 200:

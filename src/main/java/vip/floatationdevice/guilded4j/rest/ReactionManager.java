@@ -6,7 +6,6 @@
 package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.REACTION_URL;
 
@@ -26,8 +25,6 @@ public class ReactionManager extends RestManager
      * @param channelId The ID of the channel.
      * @param contentId Content ID of the content.
      * @param emoteId Emote ID to apply.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void createContentReaction(String channelId, String contentId, int emoteId)
     {
@@ -46,8 +43,6 @@ public class ReactionManager extends RestManager
      * @param channelId Channel UUID where the content exists.
      * @param contentId The ID of the content.
      * @param emoteId The ID of the emote to remove.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void deleteContentReaction(String channelId, String contentId, int emoteId)
     {

@@ -7,7 +7,6 @@ package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import static vip.floatationdevice.guilded4j.G4JClient.ROLES_URL;
 
@@ -27,8 +26,6 @@ public class RoleManager extends RestManager
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member that the role should be assigned to.
      * @param roleId The role ID to apply to the user.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void addRoleMember(String serverId, int roleId, String userId)
     {
@@ -52,8 +49,6 @@ public class RoleManager extends RestManager
      * @param userId The ID of the member to obtain roles from.
      * @param serverId The ID of the server where the member is.
      * @return An int[] contains the IDs of the roles that the member currently has.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public int[] getMemberRoles(String serverId, String userId)
     {

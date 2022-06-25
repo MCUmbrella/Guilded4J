@@ -9,7 +9,6 @@ import cn.hutool.http.Method;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.enums.ServerChannelType;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.object.ServerChannel;
 
 import static vip.floatationdevice.guilded4j.G4JClient.CHANNELS_URL;
@@ -35,8 +34,6 @@ public class ServerChannelManager extends RestManager
      * @param groupId The group that the channel should be created in (optional). If not provided, channel will be created in the "Server home" group.
      * @param categoryId The category the channel should go in (optional). If not provided, channel will be a top-level channel.
      * @return The created channel's ServerChannel object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerChannel createServerChannel(String name, String topic, Boolean isPublic, ServerChannelType type, String serverId, String groupId, Integer categoryId)
     {
@@ -60,8 +57,6 @@ public class ServerChannelManager extends RestManager
      * <a href="https://www.guilded.gg/docs/api/channels/ChannelRead" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelRead</a>
      * @param channelId The ID of the channel.
      * @return The channel's ServerChannel object.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public ServerChannel getServerChannel(String channelId)
     {
@@ -77,8 +72,6 @@ public class ServerChannelManager extends RestManager
      * Delete a channel by its UUID.<br>
      * <a href="https://www.guilded.gg/docs/api/channels/ChannelDelete" target=_blank>https://www.guilded.gg/docs/api/channels/ChannelDelete</a>
      * @param channelId The ID of the channel.
-     * @throws GuildedException if Guilded API returned an error JSON string.
-     * @throws cn.hutool.core.io.IORuntimeException if an error occurred while sending HTTP request.
      */
     public void deleteServerChannel(String channelId)
     {

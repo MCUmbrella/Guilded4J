@@ -5,8 +5,11 @@
 
 package vip.floatationdevice.guilded4j.event;
 
+import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.object.Emote;
+
 /**
- * Not implemented yet.<br>
+ * Event fired when a reaction is added to a chat message.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated", target=_blank>https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated</a>
  */
 public class ChannelMessageReactionCreatedEvent extends GuildedEvent // TODO: wait
@@ -37,8 +40,20 @@ public class ChannelMessageReactionCreatedEvent extends GuildedEvent // TODO: wa
         createdAt: "2020-01-01T00:00:00.000Z"
         createdBy: "xxxxxxxx"
      */
+    private final String channelId, messageId, createdBy;
+    private final Emote emote;
     public ChannelMessageReactionCreatedEvent(Object source, String json)
     {
         super(source, json);
+        JSONObject j = (JSONObject) new JSONObject(json).getByPath("d.reaction");
+        this.channelId = j.getStr("channelId");
+        this.messageId = j.getStr("messageId");
+        this.createdBy = j.getStr("createdBy");
+        this.emote = Emote.fromJSON(j.getJSONObject("emote"));
     }
+
+    public String getChannelId() {return channelId;}
+    public String getMessageId() {return messageId;}
+    public String getCreatedBy() {return createdBy;}
+    public Emote getEmote() {return emote;}
 }

@@ -18,23 +18,37 @@ public class G4JTest
         G4JWebSocketClient ws = new G4JWebSocketClient(s.savedToken);
         ws.eventBus.register(new G4JTest());
         ws.connect();
-        new RestManager(s.savedToken){}.execute(Method.GET, "http://nwnsineubyuanhuiqx3b87ohiuynexybuabhbwuiuo.com", null);
         //==============================================================
     }
+
     @Subscribe
     public void onConnect(GuildedWebSocketWelcomeEvent e)
     {
         System.out.println("Connected to Guilded WebSocket server.");
     }
+
     @Subscribe
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
         System.out.println("Disconnected from Guilded WebSocket server.");
     }
+
     @Subscribe
     public void onUnknownGuildedEvent(UnknownGuildedEvent e)
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());
         if(e.getReason() != null) e.getReason().printStackTrace();
+    }
+
+    @Subscribe
+    public void onReaction(ChannelMessageReactionCreatedEvent e)
+    {
+        System.out.println("Reaction created: " + e.getEmote().getName() + " on message " + e.getMessageId() + " in channel " + e.getChannelId() + " by " + e.getCreatedBy());
+    }
+
+    @Subscribe
+    public void onReaction(ChannelMessageReactionDeletedEvent e)
+    {
+        System.out.println("Reaction deleted: " + e.getEmote().getName() + " on message " + e.getMessageId() + " in channel " + e.getChannelId() + " by " + e.getCreatedBy());
     }
 }

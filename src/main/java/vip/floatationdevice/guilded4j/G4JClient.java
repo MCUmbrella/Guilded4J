@@ -41,6 +41,7 @@ public class G4JClient
 
     String authToken;
     int httpTimeout = 20000;
+    Proxy proxy = Proxy.NO_PROXY;
 
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
 
@@ -196,8 +197,9 @@ public class G4JClient
      */
     public void setProxy(Proxy proxy)
     {
+        this.proxy = proxy == null ? Proxy.NO_PROXY : proxy;
         for(RestManager m : managers) m.setProxy(proxy);
-        ws.setProxy(proxy == null ? Proxy.NO_PROXY : proxy);
+        ws.setProxy(this.proxy);
     }
 
     /**
@@ -221,6 +223,7 @@ public class G4JClient
         {
             throw new RestManagerCreationException("Failed to create REST manager " + clazz.getName(), e);
         }
+        newManager.setProxy(proxy);
         managers.add(newManager);
         return newManager;
     }

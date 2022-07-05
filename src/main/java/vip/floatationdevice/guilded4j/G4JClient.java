@@ -215,15 +215,14 @@ public class G4JClient
         RestManager newManager;
         try
         {
-            // new manager(token).setHttpTimeout(httpTimeout)
+            // new manager(token).setHttpTimeout(httpTimeout).setProxy(proxy)
             Constructor<? extends RestManager> constructor = clazz.getConstructor(String.class);
-            newManager = constructor.newInstance(authToken).setHttpTimeout(httpTimeout);
+            newManager = constructor.newInstance(authToken).setHttpTimeout(httpTimeout).setProxy(proxy);
         }
         catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e)
         {
             throw new RestManagerCreationException("Failed to create REST manager " + clazz.getName(), e);
         }
-        newManager.setProxy(proxy);
         managers.add(newManager);
         return newManager;
     }

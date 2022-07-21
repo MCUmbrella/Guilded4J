@@ -11,6 +11,7 @@ import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.CalendarEvent;
+import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 
 import static vip.floatationdevice.guilded4j.G4JClient.CALENDAR_CHANNEL_URL;
 
@@ -142,5 +143,55 @@ public class CalendarEventManager extends RestManager
     public void deleteCalendarEvent(String channelId, int calendarEventId)
     {
         execute(Method.DELETE, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + "/" + calendarEventId, null);
+    }
+
+    /**
+     * Get a calendar event RSVP.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpRead" target=_blank>https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpRead</a>
+     * @param channelId The ID of the channel that the calendar event will be retrieved from.
+     * @param calendarEventId The ID of the calendar event.
+     * @param userId The ID of the user that the RSVP will be retrieved from.
+     * @return The calendar event RSVP.
+     */
+    public CalendarEventRsvp getCalendarEventRsvp(String channelId, int calendarEventId, String userId)
+    {
+        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+    }
+
+    /**
+     * Create or update a calendar event RSVP.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpUpdate" target=_blank>https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpUpdate</a>
+     * @param channelId The ID of the channel that the calendar event will be updated in.
+     * @param calendarEventId The ID of the calendar event.
+     * @param userId The ID of the user that the RSVP will be updated for.
+     * @param rsvp The RSVP that was created or updated.
+     */
+    public CalendarEventRsvp updateCalendarEventRsvp(String channelId, int calendarEventId, String userId, CalendarEventRsvp rsvp)
+    {
+        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+    }
+
+    /**
+     * Delete a calendar event RSVP.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpDelete" target=_blank>https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpDelete</a>
+     * @param channelId The ID of the channel that the calendar event will be deleted from.
+     * @param calendarEventId The ID of the calendar event.
+     * @param userId The ID of the user that the RSVP will be deleted for.
+     */
+    public void deleteCalendarEventRsvp(String channelId, int calendarEventId, String userId)
+    {
+        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+    }
+
+    /**
+     * Get a list of calendar event RSVPs.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpReadMany" target=_blank>https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpReadMany</a>
+     * @param channelId The ID of the channel that the calendar event will be retrieved from.
+     * @param calendarEventId The ID of the calendar event.
+     * @return The array of calendar event RSVPs.
+     */
+    public CalendarEventRsvp[] getCalendarEventRsvps(String channelId, int calendarEventId)
+    {
+        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
     }
 }

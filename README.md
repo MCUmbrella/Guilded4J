@@ -26,6 +26,10 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Update event - updateCalendarEvent()
 - [x] Get event info - getCalendarEvent()
 - [x] Get events - getCalendarEvents()
+- [ ] Create or update RSVP - updateCalendarEventRsvp()
+- [ ] Get RSVPs - getCalendarEventRsvps()
+- [ ] Delete RSVP - deleteCalendarEventRsvp()
+- [ ] Get RSVP info - getCalendarEventRsvp()
 ## Members
 - [x] Update/delete nickname - setMemberNickname()
 - [x] Get member info - getServerMember()
@@ -109,8 +113,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] CalendarEventCreatedEvent
 - [x] CalendarEventUpdatedEvent
 - [x] CalendarEventDeletedEvent
-- [ ] ChannelMessageReactionCreatedEvent
-- [ ] ChannelMessageReactionDeletedEvent
+- [x] ChannelMessageReactionCreatedEvent
+- [x] ChannelMessageReactionDeletedEvent
+- [ ] CalendarEventRsvpUpdatedEvent
+- [ ] CalendarEventRsvpManyUpdatedEvent (wth is this even possible)
+- [ ] CalendarEventRsvpDeletedEvent
 
 </p>
 </details>

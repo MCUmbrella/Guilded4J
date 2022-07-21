@@ -23,6 +23,7 @@ public class G4JClient
     public static final String
             CHANNELS_URL = "https://www.guilded.gg/api/v1/channels",
             CALENDAR_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events",
+            CALENDAR_RSVP_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events/{calendarEventId}/rsvps",
             SERVER_URL = "https://www.guilded.gg/api/v1/servers/{serverId}",
             MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
             NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",

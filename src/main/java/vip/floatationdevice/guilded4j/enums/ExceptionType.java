@@ -32,6 +32,10 @@ public enum ExceptionType
      */
     CONFLICTED,
     /**
+     * 429
+     */
+    RATE_LIMITED,
+    /**
      * 500-504
      */
     INTERNAL_SERVER_ERROR,
@@ -56,6 +60,8 @@ public enum ExceptionType
                 return NOT_FOUND;
             case 409:
                 return CONFLICTED;
+            case 429:
+                return RATE_LIMITED;
             case 500:
             case 501:
             case 502:

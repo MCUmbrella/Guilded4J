@@ -28,7 +28,7 @@ public class G4JWebSocketClient extends WebSocketClient
 {
     String authToken, lastMessageId;
     int heartbeatIntervalMs = 22500;
-    private boolean dump = false;
+    public boolean verboseEnabled = false;
 
     /**
      * Used to post events or register an event listener class.<br>
@@ -64,14 +64,13 @@ public class G4JWebSocketClient extends WebSocketClient
     }
 
     /**
-     * Toggle printing the received JSON string from WebSocket to stdout.
-     * Disabled (dump=false) by default.
-     * @return Dumping status after changed.
+     * Toggle verbose mode.
+     * @param status If set to true, the received messages will be printed to stdout.
      */
-    public boolean toggleDump()
+    public G4JWebSocketClient setVerbose(boolean status)
     {
-        dump = !dump;
-        return dump;
+        verboseEnabled = status;
+        return this;
     }
 
 //============================== EVENT MANAGER START ==============================
@@ -84,7 +83,7 @@ public class G4JWebSocketClient extends WebSocketClient
     public void onMessage(String rawMessage)
     {
         JSONObject json = new JSONObject(rawMessage);
-        if(dump) System.out.println("\n" + json.toStringPretty());
+        if(verboseEnabled) System.out.println(json.toStringPretty());
         Integer op = json.getInt("op");//operation code: 0, 1, 2, 8, 9
         String eventType = json.getStr("t");//hope they wont change this key name in the future
 

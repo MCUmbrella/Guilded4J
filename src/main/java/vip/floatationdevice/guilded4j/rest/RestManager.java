@@ -22,6 +22,7 @@ import java.net.Proxy;
  */
 public abstract class RestManager
 {
+    public boolean verboseEnabled = false;
     String authToken;
     int httpTimeout = 20000;
     Proxy proxy;
@@ -55,6 +56,16 @@ public abstract class RestManager
     }
 
     /**
+     * Toggle verbose mode.
+     * @param status If set to true, the HTTP requests and responses will be printed to stdout.
+     */
+    public RestManager setVerbose(boolean status)
+    {
+        this.verboseEnabled = status;
+        return this;
+    }
+
+    /**
      * Execute a HTTP request.
      * @param method The HTTP method.
      * @param url The URL to request.
@@ -70,13 +81,17 @@ public abstract class RestManager
         {
             HttpRequest req = new HttpRequest(UrlBuilder.of(url))
                     .method(method)
-                    .header("Authorization", "Bearer " + authToken)
+                    .header("User-Agent", "Guilded4J/0.9.6 Hutool/5.8.3")
+                    .header("Authorization", "")
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")
                     .timeout(httpTimeout);
             if(body != null) req.body(body.toString());
             if(proxy != Proxy.NO_PROXY) req.setProxy(proxy);
+            if(verboseEnabled) System.out.println(req.toString());
+            req.header("Authorization", "Bearer " + authToken);
             res = req.execute();
+            if(verboseEnabled) System.out.println(res.toString());
         }
         catch(IORuntimeException e)
         {

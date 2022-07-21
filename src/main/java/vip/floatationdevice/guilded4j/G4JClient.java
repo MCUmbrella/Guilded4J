@@ -42,6 +42,7 @@ public class G4JClient
     String authToken;
     int httpTimeout = 20000;
     Proxy proxy = Proxy.NO_PROXY;
+    public boolean verboseEnabled = false;
 
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
 
@@ -203,6 +204,18 @@ public class G4JClient
     }
 
     /**
+     * Toggle verbose mode.
+     * @param status If set to true, the HTTP requests and responses, and received WebSocket messages will be printed to stdout.
+     */
+    public G4JClient setVerbose(boolean status)
+    {
+        verboseEnabled = status;
+        for(RestManager m : managers) m.setVerbose(status);
+        ws.setVerbose(status);
+        return this;
+    }
+
+    /**
      * Gets the specified REST manager. If the manager is not initialized, create it and add it to the managers list.
      * @param clazz The REST manager class.
      * @return The REST manager (newly created or already existing).
@@ -215,9 +228,9 @@ public class G4JClient
         RestManager newManager;
         try
         {
-            // new manager(token).setHttpTimeout(httpTimeout).setProxy(proxy)
+            // new manager(token).setHttpTimeout(httpTimeout).setProxy(proxy).setVerbose(verboseEnabled)
             Constructor<? extends RestManager> constructor = clazz.getConstructor(String.class);
-            newManager = constructor.newInstance(authToken).setHttpTimeout(httpTimeout).setProxy(proxy);
+            newManager = constructor.newInstance(authToken).setHttpTimeout(httpTimeout).setProxy(proxy).setVerbose(verboseEnabled);
         }
         catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e)
         {

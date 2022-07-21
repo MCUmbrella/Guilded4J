@@ -261,8 +261,6 @@ public class G4JDebugger
         }
     }
 
-    static String resultPfx(){return datePfx() + " [D] Result:\n";}
-
     static String datePfx(){return "[" + DateUtil.date() + "]";}
 
     static String parseMessage(ChatMessage m, Boolean prompt)
@@ -434,7 +432,8 @@ public class G4JDebugger
                     case "dump":
                     {
                         dumpEnabled = !dumpEnabled;
-                        System.out.print(datePfx() + " [i] Dump status changed to: " + client.ws.toggleDump());
+                        client.setVerbose(dumpEnabled);
+                        System.out.print(datePfx() + " [i] Dump status changed to: " + dumpEnabled);
                         break;
                     }
                     case "token":
@@ -464,7 +463,6 @@ public class G4JDebugger
                         if(workChannelValid() && commands.length > 1)
                         {
                             String result = client.getChatMessageManager().createChannelMessage(workChannel, text.substring(5), null, null, null, null).toString();
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
                     }
@@ -499,7 +497,6 @@ public class G4JDebugger
                             isSilent = Boolean.parseBoolean(s.nextLine());
                             System.out.print("[i] Message content:\n? ");
                             String result = client.getChatMessageManager().createChannelMessage(workChannel, s.nextLine(), null, uuidArray, isPrivate, isSilent).toString();
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
                     }
@@ -518,8 +515,6 @@ public class G4JDebugger
                         {
                             UUID.fromString(commands[1]);
                             ChatMessage result = client.getChatMessageManager().updateChannelMessage(workChannel, commands[1], text.substring(44), null);
-                            if(dumpEnabled)
-                                System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
                         break;
                     }
@@ -553,7 +548,6 @@ public class G4JDebugger
                                 continue;
                             }
                             String result = client.getForumManager().createForumThread(workChannel, title, content).toString();
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         break;
                     }
@@ -589,7 +583,6 @@ public class G4JDebugger
                             if(note.isEmpty()) note = null;
                             ListItem result = client.getListItemManager().createListItem(workChannel, message, note);
                             System.out.print(datePfx() + " [i] Item created. ID: " + result.getId());
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result.toString()).toStringPretty());
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: mkitem <message>");
@@ -616,7 +609,6 @@ public class G4JDebugger
                             String note = new Scanner(System.in).nextLine();
                             if(note.isEmpty()) note = null;
                             String result = client.getListItemManager().updateListItem(workChannel, commands[1], message, note).toString();
-                            if(dumpEnabled) System.out.print(resultPfx() + new JSONObject(result).toStringPretty());
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: updateitem <(UUID)itemId> <(String)message>");
@@ -651,7 +643,6 @@ public class G4JDebugger
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
                         {
                             int result = client.getXPManager().awardUserXp(workServer, commands[1], Integer.parseInt(commands[2]));
-                            if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: addxp <(string)userId> <(int)amount>");
@@ -762,7 +753,6 @@ public class G4JDebugger
                         if(workServerValid() && commands.length > 2 && commands[1].length() == 8)
                         {
                             String result = client.getMemberManager().setMemberNickname(workServer, commands[1], text.substring(14));
-                            if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: nick <userId> <nickname>");
@@ -773,7 +763,6 @@ public class G4JDebugger
                         if(workServerValid() && commands.length == 2 && commands[1].length() == 8)
                         {
                             String result = client.getMemberManager().setMemberNickname(workServer, commands[1], null);
-                            if(dumpEnabled) System.out.print(resultPfx() + result);
                         }
                         break;
                     }
@@ -782,7 +771,6 @@ public class G4JDebugger
                         if(workServerValid() && commands.length == 3 && commands[1].length() == 8)
                         {
                             HashMap<String, String> result = client.getMemberManager().getSocialLink(workServer, commands[1], SocialMedia.valueOf(commands[2].toUpperCase()));
-                            System.out.print(resultPfx() + result);
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: social <userID> <socialMediaName>");

@@ -18,6 +18,7 @@ public class G4JTest
         G4JWebSocketClient ws = new G4JWebSocketClient(s.savedToken);
         ws.eventBus.register(new G4JTest());
         ws.connect();
+        System.out.println(new RestManager(s.savedToken){}.setVerbose(true).execute(Method.GET, "http://127.0.0.1/test.json", null));
         //==============================================================
     }
 

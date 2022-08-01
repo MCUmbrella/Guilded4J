@@ -38,9 +38,10 @@ public class CalendarEventManager extends RestManager
      * @param color The color of the event when viewing in the calendar (from 0x000000 or 0, to 0xffffff or 16777215).
      * @param duration The duration of the event in minutes (min 1).
      * @param isPrivate No description available in the API documentation.
+     * @param rsvpLimit The number of RSVPs to allow before waitlisting RSVPs (min 1, null if you don't want to limit).
      * @return The created calendar event.
      */
-    public CalendarEvent createCalendarEvent(String channelId, String name, String description, String location, String startsAt, String url, Integer color, Integer duration, Boolean isPrivate)
+    public CalendarEvent createCalendarEvent(String channelId, String name, String description, String location, String startsAt, String url, Integer color, Integer duration, Boolean isPrivate, Integer rsvpLimit)
     {
         return CalendarEvent.fromJSON(
                 execute(Method.POST,
@@ -52,6 +53,7 @@ public class CalendarEventManager extends RestManager
                                 .set("startsAt", startsAt)
                                 .set("url", url)
                                 .set("color", color)
+                                .set("rsvpLimit", rsvpLimit)
                                 .set("duration", duration)
                                 .set("isPrivate", isPrivate)
                 ).getJSONObject("calendarEvent")

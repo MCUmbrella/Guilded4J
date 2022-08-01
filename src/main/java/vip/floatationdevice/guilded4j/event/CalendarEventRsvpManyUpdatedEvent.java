@@ -10,7 +10,7 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 
 /**
- * how is this even possible<br>
+ * Event fired when some people was bulk-invited to a calendar event.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/CalendarEventRsvpManyUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/CalendarEventRsvpManyUpdated</a>
  */
 public class CalendarEventRsvpManyUpdatedEvent extends GuildedEvent

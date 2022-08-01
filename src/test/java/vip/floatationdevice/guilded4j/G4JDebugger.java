@@ -547,7 +547,7 @@ public class G4JDebugger
                                 System.err.println("[X] Content too short");
                                 continue;
                             }
-                            String result = client.getForumManager().createForumThread(workChannel, title, content).toString();
+                            String result = client.getForumManager().createForumTopic(workChannel, title, content).toString();
                         }
                         break;
                     }

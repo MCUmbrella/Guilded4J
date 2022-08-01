@@ -148,7 +148,7 @@ public class Doc
     }
 
     /**
-     * Convert the ForumThread object to JSON string.
+     * Convert the Doc object to JSON string.
      * @return A JSON string.
      */
     @Override

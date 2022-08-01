@@ -13,10 +13,11 @@ import vip.floatationdevice.guilded4j.Util;
  * The basic forum thread object in a 'forum' type channel.<br>
  * <a href="https://www.guilded.gg/docs/api/forums/ForumThread" target=_blank>https://www.guilded.gg/docs/api/forums/ForumThread</a>
  */
-public class ForumThread
+public class ForumTopic
 {
     int id;
-    String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId;
+    String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId, updatedAt, bumpedAt;
+    Mention mentions;
 
     /**
      * Get the thread's ID (it is not UUID).
@@ -36,105 +37,134 @@ public class ForumThread
     /**
      * Get the title of the thread.
      */
-    public String getTitle(){return title;}//TODO: it has been marked as 'optional' for a few months but I still can't believe it
+    public String getTitle(){return title;}
 
     /**
      * Get the content of the thread.
      */
-    public String getContent(){return content;}//TODO: ↑
+    public String getContent(){return content;}
 
     /**
      * Get the ISO 8601 timestamp string that the forum thread was created at.
      */
-    public String getCreationTime(){return createdAt;}
+    public String getCreatedAt(){return createdAt;}
 
     /**
      * The ID of the user who created this forum thread.
      */
-    public String getCreatorId(){return createdBy;}
+    public String getCreatedBy(){return createdBy;}
 
     /**
-     * Get the ID of the webhook who created this forum thread.
+     * Get the ID of the webhook who created this forum thread (if it was created by a webhook).
      * @return A UUID string of the webhook who created the thread. If the creator isn't webhook, return {@code null}.
      */
-    public String getWebhookCreatorId(){return createdByWebhookId;}
+    public String getCreatedByWebhookId(){return createdByWebhookId;}
 
-    public ForumThread setId(int id)
+    /**
+     * Get the ISO 8601 timestamp that the forum topic was updated at, if relevant.
+     */
+    public String getUpdatedAt(){return updatedAt;}
+
+    /**
+     * Get the ISO 8601 timestamp that the forum topic was bumped at.
+     * This timestamp is updated whenever there is any activity on the posts within the forum topic.
+     */
+    public String getBumpedAt(){return bumpedAt;}
+
+    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+
+    public ForumTopic setId(int id)
     {
         this.id = id;
         return this;
     }
 
-    public ForumThread setServerId(String serverId)
+    public ForumTopic setServerId(String serverId)
     {
         this.serverId = serverId;
         return this;
     }
 
-    public ForumThread setChannelId(String channelId)
+    public ForumTopic setChannelId(String channelId)
     {
         this.channelId = channelId;
         return this;
     }
 
-    public ForumThread setTitle(String title)
+    public ForumTopic setTitle(String title)
     {
         this.title = title;
         return this;
     }
 
-    public ForumThread setContent(String content)
+    public ForumTopic setContent(String content)
     {
         this.content = content;
         return this;
     }
 
-    public ForumThread setCreationTime(String createdAt)
+    public ForumTopic setCreatedAt(String createdAt)
     {
         this.createdAt = createdAt;
         return this;
     }
 
-    public ForumThread setCreatorId(String createdBy)
+    public ForumTopic setCreatedBy(String createdBy)
     {
         this.createdBy = createdBy;
         return this;
     }
 
-    public ForumThread setWebhookCreatorId(String createdByWebhookId)
+    public ForumTopic setCreatedByWebhookId(String createdByWebhookId)
     {
         this.createdByWebhookId = createdByWebhookId;
         return this;
     }
 
+    public ForumTopic setUpdatedAt(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public ForumTopic setBumpedAt(String bumpedAt)
+    {
+        this.bumpedAt = bumpedAt;
+        return this;
+    }
+
     /**
-     * Use the given JSON object to generate ForumThread object.
+     * Use the given JSON object to generate ForumTopic object.
      * @param json The JSON object.
-     * @return ForumThread object.
+     * @return ForumTopic object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
-    public static ForumThread fromJSON(JSONObject json)
+    public static ForumTopic fromJSON(JSONObject json)
     {
         Util.checkNullArgument(
                 json.getStr("id"),
                 json.getStr("serverId"),
                 json.getStr("channelId"),
+                json.getStr("title"),
                 json.getStr("createdAt"),
-                json.getStr("createdBy")
+                json.getStr("createdBy"),
+                json.getStr("content")
         );
-        return new ForumThread()
+        return new ForumTopic()
                 .setId(json.getInt("id"))
                 .setServerId(json.getStr("serverId"))
                 .setChannelId(json.getStr("channelId"))
                 .setTitle(json.getStr("title"))
                 .setContent(json.getStr("content"))
-                .setCreationTime(json.getStr("createdAt"))
-                .setCreatorId(json.getStr("createdBy"))
-                .setWebhookCreatorId(json.getStr("createdByWebhookId"));
+                .setCreatedAt(json.getStr("createdAt"))
+                .setCreatedBy(json.getStr("createdBy"))
+                .setCreatedByWebhookId(json.getStr("createdByWebhookId"))
+                .setUpdatedAt(json.getStr("updatedAt"))
+                .setBumpedAt(json.getStr("bumpedAt"));
     }
 
     /**
-     * Convert the ForumThread object to JSON string.
+     * Convert the ForumTopic object to JSON string.
      * @return A JSON string.
      */
     @Override
@@ -149,6 +179,8 @@ public class ForumThread
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
                 .set("createdByWebhookId", createdByWebhookId)
+                .set("updatedAt", updatedAt)
+                .set("bumpedAt", bumpedAt)
                 .toString();
     }
 }

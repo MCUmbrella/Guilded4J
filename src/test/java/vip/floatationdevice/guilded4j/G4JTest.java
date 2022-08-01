@@ -1,8 +1,10 @@
 package vip.floatationdevice.guilded4j;
 
 import cn.hutool.http.Method;
+import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 import vip.floatationdevice.guilded4j.rest.RestManager;
 
 /**
@@ -17,8 +19,18 @@ public class G4JTest
         s.restore();
         G4JWebSocketClient ws = new G4JWebSocketClient(s.savedToken);
         ws.eventBus.register(new G4JTest());
-        ws.connect();
-        System.out.println(new RestManager(s.savedToken){}.setVerbose(true).execute(Method.GET, "http://127.0.0.1/test.json", null));
+        //ws.connect();
+        System.out.println(CalendarEventRsvp.fromJSON(new JSONObject("{\n" +
+                "  \"calendarEventId\": 1,\n" +
+                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
+                "  \"serverId\": \"wlVr3Ggl\",\n" +
+                "  \"userId\": \"Ann6LewA\",\n" +
+                "  \"status\": \"going\",\n" +
+                "  \"createdAt\": \"2021-06-15T20:15:00.706Z\",\n" +
+                "  \"createdBy\": \"Ann6LewA\",\n" +
+                "  \"updatedAt\": \"2021-06-15T20:15:00.706Z\",\n" +
+                "  \"updatedBy\": \"Ann6LewA\"\n" +
+                "}")));
         //==============================================================
     }
 

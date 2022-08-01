@@ -7,6 +7,8 @@ import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 import vip.floatationdevice.guilded4j.rest.RestManager;
 
+import java.util.Arrays;
+
 /**
  * Some temporary test code will go here.
  */
@@ -19,18 +21,7 @@ public class G4JTest
         s.restore();
         G4JWebSocketClient ws = new G4JWebSocketClient(s.savedToken);
         ws.eventBus.register(new G4JTest());
-        //ws.connect();
-        System.out.println(CalendarEventRsvp.fromJSON(new JSONObject("{\n" +
-                "  \"calendarEventId\": 1,\n" +
-                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                "  \"serverId\": \"wlVr3Ggl\",\n" +
-                "  \"userId\": \"Ann6LewA\",\n" +
-                "  \"status\": \"going\",\n" +
-                "  \"createdAt\": \"2021-06-15T20:15:00.706Z\",\n" +
-                "  \"createdBy\": \"Ann6LewA\",\n" +
-                "  \"updatedAt\": \"2021-06-15T20:15:00.706Z\",\n" +
-                "  \"updatedBy\": \"Ann6LewA\"\n" +
-                "}")));
+        ws.connect();
         //==============================================================
     }
 
@@ -63,5 +54,23 @@ public class G4JTest
     public void onReaction(ChannelMessageReactionDeletedEvent e)
     {
         System.out.println("Reaction deleted: " + e.getEmote().getName() + " on message " + e.getMessageId() + " in channel " + e.getChannelId() + " by " + e.getCreatedBy());
+    }
+
+    @Subscribe
+    public void onCalendarEventRsvpUpdatedEvent(CalendarEventRsvpUpdatedEvent e)
+    {
+        System.out.println("CalendarEventRsvpUpdatedEvent: " + e.getCalendarEventRsvp());
+    }
+
+    @Subscribe
+    public void onCalendarEventRsvpDeletedEvent(CalendarEventRsvpDeletedEvent e)
+    {
+        System.out.println("CalendarEventRsvpDeletedEvent: " + e.getCalendarEventRsvp());
+    }
+
+    @Subscribe
+    public void onCalendarEventRsvpManyUpdatedEvent(CalendarEventRsvpManyUpdatedEvent e)
+    {
+        System.out.println("CalendarEventRsvpManyUpdatedEvent: " + Arrays.toString(e.getCalendarEventRsvps()));
     }
 }

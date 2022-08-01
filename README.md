@@ -115,9 +115,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] CalendarEventDeletedEvent
 - [x] ChannelMessageReactionCreatedEvent
 - [x] ChannelMessageReactionDeletedEvent
-- [ ] CalendarEventRsvpUpdatedEvent
-- [ ] CalendarEventRsvpManyUpdatedEvent (wth is this even possible)
-- [ ] CalendarEventRsvpDeletedEvent
+- [x] CalendarEventRsvpUpdatedEvent
+- [x] CalendarEventRsvpManyUpdatedEvent (wth is this even possible)
+- [x] CalendarEventRsvpDeletedEvent
 
 </p>
 </details>

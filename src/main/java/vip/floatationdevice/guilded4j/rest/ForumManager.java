@@ -3,6 +3,7 @@ package vip.floatationdevice.guilded4j.rest;
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ForumTopic;
+import vip.floatationdevice.guilded4j.object.ForumTopicSummary;
 
 import static vip.floatationdevice.guilded4j.G4JClient.FORUM_CHANNEL_URL;
 
@@ -31,5 +32,25 @@ public class ForumManager extends RestManager
                         new JSONObject().set("title", title).set("content", content)
                 ).getJSONObject("forumTopic")
         );
+    }
+
+    public ForumTopic updateForumTopic(String channelId, int forumTopicId, String title, String content) //TODO
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void deleteForumTopic(String channelId, int forumTopicId) //TODO
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public ForumTopic getForumTopic(String channelId, int forumTopicId) //TODO
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public ForumTopicSummary getForumTopics(String channelId) //TODO
+    {
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

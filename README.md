@@ -40,7 +40,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Unban server member - unbanServerMember()
 - [x] Get member ban list - getServerMemberBans()
 ## Forum
-- [x] Create forum thread - createForumThread()
+- [x] Create forum topic - createForumTopic()
+- [ ] Update forum topic - updateForumTopic()
+- [ ] Delete forum topic - deleteForumTopic()
+- [ ] Get forum topic info - getForumTopic()
+- [ ] Get forum topic list - getForumTopics()
 ## List
 - [x] Create list item - createListItem()
 - [x] Get list items - getListItems()
@@ -85,39 +89,42 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 ## Server
 - [x] Get server info - getServer()
 ## Event
-- [x] GuildedWebsocketWelcomeEvent
-- [x] GuildedWebsocketClosedEvent
+- [x] CalendarEventCreatedEvent
+- [x] CalendarEventDeletedEvent
+- [x] CalendarEventRsvpDeletedEvent
+- [x] CalendarEventRsvpManyUpdatedEvent
+- [x] CalendarEventRsvpUpdatedEvent
+- [x] CalendarEventUpdatedEvent
+- [x] ChannelMessageReactionCreatedEvent
+- [x] ChannelMessageReactionDeletedEvent
 - [x] ChatMessageCreatedEvent
 - [x] ChatMessageDeletedEvent
 - [x] ChatMessageUpdatedEvent
+- [x] DocCreatedEvent
+- [x] DocDeletedEvent
+- [x] DocUpdatedEvent
+- [ ] ForumTopicCreatedEvent
+- [ ] ForumTopicDeletedEvent
+- [ ] ForumTopicUpdatedEvent
+- [x] GuildedWebsocketClosedEvent
+- [x] GuildedWebsocketWelcomeEvent
+- [x] ListItemCompletedEvent
+- [x] ListItemCreatedEvent
+- [x] ListItemDeletedEvent
+- [x] ListItemUncompletedEvent
+- [x] ListItemUpdatedEvent
+- [x] TeamChannelCreatedEvent
+- [x] TeamChannelDeletedEvent
+- [x] TeamChannelUpdatedEvent
+- [x] TeamMemberBannedEvent
 - [x] TeamMemberJoinedEvent
 - [x] TeamMemberRemovedEvent
-- [x] TeamMemberBannedEvent
 - [x] TeamMemberUnbannedEvent
 - [x] TeamMemberUpdatedEvent
 - [x] TeamRolesUpdatedEvent
-- [x] TeamXpAddedEvent
 - [x] TeamWebhookCreatedEvent
 - [x] TeamWebhookUpdatedEvent
-- [x] TeamChannelCreatedEvent
-- [x] TeamChannelUpdatedEvent
-- [x] TeamChannelDeletedEvent
-- [x] DocCreatedEvent
-- [x] DocUpdatedEvent
-- [x] DocDeletedEvent
-- [x] ListItemCreatedEvent
-- [x] ListItemUpdatedEvent
-- [x] ListItemDeletedEvent
-- [x] ListItemCompletedEvent
-- [x] ListItemUncompletedEvent
-- [x] CalendarEventCreatedEvent
-- [x] CalendarEventUpdatedEvent
-- [x] CalendarEventDeletedEvent
-- [x] ChannelMessageReactionCreatedEvent
-- [x] ChannelMessageReactionDeletedEvent
-- [x] CalendarEventRsvpUpdatedEvent
-- [x] CalendarEventRsvpManyUpdatedEvent
-- [x] CalendarEventRsvpDeletedEvent
+- [x] TeamXpAddedEvent
 
 </p>
 </details>

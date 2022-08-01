@@ -19,9 +19,15 @@ public class G4JTest
         //==============================================================
         G4JDebugger.G4JSession s = new G4JDebugger.G4JSession();
         s.restore();
-        G4JWebSocketClient ws = new G4JWebSocketClient(s.savedToken);
-        ws.eventBus.register(new G4JTest());
-        ws.connect();
+        G4JClient c = new G4JClient(s.savedToken).setVerbose(true);
+        c.ws.eventBus.register(new G4JTest());
+        c.ws.connect();
+        Thread.sleep(10000);
+        c.getCalendarEventManager().updateCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d", "maybe");
+        Thread.sleep(1000);
+        c.getCalendarEventManager().updateCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d", "going");
+        Thread.sleep(30000);
+        c.getCalendarEventManager().deleteCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d");
         //==============================================================
     }
 

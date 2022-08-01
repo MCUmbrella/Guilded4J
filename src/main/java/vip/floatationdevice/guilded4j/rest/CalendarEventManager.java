@@ -14,6 +14,7 @@ import vip.floatationdevice.guilded4j.object.CalendarEvent;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 
 import static vip.floatationdevice.guilded4j.G4JClient.CALENDAR_CHANNEL_URL;
+import static vip.floatationdevice.guilded4j.G4JClient.CALENDAR_RSVP_URL;
 
 /**
  * Manages the calendar events.
@@ -155,7 +156,13 @@ public class CalendarEventManager extends RestManager
      */
     public CalendarEventRsvp getCalendarEventRsvp(String channelId, int calendarEventId, String userId)
     {
-        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+        return CalendarEventRsvp.fromJSON(
+                execute(
+                        Method.GET,
+                        CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)) + "/" + userId,
+                        null
+                ).getJSONObject("calendarEventRsvp")
+        );
     }
 
     /**
@@ -164,11 +171,17 @@ public class CalendarEventManager extends RestManager
      * @param channelId The ID of the channel that the calendar event will be updated in.
      * @param calendarEventId The ID of the calendar event.
      * @param userId The ID of the user that the RSVP will be updated for.
-     * @param rsvp The RSVP that was created or updated.
+     * @param status The status of the RSSVP.
      */
-    public CalendarEventRsvp updateCalendarEventRsvp(String channelId, int calendarEventId, String userId, CalendarEventRsvp rsvp)
+    public CalendarEventRsvp updateCalendarEventRsvp(String channelId, int calendarEventId, String userId, String status)
     {
-        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+        return CalendarEventRsvp.fromJSON(
+                execute(
+                        Method.PUT,
+                        CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)) + "/" + userId,
+                        new JSONObject().set("status", status)
+                ).getJSONObject("calendarEventRsvp")
+        );
     }
 
     /**
@@ -180,7 +193,7 @@ public class CalendarEventManager extends RestManager
      */
     public void deleteCalendarEventRsvp(String channelId, int calendarEventId, String userId)
     {
-        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+        execute(Method.DELETE, CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)) + "/" + userId, null);
     }
 
     /**
@@ -192,6 +205,14 @@ public class CalendarEventManager extends RestManager
      */
     public CalendarEventRsvp[] getCalendarEventRsvps(String channelId, int calendarEventId)
     {
-        throw new UnsupportedOperationException("Not implemented yet"); //TODO: implement
+        JSONArray jsonArray = execute(
+                Method.GET,
+                CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)),
+                null
+        ).getJSONArray("calendarEventRsvps");
+        CalendarEventRsvp[] calendarEventRsvps = new CalendarEventRsvp[jsonArray.size()];
+        for (int i = 0; i < jsonArray.size(); i++)
+            calendarEventRsvps[i] = CalendarEventRsvp.fromJSON(jsonArray.getJSONObject(i));
+        return calendarEventRsvps;
     }
 }

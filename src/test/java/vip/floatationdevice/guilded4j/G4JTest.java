@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
+import vip.floatationdevice.guilded4j.object.ForumTopic;
 import vip.floatationdevice.guilded4j.object.ForumTopicSummary;
 import vip.floatationdevice.guilded4j.rest.RestManager;
 
@@ -22,15 +23,20 @@ public class G4JTest
         s.restore();
         G4JClient c = new G4JClient(s.savedToken).setVerbose(true);
         c.ws.eventBus.register(new G4JTest());
-        //c.ws.connect();
-        System.out.println(ForumTopicSummary.fromJSON(new JSONObject("{\n" +
-                "  \"id\": 123456,\n" +
-                "  \"serverId\": \"wlVr3Ggl\",\n" +
-                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                "  \"title\": \"Welcome new members!!\",\n" +
-                "  \"createdAt\": \"2021-06-15T20:15:00.706Z\",\n" +
-                "  \"createdBy\": \"Ann6LewA\"\n" +
-                "}")));
+        c.ws.connect();
+        Thread.sleep(10000);
+        ForumTopic f = c.getForumManager().createForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", "title", "**content**");
+        Thread.sleep(5000);
+        c.getForumManager().updateForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId(), "title2", "_content2_");
+        Thread.sleep(5000);
+        c.getForumManager().getForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId());
+        Thread.sleep(5000);
+        ForumTopicSummary[] fs = c.getForumManager().getForumTopics("6284cada-9d78-4941-803a-3bc38e3de9aa", null);
+        for(ForumTopicSummary fts : fs)
+            System.out.println(fts.getId()+"\n"+fts.getTitle());
+        Thread.sleep(10000);
+        c.getForumManager().deleteForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId());
+        System.out.println("OK");
         //==============================================================
     }
 
@@ -54,32 +60,20 @@ public class G4JTest
     }
 
     @Subscribe
-    public void onReaction(ChannelMessageReactionCreatedEvent e)
+    public void onForumTopicCreatedEvent(ForumTopicCreatedEvent e)
     {
-        System.out.println("Reaction created: " + e.getEmote().getName() + " on message " + e.getMessageId() + " in channel " + e.getChannelId() + " by " + e.getCreatedBy());
+        System.out.println("ForumTopicCreatedEvent: " + e.getForumTopic().toString());
     }
 
     @Subscribe
-    public void onReaction(ChannelMessageReactionDeletedEvent e)
+    public void onForumTopicUpdatedEvent(ForumTopicUpdatedEvent e)
     {
-        System.out.println("Reaction deleted: " + e.getEmote().getName() + " on message " + e.getMessageId() + " in channel " + e.getChannelId() + " by " + e.getCreatedBy());
+        System.out.println("ForumTopicUpdatedEvent: " + e.getForumTopic().toString());
     }
 
     @Subscribe
-    public void onCalendarEventRsvpUpdatedEvent(CalendarEventRsvpUpdatedEvent e)
+    public void onForumTopicDeletedEvent(ForumTopicDeletedEvent e)
     {
-        System.out.println("CalendarEventRsvpUpdatedEvent: " + e.getCalendarEventRsvp());
-    }
-
-    @Subscribe
-    public void onCalendarEventRsvpDeletedEvent(CalendarEventRsvpDeletedEvent e)
-    {
-        System.out.println("CalendarEventRsvpDeletedEvent: " + e.getCalendarEventRsvp());
-    }
-
-    @Subscribe
-    public void onCalendarEventRsvpManyUpdatedEvent(CalendarEventRsvpManyUpdatedEvent e)
-    {
-        System.out.println("CalendarEventRsvpManyUpdatedEvent: " + Arrays.toString(e.getCalendarEventRsvps()));
+        System.out.println("ForumTopicDeletedEvent: " + e.getForumTopic().toString());
     }
 }

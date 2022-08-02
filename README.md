@@ -41,10 +41,10 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get member ban list - getServerMemberBans()
 ## Forum
 - [x] Create forum topic - createForumTopic()
-- [ ] Update forum topic - updateForumTopic()
-- [ ] Delete forum topic - deleteForumTopic()
-- [ ] Get forum topic info - getForumTopic()
-- [ ] Get forum topic list - getForumTopics()
+- [x] Update forum topic - updateForumTopic()
+- [x] Delete forum topic - deleteForumTopic()
+- [x] Get forum topic info - getForumTopic()
+- [x] Get forum topic list - getForumTopics()
 ## List
 - [x] Create list item - createListItem()
 - [x] Get list items - getListItems()
@@ -103,9 +103,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] DocCreatedEvent
 - [x] DocDeletedEvent
 - [x] DocUpdatedEvent
-- [ ] ForumTopicCreatedEvent
-- [ ] ForumTopicDeletedEvent
-- [ ] ForumTopicUpdatedEvent
+- [x] ForumTopicCreatedEvent
+- [x] ForumTopicDeletedEvent
+- [x] ForumTopicUpdatedEvent
 - [x] GuildedWebsocketClosedEvent
 - [x] GuildedWebsocketWelcomeEvent
 - [x] ListItemCompletedEvent

@@ -79,6 +79,6 @@ public class GuildedException extends RuntimeException
             return new GuildedException(json.getStr("code"), json.getStr("message"))
                     .setMeta(json.isNull("meta") ? null : json.getJSONObject("meta").toBean(HashMap.class));
         }
-        else throw new ClassCastException("The provided String's content can't be converted to JSON object");
+        else return new GuildedException(null, rawString);
     }
 }

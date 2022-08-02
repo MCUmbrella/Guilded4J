@@ -16,6 +16,7 @@ import vip.floatationdevice.guilded4j.exception.GuildedException;
 import vip.floatationdevice.guilded4j.exception.HttpRequestException;
 
 import java.net.Proxy;
+import java.util.HashMap;
 
 /**
  * Class for interacting with the Guilded REST API.
@@ -82,7 +83,7 @@ public abstract class RestManager
             HttpRequest req = new HttpRequest(UrlBuilder.of(url))
                     .method(method)
                     .header("User-Agent", "Guilded4J/0.9.6 Hutool/5.8.3")
-                    .header("Authorization", "")
+                    .header("Authorization", "[REDACTED]")
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")
                     .timeout(httpTimeout);
@@ -104,6 +105,12 @@ public abstract class RestManager
                 return new JSONObject(res.body());
             case 204:
                 return null;
+            case 429:
+            {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("retryAfter", res.header("Retry-After"));
+                throw GuildedException.fromString(res.body()).setType(ExceptionType.RATE_LIMITED).setMeta(map);
+            }
             default:
                 throw GuildedException.fromString(res.body()).setType(ExceptionType.fromInt(res.getStatus()));
         }

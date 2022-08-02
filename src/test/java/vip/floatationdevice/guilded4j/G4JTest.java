@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
+import vip.floatationdevice.guilded4j.object.ForumTopicSummary;
 import vip.floatationdevice.guilded4j.rest.RestManager;
 
 import java.util.Arrays;
@@ -21,13 +22,15 @@ public class G4JTest
         s.restore();
         G4JClient c = new G4JClient(s.savedToken).setVerbose(true);
         c.ws.eventBus.register(new G4JTest());
-        c.ws.connect();
-        Thread.sleep(10000);
-        c.getCalendarEventManager().updateCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d", "maybe");
-        Thread.sleep(1000);
-        c.getCalendarEventManager().updateCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d", "going");
-        Thread.sleep(30000);
-        c.getCalendarEventManager().deleteCalendarEventRsvp("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5481006, "8412wg5d");
+        //c.ws.connect();
+        System.out.println(ForumTopicSummary.fromJSON(new JSONObject("{\n" +
+                "  \"id\": 123456,\n" +
+                "  \"serverId\": \"wlVr3Ggl\",\n" +
+                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
+                "  \"title\": \"Welcome new members!!\",\n" +
+                "  \"createdAt\": \"2021-06-15T20:15:00.706Z\",\n" +
+                "  \"createdBy\": \"Ann6LewA\"\n" +
+                "}")));
         //==============================================================
     }
 

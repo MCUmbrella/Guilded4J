@@ -23,20 +23,9 @@ public class G4JTest
         s.restore();
         G4JClient c = new G4JClient(s.savedToken).setVerbose(true);
         c.ws.eventBus.register(new G4JTest());
-        c.ws.connect();
-        Thread.sleep(10000);
-        ForumTopic f = c.getForumManager().createForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", "title", "**content**");
-        Thread.sleep(5000);
-        c.getForumManager().updateForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId(), "title2", "_content2_");
-        Thread.sleep(5000);
-        c.getForumManager().getForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId());
-        Thread.sleep(5000);
-        ForumTopicSummary[] fs = c.getForumManager().getForumTopics("6284cada-9d78-4941-803a-3bc38e3de9aa", null);
-        for(ForumTopicSummary fts : fs)
-            System.out.println(fts.getId()+"\n"+fts.getTitle());
-        Thread.sleep(10000);
-        c.getForumManager().deleteForumTopic("6284cada-9d78-4941-803a-3bc38e3de9aa", f.getId());
-        System.out.println("OK");
+        //c.ws.connect();
+        int i = c.getXPManager().setUserXp(s.savedServerId, "8412wg5d", 1);
+        System.out.println(i);
         //==============================================================
     }
 
@@ -57,23 +46,5 @@ public class G4JTest
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());
         if(e.getReason() != null) e.getReason().printStackTrace();
-    }
-
-    @Subscribe
-    public void onForumTopicCreatedEvent(ForumTopicCreatedEvent e)
-    {
-        System.out.println("ForumTopicCreatedEvent: " + e.getForumTopic().toString());
-    }
-
-    @Subscribe
-    public void onForumTopicUpdatedEvent(ForumTopicUpdatedEvent e)
-    {
-        System.out.println("ForumTopicUpdatedEvent: " + e.getForumTopic().toString());
-    }
-
-    @Subscribe
-    public void onForumTopicDeletedEvent(ForumTopicDeletedEvent e)
-    {
-        System.out.println("ForumTopicDeletedEvent: " + e.getForumTopic().toString());
     }
 }

@@ -65,6 +65,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 ## XP
 - [x] Add XP to user - awardUserXp()
 - [x] Add XP to all users with specified role - awardRoleXp()
+- [x] Set XP of user - setUserXp()
 ## Social links
 - [x] Get member's social link - getSocialLink()
 ## Group membership

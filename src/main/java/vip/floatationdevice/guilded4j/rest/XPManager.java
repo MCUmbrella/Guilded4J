@@ -23,7 +23,7 @@ public class XPManager extends RestManager
 
     /**
      * Award XP to a member.<br>
-     * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForUserCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/server-xp/ServerXpForUserCreate" target=_blank>https://www.guilded.gg/docs/api/server-xp/ServerXpForUserCreate</a>
      * @param serverId The ID of the server where the member is.
      * @param userId Member ID to award XP to.
      * @param amount The amount of XP to award.
@@ -39,7 +39,7 @@ public class XPManager extends RestManager
 
     /**
      * Award XP to all members with a particular role.<br>
-     * <a href="https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate" target=_blank>https://www.guilded.gg/docs/api/teamXP/TeamXpForRoleCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/server-xp/ServerXpForRoleCreate" target=_blank>https://www.guilded.gg/docs/api/server-xp/ServerXpForRoleCreate</a>
      * @param serverId The ID of the server where the member is.
      * @param roleId Role ID to award XP to.
      * @param amount The amount of XP to award.
@@ -50,5 +50,21 @@ public class XPManager extends RestManager
                 ROLE_XP_URL.replace("{serverId}", serverId).replace("{roleId}", String.valueOf(roleId)),
                 new JSONObject().set("amount", amount)
         );
+    }
+
+    /**
+     * Set the XP of a server member.<br>
+     * <a href="https://www.guilded.gg/docs/api/server-xp/ServerXpForUserUpdate" target=_blank>https://www.guilded.gg/docs/api/server-xp/ServerXpForUserUpdate</a>
+     * @param serverId The ID of the server where the member is.
+     * @param userId The ID of the member to set the XP.
+     * @param total The total XP to set on the user (min -1000000000; max 1000000000).
+     * @return The total XP after this operation.
+     */
+    public int setUserXp(String serverId, String userId, int total)
+    {
+        return execute(Method.PUT,
+                USER_XP_URL.replace("{serverId}", serverId).replace("{userId}", userId),
+                new JSONObject().set("total", total)
+        ).getInt("total");
     }
 }

@@ -105,4 +105,32 @@ public class ForumManager extends RestManager
             forumTopicSummaries[i] = ForumTopicSummary.fromJSON(jsonArray.getJSONObject(i));
         return forumTopicSummaries;
     }
+
+    /**
+     * Pin a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/forums/ForumTopicPin" target=_blank>https://www.guilded.gg/docs/api/forums/ForumTopicPin</a>
+     * @param channelId The ID of the channel where the topic belongs to.
+     * @param forumTopicId The ID of the topic.
+     */
+    public void pinForumTopic(String channelId, int forumTopicId)
+    {
+        execute(Method.PUT,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/pin",
+                null
+        );
+    }
+
+    /**
+     * Unpin a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/forums/ForumTopicUnpin" target=_blank>https://www.guilded.gg/docs/api/forums/ForumTopicUnpin</a>
+     * @param channelId The ID of the channel where the topic belongs to.
+     * @param forumTopicId The ID of the topic.
+     */
+    public void unpinForumTopic(String channelId, int forumTopicId)
+    {
+        execute(Method.DELETE,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/pin",
+                null
+        );
+    }
 }

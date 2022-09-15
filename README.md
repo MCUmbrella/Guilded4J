@@ -45,6 +45,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Delete forum topic - deleteForumTopic()
 - [x] Get forum topic info - getForumTopic()
 - [x] Get forum topic list - getForumTopics()
+- [x] Pin a forum topic - pinForumTopic()
+- [x] Unpin a forum topic - unpinForumTopic()
 ## List
 - [x] Create list item - createListItem()
 - [x] Get list items - getListItems()

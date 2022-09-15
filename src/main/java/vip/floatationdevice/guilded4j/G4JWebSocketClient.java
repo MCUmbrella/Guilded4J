@@ -39,7 +39,7 @@ public class G4JWebSocketClient extends WebSocketClient
     /**
      * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
      */
-    public static final URI WEBSOCKET_URI = URI.create("wss://api.guilded.gg/v1/websocket");
+    public static final URI WEBSOCKET_URI = URI.create("wss://www.guilded.gg/websocket/v1");
 
     /**
      * Generate a G4JWebSocketClient using the given access token.

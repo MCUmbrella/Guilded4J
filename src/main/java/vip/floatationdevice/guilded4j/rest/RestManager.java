@@ -82,7 +82,7 @@ public abstract class RestManager
         {
             HttpRequest req = new HttpRequest(UrlBuilder.of(url))
                     .method(method)
-                    .header("User-Agent", "Guilded4J/0.9.6 Hutool/5.8.3")
+                    .header("User-Agent", "Guilded4J/0.9.7 Hutool/5.8.6")
                     .header("Authorization", "[REDACTED]")
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")

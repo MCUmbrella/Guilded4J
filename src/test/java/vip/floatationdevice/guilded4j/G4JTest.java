@@ -14,7 +14,7 @@ public class G4JTest
         //==============================================================
         G4JDebugger.G4JSession s = new G4JDebugger.G4JSession();
         s.restore();
-        G4JClient c = new G4JClient(s.savedToken).setVerbose(true);
+        G4JClient c = new G4JClient(s.savedToken).setVerbose(false);
         c.ws.eventBus.register(new G4JTest());
         c.ws.connect();
         String ch="6284cada-9d78-4941-803a-3bc38e3de9aa";
@@ -52,5 +52,17 @@ public class G4JTest
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());
         if(e.getReason() != null) e.getReason().printStackTrace();
+    }
+
+    @Subscribe
+    public void onForumTopicPinnedEvent(ForumTopicPinnedEvent e)
+    {
+        System.out.println("ForumTopicPinned\n"+e.getForumTopic().toString());
+    }
+
+    @Subscribe
+    public void onForumTopicUnpinnedEvent(ForumTopicUnpinnedEvent e)
+    {
+        System.out.println("ForumTopicUnpinned\n"+e.getForumTopic().toString());
     }
 }

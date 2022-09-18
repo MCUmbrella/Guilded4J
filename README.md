@@ -109,6 +109,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicCreatedEvent
 - [x] ForumTopicDeletedEvent
 - [x] ForumTopicUpdatedEvent
+- [x] ForumTopicPinnedEvent
+- [x] ForumTopicUnpinnedEvent
 - [x] GuildedWebsocketClosedEvent
 - [x] GuildedWebsocketWelcomeEvent
 - [x] ListItemCompletedEvent

@@ -17,6 +17,7 @@ public class ForumTopic
 {
     int id;
     String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId, updatedAt, bumpedAt;
+    boolean isPinned = false;
     Mention mentions;
 
     /**
@@ -72,6 +73,11 @@ public class ForumTopic
     public String getBumpedAt(){return bumpedAt;}
 
     public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+
+    /**
+     * Check if the topic is pinned.
+     */
+    public boolean isPinned(){return isPinned;}
 
     public ForumTopic setId(int id)
     {
@@ -133,6 +139,12 @@ public class ForumTopic
         return this;
     }
 
+    public ForumTopic setIsPinned(Boolean isPinned)
+    {
+        this.isPinned = isPinned != null ? isPinned : false;
+        return this;
+    }
+
     /**
      * Use the given JSON object to generate ForumTopic object.
      * @param json The JSON object.
@@ -160,7 +172,8 @@ public class ForumTopic
                 .setCreatedBy(json.getStr("createdBy"))
                 .setCreatedByWebhookId(json.getStr("createdByWebhookId"))
                 .setUpdatedAt(json.getStr("updatedAt"))
-                .setBumpedAt(json.getStr("bumpedAt"));
+                .setBumpedAt(json.getStr("bumpedAt"))
+                .setIsPinned(json.getBool("isPinned"));
     }
 
     /**
@@ -181,6 +194,7 @@ public class ForumTopic
                 .set("createdByWebhookId", createdByWebhookId)
                 .set("updatedAt", updatedAt)
                 .set("bumpedAt", bumpedAt)
+                .set("isPinned", isPinned)
                 .toString();
     }
 }

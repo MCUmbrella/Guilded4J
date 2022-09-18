@@ -6,17 +6,17 @@
 
     <groupId>vip.floatationdevice</groupId>
     <artifactId>guilded4j</artifactId>
-    <version>0.9.6</version>
+    <version>0.9.7</version>
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
-            <version>5.8.3</version>
+            <version>5.8.6</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-json</artifactId>
-            <version>5.8.3</version>
+            <version>5.8.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

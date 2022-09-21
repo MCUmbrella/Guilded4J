@@ -2,6 +2,7 @@ package vip.floatationdevice.guilded4j;
 
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.misc.*;
 import vip.floatationdevice.guilded4j.object.*;
 
 /**
@@ -17,21 +18,6 @@ public class G4JTest
         G4JClient c = new G4JClient(s.savedToken).setVerbose(false);
         c.ws.eventBus.register(new G4JTest());
         c.ws.connect();
-        String ch="6284cada-9d78-4941-803a-3bc38e3de9aa";
-        Thread.sleep(10000);
-        ForumTopic f = c.getForumManager().createForumTopic(ch, "HHHHHH", "H");
-        System.out.println(f.getId());
-        Thread.sleep(10000);
-        c.getForumManager().pinForumTopic(ch, f.getId());
-        System.out.println("PINNED");
-        Thread.sleep(10000);
-        c.getForumManager().unpinForumTopic(ch, f.getId());
-        System.out.println("UNPINNED");
-        Thread.sleep(10000);
-        c.getForumManager().deleteForumTopic(ch, f.getId());
-        System.out.println("DELETED");
-        Thread.sleep(10000);
-        System.exit(0);
         //==============================================================
     }
 
@@ -52,17 +38,5 @@ public class G4JTest
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());
         if(e.getReason() != null) e.getReason().printStackTrace();
-    }
-
-    @Subscribe
-    public void onForumTopicPinnedEvent(ForumTopicPinnedEvent e)
-    {
-        System.out.println("ForumTopicPinned\n"+e.getForumTopic().toString());
-    }
-
-    @Subscribe
-    public void onForumTopicUnpinnedEvent(ForumTopicUnpinnedEvent e)
-    {
-        System.out.println("ForumTopicUnpinned\n"+e.getForumTopic().toString());
     }
 }

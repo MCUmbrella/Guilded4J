@@ -133,4 +133,14 @@ public class ForumManager extends RestManager
                 null
         );
     }
+
+    public void lockForumTopic()
+    {
+        //TODO: wait for the announcement
+    }
+
+    public void unlockForumTopic()
+    {
+        //TODO: wait for the announcement
+    }
 }

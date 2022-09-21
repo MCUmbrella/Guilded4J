@@ -17,7 +17,7 @@ public class ForumTopic
 {
     int id;
     String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId, updatedAt, bumpedAt;
-    boolean isPinned = false;
+    boolean isPinned = false, isLocked = false;
     Mention mentions;
 
     /**
@@ -78,6 +78,11 @@ public class ForumTopic
      * Check if the topic is pinned.
      */
     public boolean isPinned(){return isPinned;}
+
+    /**
+     * Check if the topic is locked.
+     */
+    public boolean isLocked(){return isLocked;}
 
     public ForumTopic setId(int id)
     {
@@ -145,6 +150,12 @@ public class ForumTopic
         return this;
     }
 
+    public ForumTopic setIsLocked(Boolean isLocked)
+    {
+        this.isPinned = isLocked != null ? isLocked : false;
+        return this;
+    }
+
     /**
      * Use the given JSON object to generate ForumTopic object.
      * @param json The JSON object.
@@ -173,7 +184,8 @@ public class ForumTopic
                 .setCreatedByWebhookId(json.getStr("createdByWebhookId"))
                 .setUpdatedAt(json.getStr("updatedAt"))
                 .setBumpedAt(json.getStr("bumpedAt"))
-                .setIsPinned(json.getBool("isPinned"));
+                .setIsPinned(json.getBool("isPinned"))
+                .setIsLocked(json.getBool("isLocked"));
     }
 
     /**
@@ -195,6 +207,7 @@ public class ForumTopic
                 .set("updatedAt", updatedAt)
                 .set("bumpedAt", bumpedAt)
                 .set("isPinned", isPinned)
+                .set("isLocked", isLocked)
                 .toString();
     }
 }

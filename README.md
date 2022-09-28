@@ -47,6 +47,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get forum topic list - getForumTopics()
 - [x] Pin a forum topic - pinForumTopic()
 - [x] Unpin a forum topic - unpinForumTopic()
+- [x] Lock a forum topic - lockForumTopic()
+- [x] Unlock a forum topic - unlockForumTopic()
 ## List
 - [x] Create list item - createListItem()
 - [x] Get list items - getListItems()
@@ -111,6 +113,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicUpdatedEvent
 - [x] ForumTopicPinnedEvent
 - [x] ForumTopicUnpinnedEvent
+- [x] ForumTopicLockedEvent
+- [x] ForumTopicUnlockedEvent
 - [x] GuildedWebsocketClosedEvent
 - [x] GuildedWebsocketWelcomeEvent
 - [x] ListItemCompletedEvent

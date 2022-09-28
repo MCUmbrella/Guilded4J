@@ -134,13 +134,31 @@ public class ForumManager extends RestManager
         );
     }
 
-    public void lockForumTopic()
+    /**
+     * Lock a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/forums/ForumTopicLock" target=_blank>https://www.guilded.gg/docs/api/forums/ForumTopicLock</a>
+     * @param channelId The ID of the channel where the topic belongs to.
+     * @param forumTopicId The ID of the topic.
+     */
+    public void lockForumTopic(String channelId, int forumTopicId)
     {
-        //TODO: wait for the announcement
+        execute(Method.PUT,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' +forumTopicId + "/lock",
+                null
+        );
     }
 
-    public void unlockForumTopic()
+    /**
+     * Unlock a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/forums/ForumTopicUnlock" target=_blank>https://www.guilded.gg/docs/api/forums/ForumTopicUnlock</a>
+     * @param channelId The ID of the channel where the topic belongs to.
+     * @param forumTopicId The ID of the topic.
+     */
+    public void unlockForumTopic(String channelId, int forumTopicId)
     {
-        //TODO: wait for the announcement
+        execute(Method.PUT,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' +forumTopicId + "/lock",
+                null
+        );
     }
 }

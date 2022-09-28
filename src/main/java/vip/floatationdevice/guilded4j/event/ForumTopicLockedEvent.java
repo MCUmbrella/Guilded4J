@@ -5,7 +5,25 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class ForumTopicLockedEvent
+import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.object.ForumTopic;
+
+/**
+ * Event fired when a forum topic gets locked.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ForumTopicLocked" target=_blank>https://www.guilded.gg/docs/api/websockets/ForumTopicLocked</a>
+ */
+public class ForumTopicLockedEvent extends GuildedEvent
 {
-    //TODO: wait for the announcement
+    private final ForumTopic forumTopic;
+
+    public ForumTopicLockedEvent(Object source, String json)
+    {
+        super(source, json);
+        this.forumTopic = ForumTopic.fromJSON((JSONObject) new JSONObject(json).getByPath("d.forumTopic"));
+    }
+
+    /**
+     * Get the ForumTopic object of the event.
+     */
+    public ForumTopic getForumTopic(){return forumTopic;}
 }

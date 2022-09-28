@@ -22,10 +22,6 @@ public class MemberNicknameSummary
         this.nickname = nickname;
     }
 
-    public String getNickname(){return nickname;}
-
-    public String getUserId(){return id;}
-
     public static MemberNicknameSummary fromJSON(JSONObject json)
     {
         return new MemberNicknameSummary(
@@ -33,4 +29,8 @@ public class MemberNicknameSummary
                 json.getStr("nickname")
         );
     }
+
+    public String getNickname(){return nickname;}
+
+    public String getUserId(){return id;}
 }

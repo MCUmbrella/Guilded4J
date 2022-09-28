@@ -20,29 +20,6 @@ public class Bot extends User
     private String createdBy, botId;
 
     /**
-     * Get the ID of the user who created this bot.
-     */
-    public String getCreator(){return createdBy;}
-
-    /**
-     * Get the ID of this bot.
-     * @return The bot's UUID.
-     */
-    public String getBotId(){return botId;}
-
-    public Bot setCreator(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public Bot setBotId(String botId)
-    {
-        this.botId = botId;
-        return this;
-    }
-
-    /**
      * Generate a Bot object from a JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
@@ -60,6 +37,29 @@ public class Bot extends User
                 .setId(json.getStr("id"))
                 .setName(json.getStr("name"))
                 .setCreationTime(json.getStr("createdAt")); // convert it back to Bot
+    }
+
+    /**
+     * Get the ID of the user who created this bot.
+     */
+    public String getCreator(){return createdBy;}
+
+    public Bot setCreator(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Get the ID of this bot.
+     * @return The bot's UUID.
+     */
+    public String getBotId(){return botId;}
+
+    public Bot setBotId(String botId)
+    {
+        this.botId = botId;
+        return this;
     }
 
     /**

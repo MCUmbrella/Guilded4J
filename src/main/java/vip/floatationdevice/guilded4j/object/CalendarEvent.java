@@ -24,172 +24,6 @@ public class CalendarEvent
     private CalendarEventCancellation cancellation;
 
     /**
-     * Get the ID of the calendar event.
-     */
-    public int getId(){return id;}
-
-    /**
-     * Get the ID of the server that the calendar event belongs to.
-     */
-    public String getServerId(){return serverId;}
-
-    /**
-     * Get the ID of the channel that the calendar event belongs to.
-     */
-    public String getChannelId(){return channelId;}
-
-    /**
-     * Get the name of the event.
-     */
-    public String getName(){return name;}
-
-    /**
-     * Get the description of the event.
-     */
-    public String getDescription(){return description;}
-
-    /**
-     * Get the location of the event.
-     */
-    public String getLocation(){return location;}
-
-    /**
-     * Get the URL associated with the event.
-     */
-    public String getUrl(){return url;}
-
-    /**
-     * color of the event when viewing in the calendar.
-     */
-    public Integer getColor(){return color;}
-
-    /**
-     * Get the ISO 8601 timestamp that the event starts at.
-     */
-    public String getStartsAt(){return startsAt;}
-
-    /**
-     * duration of the event in minutes.
-     */
-    public Integer getDuration(){return duration;}
-
-    /**
-     * No description available in API documentation.
-     */
-    public Boolean getIsPrivate(){return isPrivate;}
-
-    /**
-     * No description available in API documentation.
-     * Also, mentions will not be implemented in Guilded4J - yet.
-     */
-    public Mention[] getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
-
-    /**
-     * Get the ISO 8601 timestamp that the event was created at.
-     */
-    public String getCreatedAt(){return createdAt;}
-
-    /**
-     * Get the ID of the user who created this event.
-     */
-    public String getCreatedBy(){return createdBy;}
-
-    /**
-     * No description available in API documentation.
-     */
-    public CalendarEventCancellation getCancellation(){return cancellation;}
-
-    public CalendarEvent setId(int id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public CalendarEvent setServerId(String serverId)
-    {
-        this.serverId = serverId;
-        return this;
-    }
-
-    public CalendarEvent setChannelId(String channelId)
-    {
-        this.channelId = channelId;
-        return this;
-    }
-
-    public CalendarEvent setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public CalendarEvent setDescription(String description)
-    {
-        this.description = description;
-        return this;
-    }
-
-    public CalendarEvent setLocation(String location)
-    {
-        this.location = location;
-        return this;
-    }
-
-    public CalendarEvent setUrl(String url)
-    {
-        this.url = url;
-        return this;
-    }
-
-    public CalendarEvent setColor(Integer color)
-    {
-        this.color = color;
-        return this;
-    }
-
-    public CalendarEvent setStartsAt(String startsAt)
-    {
-        this.startsAt = startsAt;
-        return this;
-    }
-
-    public CalendarEvent setDuration(Integer duration)
-    {
-        this.duration = duration;
-        return this;
-    }
-
-    public CalendarEvent setIsPrivate(Boolean isPrivate)
-    {
-        this.isPrivate = isPrivate;
-        return this;
-    }
-
-    public CalendarEvent setMentions(Mention[] mentions)
-    {
-        this.mentions = mentions;
-        return this;
-    }
-
-    public CalendarEvent setCreatedAt(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public CalendarEvent setCreatedBy(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public CalendarEvent setCancellation(CalendarEventCancellation cancellation)
-    {
-        this.cancellation = cancellation;
-        return this;
-    }
-
-    /**
      * Use the given JSON object to generate CalendarEvent object.
      * @param json The JSON object.
      * @return CalendarEvent object.
@@ -222,6 +56,172 @@ public class CalendarEvent
                 .setCreatedAt(json.getStr("createdAt"))
                 .setCreatedBy(json.getStr("createdBy"))
                 .setCancellation(json.getJSONObject("cancellation") != null ? CalendarEventCancellation.fromJSON(json.getJSONObject("cancellation")) : null);
+    }
+
+    /**
+     * Get the ID of the calendar event.
+     */
+    public int getId(){return id;}
+
+    public CalendarEvent setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the ID of the server that the calendar event belongs to.
+     */
+    public String getServerId(){return serverId;}
+
+    public CalendarEvent setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    /**
+     * Get the ID of the channel that the calendar event belongs to.
+     */
+    public String getChannelId(){return channelId;}
+
+    public CalendarEvent setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    /**
+     * Get the name of the event.
+     */
+    public String getName(){return name;}
+
+    public CalendarEvent setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the description of the event.
+     */
+    public String getDescription(){return description;}
+
+    public CalendarEvent setDescription(String description)
+    {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Get the location of the event.
+     */
+    public String getLocation(){return location;}
+
+    public CalendarEvent setLocation(String location)
+    {
+        this.location = location;
+        return this;
+    }
+
+    /**
+     * Get the URL associated with the event.
+     */
+    public String getUrl(){return url;}
+
+    public CalendarEvent setUrl(String url)
+    {
+        this.url = url;
+        return this;
+    }
+
+    /**
+     * color of the event when viewing in the calendar.
+     */
+    public Integer getColor(){return color;}
+
+    public CalendarEvent setColor(Integer color)
+    {
+        this.color = color;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the event starts at.
+     */
+    public String getStartsAt(){return startsAt;}
+
+    public CalendarEvent setStartsAt(String startsAt)
+    {
+        this.startsAt = startsAt;
+        return this;
+    }
+
+    /**
+     * duration of the event in minutes.
+     */
+    public Integer getDuration(){return duration;}
+
+    public CalendarEvent setDuration(Integer duration)
+    {
+        this.duration = duration;
+        return this;
+    }
+
+    /**
+     * No description available in API documentation.
+     */
+    public Boolean getIsPrivate(){return isPrivate;}
+
+    public CalendarEvent setIsPrivate(Boolean isPrivate)
+    {
+        this.isPrivate = isPrivate;
+        return this;
+    }
+
+    /**
+     * No description available in API documentation.
+     * Also, mentions will not be implemented in Guilded4J - yet.
+     */
+    public Mention[] getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+
+    public CalendarEvent setMentions(Mention[] mentions)
+    {
+        this.mentions = mentions;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the event was created at.
+     */
+    public String getCreatedAt(){return createdAt;}
+
+    public CalendarEvent setCreatedAt(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user who created this event.
+     */
+    public String getCreatedBy(){return createdBy;}
+
+    public CalendarEvent setCreatedBy(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * No description available in API documentation.
+     */
+    public CalendarEventCancellation getCancellation(){return cancellation;}
+
+    public CalendarEvent setCancellation(CalendarEventCancellation cancellation)
+    {
+        this.cancellation = cancellation;
+        return this;
     }
 
     @Override

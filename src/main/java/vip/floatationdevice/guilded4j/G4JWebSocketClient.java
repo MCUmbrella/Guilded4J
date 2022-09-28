@@ -26,20 +26,18 @@ import java.net.URI;
  */
 public class G4JWebSocketClient extends WebSocketClient
 {
-    String authToken, lastMessageId;
-    int heartbeatIntervalMs = 22500;
+    /**
+     * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
+     */
+    public static final URI WEBSOCKET_URI = URI.create("wss://www.guilded.gg/websocket/v1");
     public boolean verboseEnabled = false;
-
     /**
      * Used to post events or register an event listener class.<br>
      * Write your own event listener class and use {@code eventBus.register()} to receive events.
      */
     public EventBus eventBus = new EventBus();
-
-    /**
-     * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
-     */
-    public static final URI WEBSOCKET_URI = URI.create("wss://www.guilded.gg/websocket/v1");
+    String authToken, lastMessageId;
+    int heartbeatIntervalMs = 10000;
 
     /**
      * Generate a G4JWebSocketClient using the given access token.
@@ -165,6 +163,15 @@ public class G4JWebSocketClient extends WebSocketClient
     }
 
     /**
+     * Get the heartbeat interval.
+     * @return The interval in milliseconds.
+     */
+    public int getHeartbeatInterval()
+    {
+        return heartbeatIntervalMs;
+    }
+
+    /**
      * Set heartbeat interval.
      * @param ms The interval in milliseconds.
      */
@@ -174,14 +181,5 @@ public class G4JWebSocketClient extends WebSocketClient
         this.heartbeatIntervalMs = ms;
         this.setConnectionLostTimeout(ms / 1000);
         return this;
-    }
-
-    /**
-     * Get the heartbeat interval.
-     * @return The interval in milliseconds.
-     */
-    public int getHeartbeatInterval()
-    {
-        return heartbeatIntervalMs;
     }
 }

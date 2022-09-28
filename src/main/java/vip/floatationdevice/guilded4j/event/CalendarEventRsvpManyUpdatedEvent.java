@@ -22,7 +22,7 @@ public class CalendarEventRsvpManyUpdatedEvent extends GuildedEvent
         super(source, json);
         JSONArray jsonArray = (JSONArray) new JSONObject(json).getByPath("d.calendarEventRsvps");
         this.calendarEventRsvps = new CalendarEventRsvp[jsonArray.size()];
-        for (int i = 0; i < jsonArray.size(); i++)
+        for(int i = 0; i < jsonArray.size(); i++)
             this.calendarEventRsvps[i] = CalendarEventRsvp.fromJSON((JSONObject) jsonArray.get(i));
     }
 

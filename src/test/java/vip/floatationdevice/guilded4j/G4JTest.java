@@ -17,32 +17,28 @@ public class G4JTest
         s.restore();
         G4JClient c = new G4JClient(s.savedToken).setVerbose(false);
         c.ws.eventBus.register(new G4JTest());
+        //c.ws.setHeartbeatInterval(20000);
         c.ws.connect();
-        ForumTopic f = c.getForumManager().createForumTopic(s.savedChannelId, "HHHHHH", "H");
-        System.out.println("created forum topic");
-        Thread.sleep(5000);
-        c.getForumManager().lockForumTopic(s.savedChannelId, f.getId());
-        System.out.println("locked");
-        Thread.sleep(5000);
-        c.getForumManager().unlockForumTopic(s.savedChannelId, f.getId());
-        System.out.println("unlocked");
-        Thread.sleep(5000);
-        c.getForumManager().deleteForumTopic(s.savedChannelId, f.getId());
-        System.out.println("deleted");
-        System.exit(0);
+
+        new Thread()
+        {
+            int i = 0;
+            @Override
+            public void run()
+            {
+                try
+                {
+                    for(;;)
+                    {
+                        i++;
+                        System.out.println(i);
+                        sleep(1000);
+                    }
+                }
+                catch(InterruptedException e){}
+            }
+        }.start();
         //==============================================================
-    }
-
-    @Subscribe
-    public void onForumTopicLockedEvent(ForumTopicLockedEvent e)
-    {
-        System.out.println(e.getClass().getName()+"\n"+e.getForumTopic().toString());
-    }
-
-    @Subscribe
-    public void onForumTopicUnlockedEvent(ForumTopicUnlockedEvent e)
-    {
-        System.out.println(e.getClass().getName()+"\n"+e.getForumTopic().toString());
     }
 
     @Subscribe
@@ -54,7 +50,7 @@ public class G4JTest
     @Subscribe
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
-        System.out.println("Disconnected from Guilded WebSocket server.");
+        System.out.println("Disconnected from Guilded WebSocket server.\nCode: "+e.getCode()+", reason: "+e.getReason());
     }
 
     @Subscribe

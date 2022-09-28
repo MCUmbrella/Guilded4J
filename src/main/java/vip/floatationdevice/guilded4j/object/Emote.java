@@ -17,34 +17,6 @@ public class Emote
     private int id;
     private String name, url;
 
-    /**
-     * Get the ID of the emote.
-     */
-    public int getId(){return id;}
-
-    /**
-     * Get the name of the emote.
-     */
-    public String getName(){return name;}
-
-    public Emote setId(int id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public Emote setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public Emote setUrl(String url)
-    {
-        this.url = url;
-        return this;
-    }
-
     public static Emote fromJSON(JSONObject json)
     {
         Util.checkNullArgument(
@@ -56,6 +28,34 @@ public class Emote
                 .setId(json.getInt("id"))
                 .setName(json.getStr("name"))
                 .setUrl(json.getStr("url"));
+    }
+
+    /**
+     * Get the ID of the emote.
+     */
+    public int getId(){return id;}
+
+    public Emote setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the name of the emote.
+     */
+    public String getName(){return name;}
+
+    public Emote setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
+
+    public Emote setUrl(String url)
+    {
+        this.url = url;
+        return this;
     }
 
     @Override

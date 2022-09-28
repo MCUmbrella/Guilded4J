@@ -143,7 +143,7 @@ public class ForumManager extends RestManager
     public void lockForumTopic(String channelId, int forumTopicId)
     {
         execute(Method.PUT,
-                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' +forumTopicId + "/lock",
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/lock",
                 null
         );
     }
@@ -157,7 +157,7 @@ public class ForumManager extends RestManager
     public void unlockForumTopic(String channelId, int forumTopicId)
     {
         execute(Method.PUT,
-                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' +forumTopicId + "/lock",
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/lock",
                 null
         );
     }

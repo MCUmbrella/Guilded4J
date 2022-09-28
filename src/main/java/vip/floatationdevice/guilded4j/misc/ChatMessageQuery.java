@@ -11,13 +11,13 @@ package vip.floatationdevice.guilded4j.misc;
  */
 public class ChatMessageQuery extends GObjectQuery
 {
+    private boolean includePrivate = false;
+
     public ChatMessageQuery()
     {
         super();
         limit(50); // This is the default limit for the chat message query.
     }
-
-    private boolean includePrivate = false;
 
     /**
      * Include private messages in the query.

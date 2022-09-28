@@ -42,6 +42,7 @@ public class ChannelMessageReactionCreatedEvent extends GuildedEvent // TODO: wa
      */
     private final String channelId, messageId, createdBy;
     private final Emote emote;
+
     public ChannelMessageReactionCreatedEvent(Object source, String json)
     {
         super(source, json);
@@ -52,8 +53,11 @@ public class ChannelMessageReactionCreatedEvent extends GuildedEvent // TODO: wa
         this.emote = Emote.fromJSON(j.getJSONObject("emote"));
     }
 
-    public String getChannelId() {return channelId;}
-    public String getMessageId() {return messageId;}
-    public String getCreatedBy() {return createdBy;}
-    public Emote getEmote() {return emote;}
+    public String getChannelId(){return channelId;}
+
+    public String getMessageId(){return messageId;}
+
+    public String getCreatedBy(){return createdBy;}
+
+    public Emote getEmote(){return emote;}
 }

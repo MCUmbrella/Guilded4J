@@ -21,142 +21,6 @@ public class ForumTopic
     Mention mentions;
 
     /**
-     * Get the thread's ID (it is not UUID).
-     */
-    public int getId(){return id;}
-
-    /**
-     * Get the ID of the server to which the thread belongs.
-     */
-    public String getServerId(){return serverId;}
-
-    /**
-     * Get the UUID of the channel to which the thread belongs.
-     */
-    public String getChannelId(){return channelId;}
-
-    /**
-     * Get the title of the thread.
-     */
-    public String getTitle(){return title;}
-
-    /**
-     * Get the content of the thread.
-     */
-    public String getContent(){return content;}
-
-    /**
-     * Get the ISO 8601 timestamp string that the forum thread was created at.
-     */
-    public String getCreatedAt(){return createdAt;}
-
-    /**
-     * The ID of the user who created this forum thread.
-     */
-    public String getCreatedBy(){return createdBy;}
-
-    /**
-     * Get the ID of the webhook who created this forum thread (if it was created by a webhook).
-     * @return A UUID string of the webhook who created the thread. If the creator isn't webhook, return {@code null}.
-     */
-    public String getCreatedByWebhookId(){return createdByWebhookId;}
-
-    /**
-     * Get the ISO 8601 timestamp that the forum topic was updated at, if relevant.
-     */
-    public String getUpdatedAt(){return updatedAt;}
-
-    /**
-     * Get the ISO 8601 timestamp that the forum topic was bumped at.
-     * This timestamp is updated whenever there is any activity on the posts within the forum topic.
-     */
-    public String getBumpedAt(){return bumpedAt;}
-
-    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
-
-    /**
-     * Check if the topic is pinned.
-     */
-    public boolean isPinned(){return isPinned;}
-
-    /**
-     * Check if the topic is locked.
-     */
-    public boolean isLocked(){return isLocked;}
-
-    public ForumTopic setId(int id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public ForumTopic setServerId(String serverId)
-    {
-        this.serverId = serverId;
-        return this;
-    }
-
-    public ForumTopic setChannelId(String channelId)
-    {
-        this.channelId = channelId;
-        return this;
-    }
-
-    public ForumTopic setTitle(String title)
-    {
-        this.title = title;
-        return this;
-    }
-
-    public ForumTopic setContent(String content)
-    {
-        this.content = content;
-        return this;
-    }
-
-    public ForumTopic setCreatedAt(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public ForumTopic setCreatedBy(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public ForumTopic setCreatedByWebhookId(String createdByWebhookId)
-    {
-        this.createdByWebhookId = createdByWebhookId;
-        return this;
-    }
-
-    public ForumTopic setUpdatedAt(String updatedAt)
-    {
-        this.updatedAt = updatedAt;
-        return this;
-    }
-
-    public ForumTopic setBumpedAt(String bumpedAt)
-    {
-        this.bumpedAt = bumpedAt;
-        return this;
-    }
-
-    public ForumTopic setIsPinned(Boolean isPinned)
-    {
-        this.isPinned = isPinned != null ? isPinned : false;
-        return this;
-    }
-
-    public ForumTopic setIsLocked(Boolean isLocked)
-    {
-        this.isPinned = isLocked != null ? isLocked : false;
-        return this;
-    }
-
-    /**
      * Use the given JSON object to generate ForumTopic object.
      * @param json The JSON object.
      * @return ForumTopic object.
@@ -186,6 +50,142 @@ public class ForumTopic
                 .setBumpedAt(json.getStr("bumpedAt"))
                 .setIsPinned(json.getBool("isPinned"))
                 .setIsLocked(json.getBool("isLocked"));
+    }
+
+    /**
+     * Get the thread's ID (it is not UUID).
+     */
+    public int getId(){return id;}
+
+    public ForumTopic setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the ID of the server to which the thread belongs.
+     */
+    public String getServerId(){return serverId;}
+
+    public ForumTopic setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    /**
+     * Get the UUID of the channel to which the thread belongs.
+     */
+    public String getChannelId(){return channelId;}
+
+    public ForumTopic setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    /**
+     * Get the title of the thread.
+     */
+    public String getTitle(){return title;}
+
+    public ForumTopic setTitle(String title)
+    {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * Get the content of the thread.
+     */
+    public String getContent(){return content;}
+
+    public ForumTopic setContent(String content)
+    {
+        this.content = content;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp string that the forum thread was created at.
+     */
+    public String getCreatedAt(){return createdAt;}
+
+    public ForumTopic setCreatedAt(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * The ID of the user who created this forum thread.
+     */
+    public String getCreatedBy(){return createdBy;}
+
+    public ForumTopic setCreatedBy(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Get the ID of the webhook who created this forum thread (if it was created by a webhook).
+     * @return A UUID string of the webhook who created the thread. If the creator isn't webhook, return {@code null}.
+     */
+    public String getCreatedByWebhookId(){return createdByWebhookId;}
+
+    public ForumTopic setCreatedByWebhookId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the forum topic was updated at, if relevant.
+     */
+    public String getUpdatedAt(){return updatedAt;}
+
+    public ForumTopic setUpdatedAt(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the forum topic was bumped at.
+     * This timestamp is updated whenever there is any activity on the posts within the forum topic.
+     */
+    public String getBumpedAt(){return bumpedAt;}
+
+    public ForumTopic setBumpedAt(String bumpedAt)
+    {
+        this.bumpedAt = bumpedAt;
+        return this;
+    }
+
+    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+
+    /**
+     * Check if the topic is pinned.
+     */
+    public boolean isPinned(){return isPinned;}
+
+    /**
+     * Check if the topic is locked.
+     */
+    public boolean isLocked(){return isLocked;}
+
+    public ForumTopic setIsPinned(Boolean isPinned)
+    {
+        this.isPinned = isPinned != null ? isPinned : false;
+        return this;
+    }
+
+    public ForumTopic setIsLocked(Boolean isLocked)
+    {
+        this.isPinned = isLocked != null ? isLocked : false;
+        return this;
     }
 
     /**

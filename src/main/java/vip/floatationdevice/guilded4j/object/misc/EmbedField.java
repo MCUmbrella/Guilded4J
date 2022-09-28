@@ -17,12 +17,26 @@ public class EmbedField
     private String name, value = "";
     private boolean inline;
 
+    public static EmbedField fromJSON(JSONObject json)
+    {
+        return new EmbedField()
+                .setName(json.getStr("name"))
+                .setValue(json.getStr("value"))
+                .setInline(json.getBool("inline") != null ? json.getBool("inline") : false);
+    }
+
     /**
      * Get the header of the table-like cell.
      */
     public String getName()
     {
         return name;
+    }
+
+    public EmbedField setName(String name)
+    {
+        this.name = name;
+        return this;
     }
 
     /**
@@ -33,6 +47,12 @@ public class EmbedField
         return value;
     }
 
+    public EmbedField setValue(String value)
+    {
+        this.value = value;
+        return this;
+    }
+
     /**
      * Check if the field is inline.
      */
@@ -41,30 +61,10 @@ public class EmbedField
         return inline;
     }
 
-    public EmbedField setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public EmbedField setValue(String value)
-    {
-        this.value = value;
-        return this;
-    }
-
     public EmbedField setInline(boolean inline)
     {
         this.inline = inline;
         return this;
-    }
-
-    public static EmbedField fromJSON(JSONObject json)
-    {
-        return new EmbedField()
-                .setName(json.getStr("name"))
-                .setValue(json.getStr("value"))
-                .setInline(json.getBool("inline") != null ? json.getBool("inline") : false);
     }
 
     @Override

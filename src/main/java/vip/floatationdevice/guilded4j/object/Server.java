@@ -18,30 +18,82 @@ public class Server
     String id, ownerId, type, name, url, about, avatar, banner, timezone, defaultChannelId, createdAt;
     boolean isVerified = false;
 
+    public static Server fromJSON(JSONObject json)
+    {
+        Util.checkNullArgument(
+                json.getStr("id"),
+                json.getStr("ownerId"),
+                json.getStr("name"),
+                json.getStr("createdAt")
+        );
+        return new Server()
+                .setId(json.getStr("id"))
+                .setOwnerId(json.getStr("ownerId"))
+                .setType(json.getStr("type"))
+                .setName(json.getStr("name"))
+                .setUrl(json.getStr("url"))
+                .setAbout(json.getStr("about"))
+                .setAvatar(json.getStr("avatar"))
+                .setBanner(json.getStr("banner"))
+                .setTimezone(json.getStr("timezone"))
+                .setIsVerified(json.getBool("isVerified") != null && json.getBool("isVerified"))
+                .setCreatedAt(json.getStr("createdAt"));
+    }
+
     /**
      * Get the ID of the server.
      */
     public String getId(){return id;}
+
+    public Server setId(String id)
+    {
+        this.id = id;
+        return this;
+    }
 
     /**
      * Get the ID of the user who created this server.
      */
     public String getOwnerId(){return ownerId;}
 
+    public Server setOwnerId(String ownerId)
+    {
+        this.ownerId = ownerId;
+        return this;
+    }
+
     /**
      * Get the type of server designated from the server's settings page.
      */
     public String getType(){return type;}
+
+    public Server setType(String type)
+    {
+        this.type = type;
+        return this;
+    }
 
     /**
      * Get the name of the server.
      */
     public String getName(){return name;}
 
+    public Server setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
+
     /**
      * Get the URL that the server can be accessible from.
      */
     public String getUrl(){return url;}
+
+    public Server setUrl(String url)
+    {
+        this.url = url;
+        return this;
+    }
 
     /**
      * Get the description associated with the server.
@@ -77,36 +129,6 @@ public class Server
      * Get the ISO 8601 timestamp that the server was created at.
      */
     public String getCreationTime(){return createdAt;}
-
-    public Server setId(String id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public Server setOwnerId(String ownerId)
-    {
-        this.ownerId = ownerId;
-        return this;
-    }
-
-    public Server setType(String type)
-    {
-        this.type = type;
-        return this;
-    }
-
-    public Server setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public Server setUrl(String url)
-    {
-        this.url = url;
-        return this;
-    }
 
     public Server setAbout(String about)
     {
@@ -148,28 +170,6 @@ public class Server
     {
         this.createdAt = createdAt;
         return this;
-    }
-
-    public static Server fromJSON(JSONObject json)
-    {
-        Util.checkNullArgument(
-                json.getStr("id"),
-                json.getStr("ownerId"),
-                json.getStr("name"),
-                json.getStr("createdAt")
-        );
-        return new Server()
-                .setId(json.getStr("id"))
-                .setOwnerId(json.getStr("ownerId"))
-                .setType(json.getStr("type"))
-                .setName(json.getStr("name"))
-                .setUrl(json.getStr("url"))
-                .setAbout(json.getStr("about"))
-                .setAvatar(json.getStr("avatar"))
-                .setBanner(json.getStr("banner"))
-                .setTimezone(json.getStr("timezone"))
-                .setIsVerified(json.getBool("isVerified") != null && json.getBool("isVerified"))
-                .setCreatedAt(json.getStr("createdAt"));
     }
 
     @Override

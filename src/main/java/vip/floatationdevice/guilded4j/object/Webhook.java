@@ -17,118 +17,6 @@ public class Webhook
     private String id, name, serverId, channelId, createdAt, createdBy, deletedAt, token;
 
     /**
-     * Get the ID of the webhook.
-     */
-    public String getId()
-    {
-        return id;
-    }
-
-    /**
-     * Get the name of the webhook.
-     */
-    public String getName()
-    {
-        return name;
-    }
-
-    /**
-     * Get the ID of the server that the webhook belongs to.
-     */
-    public String getServerId()
-    {
-        return serverId;
-    }
-
-    /**
-     * Get the ID of the channel that the webhook belongs to.
-     */
-    public String getChannelId()
-    {
-        return channelId;
-    }
-
-    /**
-     * Get the ISO 8601 timestamp that the webhook was created at.
-     */
-    public String getCreationTime()
-    {
-        return createdAt;
-    }
-
-    /**
-     * Get the ID of the user who created this webhook.
-     */
-    public String getCreator()
-    {
-        return createdBy;
-    }
-
-    /**
-     * Get the ISO 8601 timestamp that the webhook was deleted at.
-     */
-    public String getDeletionTime()
-    {
-        return deletedAt;
-    }
-
-    /**
-     * Get the token of the webhook.
-     */
-    public String getToken()
-    {
-        return token;
-    }
-
-    public Webhook setId(String id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public Webhook setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public Webhook setServerId(String serverId)
-    {
-        this.serverId = serverId;
-        return this;
-    }
-
-    public Webhook setChannelId(String channelId)
-    {
-        this.channelId = channelId;
-        return this;
-    }
-
-    public Webhook setCreationTime(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public Webhook setCreator(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public Webhook setDeletionTime(String deletedAt)
-    {
-        this.deletedAt = deletedAt;
-        return this;
-    }
-
-    public Webhook setToken(String token)
-    {
-        this.token = token;
-        return this;
-    }
-
-    /**
      * Generate a Webhook object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
@@ -151,6 +39,118 @@ public class Webhook
                 .setCreator(json.getStr("createdBy"))
                 .setDeletionTime(json.getStr("deletedAt"))
                 .setToken(json.getStr("token"));
+    }
+
+    /**
+     * Get the ID of the webhook.
+     */
+    public String getId()
+    {
+        return id;
+    }
+
+    public Webhook setId(String id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the name of the webhook.
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    public Webhook setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the ID of the server that the webhook belongs to.
+     */
+    public String getServerId()
+    {
+        return serverId;
+    }
+
+    public Webhook setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    /**
+     * Get the ID of the channel that the webhook belongs to.
+     */
+    public String getChannelId()
+    {
+        return channelId;
+    }
+
+    public Webhook setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the webhook was created at.
+     */
+    public String getCreationTime()
+    {
+        return createdAt;
+    }
+
+    public Webhook setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user who created this webhook.
+     */
+    public String getCreator()
+    {
+        return createdBy;
+    }
+
+    public Webhook setCreator(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the webhook was deleted at.
+     */
+    public String getDeletionTime()
+    {
+        return deletedAt;
+    }
+
+    public Webhook setDeletionTime(String deletedAt)
+    {
+        this.deletedAt = deletedAt;
+        return this;
+    }
+
+    /**
+     * Get the token of the webhook.
+     */
+    public String getToken()
+    {
+        return token;
+    }
+
+    public Webhook setToken(String token)
+    {
+        this.token = token;
+        return this;
     }
 
     /**

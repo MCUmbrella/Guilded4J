@@ -17,13 +17,47 @@ public class ListItemNote
     private String createdAt, createdBy, updatedAt, updatedBy;
     private String content;
 
+    public static ListItemNote fromJSON(JSONObject json)
+    {
+        return new ListItemNote()
+                .setContent(json.getStr("content"))
+                .setCreationTime(json.getStr("createdAt"))
+                .setCreatorId(json.getStr("createdBy"))
+                .setUpdateTime(json.getStr("updatedAt"))
+                .setUpdaterId(json.getStr("updatedBy"));
+    }
+
     public String getCreationTime(){return createdAt;}
+
+    public ListItemNote setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
 
     public String getCreatorId(){return createdBy;}
 
+    public ListItemNote setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
     public String getUpdateTime(){return updatedAt;}
 
+    public ListItemNote setUpdateTime(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
     public String getUpdaterId(){return updatedBy;}
+
+    public ListItemNote setUpdaterId(String updatedBy)
+    {
+        this.updatedBy = updatedBy;
+        return this;
+    }
 
     /**
      * Get the displayable content of the note.
@@ -35,40 +69,6 @@ public class ListItemNote
     {
         this.content = content;
         return this;
-    }
-
-    public ListItemNote setCreationTime(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public ListItemNote setCreatorId(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public ListItemNote setUpdateTime(String updatedAt)
-    {
-        this.updatedAt = updatedAt;
-        return this;
-    }
-
-    public ListItemNote setUpdaterId(String updatedBy)
-    {
-        this.updatedBy = updatedBy;
-        return this;
-    }
-
-    public static ListItemNote fromJSON(JSONObject json)
-    {
-        return new ListItemNote()
-                .setContent(json.getStr("content"))
-                .setCreationTime(json.getStr("createdAt"))
-                .setCreatorId(json.getStr("createdBy"))
-                .setUpdateTime(json.getStr("updatedAt"))
-                .setUpdaterId(json.getStr("updatedBy"));
     }
 
     @Override

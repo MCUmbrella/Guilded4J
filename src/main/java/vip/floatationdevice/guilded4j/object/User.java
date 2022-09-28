@@ -18,78 +18,6 @@ public class User
     private String id, type, name, avatar, banner, createdAt;
 
     /**
-     * Get the ID of the user.
-     * @return The ID of the user.
-     */
-    public String getId(){return id;}
-
-    /**
-     * Get the type of user.
-     * @return The type of user. If this property is absent, it can assumed to be of type 'user'.
-     */
-    public String getType(){return type;}
-
-    /**
-     * Get the name of the user.
-     * @return The real name of the user.
-     */
-    public String getName(){return name;}
-
-    /**
-     * Get the avatar image URL of the user.
-     * @return URL string of the avatar image associated with the user.
-     */
-    public String getAvatar(){return avatar;}
-
-    /**
-     * Get the banner image URL of the user.
-     * @return URL string of the banner image associated with the user.
-     */
-    public String getBanner(){return banner;}
-
-    /**
-     * Get the user's creation date.
-     * @return The ISO 8601 timestamp that the user was created at.
-     */
-    public String getCreationTime(){return createdAt;}
-
-    public User setId(String id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public User setType(String type)
-    {
-        this.type = type;
-        return this;
-    }
-
-    public User setName(String name)
-    {
-        this.name = name;
-        return this;
-    }
-
-    public User setAvatar(String avatar)
-    {
-        this.avatar = avatar;
-        return this;
-    }
-
-    public User setBanner(String banner)
-    {
-        this.banner = banner;
-        return this;
-    }
-
-    public User setCreationTime(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    /**
      * Generate a User object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
@@ -107,6 +35,78 @@ public class User
                 .setAvatar(json.getStr("avatar"))
                 .setBanner(json.getStr("banner"))
                 .setCreationTime(json.getStr("createdAt"));
+    }
+
+    /**
+     * Get the ID of the user.
+     * @return The ID of the user.
+     */
+    public String getId(){return id;}
+
+    public User setId(String id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the type of user.
+     * @return The type of user. If this property is absent, it can assumed to be of type 'user'.
+     */
+    public String getType(){return type;}
+
+    public User setType(String type)
+    {
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Get the name of the user.
+     * @return The real name of the user.
+     */
+    public String getName(){return name;}
+
+    public User setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the avatar image URL of the user.
+     * @return URL string of the avatar image associated with the user.
+     */
+    public String getAvatar(){return avatar;}
+
+    public User setAvatar(String avatar)
+    {
+        this.avatar = avatar;
+        return this;
+    }
+
+    /**
+     * Get the banner image URL of the user.
+     * @return URL string of the banner image associated with the user.
+     */
+    public String getBanner(){return banner;}
+
+    public User setBanner(String banner)
+    {
+        this.banner = banner;
+        return this;
+    }
+
+    /**
+     * Get the user's creation date.
+     * @return The ISO 8601 timestamp that the user was created at.
+     */
+    public String getCreationTime(){return createdAt;}
+
+    public User setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
     }
 
     /**

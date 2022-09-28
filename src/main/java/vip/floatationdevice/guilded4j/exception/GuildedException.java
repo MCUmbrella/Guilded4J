@@ -34,6 +34,17 @@ public class GuildedException extends RuntimeException
         this.description = message;
     }
 
+    public static GuildedException fromString(String rawString)
+    {
+        if(JSONUtil.isTypeJSON(rawString))
+        {
+            JSONObject json = new JSONObject(rawString);
+            return new GuildedException(json.getStr("code"), json.getStr("message"))
+                    .setMeta(json.isNull("meta") ? null : json.getJSONObject("meta").toBean(HashMap.class));
+        }
+        else return new GuildedException(null, rawString);
+    }
+
     /**
      * Get the error code.
      * @return The error code in the JSON returned by Guilded API.
@@ -69,16 +80,5 @@ public class GuildedException extends RuntimeException
     {
         this.meta = meta;
         return this;
-    }
-
-    public static GuildedException fromString(String rawString)
-    {
-        if(JSONUtil.isTypeJSON(rawString))
-        {
-            JSONObject json = new JSONObject(rawString);
-            return new GuildedException(json.getStr("code"), json.getStr("message"))
-                    .setMeta(json.isNull("meta") ? null : json.getJSONObject("meta").toBean(HashMap.class));
-        }
-        else return new GuildedException(null, rawString);
     }
 }

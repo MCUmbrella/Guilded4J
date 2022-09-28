@@ -19,30 +19,6 @@ public class ServerMemberSummary
     int[] roleIds;
 
     /**
-     * Get the user summary of the member.
-     * @return The user summary.
-     */
-    public UserSummary getUser(){return user;}
-
-    /**
-     * Get the role IDs of the member.
-     * @return The role IDs.
-     */
-    public int[] getRoleIds(){return roleIds;}
-
-    public ServerMemberSummary setUser(UserSummary user)
-    {
-        this.user = user;
-        return this;
-    }
-
-    public ServerMemberSummary setRoleIds(int[] roleIds)
-    {
-        this.roleIds = roleIds;
-        return this;
-    }
-
-    /**
      * Generate a ServerMemberSummary object from a JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
@@ -58,6 +34,30 @@ public class ServerMemberSummary
         return new ServerMemberSummary()
                 .setUser(UserSummary.fromJSON(json.getJSONObject("user")))
                 .setRoleIds(roleIds);
+    }
+
+    /**
+     * Get the user summary of the member.
+     * @return The user summary.
+     */
+    public UserSummary getUser(){return user;}
+
+    public ServerMemberSummary setUser(UserSummary user)
+    {
+        this.user = user;
+        return this;
+    }
+
+    /**
+     * Get the role IDs of the member.
+     * @return The role IDs.
+     */
+    public int[] getRoleIds(){return roleIds;}
+
+    public ServerMemberSummary setRoleIds(int[] roleIds)
+    {
+        this.roleIds = roleIds;
+        return this;
     }
 
     /**

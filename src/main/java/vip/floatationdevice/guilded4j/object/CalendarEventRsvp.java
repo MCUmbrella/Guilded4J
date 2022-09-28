@@ -19,62 +19,6 @@ public class CalendarEventRsvp
     String channelId, serverId, userId, status, createdAt, updatedAt, createdBy, updatedBy;
 
     /**
-     * Get the ID of the calendar event.
-     */
-    public int getCalendarEventId(){return calendarEventId;}
-
-    /**
-     * Get the ID of the channel that the calendar event belongs to.
-     */
-    public String getChannelId(){return channelId;}
-
-    /**
-     * Get the ID of the server that the calendar event belongs to.
-     */
-    public String getServerId(){return serverId;}
-
-    /**
-     * Get the ID of the user that RSVP'd to the calendar event.
-     */
-    public String getUserId(){return userId;}
-
-    /**
-     * Get the status of the RSVP.
-     * @return "going", "maybe", "declined", "invited", "waitlisted", or "not responded".
-     */
-    public String getStatus(){return status;}
-
-    /**
-     * Get the ISO 8601 timestamp that the RSVP was created.
-     */
-    public String getCreatedAt(){return createdAt;}
-
-    /**
-     * Get the ISO 8601 timestamp that the RSVP was last updated.
-     */
-    public String getUpdatedAt(){return updatedAt;}
-
-    /**
-     * Get the ID of the user that created the RSVP.
-     */
-    public String getCreatedBy(){return createdBy;}
-
-    /**
-     * Get the ID of the user that last updated the RSVP.
-     */
-    public String getUpdatedBy(){return updatedBy;}
-
-    public CalendarEventRsvp setCalendarEventId(int calendarEventId){this.calendarEventId = calendarEventId; return this;}
-    public CalendarEventRsvp setChannelId(String channelId){this.channelId = channelId; return this;}
-    public CalendarEventRsvp setServerId(String serverId){this.serverId = serverId; return this;}
-    public CalendarEventRsvp setUserId(String userId){this.userId = userId; return this;}
-    public CalendarEventRsvp setStatus(String status){this.status = status; return this;}
-    public CalendarEventRsvp setCreatedAt(String createdAt){this.createdAt = createdAt; return this;}
-    public CalendarEventRsvp setUpdatedAt(String updatedAt){this.updatedAt = updatedAt; return this;}
-    public CalendarEventRsvp setCreatedBy(String createdBy){this.createdBy = createdBy; return this;}
-    public CalendarEventRsvp setUpdatedBy(String updatedBy){this.updatedBy = updatedBy; return this;}
-
-    /**
      * Use the given JSON object to generate CalendarEventRsvp object.
      * @param json The JSON object.
      * @return The CalendarEventRsvp object.
@@ -101,6 +45,106 @@ public class CalendarEventRsvp
                 .setCreatedBy(json.getStr("createdBy"))
                 .setUpdatedAt(json.getStr("updatedAt"))
                 .setUpdatedBy(json.getStr("updatedBy"));
+    }
+
+    /**
+     * Get the ID of the calendar event.
+     */
+    public int getCalendarEventId(){return calendarEventId;}
+
+    public CalendarEventRsvp setCalendarEventId(int calendarEventId)
+    {
+        this.calendarEventId = calendarEventId;
+        return this;
+    }
+
+    /**
+     * Get the ID of the channel that the calendar event belongs to.
+     */
+    public String getChannelId(){return channelId;}
+
+    public CalendarEventRsvp setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    /**
+     * Get the ID of the server that the calendar event belongs to.
+     */
+    public String getServerId(){return serverId;}
+
+    public CalendarEventRsvp setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user that RSVP'd to the calendar event.
+     */
+    public String getUserId(){return userId;}
+
+    public CalendarEventRsvp setUserId(String userId)
+    {
+        this.userId = userId;
+        return this;
+    }
+
+    /**
+     * Get the status of the RSVP.
+     * @return "going", "maybe", "declined", "invited", "waitlisted", or "not responded".
+     */
+    public String getStatus(){return status;}
+
+    public CalendarEventRsvp setStatus(String status)
+    {
+        this.status = status;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the RSVP was created.
+     */
+    public String getCreatedAt(){return createdAt;}
+
+    public CalendarEventRsvp setCreatedAt(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp that the RSVP was last updated.
+     */
+    public String getUpdatedAt(){return updatedAt;}
+
+    public CalendarEventRsvp setUpdatedAt(String updatedAt)
+    {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user that created the RSVP.
+     */
+    public String getCreatedBy(){return createdBy;}
+
+    public CalendarEventRsvp setCreatedBy(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user that last updated the RSVP.
+     */
+    public String getUpdatedBy(){return updatedBy;}
+
+    public CalendarEventRsvp setUpdatedBy(String updatedBy)
+    {
+        this.updatedBy = updatedBy;
+        return this;
     }
 
     @Override

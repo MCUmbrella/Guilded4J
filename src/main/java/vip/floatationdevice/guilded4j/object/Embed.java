@@ -21,157 +21,6 @@ public class Embed
     private EmbedField[] fields;
 
     /**
-     * Get the main header of the embed.
-     */
-    public String getTitle(){return title;}
-
-    /**
-     * Get the subtext of the embed.
-     */
-    public String getDescription(){return description;}
-
-    /**
-     * Get the URL to linkify the title field with.
-     */
-    public String getUrl(){return url;}
-
-    /**
-     * Get the URL of the small image in the footer.
-     */
-    public String getFooterIconUrl(){return footerIconUrl;}
-
-    /**
-     * Get the text in the small section at the bottom of the embed.
-     */
-    public String getFooterText(){return footerText;}
-
-    /**
-     * Get the ISO 8601 timestamp to put in the footer.
-     */
-    public String getTimestamp(){return timestamp;}
-
-    /**
-     * Get the URL of the image on the right of the embed's content.
-     */
-    public String getThumbnailUrl(){return thumbnailUrl;}
-
-    /**
-     * Get the URL of the main picture to associate with the embed.
-     */
-    public String getImageUrl(){return imageUrl;}
-
-    /**
-     * Get the embed author's name (above the title of the embed).
-     */
-    public String getAuthorName(){return authorName;}
-
-    /**
-     * Get the URL to linkify the author's name field with.
-     */
-    public String getAuthorNameUrl(){return authorUrl;}
-
-    /**
-     * Get the URL of the embed author's icon.
-     */
-    public String getAuthorIconUrl(){return authorIconUrl;}
-
-    /**
-     * Get the decimal value of the color that the left border should be.
-     */
-    public int getColor(){return color;}
-
-    /**
-     * Get the fields in the embed.
-     */
-    public EmbedField[] getFields(){return fields;}
-
-    public Embed setTitle(String title)
-    {
-        this.title = title;
-        return this;
-    }
-
-    public Embed setDescription(String description)
-    {
-        this.description = description;
-        return this;
-    }
-
-    public Embed setUrl(String url)
-    {
-        this.url = url;
-        return this;
-    }
-
-    public Embed setFooterIconUrl(String footerIconUrl)
-    {
-        this.footerIconUrl = footerIconUrl;
-        return this;
-    }
-
-    public Embed setFooterText(String footerText)
-    {
-        this.footerText = footerText;
-        return this;
-    }
-
-    public Embed setTimestamp(String timestamp)
-    {
-        this.timestamp = timestamp;
-        return this;
-    }
-
-    public Embed setThumbnailUrl(String thumbnailUrl)
-    {
-        this.thumbnailUrl = thumbnailUrl;
-        return this;
-    }
-
-    public Embed setImageUrl(String imageUrl)
-    {
-        this.imageUrl = imageUrl;
-        return this;
-    }
-
-    public Embed setAuthorName(String authorName)
-    {
-        this.authorName = authorName;
-        return this;
-    }
-
-    public Embed setAuthorUrl(String setAuthorUrl)
-    {
-        this.authorUrl = setAuthorUrl;
-        return this;
-    }
-
-    public Embed setAuthorIconUrl(String authorIconUrl)
-    {
-        this.authorIconUrl = authorIconUrl;
-        return this;
-    }
-
-    /**
-     * Set the color of the left border of the embed.
-     * @param color Decimal value of the color that the left border should be (min: 0 or 0x000000, max: 16777215 or 0xffffff).
-     */
-    public Embed setColor(Integer color)
-    {
-        this.color = color;
-        return this;
-    }
-
-    /**
-     * Set the fields in the embed.
-     * @param fields Table-like cells to add to the embed (max items 25).
-     */
-    public Embed setFields(EmbedField[] fields)
-    {
-        this.fields = fields;
-        return this;
-    }
-
-    /**
      * Use the given JSON object to generate an Embed object.
      */
     public static Embed fromJSON(JSONObject json)
@@ -198,6 +47,157 @@ public class Embed
                 .setAuthorUrl(json.getByPath("author.url") != null ? json.getByPath("author.url").toString() : null)
                 .setAuthorIconUrl(json.getByPath("author.icon_url") != null ? json.getByPath("author.icon_url").toString() : null)
                 .setFields(fields);
+    }
+
+    /**
+     * Get the main header of the embed.
+     */
+    public String getTitle(){return title;}
+
+    public Embed setTitle(String title)
+    {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * Get the subtext of the embed.
+     */
+    public String getDescription(){return description;}
+
+    public Embed setDescription(String description)
+    {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Get the URL to linkify the title field with.
+     */
+    public String getUrl(){return url;}
+
+    public Embed setUrl(String url)
+    {
+        this.url = url;
+        return this;
+    }
+
+    /**
+     * Get the URL of the small image in the footer.
+     */
+    public String getFooterIconUrl(){return footerIconUrl;}
+
+    public Embed setFooterIconUrl(String footerIconUrl)
+    {
+        this.footerIconUrl = footerIconUrl;
+        return this;
+    }
+
+    /**
+     * Get the text in the small section at the bottom of the embed.
+     */
+    public String getFooterText(){return footerText;}
+
+    public Embed setFooterText(String footerText)
+    {
+        this.footerText = footerText;
+        return this;
+    }
+
+    /**
+     * Get the ISO 8601 timestamp to put in the footer.
+     */
+    public String getTimestamp(){return timestamp;}
+
+    public Embed setTimestamp(String timestamp)
+    {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    /**
+     * Get the URL of the image on the right of the embed's content.
+     */
+    public String getThumbnailUrl(){return thumbnailUrl;}
+
+    public Embed setThumbnailUrl(String thumbnailUrl)
+    {
+        this.thumbnailUrl = thumbnailUrl;
+        return this;
+    }
+
+    /**
+     * Get the URL of the main picture to associate with the embed.
+     */
+    public String getImageUrl(){return imageUrl;}
+
+    public Embed setImageUrl(String imageUrl)
+    {
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    /**
+     * Get the embed author's name (above the title of the embed).
+     */
+    public String getAuthorName(){return authorName;}
+
+    public Embed setAuthorName(String authorName)
+    {
+        this.authorName = authorName;
+        return this;
+    }
+
+    /**
+     * Get the URL to linkify the author's name field with.
+     */
+    public String getAuthorNameUrl(){return authorUrl;}
+
+    /**
+     * Get the URL of the embed author's icon.
+     */
+    public String getAuthorIconUrl(){return authorIconUrl;}
+
+    public Embed setAuthorIconUrl(String authorIconUrl)
+    {
+        this.authorIconUrl = authorIconUrl;
+        return this;
+    }
+
+    /**
+     * Get the decimal value of the color that the left border should be.
+     */
+    public int getColor(){return color;}
+
+    /**
+     * Set the color of the left border of the embed.
+     * @param color Decimal value of the color that the left border should be (min: 0 or 0x000000, max: 16777215 or 0xffffff).
+     */
+    public Embed setColor(Integer color)
+    {
+        this.color = color;
+        return this;
+    }
+
+    /**
+     * Get the fields in the embed.
+     */
+    public EmbedField[] getFields(){return fields;}
+
+    /**
+     * Set the fields in the embed.
+     * @param fields Table-like cells to add to the embed (max items 25).
+     */
+    public Embed setFields(EmbedField[] fields)
+    {
+        this.fields = fields;
+        return this;
+    }
+
+    public Embed setAuthorUrl(String setAuthorUrl)
+    {
+        this.authorUrl = setAuthorUrl;
+        return this;
     }
 
     /**

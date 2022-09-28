@@ -70,7 +70,7 @@ public class CalendarEventManager extends RestManager
     {
         JSONArray eventsJson = execute(Method.GET, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("calendarEvents");
         CalendarEvent[] events = new CalendarEvent[eventsJson.size()];
-        for (int i = 0; i != eventsJson.size(); i++)
+        for(int i = 0; i != eventsJson.size(); i++)
             events[i] = CalendarEvent.fromJSON(eventsJson.getJSONObject(i));
         return events;
     }
@@ -86,7 +86,7 @@ public class CalendarEventManager extends RestManager
     {
         JSONArray eventsJson = execute(Method.GET, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + query.toString(), null).getJSONArray("calendarEvents");
         CalendarEvent[] events = new CalendarEvent[eventsJson.size()];
-        for (int i = 0; i != eventsJson.size(); i++)
+        for(int i = 0; i != eventsJson.size(); i++)
             events[i] = CalendarEvent.fromJSON(eventsJson.getJSONObject(i));
         return events;
     }
@@ -213,7 +213,7 @@ public class CalendarEventManager extends RestManager
                 null
         ).getJSONArray("calendarEventRsvps");
         CalendarEventRsvp[] calendarEventRsvps = new CalendarEventRsvp[jsonArray.size()];
-        for (int i = 0; i < jsonArray.size(); i++)
+        for(int i = 0; i < jsonArray.size(); i++)
             calendarEventRsvps[i] = CalendarEventRsvp.fromJSON(jsonArray.getJSONObject(i));
         return calendarEventRsvps;
     }

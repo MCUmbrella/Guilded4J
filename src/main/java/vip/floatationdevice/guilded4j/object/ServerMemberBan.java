@@ -19,54 +19,6 @@ public class ServerMemberBan
     private String reason, createdAt, createdBy;
 
     /**
-     * Get the UserSummary object of the user who was banned.
-     * @return The banned user's UserSummary object.
-     */
-    public UserSummary getUser(){return user;}
-
-    /**
-     * Get the reason for the ban.
-     * @return The reason for the ban as submitted by the banner.
-     */
-    public String getReason(){return reason;}
-
-    /**
-     * Get the date the ban was created.
-     * @return The ISO 8601 timestamp that the server member ban was created at.
-     */
-    public String getCreationTime(){return createdAt;}
-
-    /**
-     * Get the ID of the user created the ban.
-     * @return The ID of the user who created this server member ban.
-     */
-    public String getCreatorId(){return createdBy;}
-
-    public ServerMemberBan setUser(UserSummary user)
-    {
-        this.user = user;
-        return this;
-    }
-
-    public ServerMemberBan setReason(String reason)
-    {
-        this.reason = reason;
-        return this;
-    }
-
-    public ServerMemberBan setCreationTime(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public ServerMemberBan setCreatorId(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    /**
      * Generate a ServerMemberBan object from the given JSON object.
      * @throws IllegalArgumentException when the essential fields are not set.
      */
@@ -82,6 +34,54 @@ public class ServerMemberBan
                 .setReason(json.getStr("reason"))
                 .setCreationTime(json.getStr("createdAt"))
                 .setCreatorId(json.getStr("createdBy"));
+    }
+
+    /**
+     * Get the UserSummary object of the user who was banned.
+     * @return The banned user's UserSummary object.
+     */
+    public UserSummary getUser(){return user;}
+
+    public ServerMemberBan setUser(UserSummary user)
+    {
+        this.user = user;
+        return this;
+    }
+
+    /**
+     * Get the reason for the ban.
+     * @return The reason for the ban as submitted by the banner.
+     */
+    public String getReason(){return reason;}
+
+    public ServerMemberBan setReason(String reason)
+    {
+        this.reason = reason;
+        return this;
+    }
+
+    /**
+     * Get the date the ban was created.
+     * @return The ISO 8601 timestamp that the server member ban was created at.
+     */
+    public String getCreationTime(){return createdAt;}
+
+    public ServerMemberBan setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Get the ID of the user created the ban.
+     * @return The ID of the user who created this server member ban.
+     */
+    public String getCreatorId(){return createdBy;}
+
+    public ServerMemberBan setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
     }
 
     /**

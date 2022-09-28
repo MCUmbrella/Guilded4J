@@ -39,35 +39,17 @@ public class GuildedEvent extends EventObject
      */
     public Integer getOpCode(){return this.op;}
 
-    /**
-     * Get the WebSocket message ID.
-     * @return The WebSocket message ID used for replaying events after a disconnect.
-     */
-    public String getEventID(){return this.eventID;}
-
-    /**
-     * Get the WebSocket event's name.
-     * @return Event name for the given WebSocket message.
-     */
-    public String getEventType(){return this.eventType;}
-
-    /**
-     * Get the ID of the server the event was sent to.
-     * @return The server ID.
-     */
-    public String getServerID(){return this.serverID;}
-
-    /**
-     * Get the original WebSocket message of the event.
-     * @return A JSON string that contains the original data received.
-     */
-    public String getRawString(){return this.rawString;}
-
     public GuildedEvent setOpCode(Integer op)
     {
         this.op = op;
         return this;
     }
+
+    /**
+     * Get the WebSocket message ID.
+     * @return The WebSocket message ID used for replaying events after a disconnect.
+     */
+    public String getEventID(){return this.eventID;}
 
     public GuildedEvent setEventID(String s)
     {
@@ -75,17 +57,35 @@ public class GuildedEvent extends EventObject
         return this;
     }
 
-    public GuildedEvent setServerID(String serverID)
-    {
-        this.serverID = serverID;
-        return this;
-    }
+    /**
+     * Get the WebSocket event's name.
+     * @return Event name for the given WebSocket message.
+     */
+    public String getEventType(){return this.eventType;}
 
     public GuildedEvent setEventType(String t)
     {
         this.eventType = t;
         return this;
     }
+
+    /**
+     * Get the ID of the server the event was sent to.
+     * @return The server ID.
+     */
+    public String getServerID(){return this.serverID;}
+
+    public GuildedEvent setServerID(String serverID)
+    {
+        this.serverID = serverID;
+        return this;
+    }
+
+    /**
+     * Get the original WebSocket message of the event.
+     * @return A JSON string that contains the original data received.
+     */
+    public String getRawString(){return this.rawString;}
 
     /**
      * Set the original WebSocket message of the event.

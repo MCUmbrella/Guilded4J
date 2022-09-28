@@ -39,18 +39,16 @@ public class G4JClient
             ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}",
             WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks";
-
-    String authToken;
-    int httpTimeout = 20000;
-    Proxy proxy = Proxy.NO_PROXY;
-    public boolean verboseEnabled = false;
-
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
+    public boolean verboseEnabled = false;
 
     /**
      * Built-in WebSocket event manager ({@link G4JWebSocketClient}).
      */
     public G4JWebSocketClient ws;
+    String authToken;
+    int httpTimeout = 20000;
+    Proxy proxy = Proxy.NO_PROXY;
 
     public G4JClient(String authToken)
     {

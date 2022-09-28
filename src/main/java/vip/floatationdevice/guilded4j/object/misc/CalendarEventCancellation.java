@@ -15,16 +15,6 @@ public class CalendarEventCancellation
 {
     private String description, createdBy;
 
-    /**
-     * Get the description of event cancellation.
-     */
-    public String getDescription(){return description;}
-
-    /**
-     * Get the ID of the user who created this event cancellation.
-     */
-    public String getCreatedBy(){return createdBy;}
-
     public CalendarEventCancellation(String description, String createdBy)
     {
         this.description = description;
@@ -35,6 +25,16 @@ public class CalendarEventCancellation
     {
         return new CalendarEventCancellation(json.getStr("description"), json.getStr("createdBy"));
     }
+
+    /**
+     * Get the description of event cancellation.
+     */
+    public String getDescription(){return description;}
+
+    /**
+     * Get the ID of the user who created this event cancellation.
+     */
+    public String getCreatedBy(){return createdBy;}
 
     @Override
     public String toString()

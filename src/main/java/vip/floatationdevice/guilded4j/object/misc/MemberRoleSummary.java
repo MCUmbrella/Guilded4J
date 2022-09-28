@@ -23,10 +23,6 @@ public class MemberRoleSummary
         this.roleIds = roleIds;
     }
 
-    public String getUserId(){return userId;}
-
-    public int[] getRoleIds(){return roleIds;}
-
     public static MemberRoleSummary fromJSON(JSONObject json)
     {
         Util.checkNullArgument(
@@ -38,4 +34,8 @@ public class MemberRoleSummary
         for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
         return new MemberRoleSummary(json.getStr("userId"), roleIds);
     }
+
+    public String getUserId(){return userId;}
+
+    public int[] getRoleIds(){return roleIds;}
 }

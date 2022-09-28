@@ -19,62 +19,6 @@ public class ContentReaction
     private String serverId, createdAt, createdBy, createdByWebhookId;
 
     /**
-     * Get the ID of the reaction emote.
-     */
-    public int getId(){return id;}
-
-    /**
-     * Get the server ID of the reaction emote.
-     */
-    public String getServerId(){return serverId;}
-
-    /**
-     * Get the reaction's creation time.
-     */
-    public String getCreationTime(){return createdAt;}
-
-    /**
-     * Get the ID of the reaction's creator.
-     */
-    public String getCreatorId(){return createdBy;}
-
-    /**
-     * Get the UUID of the webhook who created the reaction.
-     * @return A UUID string of the webhook who created the reaction. If the creator isn't webhook, return {@code null}.
-     */
-    public String getWebhookCreatorId(){return createdByWebhookId;}
-
-    public ContentReaction setId(int id)
-    {
-        this.id = id;
-        return this;
-    }
-
-    public ContentReaction setServerId(String serverId)
-    {
-        this.serverId = serverId;
-        return this;
-    }
-
-    public ContentReaction setCreationTime(String createdAt)
-    {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public ContentReaction setCreatorId(String createdBy)
-    {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public ContentReaction setWebhookCreatorId(String createdByWebhookId)
-    {
-        this.createdByWebhookId = createdByWebhookId;
-        return this;
-    }
-
-    /**
      * Use the given JSON object to set up ContentReaction object.
      * @throws IllegalArgumentException when the essential fields are missing.
      */
@@ -91,6 +35,62 @@ public class ContentReaction
                 .setCreationTime(json.getStr("createdAt"))
                 .setCreatorId(json.getStr("createdBy"))
                 .setWebhookCreatorId(json.getStr("createdByWebhookId"));
+    }
+
+    /**
+     * Get the ID of the reaction emote.
+     */
+    public int getId(){return id;}
+
+    public ContentReaction setId(int id)
+    {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the server ID of the reaction emote.
+     */
+    public String getServerId(){return serverId;}
+
+    public ContentReaction setServerId(String serverId)
+    {
+        this.serverId = serverId;
+        return this;
+    }
+
+    /**
+     * Get the reaction's creation time.
+     */
+    public String getCreationTime(){return createdAt;}
+
+    public ContentReaction setCreationTime(String createdAt)
+    {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Get the ID of the reaction's creator.
+     */
+    public String getCreatorId(){return createdBy;}
+
+    public ContentReaction setCreatorId(String createdBy)
+    {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    /**
+     * Get the UUID of the webhook who created the reaction.
+     * @return A UUID string of the webhook who created the reaction. If the creator isn't webhook, return {@code null}.
+     */
+    public String getWebhookCreatorId(){return createdByWebhookId;}
+
+    public ContentReaction setWebhookCreatorId(String createdByWebhookId)
+    {
+        this.createdByWebhookId = createdByWebhookId;
+        return this;
     }
 
     /**

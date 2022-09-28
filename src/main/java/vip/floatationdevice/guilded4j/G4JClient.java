@@ -5,6 +5,7 @@
 
 package vip.floatationdevice.guilded4j;
 
+import com.google.common.eventbus.EventBus;
 import vip.floatationdevice.guilded4j.exception.RestManagerCreationException;
 import vip.floatationdevice.guilded4j.rest.*;
 
@@ -40,15 +41,12 @@ public class G4JClient
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}",
             WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks";
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
+    private final EventBus bus = new EventBus();
     public boolean verboseEnabled = false;
-
-    /**
-     * Built-in WebSocket event manager ({@link G4JWebSocketClient}).
-     */
     public G4JWebSocketClient ws;
-    String authToken;
     int httpTimeout = 20000;
-    Proxy proxy = Proxy.NO_PROXY;
+    private String authToken;
+    private Proxy proxy = Proxy.NO_PROXY;
 
     public G4JClient(String authToken)
     {
@@ -237,5 +235,97 @@ public class G4JClient
         }
         managers.add(newManager);
         return newManager;
+    }
+
+    /**
+     * Register an event listener to the WebSocket event manager.
+     * @param listener The event listener object.
+     */
+    public G4JClient registerEventListener(Object listener)
+    {
+        bus.register(listener);
+        return this;
+    }
+
+    /**
+     * Unregister an event listener from the WebSocket event manager.
+     * @param listener The event listener.
+     */
+    public G4JClient unregisterEventListener(Object listener)
+    {
+        bus.unregister(listener);
+        return this;
+    }
+
+    /**
+     * Get the built-in WebSocket event manager.
+     */
+    public G4JWebSocketClient getWebSocketClient()
+    {
+        if(ws == null)
+        {
+            ws = new G4JWebSocketClient(authToken).setVerbose(verboseEnabled);
+            ws.eventBus = bus;
+        }
+        return ws;
+    }
+
+    /**
+     * Connect to the Guilded WebSocket server and start receiving events.
+     * If the connection is already opened, do nothing.
+     */
+    public G4JClient connectWebSocket(boolean blocking, String lastMessageId)
+    {
+        try
+        {
+            if(ws.isOpen()) return this;
+            if(ws == null || ws.isClosing() || ws.isClosed())
+                ws = new G4JWebSocketClient(authToken, lastMessageId).setVerbose(verboseEnabled);
+            ws.eventBus = bus;
+            if(blocking) ws.connectBlocking();
+            else ws.connect();
+        }
+        catch(InterruptedException ignored) {}
+        return this;
+    }
+
+    /**
+     * Same as connectWebSocket(false, lastMessageId).
+     */
+    public G4JClient connectWebSocket(String lastMessageId)
+    {
+        return connectWebSocket(false, lastMessageId);
+    }
+
+    /**
+     * Same as connectWebSocket(false, null).
+     */
+    public G4JClient connectWebSocket()
+    {
+        return connectWebSocket(false, null);
+    }
+
+    /**
+     * Disconnect from Guilded WebSocket server.
+     * If the connection is not opened, do nothing.
+     */
+    public G4JClient disconnectWebSocket(boolean blocking)
+    {
+        if(ws != null && !ws.isClosing() && !ws.isClosed())
+            try
+            {
+                if(blocking) ws.closeBlocking();
+                else ws.close();
+            }
+            catch(InterruptedException ignored) {}
+        return this;
+    }
+
+    /**
+     * Same as disconnectWebSocket(false).
+     */
+    public G4JClient disconnectWebSocket()
+    {
+        return disconnectWebSocket(false);
     }
 }

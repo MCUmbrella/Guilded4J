@@ -5,37 +5,43 @@ import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.misc.*;
 import vip.floatationdevice.guilded4j.object.*;
 
+import java.util.Scanner;
+
 /**
  * Some temporary test code will go here.
  */
 public class G4JTest
 {
+    static G4JClient c;
+    static G4JDebugger.G4JSession s;
+    static String lastMessageId;
+    static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) throws Exception
     {
         //==============================================================
-        G4JDebugger.G4JSession s = new G4JDebugger.G4JSession();
+        s = new G4JDebugger.G4JSession();
         s.restore();
-        G4JClient c = new G4JClient(s.savedToken).setVerbose(false);
-        c.ws.eventBus.register(new G4JTest());
-        //c.ws.setHeartbeatInterval(20000);
-        c.ws.connect();
+        c = new G4JClient(s.savedToken).setVerbose(false);
+        c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
 
         new Thread()
         {
             int i = 0;
+
             @Override
             public void run()
             {
                 try
                 {
-                    for(;;)
+                    for(; ; )
                     {
                         i++;
                         System.out.println(i);
                         sleep(1000);
                     }
                 }
-                catch(InterruptedException e){}
+                catch(InterruptedException e) {}
             }
         }.start();
         //==============================================================
@@ -50,7 +56,8 @@ public class G4JTest
     @Subscribe
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
-        System.out.println("Disconnected from Guilded WebSocket server.\nCode: "+e.getCode()+", reason: "+e.getReason());
+        System.out.println("Disconnected from Guilded WebSocket server.\nCode: " + e.getCode() + ", reason: " + e.getReason() + "\nAttempting to reconnect");
+        c.connectWebSocket(false, lastMessageId);
     }
 
     @Subscribe
@@ -58,5 +65,11 @@ public class G4JTest
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());
         if(e.getReason() != null) e.getReason().printStackTrace();
+    }
+
+    @Subscribe
+    public void onGuildedEvent(GuildedEvent e)
+    {
+        lastMessageId = e.getEventID();
     }
 }

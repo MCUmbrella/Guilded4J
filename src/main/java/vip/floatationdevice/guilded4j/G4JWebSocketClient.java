@@ -13,6 +13,7 @@ import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
 import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
 import vip.floatationdevice.guilded4j.event.ResumeEvent;
 import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
+import vip.floatationdevice.guilded4j.exception.EventReplayException;
 import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import java.lang.reflect.Constructor;
@@ -99,8 +100,7 @@ public class G4JWebSocketClient extends WebSocketClient
             }
             case 8: //error replaying
             {
-                throw new GuildedException("EventReplayError", (String) json.getByPath("d.message"));
-                //i guess its called this
+                throw new EventReplayException(null, (String) json.getByPath("d.message"));
             }
             case 0: //normal event
             {

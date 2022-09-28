@@ -42,22 +42,22 @@ public class G4JClient
             WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks";
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
     private final EventBus bus = new EventBus();
+    private final String token;
     public boolean verboseEnabled = false;
     public G4JWebSocketClient ws;
     int httpTimeout = 20000;
-    private String authToken;
     private Proxy proxy = Proxy.NO_PROXY;
 
-    public G4JClient(String authToken)
+    public G4JClient(String token)
     {
-        this.authToken = authToken;
-        ws = new G4JWebSocketClient(authToken);
+        this.token = token;
+        ws = new G4JWebSocketClient(token);
     }
 
-    public G4JClient(String authToken, String lastMessageId)
+    public G4JClient(String token, String lastMessageId)
     {
-        this.authToken = authToken;
-        ws = new G4JWebSocketClient(authToken, lastMessageId);
+        this.token = token;
+        ws = new G4JWebSocketClient(token, lastMessageId);
     }
 //============================== API FUNCTIONS START ==============================
 
@@ -168,17 +168,6 @@ public class G4JClient
 //============================== API FUNCTIONS END ==============================
 
     /**
-     * Initialize or reset Guilded bot access token.
-     * @param token The bot API access token (without "Bearer" prefix).
-     */
-    public void setAuthToken(String token)
-    {
-        authToken = token;
-        ws.setAuthToken(authToken);
-        for(RestManager m : managers) m.setAuthToken(authToken);
-    }
-
-    /**
      * Set the timeout of the HTTP request.
      * @param timeoutMs The timeout in milliseconds.
      */
@@ -227,7 +216,7 @@ public class G4JClient
         {
             // new manager(token).setHttpTimeout(httpTimeout).setProxy(proxy).setVerbose(verboseEnabled)
             Constructor<? extends RestManager> constructor = clazz.getConstructor(String.class);
-            newManager = constructor.newInstance(authToken).setHttpTimeout(httpTimeout).setProxy(proxy).setVerbose(verboseEnabled);
+            newManager = constructor.newInstance(token).setHttpTimeout(httpTimeout).setProxy(proxy).setVerbose(verboseEnabled);
         }
         catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e)
         {
@@ -264,7 +253,7 @@ public class G4JClient
     {
         if(ws == null)
         {
-            ws = new G4JWebSocketClient(authToken).setVerbose(verboseEnabled);
+            ws = new G4JWebSocketClient(token).setVerbose(verboseEnabled);
             ws.eventBus = bus;
         }
         return ws;
@@ -280,7 +269,7 @@ public class G4JClient
         {
             if(ws.isOpen()) return this;
             if(ws == null || ws.isClosing() || ws.isClosed())
-                ws = new G4JWebSocketClient(authToken, lastMessageId).setVerbose(verboseEnabled);
+                ws = new G4JWebSocketClient(token, lastMessageId).setVerbose(verboseEnabled);
             ws.eventBus = bus;
             if(blocking) ws.connectBlocking();
             else ws.connect();

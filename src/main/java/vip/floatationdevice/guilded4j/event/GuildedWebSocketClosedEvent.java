@@ -15,7 +15,7 @@ public class GuildedWebSocketClosedEvent extends EventObject
 {
     private final int code;
     private final String reason;
-    private final Boolean remote;
+    private final boolean remote;
 
     /**
      * Generate a GuildedWebSocketClosedEvent using the given keys.
@@ -23,7 +23,7 @@ public class GuildedWebSocketClosedEvent extends EventObject
      * @param reason The reason of the disconnection (can be null).
      * @param remote Is connection closed by remote peer? If so, remote=true.
      */
-    public GuildedWebSocketClosedEvent(Object source, int code, String reason, Boolean remote)
+    public GuildedWebSocketClosedEvent(Object source, int code, String reason, boolean remote)
     {
         super(source);
         this.code = code;
@@ -47,6 +47,11 @@ public class GuildedWebSocketClosedEvent extends EventObject
      * Get a boolean which indicates that the connection is closed by remote.
      * @return {@code true} if remote closed the connection, else return {@code false}.
      */
-    public Boolean isRemote(){return remote;}
+    public boolean isRemote(){return remote;}
 
+    /**
+     * Check if the connection was closed because of problems connecting to Guilded
+     * (e.g. error in replaying WebSocket events because of invalid lastMessageId).
+     */
+    public boolean isUnexpected(){return code != 1000;}
 }

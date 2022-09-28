@@ -13,8 +13,6 @@ import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
 import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
 import vip.floatationdevice.guilded4j.event.ResumeEvent;
 import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
-import vip.floatationdevice.guilded4j.exception.EventReplayException;
-import vip.floatationdevice.guilded4j.exception.GuildedException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -37,7 +35,6 @@ public class G4JWebSocketClient extends WebSocketClient
      * Write your own event listener class and use {@code eventBus.register()} to receive events.
      */
     public EventBus eventBus = new EventBus();
-    String authToken, lastMessageId;
     int heartbeatIntervalMs = 10000;
 
     /**
@@ -47,7 +44,9 @@ public class G4JWebSocketClient extends WebSocketClient
     public G4JWebSocketClient(String token)
     {
         super(WEBSOCKET_URI);
-        this.setAuthToken(token).setHeartbeatInterval(heartbeatIntervalMs);
+        clearHeaders();
+        addHeader("Authorization", "Bearer " + token);
+        setHeartbeatInterval(heartbeatIntervalMs);
     }
 
     /**
@@ -58,8 +57,10 @@ public class G4JWebSocketClient extends WebSocketClient
     public G4JWebSocketClient(String token, String lastMessageId)
     {
         super(WEBSOCKET_URI);
-        this.lastMessageId = lastMessageId;
-        this.setAuthToken(token).setHeartbeatInterval(heartbeatIntervalMs);
+        clearHeaders();
+        addHeader("Authorization", "Bearer " + token);
+        if(lastMessageId != null) addHeader("guilded-last-message-id", lastMessageId);
+        setHeartbeatInterval(heartbeatIntervalMs);
     }
 
     /**
@@ -100,7 +101,8 @@ public class G4JWebSocketClient extends WebSocketClient
             }
             case 8: //error replaying
             {
-                throw new EventReplayException(null, (String) json.getByPath("d.message"));
+                // Guilded will automatically close the connection
+                break;
             }
             case 0: //normal event
             {
@@ -149,18 +151,6 @@ public class G4JWebSocketClient extends WebSocketClient
     @Override
     public void onError(Exception e){/* do nothing */}
 
-    /**
-     * Initialize or reset Guilded bot access token.
-     * @param token The bot API access token (without "Bearer" prefix).
-     */
-    public G4JWebSocketClient setAuthToken(String token)
-    {
-        authToken = token;
-        this.clearHeaders();
-        this.addHeader("Authorization", "Bearer " + authToken);
-        if(lastMessageId != null) this.addHeader("guilded-last-message-id", lastMessageId);
-        return this;
-    }
 
     /**
      * Get the heartbeat interval.

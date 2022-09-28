@@ -12,7 +12,7 @@ import vip.floatationdevice.guilded4j.enums.ExceptionType;
 import java.util.HashMap;
 
 /**
- * The exception object converted from the error JSON returned by Guilded API.
+ * The exception object converted from the error JSON returned by Guilded API when performing HTTP requests.
  */
 public class GuildedException extends RuntimeException
 {

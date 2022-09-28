@@ -25,7 +25,7 @@ import java.util.*;
 @SuppressWarnings({"unused"})
 public class G4JDebugger
 {
-    final static String helpIndexText = datePfx() + " [i] Usage: help <pageNum>\n" +
+    final static String helpIndexText = " [i] Usage: help <pageNum>\n" +
             " 0: Basic\n" +
             " 1: Chat channel management\n" +
             " 2: Forum channel management\n" +
@@ -37,13 +37,13 @@ public class G4JDebugger
             " 8: Server member management\n" +
             " 9: Channel management\n";
     final static String[] helpText = new String[]{
-            datePfx() + " [i] Basic:\n" +
+            " [i] Basic:\n" +
                     " > exit\n" +
                     "    Log out, save the current session and exit\n" +
                     " > disconnect\n" +
                     "    Close WebSocket connection\n" +
-                    " > reconnect\n" +
-                    "    Reconnect WebSocket\n" +
+                    " > connect\n" +
+                    "    Connect to Guilded WebSocket server (if connection closed)\n" +
                     " > pwd\n" +
                     "    Print the current channel and server UUID\n" +
                     " > cd [UUID]\n" +
@@ -62,7 +62,7 @@ public class G4JDebugger
                     "    Run garbage collector\n" +
                     " > whoami\n" +
                     "    Print the current bot's info\n",
-            datePfx() + " [i] Chat channel management:\n" +
+            " [i] Chat channel management:\n" +
                     " > ls\n" +
                     "    List messages in the current channel\n" +
                     " > send <text>\n" +
@@ -75,10 +75,10 @@ public class G4JDebugger
                     "    Update a message with specified UUID\n" +
                     " > get <(UUID)messageId>\n" +
                     "    Get the raw message object string from specified UUID\n",
-            datePfx() + " [i] Forum channel management:\n" +
+            " [i] Forum channel management:\n" +
                     " > mkthread\n" +
                     "    Create a forum thread in the forum channel\n",
-            datePfx() + " [i] List channel management:\n" +
+            " [i] List channel management:\n" +
                     " > lsitem\n" +
                     "    List items in the current channel\n" +
                     " > mkitem <message>\n" +
@@ -89,29 +89,29 @@ public class G4JDebugger
                     "    Update a list item with specified UUID\n" +
                     " > getitem <(UUID)itemId>\n" +
                     "    Get the information of a list item with specified UUID\n",
-            datePfx() + " [i] XP management:\n" +
+            " [i] XP management:\n" +
                     " > addxp <userId> <(int)amount>\n" +
                     "    Add XP to specified user\n" +
                     " > addrolexp <(int)roleId> <(int)amount>\n" +
                     "    Add XP to all users with specified role\n",
-            datePfx() + " [i] Reaction management:\n" +
+            " [i] Reaction management:\n" +
                     " > react <(?)contentId> <(int)emoteId>\n" +
                     "    Add a reaction to specified content\n" +
                     " > rmreact <(?)contentId> <(int)emoteId>\n" +
                     "    Remove a reaction from specified content\n",
-            datePfx() + " [i] Group management:\n" +
+            " [i] Group management:\n" +
                     " > groupadd <groupId> <userId>\n" +
                     "    Add a user to a group\n" +
                     " > groupkick <groupId> <userId>\n" +
                     "    Remove a user from a group\n",
-            datePfx() + " [i] Role management:\n" +
+            " [i] Role management:\n" +
                     " > lsrole <userId>\n" +
                     "    Print the specified user's role ID(s)\n" +
                     " > roleadd <(int)roleId> <userId>\n" +
                     "    Give the specified role to specified user\n" +
                     " > rolekick <(int)roleId> <userId>\n" +
                     "    Remove the specified role from specified user\n",
-            datePfx() + " [i] Server member management:\n" +
+            " [i] Server member management:\n" +
                     " > lsmember\n" +
                     "    List members in the current server\n" +
                     " > member <userId>\n" +
@@ -134,107 +134,19 @@ public class G4JDebugger
                     "    Unban the specified user from the current server\n" +
                     " > getban <userId>\n" +
                     "    Get the ban information of the specified user\n",
-            datePfx() + " [i] Channel management:\n" +
+            " [i] Channel management:\n" +
                     " > mkch\n" +
                     "    Create a new channel\n" +
                     " > channel <channelId>\n" +
                     "    Get the information of the specified channel\n"
     };
-    static Boolean dumpEnabled = false;
     final static Scanner scanner = new Scanner(System.in);
+    static Boolean dumpEnabled = false;
     static String workChannel = "";
     static String workServer = "";
     static G4JClient client;
     static String token;
     static Bot self;
-
-    static class GuildedEventListener
-    {
-        @Subscribe
-        public void onInit(GuildedWebSocketWelcomeEvent e)
-        {
-            System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
-            self = e.getSelf();
-            System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (user ID: " + self.getId() + ", bot ID: " + self.getBotId() + ", home server ID: " + e.getServerID() + ")" + prompt());
-            client.ws.setHeartbeatInterval(e.getHeartbeatInterval());
-        }
-
-        @Subscribe
-        public void onDisconnect(GuildedWebSocketClosedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] Connection closed " + (e.isRemote() ? "by remote peer (" : "(") + e.getCode() + ")\n    " + e.getReason() + prompt());
-        }
-
-        @Subscribe
-        public void onMsg(ChatMessageCreatedEvent e)
-        {
-            ChatMessage m = e.getChatMessage();
-            System.out.print(parseMessage(m, true));
-        }
-
-        @Subscribe
-        public void onXP(TeamXpAddedEvent e)
-        {
-            if(dumpEnabled)
-                System.out.print("\n" + datePfx() + " [D] " + Arrays.toString(e.getUserIds()) + ": +" + e.getXpAmount() + " XP" + prompt());
-        }
-
-        @Subscribe
-        public void onNicknameChange(TeamMemberUpdatedEvent e)
-        {
-            if(dumpEnabled)
-                System.out.print("\n" + datePfx() + " [D] " + e.getUserInfo().getUserId() + (e.getUserInfo().getNickname() == null ? ": nickname cleared" : ": nickname changed to '" + e.getUserInfo().getNickname() + "'") + prompt());
-        }
-
-        @Subscribe
-        public void onRoleChange(TeamRolesUpdatedEvent e)
-        {
-            MemberRoleSummary[] users = e.getMembers();
-            if(dumpEnabled)
-            {
-                System.out.println("\n" + datePfx() + " [D] Member role changes:");
-                for(MemberRoleSummary user : users)
-                    System.out.println("    " + user.getUserId() + ": " + Arrays.toString(user.getRoleIds()));
-                System.out.print(prompt());
-            }
-        }
-
-        @Subscribe
-        public void onMemberJoined(TeamMemberJoinedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server " + e.getServerID() + prompt());
-        }
-
-        @Subscribe
-        public void onMemberRemoved(TeamMemberRemovedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server " + e.getServerID() + " (cause: " + e.getCause() + ")" + prompt());
-        }
-
-        @Subscribe
-        public void onBan(TeamMemberBannedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " in server " + e.getServerID() + " got banned. Reason: " + e.getServerMemberBan().getReason() + prompt());
-        }
-
-        @Subscribe
-        public void onUnban(TeamMemberUnbannedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " unbanned from server " + e.getServerID() + prompt());
-        }
-
-        @Subscribe
-        public void onUnknownGuildedEvent(UnknownGuildedEvent e)
-        {
-            System.err.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
-        }
-
-        @Subscribe
-        public void onMessageDeleted(ChatMessageDeletedEvent e)
-        {
-            System.out.print("\n" + datePfx() + " [i] Message with ID " + e.getMessageId() + " deleted from channel " + e.getChannelId() + " in server " + e.getServerID() + " (private: " + e.isPrivate() + ")" + prompt());
-        }
-    }
 
     static boolean workChannelValid()
     {
@@ -268,63 +180,7 @@ public class G4JDebugger
         return "\n[" + DateUtil.parse(m.getCreationTime()) + "] [" + m.getServerId() + "] [" + m.getChannelId() + "] (" + m.getId() + ") <" + m.getCreatorId() + "> " + m.getContent() + (prompt ? prompt() : "");
     }
 
-    static String prompt(){return "\n[/" + workServer + "/" + workChannel + "] #";}
-
-    static class G4JSession implements Serializable
-    {
-        public static final long serialVersionUID = 2L;
-        public String savedToken;
-        public String savedChannelId;
-        public String savedServerId;
-
-        public void save()
-        {
-            try
-            {
-                this.savedToken = token;
-                this.savedChannelId = workChannel;
-                this.savedServerId = workServer;
-                ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("G4JSession.dat"));
-                o.writeObject(this);
-                o.close();
-                System.out.println(datePfx() + " [i] Session saved\n" + this);
-            }
-            catch(Exception e)
-            {
-                System.err.println(datePfx() + " [X] Failed to save session: " + e);
-            }
-        }
-
-        public Boolean restore()
-        {
-            try
-            {
-                ObjectInputStream i = new ObjectInputStream(new FileInputStream("G4JSession.dat"));
-                G4JSession session = (G4JSession) i.readObject();
-                this.savedToken = session.savedToken;
-                this.savedChannelId = session.savedChannelId;
-                this.savedServerId = session.savedServerId;
-                i.close();
-                System.out.println(datePfx() + " [i] Session restored\n" + this);
-                return true;
-            }
-            catch(FileNotFoundException e) {return false;}
-            catch(Exception e)
-            {
-                System.err.println(datePfx() + " [X] Failed to restore session: " + e);
-                return false;
-            }
-        }
-
-        @Override
-        public String toString()
-        {
-            String tokenSummary = savedToken.length() < 10 ? "***" : savedToken.substring(0, 5) + "..." + savedToken.substring(savedToken.length() - 5);
-            return "Token: " + tokenSummary + "\n" +
-                    "Channel UUID: " + savedChannelId + "\n" +
-                    "Server ID: " + savedServerId;
-        }
-    }
+    static String prompt(){return "\n[/" + workServer + "/" + workChannel + "] # ";}
 
     public static void main(String[] args)
     {
@@ -345,9 +201,9 @@ public class G4JDebugger
             client = new G4JClient(token);
             System.out.println(datePfx() + " [i] Logging in");
         }
-        client.ws.eventBus.register(new GuildedEventListener());
+        client.registerEventListener(new GuildedEventListener());
         System.out.println(datePfx() + " [i] Connecting to Guilded");
-        client.ws.connect();
+        client.connectWebSocket();
         String text = null;//typed command
         String textCache = "";//previous command
         for(; ; System.out.print(prompt()))
@@ -362,9 +218,9 @@ public class G4JDebugger
                     case "help":
                     {
                         if(commands.length == 2)
-                            System.out.print(helpText[Integer.parseInt(commands[1])]);
+                            System.out.print(datePfx() + helpText[Integer.parseInt(commands[1])]);
                         else
-                            System.out.print(helpIndexText);
+                            System.out.print(datePfx() + helpIndexText);
                         break;
                     }
                     case "exit":
@@ -377,13 +233,13 @@ public class G4JDebugger
                     case "disconnect":
                     {
                         System.out.print(datePfx() + " [i] Disconnecting");
-                        client.ws.close();
+                        client.disconnectWebSocket();
                         break;
                     }
-                    case "reconnect":
+                    case "connect":
                     {
-                        System.out.print(datePfx() + " [i] Reconnecting");
-                        if(client.ws != null) {client.ws.reconnect();}
+                        System.out.print(datePfx() + " [i] Connecting");
+                        client.connectWebSocket();
                         break;
                     }
                     case "pwd":
@@ -440,10 +296,16 @@ public class G4JDebugger
                     {
                         if(commands.length == 2)
                         {
-                            token = commands[1];
-                            client.setAuthToken(commands[1]);
-                            client.ws.setAuthToken(commands[1]);
-                            System.out.print(datePfx() + " [i] Updated AuthToken");
+                            System.err.print(datePfx() + " [!] This will close your WebSocket connection (if any).\n  Continue? [y/N] ");
+                            if(new Scanner(System.in).nextLine().equalsIgnoreCase("y"))
+                            {
+                                client.disconnectWebSocket();
+                                token = commands[1];
+                                client = new G4JClient(token);
+                                client.registerEventListener(new GuildedEventListener());
+                                System.out.print(datePfx() + " [i] Updated AuthToken");
+                            }
+                            else System.out.print(datePfx() + " [i] Aborted");
                         }
                         else
                             System.err.println(datePfx() + " [X] Usage: token <token>");
@@ -911,7 +773,7 @@ public class G4JDebugger
             }
             catch(GuildedException e)
             {
-                System.err.println(datePfx() + " [X] Operation failed (" + e.getType() +")\n  " + e.getCode() + ": " + e.getDescription());
+                System.err.println(datePfx() + " [X] Operation failed (" + e.getType() + ")\n  " + e.getCode() + ": " + e.getDescription());
             }
             catch(Exception e)
             {
@@ -926,6 +788,150 @@ public class G4JDebugger
                 System.exit(-1);
             }
             if(!text.isEmpty()) textCache = text;
+        }
+    }
+
+    static class GuildedEventListener
+    {
+        @Subscribe
+        public void onInit(GuildedWebSocketWelcomeEvent e)
+        {
+            System.out.println("\n" + datePfx() + " [i] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)");
+            self = e.getSelf();
+            System.out.print(datePfx() + " [i] Logged in as " + self.getName() + " (user ID: " + self.getId() + ", bot ID: " + self.getBotId() + ", home server ID: " + e.getServerID() + ")" + prompt());
+        }
+
+        @Subscribe
+        public void onDisconnect(GuildedWebSocketClosedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] Connection closed " + (e.isRemote() ? "(by remote peer) " : "") + (e.isUnexpected() ? "(by error)" : "") +
+                    "\n Code: " + e.getCode() + ", reason: " + e.getReason() + prompt());
+        }
+
+        @Subscribe
+        public void onMsg(ChatMessageCreatedEvent e)
+        {
+            ChatMessage m = e.getChatMessage();
+            System.out.print(parseMessage(m, true));
+        }
+
+        @Subscribe
+        public void onXP(TeamXpAddedEvent e)
+        {
+            if(dumpEnabled)
+                System.out.print("\n" + datePfx() + " [D] " + Arrays.toString(e.getUserIds()) + ": +" + e.getXpAmount() + " XP" + prompt());
+        }
+
+        @Subscribe
+        public void onNicknameChange(TeamMemberUpdatedEvent e)
+        {
+            if(dumpEnabled)
+                System.out.print("\n" + datePfx() + " [D] " + e.getUserInfo().getUserId() + (e.getUserInfo().getNickname() == null ? ": nickname cleared" : ": nickname changed to '" + e.getUserInfo().getNickname() + "'") + prompt());
+        }
+
+        @Subscribe
+        public void onRoleChange(TeamRolesUpdatedEvent e)
+        {
+            MemberRoleSummary[] users = e.getMembers();
+            if(dumpEnabled)
+            {
+                System.out.println("\n" + datePfx() + " [D] Member role changes:");
+                for(MemberRoleSummary user : users)
+                    System.out.println("    " + user.getUserId() + ": " + Arrays.toString(user.getRoleIds()));
+                System.out.print(prompt());
+            }
+        }
+
+        @Subscribe
+        public void onMemberJoined(TeamMemberJoinedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server " + e.getServerID() + prompt());
+        }
+
+        @Subscribe
+        public void onMemberRemoved(TeamMemberRemovedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server " + e.getServerID() + " (cause: " + e.getCause() + ")" + prompt());
+        }
+
+        @Subscribe
+        public void onBan(TeamMemberBannedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " in server " + e.getServerID() + " got banned. Reason: " + e.getServerMemberBan().getReason() + prompt());
+        }
+
+        @Subscribe
+        public void onUnban(TeamMemberUnbannedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " unbanned from server " + e.getServerID() + prompt());
+        }
+
+        @Subscribe
+        public void onUnknownGuildedEvent(UnknownGuildedEvent e)
+        {
+            System.err.print("\n" + datePfx() + " [!] Unknown event received: \n" + new JSONObject(e.getRawString()).toStringPretty() + prompt());
+        }
+
+        @Subscribe
+        public void onMessageDeleted(ChatMessageDeletedEvent e)
+        {
+            System.out.print("\n" + datePfx() + " [i] Message with ID " + e.getMessageId() + " deleted from channel " + e.getChannelId() + " in server " + e.getServerID() + " (private: " + e.isPrivate() + ")" + prompt());
+        }
+    }
+
+    static class G4JSession implements Serializable
+    {
+        public static final long serialVersionUID = 2L;
+        public String savedToken;
+        public String savedChannelId;
+        public String savedServerId;
+
+        public void save()
+        {
+            try
+            {
+                this.savedToken = token;
+                this.savedChannelId = workChannel;
+                this.savedServerId = workServer;
+                ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("G4JSession.dat"));
+                o.writeObject(this);
+                o.close();
+                System.out.println(datePfx() + " [i] Session saved\n" + this);
+            }
+            catch(Exception e)
+            {
+                System.err.println(datePfx() + " [X] Failed to save session: " + e);
+            }
+        }
+
+        public Boolean restore()
+        {
+            try
+            {
+                ObjectInputStream i = new ObjectInputStream(new FileInputStream("G4JSession.dat"));
+                G4JSession session = (G4JSession) i.readObject();
+                this.savedToken = session.savedToken;
+                this.savedChannelId = session.savedChannelId;
+                this.savedServerId = session.savedServerId;
+                i.close();
+                System.out.println(datePfx() + " [i] Session restored\n" + this);
+                return true;
+            }
+            catch(FileNotFoundException e) {return false;}
+            catch(Exception e)
+            {
+                System.err.println(datePfx() + " [X] Failed to restore session: " + e);
+                return false;
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            String tokenSummary = savedToken.length() < 10 ? "***" : savedToken.substring(0, 5) + "..." + savedToken.substring(savedToken.length() - 5);
+            return "Token: " + tokenSummary + "\n" +
+                    "Channel UUID: " + savedChannelId + "\n" +
+                    "Server ID: " + savedServerId;
         }
     }
 }

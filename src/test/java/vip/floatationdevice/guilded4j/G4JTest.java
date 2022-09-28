@@ -24,26 +24,6 @@ public class G4JTest
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(false);
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
-
-        new Thread()
-        {
-            int i = 0;
-
-            @Override
-            public void run()
-            {
-                try
-                {
-                    for(; ; )
-                    {
-                        i++;
-                        System.out.println(i);
-                        sleep(1000);
-                    }
-                }
-                catch(InterruptedException e) {}
-            }
-        }.start();
         //==============================================================
     }
 
@@ -56,8 +36,14 @@ public class G4JTest
     @Subscribe
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
-        System.out.println("Disconnected from Guilded WebSocket server.\nCode: " + e.getCode() + ", reason: " + e.getReason() + "\nAttempting to reconnect");
-        c.connectWebSocket(false, lastMessageId);
+        System.out.println("Connection closed " + (e.isRemote() ? "(by remote peer) " : "") + (e.isUnexpected() ? "(by error)" : "") +
+                "\nCode: " + e.getCode() + ", reason: " + e.getReason());
+        if(e.isUnexpected())
+        {
+            System.err.println("Error replaying. Initializing clean connection");
+            c.connectWebSocket();
+        }
+        else c.connectWebSocket(lastMessageId);
     }
 
     @Subscribe

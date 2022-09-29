@@ -6,7 +6,13 @@
 package vip.floatationdevice.guilded4j;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import vip.floatationdevice.guilded4j.event.GuildedEvent;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
+import vip.floatationdevice.guilded4j.event.ResumeEvent;
 import vip.floatationdevice.guilded4j.exception.RestManagerCreationException;
+import vip.floatationdevice.guilded4j.object.misc.Bot;
 import vip.floatationdevice.guilded4j.rest.*;
 
 import java.lang.reflect.Constructor;
@@ -43,9 +49,10 @@ public class G4JClient
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
     private final EventBus bus = new EventBus();
     private final String token;
-    public boolean verboseEnabled = false;
+    public boolean verboseEnabled = false, autoReconnect = false;
     public G4JWebSocketClient ws;
     int httpTimeout = 20000;
+    private String lastMessageId = null;
     private Proxy proxy = Proxy.NO_PROXY;
 
     public G4JClient(String token)
@@ -167,6 +174,70 @@ public class G4JClient
 
 //============================== API FUNCTIONS END ==============================
 
+//============================== INTERNAL EVENT LISTENER START ==============================
+
+    @Subscribe
+    public void onConnect(GuildedWebSocketWelcomeEvent e)
+    {
+        Bot self = e.getSelf();
+        if(verboseEnabled)
+            System.out.println("[G4JClient] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" +
+                    "\n Logged in as " + self.getName() + " (user ID: " + self.getId() + ", bot ID: " + self.getBotId() + ", home server ID: " + e.getServerID() + ")"
+            );
+    }
+
+    @Subscribe
+    public void onResumeEvent(ResumeEvent e)
+    {
+        if(verboseEnabled)
+            System.out.println("[G4JClient] Recovered previous session");
+    }
+
+    @Subscribe
+    private void onGuildedEvent(GuildedEvent e)
+    {
+        lastMessageId = e.getEventID(); // update lastMessageId for future use (if auto reconnect is enabled)
+    }
+
+    @Subscribe
+    private void onDisconnect(GuildedWebSocketClosedEvent e)
+    {
+        if(verboseEnabled)
+            System.out.println("[G4JClient] Connection closed " + (e.isRemote() ? "(by remote peer) " : "") + (e.isUnexpected() ? "(by error)" : "") +
+                    "\n Code: " + e.getCode() + ", reason: " + e.getReason()
+            );
+        if(e.isUnexpected() && autoReconnect) // auto reconnect?
+        {
+            if(e.getCode() == 1007)
+            {
+                if(verboseEnabled)
+                    System.err.println("[G4JClient] Unable to recover the previous session. Establish clean connection");
+                Util.runAsyncTaskLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        connectWebSocket(false, null);
+                    }
+                }, 1000);
+            }
+            else
+            {
+                if(verboseEnabled) System.err.println("[G4JClient] Connection lost. Attempting to reconnect");
+                Util.runAsyncTaskLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        connectWebSocket(false, lastMessageId);
+                    }
+                }, 1000);
+            }
+        }
+    }
+
+//============================== INTERNAL EVENT LISTENER END ==============================
+
     /**
      * Set the timeout of the HTTP request.
      * @param timeoutMs The timeout in milliseconds.
@@ -198,6 +269,16 @@ public class G4JClient
         verboseEnabled = status;
         for(RestManager m : managers) m.setVerbose(status);
         ws.setVerbose(status);
+        return this;
+    }
+
+    /**
+     * Toggles auto reconnect of WebSocket event manager.
+     * @param status If set to true, the WebSocket event manager will attempt to reconnect when the connection is closed unexpectedly.
+     */
+    public G4JClient setAutoReconnect(boolean status)
+    {
+        autoReconnect = status;
         return this;
     }
 
@@ -267,10 +348,10 @@ public class G4JClient
     {
         try
         {
-            if(ws.isOpen()) return this;
-            if(ws == null || ws.isClosing() || ws.isClosed())
-                ws = new G4JWebSocketClient(token, lastMessageId).setVerbose(verboseEnabled);
+            if(ws != null && ws.isOpen()) return this;
+            ws = new G4JWebSocketClient(token, lastMessageId).setVerbose(verboseEnabled);
             ws.eventBus = bus;
+            registerEventListener(this);
             if(blocking) ws.connectBlocking();
             else ws.connect();
         }

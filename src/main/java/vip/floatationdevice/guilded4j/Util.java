@@ -64,4 +64,29 @@ public class Util
                 c.get(Calendar.SECOND),
                 c.get(Calendar.MILLISECOND));
     }
+
+    /**
+     * Run a Runnable object in a new thread after specified amount of milliseconds.
+     * @param r The Runnable object you want to run.
+     * @param milliseconds How many milliseconds should we wait before calling run().
+     * @return The Thread object.
+     */
+    public static Thread runAsyncTaskLater(Runnable r, long milliseconds)
+    {
+        Thread t = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    sleep(milliseconds);
+                }
+                catch(InterruptedException ignored) {}
+                r.run();
+            }
+        };
+        t.start();
+        return t;
+    }
 }

@@ -11,17 +11,29 @@ import java.util.TimeZone;
 public class Util
 {
     public static final String UUID_REGEX = "^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}$";
+    public static final String GID_REGEX = "^[a-zA-Z0-9]{8}$";
 
     public static void checkNullArgument(Object... objects)
     {
-        for(Object object : objects)
-        {
-            //System.out.println(object);
-            if(object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
-        }
+        for (Object object : objects)
+            if (object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
     }
 
-    public static boolean isUUID(Object o){return o != null && o.toString().matches(UUID_REGEX);}
+    /**
+     * Check if the given object can be converted to a UUID string.
+     * @param o The object to check.
+     * @return True if the object can be converted to UUID string, false otherwise.
+     */
+    public static boolean isUUID(Object o) {return o != null && o.toString().matches(UUID_REGEX);}
+
+    /**
+     * Check if the given object can be converted to a 'GID'.
+     * GID: an 8-digit string only contains English letters and/or numbers.
+     * e.g. "8412wg5d", "zE8VxJNR"...
+     * @param o The object to check.
+     * @return True if the object can be converted to GID, false otherwise.
+     */
+    public static boolean isGID(Object o) {return o != null && o.toString().matches(GID_REGEX);}
 
     /**
      * Converts ISO8601 timestamp to Calendar object.
@@ -42,7 +54,7 @@ public class Util
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeParts[1]));
         String[] secondsParts = timeParts[2].split("\\."); // [01, 706Z]
         calendar.set(Calendar.SECOND, Integer.parseInt(secondsParts[0]));
-        if(secondsParts.length > 1)
+        if (secondsParts.length > 1)
             calendar.set(Calendar.MILLISECOND, Integer.parseInt(secondsParts[1].substring(0, 3))); // drops 'Z'
         return calendar;
     }
@@ -82,7 +94,7 @@ public class Util
                 {
                     sleep(milliseconds);
                 }
-                catch(InterruptedException ignored) {}
+                catch (InterruptedException ignored) {}
                 r.run();
             }
         };

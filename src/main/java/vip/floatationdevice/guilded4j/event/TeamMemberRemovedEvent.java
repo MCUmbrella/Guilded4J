@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.enums.MemberRemoveCause;
 
 /**
  * Event fired when a member is removed from a server.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberRemoved", target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberRemoved</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberRemoved" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberRemoved</a>
  */
 public class TeamMemberRemovedEvent extends GuildedEvent
 {

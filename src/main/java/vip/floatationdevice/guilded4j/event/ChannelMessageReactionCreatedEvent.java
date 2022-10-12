@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.Emote;
 
 /**
  * Event fired when a reaction is added to a chat message.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated", target=_blank>https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/ChannelMessageReactionCreated</a>
  */
 public class ChannelMessageReactionCreatedEvent extends GuildedEvent // TODO: wait
 {

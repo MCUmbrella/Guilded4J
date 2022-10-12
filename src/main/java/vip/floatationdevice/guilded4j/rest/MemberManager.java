@@ -56,7 +56,7 @@ public class MemberManager extends RestManager
 
     /**
      * Get a server member by ID.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberRead/a>
+     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberRead</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      * @return The member's ServerMember object.

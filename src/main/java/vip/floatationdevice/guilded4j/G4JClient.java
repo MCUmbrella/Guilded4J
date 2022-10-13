@@ -58,13 +58,12 @@ public class G4JClient
     public G4JClient(String token)
     {
         this.token = token;
-        ws = new G4JWebSocketClient(token);
     }
 
     public G4JClient(String token, String lastMessageId)
     {
         this.token = token;
-        ws = new G4JWebSocketClient(token, lastMessageId);
+        this.lastMessageId = lastMessageId;
     }
 //============================== API FUNCTIONS START ==============================
 
@@ -257,7 +256,7 @@ public class G4JClient
     {
         this.proxy = proxy == null ? Proxy.NO_PROXY : proxy;
         for(RestManager m : managers) m.setProxy(proxy);
-        ws.setProxy(this.proxy);
+        if(ws != null) ws.setProxy(this.proxy);
     }
 
     /**
@@ -268,7 +267,7 @@ public class G4JClient
     {
         verboseEnabled = status;
         for(RestManager m : managers) m.setVerbose(status);
-        ws.setVerbose(status);
+        if(ws != null) ws.setVerbose(status);
         return this;
     }
 
@@ -329,14 +328,10 @@ public class G4JClient
 
     /**
      * Get the built-in WebSocket event manager.
+     * @return The G4JWebSocketClient instance. If connectWebSocket() is never called, return null.
      */
     public G4JWebSocketClient getWebSocketClient()
     {
-        if(ws == null)
-        {
-            ws = new G4JWebSocketClient(token).setVerbose(verboseEnabled);
-            ws.eventBus = bus;
-        }
         return ws;
     }
 
@@ -350,6 +345,7 @@ public class G4JClient
         {
             if(ws != null && ws.isOpen()) return this;
             ws = new G4JWebSocketClient(token, lastMessageId).setVerbose(verboseEnabled);
+            ws.setProxy(proxy);
             ws.eventBus = bus;
             registerEventListener(this);
             if(blocking) ws.connectBlocking();

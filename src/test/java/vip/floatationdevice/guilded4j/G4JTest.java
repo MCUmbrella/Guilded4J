@@ -5,6 +5,8 @@ import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.misc.*;
 import vip.floatationdevice.guilded4j.object.*;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Scanner;
 
 /**
@@ -23,8 +25,9 @@ public class G4JTest
         s = new G4JDebugger.G4JSession();
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
-        c.getWebSocketClient().setHeartbeatInterval(10000);
+        c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
+        c.getWebSocketClient().setHeartbeatInterval(10000);
         //==============================================================
     }
 

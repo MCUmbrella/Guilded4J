@@ -1,3 +1,8 @@
+/*
+ Copyright (C) 2021-2022 MCUmbrella & contributors
+ Licensed under the MIT License. See LICENSE in the project root for license information.
+*/
+
 package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
@@ -5,6 +10,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.ForumTopic;
+import vip.floatationdevice.guilded4j.object.ForumTopicComment;
 import vip.floatationdevice.guilded4j.object.ForumTopicSummary;
 
 import static vip.floatationdevice.guilded4j.G4JClient.FORUM_CHANNEL_URL;
@@ -160,5 +166,42 @@ public class ForumManager extends RestManager
                 FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/lock",
                 null
         );
+    }
+
+    public ForumTopicComment createForumTopicComment(String channelId, int forumTopicId, String content)
+    {
+        return null; //TODO
+    }
+
+    public ForumTopicComment[] getForumTopicComments(String channelId, int forumTopicId)
+    {
+        return null; //TODO
+    }
+
+    public ForumTopicComment getForumTopicComment(String channelId, int forumTopicId, int forumTopicCommentId)
+    {
+        return null; //TODO
+    }
+
+    public ForumTopicComment updateForumTopicComment(String channelId, int forumTopicId, int forumCommentId)
+    {
+        return null; //TODO
+    }
+
+    public void deleteForumTopicComment(String channelId, int forumTopicId, int forumTopicCommentId)
+    {
+        //TODO
+    }
+
+    public void addForumTopicReaction(String channelId, int forumTopicId, int emoteId)
+    {
+        throw new UnsupportedOperationException();
+        //TODO: why separate this one out why dont let we use ContentReactionCreate
+    }
+
+    public void deleteForumTopicReaction(String channelId, int forumTopicId, int emoteId)
+    {
+        throw new UnsupportedOperationException();
+        //TODO: T E L L, M E, W H Y
     }
 }

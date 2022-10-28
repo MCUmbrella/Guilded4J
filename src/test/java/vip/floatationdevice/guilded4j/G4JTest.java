@@ -25,9 +25,11 @@ public class G4JTest
         s = new G4JDebugger.G4JSession();
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
-        c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
+        //c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         c.getWebSocketClient().setHeartbeatInterval(10000);
+        Thread.sleep(2000);
+        c.getReactionManager().createContentReaction("6284cada-9d78-4941-803a-3bc38e3de9aa", "1060214396", 90000094);
         //==============================================================
     }
 

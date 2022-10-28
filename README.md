@@ -10,17 +10,19 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 # CAUTION:
 - The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
 - The API is only available to users who participate in the early access for now.<br>
-# Implemented features / Progress:
-<details><summary>Click me</summary>
-<p>
+# Features & Progress:
+<details><summary>Chat & messaging</summary><p>
 
-## Chat & messaging
 - [x] Create message - createChannelMessage()
 - [x] Delete message - deleteChannelMessage()
 - [x] Update message - updateChannelMessage()
 - [x] Get message info - getChannelMessage()
 - [x] Get messages - getChannelMessages()
-## Calendar
+
+</p></details>
+
+<details><summary>Calendar</summary><p>
+
 - [x] Create event - createCalendarEvent()
 - [x] Delete event - deleteCalendarEvent()
 - [x] Update event - updateCalendarEvent()
@@ -30,7 +32,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Get RSVPs - getCalendarEventRsvps()
 - [x] Delete RSVP - deleteCalendarEventRsvp()
 - [x] Get RSVP info - getCalendarEventRsvp()
-## Members
+
+</p></details>
+
+<details><summary>Members</summary><p>
+
 - [x] Update/delete nickname - setMemberNickname()
 - [x] Get member info - getServerMember()
 - [x] Kick server member - kickServerMember()
@@ -39,7 +45,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Ban server member - banServerMember()
 - [x] Unban server member - unbanServerMember()
 - [x] Get member ban list - getServerMemberBans()
-## Forum
+
+</p></details>
+
+<details><summary>Forum</summary><p>
+
 - [x] Create forum topic - createForumTopic()
 - [x] Update forum topic - updateForumTopic()
 - [x] Delete forum topic - deleteForumTopic()
@@ -49,7 +59,16 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Unpin a forum topic - unpinForumTopic()
 - [x] Lock a forum topic - lockForumTopic()
 - [x] Unlock a forum topic - unlockForumTopic()
-## List
+- [ ] Create a forum topic comment - createForumTopicComment()
+- [ ] Update a forum topic comment - updateForumTopicComment()
+- [ ] Delete a forum topic comment - deleteForumTopicComment()
+- [ ] Get a comment on a forum topic - getForumTopicComment()
+- [ ] Get a forum topic's comments - getForumTopicComments()
+
+</p></details>
+
+<details><summary>List</summary><p>
+
 - [x] Create list item - createListItem()
 - [x] Get list items - getListItems()
 - [x] Get a list item - getListItem()
@@ -57,43 +76,84 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Delete list item - deleteListItem()
 - [x] Completed list item - completeListItem()
 - [x] Uncomplted list item - uncompleteListItem()
-## Document
+
+</p></details>
+
+<details><summary>Document</summary><p>
+
 - [x] Create document - createDoc()
 - [x] Update document - updateDoc()
 - [x] Delete document - deleteDoc()
 - [x] Get document info - getDoc()
 - [x] Get last 50 updated docs - getChannelDocs()
-## Reaction
+
+</p></details>
+
+<details><summary>Reaction</summary><p>
+
 - [x] Add reaction - createContentReaction()
 - [x] Remove reaction - deleteContentReaction()
-## XP
+
+</p></details>
+
+<details><summary>XP</summary><p>
+
 - [x] Add XP to user - awardUserXp()
 - [x] Add XP to all users with specified role - awardRoleXp()
 - [x] Set XP of user - setUserXp()
-## Social links
+
+</p></details>
+
+<details><summary>Social links</summary><p>
+
 - [x] Get member's social link - getSocialLink()
-## Group membership
+
+</p></details>
+
+<details><summary>Group membership</summary><p>
+
 - [x] Add member to group - addGroupMember()
 - [x] Remove member from group - removeGroupMember()
-## Role membership
+
+</p></details>
+
+<details><summary>Role membership</summary><p>
+
 - [x] Get member's role(s) - getMemberRoles()
 - [x] Assign role to member - addRoleMember()
 - [x] Remove role from member - removeRoleMember()
-## Webhooks
+
+</p></details>
+
+<details><summary>Webhooks</summary><p>
+
 - [x] Create webhook - createWebhook()
 - [x] Get webhooks - getWebhooks()
 - [x] Update webhook - updateWebhook()
 - [x] Delete webhook - deleteWebhook()
 - [x] Get webhook info - getWebhook()
-## Channels
+
+</p></details>
+
+<details><summary>Channels</summary><p>
+
 - [x] Create channel - createServerChannel()
 - [x] Update channel - updateServerChannel()
 - [x] Delete channel - deleteServerChannel()
 - [x] Get channel info - getServerChannel()
 - [ ] Get channel list - getServerChannels()
-## Server
+
+</p></details>
+
+<details><summary>Server</summary><p>
+
 - [x] Get server info - getServer()
-## Event
+
+</p></details>
+
+<details><summary>Event</summary><p>
+
+- [ ] BotTeamMembershipCreatedEvent
 - [x] CalendarEventCreatedEvent
 - [x] CalendarEventDeletedEvent
 - [x] CalendarEventRsvpDeletedEvent
@@ -111,8 +171,13 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicCreatedEvent
 - [x] ForumTopicDeletedEvent
 - [x] ForumTopicUpdatedEvent
+- [ ] ForumTopicCommentCreatedEvent
+- [ ] ForumTopicCommentUpdatedEvent
+- [ ] ForumTopicCommentDeletedEvent
 - [x] ForumTopicPinnedEvent
 - [x] ForumTopicUnpinnedEvent
+- [ ] ForumTopicReactionCreatedEvent
+- [ ] ForumTopicReactionDeletedEvent
 - [x] ForumTopicLockedEvent
 - [x] ForumTopicUnlockedEvent
 - [x] GuildedWebsocketClosedEvent
@@ -135,5 +200,4 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] TeamWebhookUpdatedEvent
 - [x] TeamXpAddedEvent
 
-</p>
-</details>
+</p></details>

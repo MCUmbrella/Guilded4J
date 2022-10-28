@@ -59,11 +59,11 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Unpin a forum topic - unpinForumTopic()
 - [x] Lock a forum topic - lockForumTopic()
 - [x] Unlock a forum topic - unlockForumTopic()
-- [ ] Create a forum topic comment - createForumTopicComment()
-- [ ] Update a forum topic comment - updateForumTopicComment()
-- [ ] Delete a forum topic comment - deleteForumTopicComment()
-- [ ] Get a comment on a forum topic - getForumTopicComment()
-- [ ] Get a forum topic's comments - getForumTopicComments()
+- [x] Create a forum topic comment - createForumTopicComment()
+- [x] Update a forum topic comment - updateForumTopicComment()
+- [x] Delete a forum topic comment - deleteForumTopicComment()
+- [x] Get a comment on a forum topic - getForumTopicComment()
+- [x] Get a forum topic's comments - getForumTopicComments()
 
 </p></details>
 

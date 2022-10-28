@@ -168,29 +168,93 @@ public class ForumManager extends RestManager
         );
     }
 
+    /**
+     * Create a forum topic comment.<br>
+     * <a href="https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentCreate" target=_blank>https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentCreate</a>
+     * @param channelId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicId The ID of the forum topic where the comment belongs to.
+     * @param content The content of the comment.
+     * @return The newly created comment's ForumTopicComment object.
+     */
     public ForumTopicComment createForumTopicComment(String channelId, int forumTopicId, String content)
     {
-        return null; //TODO
+        return ForumTopicComment.fromJSON(
+                execute(Method.POST,
+                        FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments",
+                        new JSONObject().set("content", content)
+                ).getJSONObject("forumTopicComment")
+        );
     }
 
+    /**
+     * Get a forum topic's comments.<br>
+     * <a href="https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentReadMany" target=_blank>https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentReadMany</a>
+     * @param channelId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicId The ID of the forum topic to get the comments.
+     * @return The ForumTopicComment array containing the comments of the forum topic.
+     */
     public ForumTopicComment[] getForumTopicComments(String channelId, int forumTopicId)
     {
-        return null; //TODO
+        JSONArray commentsArray = execute(Method.GET,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments",
+                null
+                ).getJSONArray("forumTopicComments");
+        ForumTopicComment[] comments = new ForumTopicComment[commentsArray.size()];
+        for(int i=0; i!=commentsArray.size(); i++)
+            comments[i] = ForumTopicComment.fromJSON(commentsArray.getJSONObject(i));
+        return comments;
     }
 
+    /**
+     * Get a comment on a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentRead" target=_blank>https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentRead</a>
+     * @param channelId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicId The ID of the forum topic where the comment belongs to.
+     * @param forumTopicCommentId The ID of the comment.
+     * @return The comment's ForumTopicComment object.
+     */
     public ForumTopicComment getForumTopicComment(String channelId, int forumTopicId, int forumTopicCommentId)
     {
-        return null; //TODO
+        return ForumTopicComment.fromJSON(
+                execute(Method.GET,
+                        FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments/" + forumTopicCommentId,
+                        null
+                ).getJSONObject("forumTopicComment")
+        );
     }
 
-    public ForumTopicComment updateForumTopicComment(String channelId, int forumTopicId, int forumCommentId)
+    /**
+     * Update a forum topic comment.<br>
+     * <a href="https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentUpdate" target=_blank>https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentUpdate</a>
+     * @param channelId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicCommentId The ID of the comment to update.
+     * @param content The new content of the comment.
+     * @return The updated comment's ForumTopicComment object.
+     */
+    public ForumTopicComment updateForumTopicComment(String channelId, int forumTopicId, int forumTopicCommentId, String content)
     {
-        return null; //TODO
+        return ForumTopicComment.fromJSON(
+                execute(Method.PATCH,
+                        FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments/" + forumTopicCommentId,
+                        new JSONObject().set("content", content)
+                ).getJSONObject("forumTopicComment")
+        );
     }
 
+    /**
+     * Delete a forum topic comment.<br>
+     * <a href="https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentDelete" target=_blank>https://www.guilded.gg/docs/api/forumComments/ForumTopicCommentDelete</a>
+     * @param channelId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicId The ID of the channel where the forum topic belongs to.
+     * @param forumTopicCommentId The ID of the comment to delete.
+     */
     public void deleteForumTopicComment(String channelId, int forumTopicId, int forumTopicCommentId)
     {
-        //TODO
+        execute(Method.DELETE,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments/" + forumTopicCommentId,
+                null
+        );
     }
 
     public void addForumTopicReaction(String channelId, int forumTopicId, int emoteId)

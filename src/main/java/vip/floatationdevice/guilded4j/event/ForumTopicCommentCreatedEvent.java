@@ -5,10 +5,28 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class ForumTopicCommentCreatedEvent extends GuildedEvent //TODO
+import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.object.ForumTopicComment;
+
+/**
+ * Event fired when a forum comment is created.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ForumTopicCommentCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/ForumTopicCommentCreated</a>
+ */
+public class ForumTopicCommentCreatedEvent extends GuildedEvent
 {
+    private final ForumTopicComment forumTopicComment;
+
     public ForumTopicCommentCreatedEvent(Object source, String json)
     {
         super(source, json);
+        forumTopicComment = ForumTopicComment.fromJSON((JSONObject) new JSONObject(json).getByPath("d.forumTopicComment"));
+    }
+
+    /**
+     * Get the ForumTopicComment object of the event.
+     */
+    public ForumTopicComment getForumTopicComment()
+    {
+        return forumTopicComment;
     }
 }

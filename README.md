@@ -171,9 +171,9 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicCreatedEvent
 - [x] ForumTopicDeletedEvent
 - [x] ForumTopicUpdatedEvent
-- [ ] ForumTopicCommentCreatedEvent
-- [ ] ForumTopicCommentUpdatedEvent
-- [ ] ForumTopicCommentDeletedEvent
+- [x] ForumTopicCommentCreatedEvent
+- [x] ForumTopicCommentUpdatedEvent
+- [x] ForumTopicCommentDeletedEvent
 - [x] ForumTopicPinnedEvent
 - [x] ForumTopicUnpinnedEvent
 - [ ] ForumTopicReactionCreatedEvent

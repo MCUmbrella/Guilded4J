@@ -23,21 +23,31 @@ public class G4JTest
     public static void main(String[] args) throws Exception
     {
         //==============================================================
-        /*s = new G4JDebugger.G4JSession();
+        s = new G4JDebugger.G4JSession();
         s.restore();
-        c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
+        c = new G4JClient(s.savedToken).setVerbose(false).setAutoReconnect(true);
         //c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
-        c.getWebSocketClient().setHeartbeatInterval(10000);*/
+        //c.getWebSocketClient().setHeartbeatInterval(10000);
         //==============================================================
-        System.out.println(new JSONObject(ForumTopicComment.fromJSON(new JSONObject("{\n" +
-                "  \"id\": 1234567890,\n" +
-                "  \"content\": \"Great idea!\",\n" +
-                "  \"createdAt\": \"2021-06-15T20:15:00.706Z\",\n" +
-                "  \"forumTopicId\": 9876543210,\n" +
-                "  \"createdBy\": \"Ann6LewA\",\n" +
-                "  \"updatedAt\": \"2021-06-15T20:15:00.706Z\"" +
-                "}")).toString()).toStringPretty());
+    }
+
+    @Subscribe
+    public void onForumTopicCommentCreatedEvent(ForumTopicCommentCreatedEvent e)
+    {
+        System.out.println(e.getForumTopicComment().toString());
+    }
+
+    @Subscribe
+    public void onForumTopicCommentUpdatedEvent(ForumTopicCommentUpdatedEvent e)
+    {
+        System.out.println(e.getForumTopicComment().toString());
+    }
+
+    @Subscribe
+    public void onForumTopicCommentDeletedEvent(ForumTopicCommentDeletedEvent e)
+    {
+        System.out.println(e.getForumTopicComment().toString());
     }
 
     @Subscribe

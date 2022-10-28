@@ -153,7 +153,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 
 <details><summary>Event</summary><p>
 
-- [ ] BotTeamMembershipCreatedEvent
+- [x] BotTeamMembershipCreatedEvent
 - [x] CalendarEventCreatedEvent
 - [x] CalendarEventDeletedEvent
 - [x] CalendarEventRsvpDeletedEvent

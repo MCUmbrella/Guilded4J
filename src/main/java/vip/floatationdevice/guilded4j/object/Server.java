@@ -37,6 +37,7 @@ public class Server
                 .setBanner(json.getStr("banner"))
                 .setTimezone(json.getStr("timezone"))
                 .setIsVerified(json.getBool("isVerified") != null && json.getBool("isVerified"))
+                .setDefaultChannelId(json.getStr("defaultChannelId"))
                 .setCreatedAt(json.getStr("createdAt"));
     }
 
@@ -123,7 +124,7 @@ public class Server
     /**
      * Get the channel ID of the default channel of the server.
      */
-    public String getDefaultChannel(){return defaultChannelId;}
+    public String getDefaultChannelId(){return defaultChannelId;}
 
     /**
      * Get the ISO 8601 timestamp that the server was created at.
@@ -186,6 +187,7 @@ public class Server
                 .set("banner", banner)
                 .set("timezone", timezone)
                 .set("isVerified", isVerified)
+                .set("defaultChannelId", defaultChannelId)
                 .set("createdAt", createdAt)
                 .toString();
     }

@@ -35,6 +35,7 @@ public class G4JTest
     public void onBotTeamMembershipCreatedEvent(BotTeamMembershipCreatedEvent e)
     {
         System.out.println("BotTeamMembershipCreatedEvent:\n  server: " + e.getServer() + "\n  createdBy: " + e.getCreatedBy());
+        System.out.println(new JSONObject(e.getServer().toString()).toStringPretty());
     }
 
     @Subscribe

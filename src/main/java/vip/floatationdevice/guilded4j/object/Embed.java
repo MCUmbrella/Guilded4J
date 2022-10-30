@@ -16,7 +16,7 @@ import vip.floatationdevice.guilded4j.object.misc.EmbedField;
  */
 public class Embed
 {
-    private String title, description, url, footerIconUrl, footerText = "", timestamp, thumbnailUrl, imageUrl, authorName, authorUrl, authorIconUrl;
+    private String title, description, url, footerIconUrl, footerText, timestamp, thumbnailUrl, imageUrl, authorName, authorUrl, authorIconUrl;
     private Integer color;
     private EmbedField[] fields;
 
@@ -39,13 +39,13 @@ public class Embed
                 .setUrl(json.getStr("url"))
                 .setColor(json.getInt("color"))
                 .setTimestamp(json.getStr("timestamp"))
-                .setFooterText(json.getByPath("footer.text") != null ? json.getByPath("footer.text").toString() : null)
-                .setFooterIconUrl(json.getByPath("footer.icon_url") != null ? json.getByPath("footer.icon_url").toString() : null)
-                .setThumbnailUrl(json.getByPath("thumbnail.url") != null ? json.getByPath("thumbnail.url").toString() : null)
-                .setImageUrl(json.getByPath("image.url") != null ? json.getByPath("image.url").toString() : null)
-                .setAuthorName(json.getByPath("author.name") != null ? json.getByPath("author.name").toString() : null)
-                .setAuthorUrl(json.getByPath("author.url") != null ? json.getByPath("author.url").toString() : null)
-                .setAuthorIconUrl(json.getByPath("author.icon_url") != null ? json.getByPath("author.icon_url").toString() : null)
+                .setFooterText((String) json.getByPath("footer.text"))
+                .setFooterIconUrl((String) json.getByPath("footer.icon_url"))
+                .setThumbnailUrl((String) json.getByPath("thumbnail.url"))
+                .setImageUrl((String) json.getByPath("image.url"))
+                .setAuthorName((String) json.getByPath("author.name"))
+                .setAuthorUrl((String) json.getByPath("author.url"))
+                .setAuthorIconUrl((String) json.getByPath("author.icon_url"))
                 .setFields(fields);
     }
 
@@ -213,18 +213,26 @@ public class Embed
                 .set("url", url)
                 .set("color", color)
                 .set("timestamp", timestamp)
-                .set("footer", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("text", footerText)
-                        .set("icon_url", footerIconUrl))
-                .set("thumbnail", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("url", thumbnailUrl))
-                .set("image", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("url", imageUrl))
-                .set("author", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                        .set("name", authorName)
-                        .set("url", authorUrl)
-                        .set("icon_url", authorIconUrl))
-                .set("fields", new JSONArray(fields))
+                .set("footer", footerText == null ? null :
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("text", footerText)
+                                .set("icon_url", footerIconUrl)
+                )
+                .set("thumbnail", thumbnailUrl == null ? null :
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("url", thumbnailUrl)
+                )
+                .set("image", imageUrl == null ? null :
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("url", imageUrl)
+                )
+                .set("author", authorName == null ? null :
+                        new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                                .set("name", authorName)
+                                .set("url", authorUrl)
+                                .set("icon_url", authorIconUrl)
+                )
+                .set("fields", fields == null || fields.length == 0 ? null : new JSONArray(fields))
                 .toString();
     }
 }

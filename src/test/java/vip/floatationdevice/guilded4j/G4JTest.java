@@ -3,11 +3,7 @@ package vip.floatationdevice.guilded4j;
 import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
-import vip.floatationdevice.guilded4j.misc.*;
-import vip.floatationdevice.guilded4j.object.*;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Scanner;
 
 /**
@@ -32,9 +28,9 @@ public class G4JTest
     }
 
     @Subscribe
-    public void onBotTeamMembershipCreatedEvent(BotTeamMembershipCreatedEvent e)
+    public void onBotTeamMembershipCreatedEvent(BotServerMembershipCreatedEvent e)
     {
-        System.out.println("BotTeamMembershipCreatedEvent:\n  server: " + e.getServer() + "\n  createdBy: " + e.getCreatedBy());
+        System.out.println("BotServerMembershipCreatedEvent:\n  server: " + e.getServer() + "\n  createdBy: " + e.getCreatedBy());
         System.out.println(new JSONObject(e.getServer().toString()).toStringPretty());
     }
 

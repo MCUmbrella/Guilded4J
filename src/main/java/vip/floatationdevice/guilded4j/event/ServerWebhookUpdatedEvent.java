@@ -9,22 +9,22 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.Webhook;
 
 /**
- * Event fired when a webhook is created.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamWebhookCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamWebhookCreated</a>
+ * Event fired when a webhook is updated.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamWebhookUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamWebhookUpdated</a>
  */
-public class TeamWebhookCreatedEvent extends GuildedEvent
+public class ServerWebhookUpdatedEvent extends GuildedEvent
 {
     private final Webhook webhook;
 
-    public TeamWebhookCreatedEvent(Object source, String json)
+    public ServerWebhookUpdatedEvent(Object source, String json)
     {
         super(source, json);
         this.webhook = Webhook.fromJSON((JSONObject) new JSONObject(json).getByPath("d.webhook"));
     }
 
     /**
-     * Gets the webhook that was created.
-     * @return The Webhook object.
+     * Gets the webhook that was updated.
+     * @return The updated Webhook object.
      */
     public Webhook getWebhook()
     {

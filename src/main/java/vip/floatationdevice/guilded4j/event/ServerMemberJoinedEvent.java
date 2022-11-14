@@ -12,11 +12,11 @@ import vip.floatationdevice.guilded4j.object.ServerMember;
  * Event that is fired when a user joins a server.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberJoined" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberJoined</a>
  */
-public class TeamMemberJoinedEvent extends GuildedEvent
+public class ServerMemberJoinedEvent extends GuildedEvent
 {
     private final ServerMember member;
 
-    public TeamMemberJoinedEvent(Object source, String json)
+    public ServerMemberJoinedEvent(Object source, String json)
     {
         super(source, json);
         this.member = ServerMember.fromJSON((JSONObject) new JSONObject(json).getByPath("d.member"));

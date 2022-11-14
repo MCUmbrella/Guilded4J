@@ -9,21 +9,21 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ServerChannel;
 
 /**
- * Event fired when a server channel is updated.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamChannelUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamChannelUpdated</a>
+ * Event that is fired when a server channel is created.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/TeamChannelCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamChannelCreated</a>
  */
-public class TeamChannelUpdatedEvent extends GuildedEvent
+public class ServerChannelCreatedEvent extends GuildedEvent
 {
     private final ServerChannel channel;
 
-    public TeamChannelUpdatedEvent(Object source, String json)
+    public ServerChannelCreatedEvent(Object source, String json)
     {
         super(source, json);
         this.channel = ServerChannel.fromJSON((JSONObject) new JSONObject(json).getByPath("d.channel"));
     }
 
     /**
-     * Gets the channel that was updated.
+     * Gets the channel that was created.
      * @return The channel's ServerChannel object.
      */
     public ServerChannel getChannel(){return channel;}

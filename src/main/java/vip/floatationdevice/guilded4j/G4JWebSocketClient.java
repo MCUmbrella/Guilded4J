@@ -110,7 +110,7 @@ public class G4JWebSocketClient extends WebSocketClient
             {
                 try
                 {// eventBus.post(new xxxEvent(this, rawMessage)) in reflection
-                    Class<?> eventClass = Class.forName("vip.floatationdevice.guilded4j.event." + String.valueOf(eventType.charAt(0)).toUpperCase() + eventType.substring(1) + "Event");
+                    Class<?> eventClass = Class.forName("vip.floatationdevice.guilded4j.event." + eventType + "Event");
                     Constructor<?> constructor = eventClass.getConstructor(Object.class, String.class);
                     Object event = constructor.newInstance(this, rawMessage);
                     eventBus.post(event);

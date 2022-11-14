@@ -12,12 +12,12 @@ import vip.floatationdevice.guilded4j.object.Server;
  * Emitted when a bot is added to a server.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/BotTeamMembershipCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/BotTeamMembershipCreated</a>
  */
-public class BotTeamMembershipCreatedEvent extends GuildedEvent
+public class BotServerMembershipCreatedEvent extends GuildedEvent
 {
     private final Server server;
     private final String createdBy;
 
-    public BotTeamMembershipCreatedEvent(Object source, String json)
+    public BotServerMembershipCreatedEvent(Object source, String json)
     {
         super(source, json);
         JSONObject j = new JSONObject(json);

@@ -13,11 +13,11 @@ import vip.floatationdevice.guilded4j.object.misc.MemberRoleSummary;
  * Event fired when one or more member's roles are updated.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/teamRolesUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/teamRolesUpdated</a>
  */
-public class TeamRolesUpdatedEvent extends GuildedEvent
+public class ServerRolesUpdatedEvent extends GuildedEvent
 {
     private final MemberRoleSummary[] memberRoleIds;
 
-    public TeamRolesUpdatedEvent(Object source, String json)
+    public ServerRolesUpdatedEvent(Object source, String json)
     {
         super(source, json);
         JSONArray memberRoleIdsArray = (JSONArray) new JSONObject(json).getByPath("d.memberRoleIds");

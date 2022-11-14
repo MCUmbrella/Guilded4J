@@ -816,21 +816,21 @@ public class G4JDebugger
         }
 
         @Subscribe
-        public void onXP(TeamXpAddedEvent e)
+        public void onXP(ServerXpAddedEvent e)
         {
             if(dumpEnabled)
                 System.out.print("\n" + datePfx() + " [D] " + Arrays.toString(e.getUserIds()) + ": +" + e.getXpAmount() + " XP" + prompt());
         }
 
         @Subscribe
-        public void onNicknameChange(TeamMemberUpdatedEvent e)
+        public void onNicknameChange(ServerMemberUpdatedEvent e)
         {
             if(dumpEnabled)
                 System.out.print("\n" + datePfx() + " [D] " + e.getUserInfo().getUserId() + (e.getUserInfo().getNickname() == null ? ": nickname cleared" : ": nickname changed to '" + e.getUserInfo().getNickname() + "'") + prompt());
         }
 
         @Subscribe
-        public void onRoleChange(TeamRolesUpdatedEvent e)
+        public void onRoleChange(ServerRolesUpdatedEvent e)
         {
             MemberRoleSummary[] users = e.getMembers();
             if(dumpEnabled)
@@ -843,25 +843,25 @@ public class G4JDebugger
         }
 
         @Subscribe
-        public void onMemberJoined(TeamMemberJoinedEvent e)
+        public void onMemberJoined(ServerMemberJoinedEvent e)
         {
             System.out.print("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server " + e.getServerID() + prompt());
         }
 
         @Subscribe
-        public void onMemberRemoved(TeamMemberRemovedEvent e)
+        public void onMemberRemoved(ServerMemberRemovedEvent e)
         {
             System.out.print("\n" + datePfx() + " [i] User with ID " + e.getUserId() + " removed from server " + e.getServerID() + " (cause: " + e.getCause() + ")" + prompt());
         }
 
         @Subscribe
-        public void onBan(TeamMemberBannedEvent e)
+        public void onBan(ServerMemberBannedEvent e)
         {
             System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " in server " + e.getServerID() + " got banned. Reason: " + e.getServerMemberBan().getReason() + prompt());
         }
 
         @Subscribe
-        public void onUnban(TeamMemberUnbannedEvent e)
+        public void onUnban(ServerMemberUnbannedEvent e)
         {
             System.out.print("\n" + datePfx() + " [i] User with ID " + e.getServerMemberBan().getUser().getId() + " unbanned from server " + e.getServerID() + prompt());
         }

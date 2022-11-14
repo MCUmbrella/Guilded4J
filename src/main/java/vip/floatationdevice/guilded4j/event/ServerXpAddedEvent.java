@@ -11,12 +11,12 @@ import cn.hutool.json.JSONObject;
 /**
  * Event that is fired when XP is added to user(s).
  */
-public class TeamXpAddedEvent extends GuildedEvent
+public class ServerXpAddedEvent extends GuildedEvent
 {
     private final int xpAmount;
     private final String[] userIds;
 
-    public TeamXpAddedEvent(Object source, String json)
+    public ServerXpAddedEvent(Object source, String json)
     {
         super(source, json);
         JSONObject j = new JSONObject(json);

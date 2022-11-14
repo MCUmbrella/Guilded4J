@@ -12,11 +12,11 @@ import vip.floatationdevice.guilded4j.object.ServerMemberBan;
  * Event fired when a server member is unbanned.<br>
  * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberUnbanned" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberUnbanned</a>
  */
-public class TeamMemberUnbannedEvent extends GuildedEvent
+public class ServerMemberUnbannedEvent extends GuildedEvent
 {
     private final ServerMemberBan serverMemberBan;
 
-    public TeamMemberUnbannedEvent(Object source, String json)
+    public ServerMemberUnbannedEvent(Object source, String json)
     {
         super(source, json);
         this.serverMemberBan = ServerMemberBan.fromJSON((JSONObject) new JSONObject(json).getByPath("d.serverMemberBan"));

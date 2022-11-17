@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.Webhook;
 
 /**
  * Event fired when a webhook is created.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamWebhookCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamWebhookCreated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ServerWebhookCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/ServerWebhookCreated</a>
  */
 public class ServerWebhookCreatedEvent extends GuildedEvent
 {

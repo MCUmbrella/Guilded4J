@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.ServerChannel;
 
 /**
  * Event fired when a server channel is deleted.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamChannelDeleted" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamChannelDeleted</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ServerChannelDeleted" target=_blank>https://www.guilded.gg/docs/api/websockets/ServerChannelDeleted</a>
  */
 public class ServerChannelDeletedEvent extends GuildedEvent
 {

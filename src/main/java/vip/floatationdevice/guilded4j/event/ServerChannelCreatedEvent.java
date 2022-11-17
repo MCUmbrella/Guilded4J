@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.ServerChannel;
 
 /**
  * Event that is fired when a server channel is created.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamChannelCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamChannelCreated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ServerChannelCreated" target=_blank>https://www.guilded.gg/docs/api/websockets/ServerChannelCreated</a>
  */
 public class ServerChannelCreatedEvent extends GuildedEvent
 {

@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.misc.MemberNicknameSummary;
 
 /**
  * Event fired when a member's nickname is updated.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamMemberUpdated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ServerMemberUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/ServerMemberUpdated</a>
  */
 public class ServerMemberUpdatedEvent extends GuildedEvent
 {

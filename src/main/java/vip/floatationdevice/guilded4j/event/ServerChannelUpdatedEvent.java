@@ -10,7 +10,7 @@ import vip.floatationdevice.guilded4j.object.ServerChannel;
 
 /**
  * Event fired when a server channel is updated.<br>
- * <a href="https://www.guilded.gg/docs/api/websockets/TeamChannelUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/TeamChannelUpdated</a>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ServerChannelUpdated" target=_blank>https://www.guilded.gg/docs/api/websockets/ServerChannelUpdated</a>
  */
 public class ServerChannelUpdatedEvent extends GuildedEvent
 {

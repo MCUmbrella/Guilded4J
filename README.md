@@ -153,7 +153,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 
 <details><summary>Event</summary><p>
 
-- [x] BotTeamMembershipCreatedEvent
+- [x] BotServerMembershipCreatedEvent
+- [x] BotServerMembershipDeletedEvent
 - [x] CalendarEventCreatedEvent
 - [x] CalendarEventDeletedEvent
 - [x] CalendarEventRsvpDeletedEvent
@@ -187,17 +188,17 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ListItemDeletedEvent
 - [x] ListItemUncompletedEvent
 - [x] ListItemUpdatedEvent
-- [x] TeamChannelCreatedEvent
-- [x] TeamChannelDeletedEvent
-- [x] TeamChannelUpdatedEvent
-- [x] TeamMemberBannedEvent
-- [x] TeamMemberJoinedEvent
-- [x] TeamMemberRemovedEvent
-- [x] TeamMemberUnbannedEvent
-- [x] TeamMemberUpdatedEvent
-- [x] TeamRolesUpdatedEvent
-- [x] TeamWebhookCreatedEvent
-- [x] TeamWebhookUpdatedEvent
-- [x] TeamXpAddedEvent
+- [x] ServerChannelCreatedEvent
+- [x] ServerChannelDeletedEvent
+- [x] ServerChannelUpdatedEvent
+- [x] ServerMemberBannedEvent
+- [x] ServerMemberJoinedEvent
+- [x] ServerMemberRemovedEvent
+- [x] ServerMemberUnbannedEvent
+- [x] ServerMemberUpdatedEvent
+- [x] ServerRolesUpdatedEvent
+- [x] ServerWebhookCreatedEvent
+- [x] ServerWebhookUpdatedEvent
+- [x] ServerXpAddedEvent
 
 </p></details>

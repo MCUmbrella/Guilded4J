@@ -8,8 +8,8 @@ package vip.floatationdevice.guilded4j.object.misc;
 import cn.hutool.json.JSONObject;
 
 /**
- * Represents a summary of a member's nickname. This class is not present in the official API
- * (as TeamMemberUpdated's property of this is described as type "object" instead of something else).
+ * Represents a summary of a member's nickname.
+ * This class is not present in the official API.
  */
 
 public class MemberNicknameSummary

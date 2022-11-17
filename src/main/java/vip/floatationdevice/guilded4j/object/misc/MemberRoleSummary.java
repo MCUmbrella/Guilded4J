@@ -9,8 +9,8 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.Util;
 
 /**
- * Represents a summary of a member's roles. This class is not present in the official API
- * (as teamRolesUpdated's property of this is described as type "object" instead of something else).
+ * Represents a summary of a member's roles.
+ * This class is not present in the official API
  */
 public class MemberRoleSummary
 {

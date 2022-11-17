@@ -28,13 +28,6 @@ public class G4JTest
     }
 
     @Subscribe
-    public void onBotTeamMembershipCreatedEvent(BotServerMembershipCreatedEvent e)
-    {
-        System.out.println("BotServerMembershipCreatedEvent:\n  server: " + e.getServer() + "\n  createdBy: " + e.getCreatedBy());
-        System.out.println(new JSONObject(e.getServer().toString()).toStringPretty());
-    }
-
-    @Subscribe
     public void onConnect(GuildedWebSocketWelcomeEvent e)
     {
         System.out.println("Connected");

@@ -11,7 +11,7 @@ import vip.floatationdevice.guilded4j.Util;
 
 /**
  * Represents a member of a server.<br>
- * <a href="https://www.guilded.gg/docs/api/members/TeamMember" target=_blank>https://www.guilded.gg/docs/api/members/TeamMember</a>
+ * <a href="https://www.guilded.gg/docs/api/members/ServerMember" target=_blank>https://www.guilded.gg/docs/api/members/ServerMember</a>
  */
 public class ServerMember
 {

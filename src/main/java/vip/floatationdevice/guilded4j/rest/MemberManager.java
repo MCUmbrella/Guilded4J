@@ -56,7 +56,7 @@ public class MemberManager extends RestManager
 
     /**
      * Get a server member by ID.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberRead</a>
+     * <a href="https://www.guilded.gg/docs/api/members/ServerMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberRead</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      * @return The member's ServerMember object.
@@ -71,7 +71,7 @@ public class MemberManager extends RestManager
 
     /**
      * Kick a member from the server.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberDelete</a>
+     * <a href="https://www.guilded.gg/docs/api/members/ServerMemberDelete" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberDelete</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
      */
@@ -82,7 +82,7 @@ public class MemberManager extends RestManager
 
     /**
      * Get a list of all members in the server.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberReadMany</a>
+     * <a href="https://www.guilded.gg/docs/api/members/ServerMemberReadMany" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberReadMany</a>
      * @param serverId The ID of the server where the members are.
      * @return A list of ServerMemberSummary objects for each member in the server.
      */
@@ -97,7 +97,7 @@ public class MemberManager extends RestManager
 
     /**
      * Get a ban information of the member.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanRead" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanRead</a>
+     * <a href="https://www.guilded.gg/docs/api/member-bans/ServerMemberBanRead" target=_blank>https://www.guilded.gg/docs/api/member-bans/ServerMemberBanRead</a>
      * NOTE: If the member is not banned, a GuildedException will be thrown.
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the member.
@@ -115,7 +115,7 @@ public class MemberManager extends RestManager
 
     /**
      * Ban a server member.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanCreate" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanCreate</a>
+     * <a href="https://www.guilded.gg/docs/api/member-bans/ServerMemberBanCreate" target=_blank>https://www.guilded.gg/docs/api/member-bans/ServerMemberBanCreate</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the user to ban from this server.
      * @param reason The reason for the ban.
@@ -133,7 +133,7 @@ public class MemberManager extends RestManager
 
     /**
      * Unban a server member.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanDelete" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanDelete</a>
+     * <a href="https://www.guilded.gg/docs/api/member-bans/ServerMemberBanDelete" target=_blank>https://www.guilded.gg/docs/api/member-bans/ServerMemberBanDelete</a>
      * @param serverId The ID of the server where the member is.
      * @param userId The ID of the user to unban from this server.
      */
@@ -144,7 +144,7 @@ public class MemberManager extends RestManager
 
     /**
      * Get all ban information of a server.<br>
-     * <a href="https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany" target=_blank>https://www.guilded.gg/docs/api/members/TeamMemberBanReadMany</a>
+     * <a href="https://www.guilded.gg/docs/api/member-bans/ServerMemberBanReadMany" target=_blank>https://www.guilded.gg/docs/api/member-bans/ServerMemberBanReadMany</a>
      * @param serverId The ID of the server to get ban information of.
      * @return A list of ServerMemberBan objects of the banned members.
      */

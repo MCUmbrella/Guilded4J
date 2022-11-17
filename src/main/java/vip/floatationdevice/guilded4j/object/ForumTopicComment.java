@@ -16,7 +16,8 @@ import vip.floatationdevice.guilded4j.Util;
 public class ForumTopicComment
 {
     int id, forumTopicId;
-    String content, createdAt, createdBy, updatedAt;
+    String content, createdAt, createdBy, updatedAt, channelId;
+    Mention mentions;
 
     public static ForumTopicComment fromJSON(JSONObject json)
     {
@@ -33,6 +34,7 @@ public class ForumTopicComment
                 .setCreatedAt(json.getStr("createdAt"))
                 .setCreatedBy(json.getStr("createdBy"))
                 .setUpdatedAt(json.getStr("updatedAt"))
+                .setChannelId(json.getStr("channelId"))
                 .setForumTopicId(json.getInt("forumTopicId"));
     }
 
@@ -102,6 +104,19 @@ public class ForumTopicComment
         return this;
     }
 
+    /**
+     * Get the UUID of the channel where the comment belongs to.
+     */
+    public String getChannelId(){return channelId;}
+
+    public ForumTopicComment setChannelId(String channelId)
+    {
+        this.channelId = channelId;
+        return this;
+    }
+
+    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+
     @Override
     public String toString()
     {
@@ -110,6 +125,7 @@ public class ForumTopicComment
                 .set("content", content)
                 .set("createdAt", createdAt)
                 .set("createdBy", createdBy)
+                .set("channelId", channelId)
                 .set("forumTopicId", forumTopicId)
                 .set("updatedAt", updatedAt)
                 .toString();

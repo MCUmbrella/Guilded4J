@@ -12,6 +12,7 @@ import vip.floatationdevice.guilded4j.enums.SocialMedia;
 import vip.floatationdevice.guilded4j.object.ServerMember;
 import vip.floatationdevice.guilded4j.object.ServerMemberBan;
 import vip.floatationdevice.guilded4j.object.ServerMemberSummary;
+import vip.floatationdevice.guilded4j.object.User;
 
 import java.util.HashMap;
 
@@ -25,6 +26,20 @@ public class MemberManager extends RestManager
     public MemberManager(String authToken)
     {
         super(authToken);
+    }
+
+    /**
+     * Get a user's User object by ID.<br>
+     * <a href="https://www.guilded.gg/docs/api/users/UserRead" target=_blank>https://www.guilded.gg/docs/api/users/UserRead</a>
+     * NOTE: "@me" can be used as the bot's own ID, currently bots can only get their own User objects.
+     * @param userId The ID of the user to get.
+     */
+    public User getUser(String userId)
+    {
+        return User.fromJSON(execute(Method.GET,
+                USERS_URL.replace("{userId}", userId),
+                null
+        ).getJSONObject("user"));
     }
 
     /**

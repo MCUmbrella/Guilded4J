@@ -45,7 +45,8 @@ public class G4JClient
             GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
             ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
             REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}",
-            WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks";
+            WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks",
+            USERS_URL = "https://www.guilded.gg/api/v1/users/{userId}";
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
     private final EventBus bus = new EventBus();
     private final String token;

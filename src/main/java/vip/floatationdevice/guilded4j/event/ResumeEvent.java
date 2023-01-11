@@ -18,13 +18,15 @@ public class ResumeEvent extends GuildedEvent
     public ResumeEvent(Object source, String json)
     {
         super(source, json);
-        this.lastMessageId = new JSONObject(json).getByPath("d.s").toString();
-        super.setEventID(lastMessageId);
+        lastMessageId = new JSONObject(json).getByPath("d.s").toString();
     }
 
     /**
      * Get the ID used in replaying events.
      * @return An ID string.
      */
-    public String getLastMessageId(){return this.lastMessageId;}
+    public String getLastMessageId(){return lastMessageId;}
+
+    @Override
+    public String getEventID(){return lastMessageId;}
 }

@@ -1,6 +1,5 @@
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
 
@@ -37,6 +36,38 @@ public class G4JTest
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
         System.out.println("Disconnected");
+    }
+
+    @Subscribe
+    public void onForumTopicCommentReactionCreated(ForumTopicCommentReactionCreatedEvent e)
+    {
+        System.out.println("ForumTopicCommentReactionCreatedEvent\n" +
+                e.getServerID() + '\n' +
+                e.getOpCode() + '\n' +
+                e.getEventID() + '\n' +
+                e.getEventType() + '\n' +
+                e.getCreatedBy() + '\n' +
+                e.getChannelId() + '\n' +
+                e.getForumTopicId() + '\n' +
+                e.getForumTopicCommentId() + '\n' +
+                e.getEmote()
+        );
+    }
+
+    @Subscribe
+    public void onForumTopicCommentReactionDeleted(ForumTopicCommentReactionDeletedEvent e)
+    {
+        System.out.println("ForumTopicCommentReactionDeletedEvent\n" +
+                e.getServerID() + '\n' +
+                e.getOpCode() + '\n' +
+                e.getEventID() + '\n' +
+                e.getEventType() + '\n' +
+                e.getCreatedBy() + '\n' +
+                e.getChannelId() + '\n' +
+                e.getForumTopicId() + '\n' +
+                e.getForumTopicCommentId() + '\n' +
+                e.getEmote()
+        );
     }
 
     @Subscribe

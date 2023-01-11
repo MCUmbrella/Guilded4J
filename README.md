@@ -151,6 +151,12 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 
 </p></details>
 
+<details><summary>User</summary><p>
+
+- [ ] Get user info - getUser()
+
+</p></details>
+
 <details><summary>Event</summary><p>
 
 - [x] BotServerMembershipCreatedEvent
@@ -179,6 +185,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicUnpinnedEvent
 - [ ] ForumTopicReactionCreatedEvent
 - [ ] ForumTopicReactionDeletedEvent
+- [x] ForumTopicCommentReactionCreatedEvent
+- [x] ForumTopicCommentReactionDeletedEvent
 - [x] ForumTopicLockedEvent
 - [x] ForumTopicUnlockedEvent
 - [x] GuildedWebsocketClosedEvent

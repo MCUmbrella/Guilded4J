@@ -24,17 +24,16 @@ public class GuildedWebSocketWelcomeEvent extends GuildedEvent
     {
         super(source, json);
         JSONObject j = new JSONObject(json);
-        this.lastMessageId = j.getByPath("d.lastMessageId").toString();
-        this.heartbeatIntervalMs = Integer.parseInt(j.getByPath("d.heartbeatIntervalMs").toString());
-        this.self = Bot.fromJSON((JSONObject) j.getByPath("d.user"));
-        super.setEventID(lastMessageId);
+        lastMessageId = j.getByPath("d.lastMessageId").toString();
+        heartbeatIntervalMs = Integer.parseInt(j.getByPath("d.heartbeatIntervalMs").toString());
+        self = Bot.fromJSON((JSONObject) j.getByPath("d.user"));
     }
 
     /**
      * Get the ID used in replaying events.
      * @return An ID string.
      */
-    public String getLastMessageId(){return this.lastMessageId;}
+    public String getLastMessageId(){return lastMessageId;}
 
     /**
      * Get the keepalive interval.
@@ -47,4 +46,7 @@ public class GuildedWebSocketWelcomeEvent extends GuildedEvent
      * @return Bot object.
      */
     public Bot getSelf(){return self;}
+
+    @Override
+    public String getEventID(){return lastMessageId;}
 }

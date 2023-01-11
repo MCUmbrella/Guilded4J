@@ -257,15 +257,23 @@ public class ForumManager extends RestManager
         );
     }
 
-    public void addForumTopicReaction(String channelId, int forumTopicId, int emoteId)
+    public void addReaction(String channelId, int forumTopicId, int emoteId) // asshole doesnt let we use a single ContentReactionCreate to do uniform actions
     {
-        throw new UnsupportedOperationException();
-        //TODO: why separate this one out why dont let we use ContentReactionCreate
+        //TODO
     }
 
-    public void deleteForumTopicReaction(String channelId, int forumTopicId, int emoteId)
+    public void addReaction(String channelId, int forumTopicId, int forumTopicCommentId,int emoteId)
     {
-        throw new UnsupportedOperationException();
-        //TODO: T E L L, M E, W H Y
+        //TODO
+    }
+
+    public void deleteReaction(String channelId, int forumTopicId, int emoteId)
+    {
+        //TODO
+    }
+
+    public void deleteReaction(String channelId, int forumTopicId, int forumTopicCommentId, int emoteId)
+    {
+        //TODO
     }
 }

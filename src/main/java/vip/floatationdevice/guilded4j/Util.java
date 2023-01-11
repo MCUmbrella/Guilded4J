@@ -7,11 +7,17 @@ package vip.floatationdevice.guilded4j;
 
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 public class Util
 {
-    public static final String UUID_REGEX = "^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}$";
-    public static final String GID_REGEX = "^[a-zA-Z0-9]{8}$";
+    public static final Pattern UUID_REGEX = Pattern.compile("^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}$");
+    public static final Pattern GID_REGEX = Pattern.compile("^[a-zA-Z\\d]{8}$");
+
+    private Util()
+    {
+        throw new UnsupportedOperationException();
+    }
 
     public static void checkNullArgument(Object... objects)
     {
@@ -24,16 +30,16 @@ public class Util
      * @param o The object to check.
      * @return True if the object can be converted to UUID string, false otherwise.
      */
-    public static boolean isUUID(Object o) {return o != null && o.toString().matches(UUID_REGEX);}
+    public static boolean isUUID(Object o) {return o != null && UUID_REGEX.matcher(o.toString()).matches();}
 
     /**
-     * Check if the given object can be converted to a 'GID'.
-     * GID: an 8-digit string only contains English letters and/or numbers.
+     * Check if the given object can be converted to an ID format used by Guilded
+     * (an 8-digit string only contains English letters and/or numbers).
      * e.g. "8412wg5d", "zE8VxJNR"...
      * @param o The object to check.
      * @return True if the object can be converted to GID, false otherwise.
      */
-    public static boolean isGID(Object o) {return o != null && o.toString().matches(GID_REGEX);}
+    public static boolean isGID(Object o) {return o != null && GID_REGEX.matcher(o.toString()).matches();}
 
     /**
      * Converts ISO8601 timestamp to Calendar object.

@@ -18,6 +18,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Update message - updateChannelMessage()
 - [x] Get message info - getChannelMessage()
 - [x] Get messages - getChannelMessages()
+- [x] Add reaction - addReaction()
+- [x] Remove reaction - removeReaction()
 
 </p></details>
 
@@ -64,6 +66,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Delete a forum topic comment - deleteForumTopicComment()
 - [x] Get a comment on a forum topic - getForumTopicComment()
 - [x] Get a forum topic's comments - getForumTopicComments()
+- [x] Add reaction - addReaction()
+- [x] Remove reaction - removeReaction()
 
 </p></details>
 
@@ -86,13 +90,6 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] Delete document - deleteDoc()
 - [x] Get document info - getDoc()
 - [x] Get last 50 updated docs - getChannelDocs()
-
-</p></details>
-
-<details><summary>Reaction</summary><p>
-
-- [x] Add reaction - createContentReaction()
-- [x] Remove reaction - deleteContentReaction()
 
 </p></details>
 

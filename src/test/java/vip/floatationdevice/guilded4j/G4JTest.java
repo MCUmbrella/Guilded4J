@@ -1,7 +1,10 @@
 package vip.floatationdevice.guilded4j;
 
 import com.google.common.eventbus.Subscribe;
-import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.event.GuildedEvent;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
+import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
+import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
 
 import java.util.Scanner;
 
@@ -23,6 +26,19 @@ public class G4JTest
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
         //c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
+        c.getForumManager().addReaction("6284cada-9d78-4941-803a-3bc38e3de9aa", 2076691721, 90001164);
+        c.getForumManager().addReaction("6284cada-9d78-4941-803a-3bc38e3de9aa", 2076691721, 2124074763, 90001164);
+        System.out.println("getForumManager().addReaction() OK");
+        sc.nextLine();
+        c.getForumManager().removeReaction("6284cada-9d78-4941-803a-3bc38e3de9aa", 2076691721, 90001164);
+        c.getForumManager().removeReaction("6284cada-9d78-4941-803a-3bc38e3de9aa", 2076691721, 2124074763, 90001164);
+        System.out.println("getForumManager().removeReaction() OK");
+        sc.nextLine();
+        c.getChatMessageManager().addReaction("e4b1cd5a-721a-47dc-8e23-c04ecf31c206", "229dd339-16ba-43a2-9957-726af1e3bfdc", 90001164);
+        System.out.println("getChatMessageManager().addReaction() OK");
+        sc.nextLine();
+        c.getChatMessageManager().removeReaction("e4b1cd5a-721a-47dc-8e23-c04ecf31c206", "229dd339-16ba-43a2-9957-726af1e3bfdc", 90001164);
+        System.out.println("getChatMessageManager().removeReaction() OK");
         //==============================================================
     }
 
@@ -36,68 +52,6 @@ public class G4JTest
     public void onDisconnect(GuildedWebSocketClosedEvent e)
     {
         System.out.println("Disconnected");
-    }
-
-    @Subscribe
-    public void onForumTopicCommentReactionCreated(ForumTopicCommentReactionCreatedEvent e)
-    {
-        System.out.println("ForumTopicCommentReactionCreatedEvent\n" +
-                e.getServerID() + '\n' +
-                e.getOpCode() + '\n' +
-                e.getEventID() + '\n' +
-                e.getEventType() + '\n' +
-                e.getCreatedBy() + '\n' +
-                e.getChannelId() + '\n' +
-                e.getForumTopicId() + '\n' +
-                e.getForumTopicCommentId() + '\n' +
-                e.getEmote()
-        );
-    }
-
-    @Subscribe
-    public void onForumTopicCommentReactionDeleted(ForumTopicCommentReactionDeletedEvent e)
-    {
-        System.out.println("ForumTopicCommentReactionDeletedEvent\n" +
-                e.getServerID() + '\n' +
-                e.getOpCode() + '\n' +
-                e.getEventID() + '\n' +
-                e.getEventType() + '\n' +
-                e.getCreatedBy() + '\n' +
-                e.getChannelId() + '\n' +
-                e.getForumTopicId() + '\n' +
-                e.getForumTopicCommentId() + '\n' +
-                e.getEmote()
-        );
-    }
-
-    @Subscribe
-    public void onForumTopicReactionCreated(ForumTopicReactionCreatedEvent e)
-    {
-        System.out.println("ForumTopicReactionCreatedEvent\n" +
-                e.getServerID() + '\n' +
-                e.getOpCode() + '\n' +
-                e.getEventID() + '\n' +
-                e.getEventType() + '\n' +
-                e.getCreatedBy() + '\n' +
-                e.getChannelId() + '\n' +
-                e.getForumTopicId() + '\n' +
-                e.getEmote()
-        );
-    }
-
-    @Subscribe
-    public void onForumTopicReactionDeleted(ForumTopicReactionDeletedEvent e)
-    {
-        System.out.println("ForumTopicReactionDeletedEvent\n" +
-                e.getServerID() + '\n' +
-                e.getOpCode() + '\n' +
-                e.getEventID() + '\n' +
-                e.getEventType() + '\n' +
-                e.getCreatedBy() + '\n' +
-                e.getChannelId() + '\n' +
-                e.getForumTopicId() + '\n' +
-                e.getEmote()
-        );
     }
 
     @Subscribe

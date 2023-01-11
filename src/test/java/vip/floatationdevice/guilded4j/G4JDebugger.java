@@ -523,7 +523,7 @@ public class G4JDebugger
                     case "react":
                     {
                         if(workChannelValid() && commands.length == 3)
-                            client.getReactionManager().createContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
+                            client.getChatMessageManager().addReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
                         else
                             System.err.println(datePfx() + " [X] Usage: react <contentId> <(int)emoteId>");
                         break;
@@ -531,7 +531,7 @@ public class G4JDebugger
                     case "rmreact":
                     {
                         if(workChannelValid() && commands.length == 3)
-                            client.getReactionManager().deleteContentReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
+                            client.getChatMessageManager().removeReaction(workChannel, commands[1], Integer.parseInt(commands[2]));
                         else
                             System.err.println(datePfx() + " [X] Usage: rmreact <contentId> <(int)emoteId>");
                         break;

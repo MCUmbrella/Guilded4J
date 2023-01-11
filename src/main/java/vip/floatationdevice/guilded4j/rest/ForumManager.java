@@ -257,23 +257,65 @@ public class ForumManager extends RestManager
         );
     }
 
+    /**
+     * Add a reaction emote to a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ForumTopicReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/ForumTopicReactionCreate</a>
+     * @param channelId Channel ID where the forum topic exists.
+     * @param forumTopicId The ID of the forum topic.
+     * @param emoteId The ID of the emote to add.
+     */
     public void addReaction(String channelId, int forumTopicId, int emoteId) // asshole doesnt let we use a single ContentReactionCreate to do uniform actions
     {
-        //TODO
+        execute(Method.PUT,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/emotes/" + emoteId,
+                null
+        );
     }
 
+    /**
+     * Add a reaction emote to a forum topic comment.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ForumTopicCommentReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/ForumTopicCommentReactionCreate</a>
+     * @param channelId Channel ID where the forum topic exists.
+     * @param forumTopicId The ID of the forum topic.
+     * @param forumTopicCommentId The ID of the forum topic comment.
+     * @param emoteId The ID of the emote to add.
+     */
     public void addReaction(String channelId, int forumTopicId, int forumTopicCommentId, int emoteId)
     {
-        //TODO
+        execute(Method.PUT,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments/" + forumTopicCommentId + "/emotes/" + emoteId,
+                null
+        );
     }
 
-    public void deleteReaction(String channelId, int forumTopicId, int emoteId)
+    /**
+     * Remove a reaction emote of a forum topic.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ForumTopicReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/ForumTopicReactionDelete</a>
+     * @param channelId Channel ID where the forum topic exists.
+     * @param forumTopicId The ID of the forum topic.
+     * @param emoteId The ID of the emote to delete.
+     */
+    public void removeReaction(String channelId, int forumTopicId, int emoteId)
     {
-        //TODO
+        execute(Method.DELETE,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/emotes/" + emoteId,
+                null
+        );
     }
 
-    public void deleteReaction(String channelId, int forumTopicId, int forumTopicCommentId, int emoteId)
+    /**
+     * Remove a reaction emote of a forum topic comment.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ForumTopicCommentReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/ForumTopicCommentReactionDelete</a>
+     * @param channelId Channel ID where the forum topic exists.
+     * @param forumTopicId The ID of the forum topic.
+     * @param forumTopicCommentId The ID of the forum topic comment.
+     * @param emoteId The ID of the emote to delete.
+     */
+    public void removeReaction(String channelId, int forumTopicId, int forumTopicCommentId, int emoteId)
     {
-        //TODO
+        execute(Method.DELETE,
+                FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments/" + forumTopicCommentId + "/emotes/" + emoteId,
+                null
+        );
     }
 }

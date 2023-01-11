@@ -124,14 +124,6 @@ public class G4JClient
     }
 
     /**
-     * Gets the reaction manager.
-     */
-    public ReactionManager getReactionManager()
-    {
-        return (ReactionManager) getManagerOrCreate(ReactionManager.class);
-    }
-
-    /**
      * Gets the role manager.
      */
     public RoleManager getRoleManager()

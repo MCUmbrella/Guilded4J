@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import static vip.floatationdevice.guilded4j.G4JClient.MSG_CHANNEL_URL;
+import static vip.floatationdevice.guilded4j.G4JClient.REACTION_URL;
 
 /**
  * Manages the chat messages.
@@ -137,5 +138,41 @@ public class ChatMessageManager extends RestManager
         for(int i = 0; i != messagesJson.size(); i++)
             messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));
         return messages;
+    }
+
+    /**
+     * Add a reaction emote to a chat message.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ContentReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReactionCreate</a>
+     * @param channelId Channel UUID where the chat message exists.
+     * @param messageId The UUID of the chat message.
+     * @param emoteId The ID of the emote to add.
+     */
+    public void addReaction(String channelId, String messageId, int emoteId)
+    {
+        execute(Method.PUT,
+                REACTION_URL
+                        .replace("{channelId}", channelId)
+                        .replace("{contentId}", messageId)
+                        .replace("{emoteId}", Integer.toString(emoteId)),
+                null
+        );
+    }
+
+    /**
+     * Remove a reaction emote of a chat message.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/ContentReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/ContentReactionDelete</a>
+     * @param channelId Channel UUID where the chat message exists.
+     * @param messageId The UUID of the chat message.
+     * @param emoteId The ID of the emote to delete.
+     */
+    public void removeReaction(String channelId, String messageId, int emoteId)
+    {
+        execute(Method.DELETE,
+                REACTION_URL
+                        .replace("{channelId}", channelId)
+                        .replace("{contentId}", messageId)
+                        .replace("{emoteId}", Integer.toString(emoteId)),
+                null
+        );
     }
 }

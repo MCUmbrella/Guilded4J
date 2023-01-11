@@ -5,10 +5,58 @@
 
 package vip.floatationdevice.guilded4j.event;
 
-public class ForumTopicReactionDeletedEvent extends GuildedEvent //TODO
+import cn.hutool.json.JSONObject;
+import vip.floatationdevice.guilded4j.object.Emote;
+
+/**
+ * Event fired when a reaction emote is deleted from a forum topic.<br>
+ * <a href="https://www.guilded.gg/docs/api/websockets/ForumTopicReactionDeleted" target=_blank>https://www.guilded.gg/docs/api/websockets/ForumTopicReactionDeleted</a>
+ */
+public class ForumTopicReactionDeletedEvent extends GuildedEvent
 {
+    private final String channelId, createdBy;
+    private final int forumTopicId;
+    private final Emote emote;
+
     public ForumTopicReactionDeletedEvent(Object source, String json)
     {
         super(source, json);
+        JSONObject j = (JSONObject) new JSONObject(json).getByPath("d.reaction");
+        this.channelId = j.getStr("channelId");
+        this.createdBy = j.getStr("createdBy");
+        this.forumTopicId = j.getInt("forumTopicId");
+        this.emote = Emote.fromJSON(j.getJSONObject("emote"));
+    }
+
+    /**
+     * Get the UUID of the channel where the forum topic belongs to.
+     */
+    public String getChannelId()
+    {
+        return channelId;
+    }
+
+    /**
+     * Get the ID of the user who added the reaction.
+     */
+    public String getCreatedBy()
+    {
+        return createdBy;
+    }
+
+    /**
+     * Get the ID of the forum topic.
+     */
+    public int getForumTopicId()
+    {
+        return forumTopicId;
+    }
+
+    /**
+     * Get the Emote object of the reaction.
+     */
+    public Emote getEmote()
+    {
+        return emote;
     }
 }

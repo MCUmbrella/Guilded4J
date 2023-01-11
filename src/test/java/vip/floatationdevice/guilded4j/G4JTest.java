@@ -71,6 +71,36 @@ public class G4JTest
     }
 
     @Subscribe
+    public void onForumTopicReactionCreated(ForumTopicReactionCreatedEvent e)
+    {
+        System.out.println("ForumTopicReactionCreatedEvent\n" +
+                e.getServerID() + '\n' +
+                e.getOpCode() + '\n' +
+                e.getEventID() + '\n' +
+                e.getEventType() + '\n' +
+                e.getCreatedBy() + '\n' +
+                e.getChannelId() + '\n' +
+                e.getForumTopicId() + '\n' +
+                e.getEmote()
+        );
+    }
+
+    @Subscribe
+    public void onForumTopicReactionDeleted(ForumTopicReactionDeletedEvent e)
+    {
+        System.out.println("ForumTopicReactionDeletedEvent\n" +
+                e.getServerID() + '\n' +
+                e.getOpCode() + '\n' +
+                e.getEventID() + '\n' +
+                e.getEventType() + '\n' +
+                e.getCreatedBy() + '\n' +
+                e.getChannelId() + '\n' +
+                e.getForumTopicId() + '\n' +
+                e.getEmote()
+        );
+    }
+
+    @Subscribe
     public void onUnknownGuildedEvent(UnknownGuildedEvent e)
     {
         System.err.println("===== Unknown Guilded event =====\nRaw: " + e.getRawString() + "\nReason: " + e.getReason());

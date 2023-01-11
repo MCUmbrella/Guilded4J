@@ -183,8 +183,8 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 - [x] ForumTopicCommentDeletedEvent
 - [x] ForumTopicPinnedEvent
 - [x] ForumTopicUnpinnedEvent
-- [ ] ForumTopicReactionCreatedEvent
-- [ ] ForumTopicReactionDeletedEvent
+- [x] ForumTopicReactionCreatedEvent
+- [x] ForumTopicReactionDeletedEvent
 - [x] ForumTopicCommentReactionCreatedEvent
 - [x] ForumTopicCommentReactionDeletedEvent
 - [x] ForumTopicLockedEvent

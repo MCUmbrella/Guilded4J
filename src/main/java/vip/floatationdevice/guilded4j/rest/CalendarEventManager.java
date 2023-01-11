@@ -13,9 +13,6 @@ import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.CalendarEvent;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 
-import static vip.floatationdevice.guilded4j.G4JClient.CALENDAR_CHANNEL_URL;
-import static vip.floatationdevice.guilded4j.G4JClient.CALENDAR_RSVP_URL;
-
 /**
  * Manages the calendar events.
  */

@@ -8,8 +8,6 @@ package vip.floatationdevice.guilded4j.rest;
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONArray;
 
-import static vip.floatationdevice.guilded4j.G4JClient.ROLES_URL;
-
 /**
  * Manages the roles of a server.
  */

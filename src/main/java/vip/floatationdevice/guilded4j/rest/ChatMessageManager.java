@@ -16,9 +16,6 @@ import vip.floatationdevice.guilded4j.object.Embed;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import static vip.floatationdevice.guilded4j.G4JClient.MSG_CHANNEL_URL;
-import static vip.floatationdevice.guilded4j.G4JClient.REACTION_URL;
-
 /**
  * Manages the chat messages.
  */

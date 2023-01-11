@@ -27,26 +27,6 @@ import java.util.ArrayList;
  */
 public class G4JClient
 {
-    public static final String
-            CHANNELS_URL = "https://www.guilded.gg/api/v1/channels",
-            CALENDAR_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events",
-            CALENDAR_RSVP_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events/{calendarEventId}/rsvps",
-            SERVER_URL = "https://www.guilded.gg/api/v1/servers/{serverId}",
-            MSG_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/messages",
-            NICKNAME_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/nickname",
-            MEMBERS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members",
-            BANS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/bans",
-            FORUM_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/topics",
-            LIST_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/items",
-            DOC_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/docs",
-            USER_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/xp",
-            ROLE_XP_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/roles/{roleId}/xp",
-            SOCIAL_LINK_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/social-links/{type}",
-            GROUP_URL = "https://www.guilded.gg/api/v1/groups/{groupId}/members/{userId}",
-            ROLES_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/members/{userId}/roles",
-            REACTION_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/content/{contentId}/emotes/{emoteId}",
-            WEBHOOKS_URL = "https://www.guilded.gg/api/v1/servers/{serverId}/webhooks",
-            USERS_URL = "https://www.guilded.gg/api/v1/users/{userId}";
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
     private final EventBus bus = new EventBus();
     private final String token;

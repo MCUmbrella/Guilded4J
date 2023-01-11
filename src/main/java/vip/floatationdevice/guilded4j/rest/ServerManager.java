@@ -8,8 +8,6 @@ package vip.floatationdevice.guilded4j.rest;
 import cn.hutool.http.Method;
 import vip.floatationdevice.guilded4j.object.Server;
 
-import static vip.floatationdevice.guilded4j.G4JClient.SERVER_URL;
-
 /**
  * Manages servers.
  */

@@ -12,8 +12,6 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.ListItem;
 import vip.floatationdevice.guilded4j.object.ListItemSummary;
 
-import static vip.floatationdevice.guilded4j.G4JClient.LIST_CHANNEL_URL;
-
 /**
  * Manages the list items.
  */

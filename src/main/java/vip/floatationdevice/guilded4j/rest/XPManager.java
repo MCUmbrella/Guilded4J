@@ -8,9 +8,6 @@ package vip.floatationdevice.guilded4j.rest;
 import cn.hutool.http.Method;
 import cn.hutool.json.JSONObject;
 
-import static vip.floatationdevice.guilded4j.G4JClient.ROLE_XP_URL;
-import static vip.floatationdevice.guilded4j.G4JClient.USER_XP_URL;
-
 /**
  * Manages the XP of users or groups.
  */

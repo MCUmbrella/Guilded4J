@@ -11,8 +11,6 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.enums.ServerChannelType;
 import vip.floatationdevice.guilded4j.object.ServerChannel;
 
-import static vip.floatationdevice.guilded4j.G4JClient.CHANNELS_URL;
-
 /**
  * Manages the server channels.
  */

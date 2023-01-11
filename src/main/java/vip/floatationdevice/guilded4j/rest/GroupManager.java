@@ -7,8 +7,6 @@ package vip.floatationdevice.guilded4j.rest;
 
 import cn.hutool.http.Method;
 
-import static vip.floatationdevice.guilded4j.G4JClient.GROUP_URL;
-
 /**
  * Manages groups of a server.
  */

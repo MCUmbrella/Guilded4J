@@ -11,8 +11,6 @@ import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.Doc;
 
-import static vip.floatationdevice.guilded4j.G4JClient.DOC_CHANNEL_URL;
-
 /**
  * Manages the documents.
  */

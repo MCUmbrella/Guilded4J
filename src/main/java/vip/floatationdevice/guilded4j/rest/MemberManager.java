@@ -16,8 +16,6 @@ import vip.floatationdevice.guilded4j.object.User;
 
 import java.util.HashMap;
 
-import static vip.floatationdevice.guilded4j.G4JClient.*;
-
 /**
  * Manages the server members.
  */

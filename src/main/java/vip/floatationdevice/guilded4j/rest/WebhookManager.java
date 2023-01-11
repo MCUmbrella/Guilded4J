@@ -11,8 +11,6 @@ import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.object.Webhook;
 
-import static vip.floatationdevice.guilded4j.G4JClient.WEBHOOKS_URL;
-
 /**
  * Manages webhooks.
  */

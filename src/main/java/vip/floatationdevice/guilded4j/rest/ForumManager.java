@@ -13,8 +13,6 @@ import vip.floatationdevice.guilded4j.object.ForumTopic;
 import vip.floatationdevice.guilded4j.object.ForumTopicComment;
 import vip.floatationdevice.guilded4j.object.ForumTopicSummary;
 
-import static vip.floatationdevice.guilded4j.G4JClient.FORUM_CHANNEL_URL;
-
 /**
  * Manages the forum threads.
  */

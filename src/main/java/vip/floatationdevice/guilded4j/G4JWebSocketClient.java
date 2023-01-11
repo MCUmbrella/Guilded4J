@@ -59,7 +59,7 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         super(WEBSOCKET_URI);
         clearHeaders();
-        addHeader("User-Agent", "Guilded4J/0.9.12 Java-WebSocket/1.5.3");
+        addHeader("User-Agent", "Guilded4J/0.9.13 Java-WebSocket/1.5.3");
         addHeader("Authorization", "Bearer " + token);
         if(lastMessageId != null) addHeader("guilded-last-message-id", lastMessageId);
         setHeartbeatInterval(heartbeatIntervalMs);

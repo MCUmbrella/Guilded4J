@@ -198,9 +198,9 @@ public class ForumManager extends RestManager
         JSONArray commentsArray = execute(Method.GET,
                 FORUM_CHANNEL_URL.replace("{channelId}", channelId) + '/' + forumTopicId + "/comments",
                 null
-                ).getJSONArray("forumTopicComments");
+        ).getJSONArray("forumTopicComments");
         ForumTopicComment[] comments = new ForumTopicComment[commentsArray.size()];
-        for(int i=0; i!=commentsArray.size(); i++)
+        for(int i = 0; i != commentsArray.size(); i++)
             comments[i] = ForumTopicComment.fromJSON(commentsArray.getJSONObject(i));
         return comments;
     }
@@ -262,7 +262,7 @@ public class ForumManager extends RestManager
         //TODO
     }
 
-    public void addReaction(String channelId, int forumTopicId, int forumTopicCommentId,int emoteId)
+    public void addReaction(String channelId, int forumTopicId, int forumTopicCommentId, int emoteId)
     {
         //TODO
     }

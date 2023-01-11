@@ -21,8 +21,8 @@ public class Util
 
     public static void checkNullArgument(Object... objects)
     {
-        for (Object object : objects)
-            if (object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
+        for(Object object : objects)
+            if(object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
     }
 
     /**
@@ -30,7 +30,7 @@ public class Util
      * @param o The object to check.
      * @return True if the object can be converted to UUID string, false otherwise.
      */
-    public static boolean isUUID(Object o) {return o != null && UUID_REGEX.matcher(o.toString()).matches();}
+    public static boolean isUUID(Object o){return o != null && UUID_REGEX.matcher(o.toString()).matches();}
 
     /**
      * Check if the given object can be converted to an ID format used by Guilded
@@ -39,7 +39,7 @@ public class Util
      * @param o The object to check.
      * @return True if the object can be converted to GID, false otherwise.
      */
-    public static boolean isGID(Object o) {return o != null && GID_REGEX.matcher(o.toString()).matches();}
+    public static boolean isGID(Object o){return o != null && GID_REGEX.matcher(o.toString()).matches();}
 
     /**
      * Converts ISO8601 timestamp to Calendar object.
@@ -60,7 +60,7 @@ public class Util
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeParts[1]));
         String[] secondsParts = timeParts[2].split("\\."); // [01, 706Z]
         calendar.set(Calendar.SECOND, Integer.parseInt(secondsParts[0]));
-        if (secondsParts.length > 1)
+        if(secondsParts.length > 1)
             calendar.set(Calendar.MILLISECOND, Integer.parseInt(secondsParts[1].substring(0, 3))); // drops 'Z'
         return calendar;
     }
@@ -100,7 +100,7 @@ public class Util
                 {
                     sleep(milliseconds);
                 }
-                catch (InterruptedException ignored) {}
+                catch(InterruptedException ignored) {}
                 r.run();
             }
         };

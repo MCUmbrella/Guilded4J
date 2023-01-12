@@ -1,16 +1,46 @@
 ![Guilded4J](https://user-images.githubusercontent.com/40854260/163506743-1fdac3d2-f585-46d4-b365-c60ca5208eae.png)
-_Guilded API wrapper for Java development_
+# Guilded API wrapper for Java development
+**Build status:** [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
+**Official Guilded server:** [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))<br>
+# Getting started with the ping-pong bot
+1. [Add G4J as dependency](https://github.com/MCUmbrella/Guilded4J/wiki/How-to-import-Guilded4J-to-your-Maven-project)
+2. Start coding
+```java
+import com.google.common.eventbus.Subscribe;
+import vip.floatationdevice.guilded4j.G4JClient;
+import vip.floatationdevice.guilded4j.event.ChatMessageCreatedEvent;
+import vip.floatationdevice.guilded4j.object.ChatMessage;
 
-Build status: [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
-Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))<br>
-# Using:
+public class Main{
+    final static G4JClient client = new G4JClient("YOUR TOKEN HERE");
+    @Subscribe
+    public void onMessage(ChatMessageCreatedEvent event){
+        ChatMessage m = event.getChatMessage();
+        if(m.getContent().equals("ping")) // someone sends "ping"
+            client.getChatMessageManager().createChannelMessage(
+                    m.getChannelId(), // send to
+                    "pong", // text content
+                    null, // embed content
+                    new String[]{m.getId()}, // reply to
+                    false, // reply privately
+                    false // reply silently
+            );
+    }
+    public static void main(String[] args){
+        client.registerEventListener(new Main());
+        client.connectWebSocket();
+    }
+}
+```
+3. Compile & have fun :)
+# Useful resources
 - [Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
 - [Javadoc](http://docs.floatationdevice.vip/guilded4j/)
-- [Some example bots](https://github.com/MCUmbrella/Guilded4J-Examples)
-# CAUTION:
+- [Other example bots](https://github.com/MCUmbrella/Guilded4J-Examples)
+# NOTE:
 - The Guilded bot API is still in early development. Don't request Guilded4J to add some functions that are not implemented on the Guilded side.
-- The API is only available to users who participate in the early access for now.<br>
-# Features & Progress:
+
+# Supported features & Progress:
 <details><summary>Chat & messaging</summary><p>
 
 - [x] Create message - createChannelMessage()
@@ -39,6 +69,7 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 
 <details><summary>Members</summary><p>
 
+- [x] Get user info - getUser()
 - [x] Update/delete nickname - setMemberNickname()
 - [x] Get member info - getServerMember()
 - [x] Kick server member - kickServerMember()
@@ -145,12 +176,6 @@ Official Guilded server: [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guil
 <details><summary>Server</summary><p>
 
 - [x] Get server info - getServer()
-
-</p></details>
-
-<details><summary>User</summary><p>
-
-- [ ] Get user info - getUser()
 
 </p></details>
 

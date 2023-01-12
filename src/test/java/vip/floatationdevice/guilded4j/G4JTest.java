@@ -6,7 +6,8 @@ import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
 import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
 import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
 
-import java.util.Scanner;
+import java.net.*;
+import java.util.*;
 
 /**
  * Some temporary test code will go here.
@@ -24,10 +25,10 @@ public class G4JTest
         s = new G4JDebugger.G4JSession();
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
-        //c.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 59909)));
+        c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         System.out.println(c.getMemberManager().getUser("@me"));
-        System.out.println(c.getMemberManager().getUser("8412wg5d"));
+        //System.out.println(c.getMemberManager().getUser("8412wg5d"));
         //==============================================================
     }
 

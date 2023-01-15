@@ -65,7 +65,10 @@ public class CalendarEventManager extends RestManager
      */
     public CalendarEvent[] getCalendarEvents(String channelId)
     {
-        JSONArray eventsJson = execute(Method.GET, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("calendarEvents");
+        JSONArray eventsJson = execute(Method.GET,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId),
+                null
+        ).getJSONArray("calendarEvents");
         CalendarEvent[] events = new CalendarEvent[eventsJson.size()];
         for(int i = 0; i != eventsJson.size(); i++)
             events[i] = CalendarEvent.fromJSON(eventsJson.getJSONObject(i));
@@ -81,7 +84,11 @@ public class CalendarEventManager extends RestManager
      */
     public CalendarEvent[] getCalendarEvents(String channelId, GObjectQuery query)
     {
-        JSONArray eventsJson = execute(Method.GET, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + query.toString(), null).getJSONArray("calendarEvents");
+        JSONArray eventsJson = execute(
+                Method.GET,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + query.toString(),
+                null
+        ).getJSONArray("calendarEvents");
         CalendarEvent[] events = new CalendarEvent[eventsJson.size()];
         for(int i = 0; i != eventsJson.size(); i++)
             events[i] = CalendarEvent.fromJSON(eventsJson.getJSONObject(i));
@@ -98,8 +105,10 @@ public class CalendarEventManager extends RestManager
     public CalendarEvent getCalendarEvent(String channelId, int calendarEventId)
     {
         return CalendarEvent.fromJSON(
-                execute(Method.GET, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + "/" + calendarEventId, null)
-                        .getJSONObject("calendarEvent")
+                execute(Method.GET,
+                        CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + "/" + calendarEventId,
+                        null
+                ).getJSONObject("calendarEvent")
         );
     }
 
@@ -142,7 +151,10 @@ public class CalendarEventManager extends RestManager
      */
     public void deleteCalendarEvent(String channelId, int calendarEventId)
     {
-        execute(Method.DELETE, CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + "/" + calendarEventId, null);
+        execute(Method.DELETE,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + "/" + calendarEventId,
+                null
+        );
     }
 
     /**
@@ -192,7 +204,10 @@ public class CalendarEventManager extends RestManager
      */
     public void deleteCalendarEventRsvp(String channelId, int calendarEventId, String userId)
     {
-        execute(Method.DELETE, CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)) + "/" + userId, null);
+        execute(Method.DELETE,
+                CALENDAR_RSVP_URL.replace("{channelId}", channelId).replace("{calendarEventId}", String.valueOf(calendarEventId)) + "/" + userId,
+                null
+        );
     }
 
     /**

@@ -73,7 +73,10 @@ public class ServerChannelManager extends RestManager
      */
     public void deleteServerChannel(String channelId)
     {
-        execute(Method.DELETE, CHANNELS_URL + "/" + channelId, null);
+        execute(Method.DELETE,
+                CHANNELS_URL + "/" + channelId,
+                null
+        );
     }
 
     /**

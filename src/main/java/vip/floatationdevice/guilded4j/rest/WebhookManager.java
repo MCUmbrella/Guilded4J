@@ -53,7 +53,8 @@ public class WebhookManager extends RestManager
                 null
         ).getJSONArray("webhooks");
         Webhook[] webhooks = new Webhook[webhooksJson.size()];
-        for(int i = 0; i != webhooksJson.size(); i++) webhooks[i] = Webhook.fromJSON(webhooksJson.getJSONObject(i));
+        for(int i = 0; i != webhooksJson.size(); i++)
+            webhooks[i] = Webhook.fromJSON(webhooksJson.getJSONObject(i));
         return webhooks;
     }
 
@@ -70,7 +71,9 @@ public class WebhookManager extends RestManager
     {
         return Webhook.fromJSON(execute(Method.PUT,
                 WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId,
-                new JSONObject(new JSONConfig().setIgnoreNullValue(true)).set("name", name).set("channelId", channelId)
+                new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("name", name)
+                        .set("channelId", channelId)
         ).getJSONObject("webhook"));
     }
 
@@ -82,7 +85,10 @@ public class WebhookManager extends RestManager
      */
     public void deleteWebhook(String serverId, String webhookId)
     {
-        execute(Method.DELETE, WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId, null);
+        execute(Method.DELETE,
+                WEBHOOKS_URL.replace("{serverId}", serverId) + "/" + webhookId,
+                null
+        );
     }
 
     /**

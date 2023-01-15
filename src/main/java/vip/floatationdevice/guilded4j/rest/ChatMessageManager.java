@@ -64,7 +64,10 @@ public class ChatMessageManager extends RestManager
      */
     public void deleteChannelMessage(String channelId, String messageId)
     {
-        execute(Method.DELETE, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null);
+        execute(Method.DELETE,
+                MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId,
+                null
+        );
     }
 
     /**
@@ -102,8 +105,10 @@ public class ChatMessageManager extends RestManager
     public ChatMessage getChannelMessage(String channelId, String messageId)
     {
         return ChatMessage.fromJSON(
-                execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId, null)
-                        .getJSONObject("message")
+                execute(Method.GET,
+                        MSG_CHANNEL_URL.replace("{channelId}", channelId) + "/" + messageId,
+                        null
+                ).getJSONObject("message")
         );
     }
 
@@ -115,7 +120,10 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage[] getChannelMessages(String channelId)
     {
-        JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("messages");
+        JSONArray messagesJson = execute(Method.GET,
+                MSG_CHANNEL_URL.replace("{channelId}", channelId),
+                null
+        ).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
             messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));
@@ -130,7 +138,10 @@ public class ChatMessageManager extends RestManager
      */
     public ChatMessage[] getChannelMessages(String channelId, GObjectQuery query)
     {
-        JSONArray messagesJson = execute(Method.GET, MSG_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("messages");
+        JSONArray messagesJson = execute(Method.GET,
+                MSG_CHANNEL_URL.replace("{channelId}", channelId) + query,
+                null
+        ).getJSONArray("messages");
         ChatMessage[] messages = new ChatMessage[messagesJson.size()];
         for(int i = 0; i != messagesJson.size(); i++)
             messages[i] = ChatMessage.fromJSON(messagesJson.getJSONObject(i));

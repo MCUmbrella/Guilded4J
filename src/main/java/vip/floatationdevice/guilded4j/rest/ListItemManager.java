@@ -49,9 +49,13 @@ public class ListItemManager extends RestManager
      */
     public ListItemSummary[] getListItems(String channelId)
     {
-        JSONArray itemsJson = execute(Method.GET, LIST_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("listItems");
+        JSONArray itemsJson = execute(Method.GET,
+                LIST_CHANNEL_URL.replace("{channelId}", channelId),
+                null
+        ).getJSONArray("listItems");
         ListItemSummary[] items = new ListItemSummary[itemsJson.size()];
-        for(int i = 0; i < itemsJson.size(); i++) items[i] = ListItemSummary.fromJSON(itemsJson.getJSONObject(i));
+        for(int i = 0; i < itemsJson.size(); i++)
+            items[i] = ListItemSummary.fromJSON(itemsJson.getJSONObject(i));
         return items;
     }
 
@@ -65,8 +69,10 @@ public class ListItemManager extends RestManager
     public ListItem getListItem(String channelId, String listItemId)
     {
         return ListItem.fromJSON(
-                execute(Method.GET, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId, null)
-                        .getJSONObject("listItem")
+                execute(Method.GET,
+                        LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId,
+                        null
+                ).getJSONObject("listItem")
         );
     }
 
@@ -98,7 +104,10 @@ public class ListItemManager extends RestManager
      */
     public void deleteListItem(String channelId, String listItemId)
     {
-        execute(Method.DELETE, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId, null);
+        execute(Method.DELETE,
+                LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId,
+                null
+        );
     }
 
     /**
@@ -109,7 +118,10 @@ public class ListItemManager extends RestManager
      */
     public void completeListItem(String channelId, String listItemId)
     {
-        execute(Method.POST, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete", null);
+        execute(Method.POST,
+                LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete",
+                null
+        );
     }
 
     /**
@@ -120,6 +132,9 @@ public class ListItemManager extends RestManager
      */
     public void uncompleteListItem(String channelId, String listItemId)
     {
-        execute(Method.DELETE, LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete", null);
+        execute(Method.DELETE,
+                LIST_CHANNEL_URL.replace("{channelId}", channelId) + "/" + listItemId + "/complete",
+                null
+        );
     }
 }

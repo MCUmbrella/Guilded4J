@@ -34,10 +34,12 @@ public class MemberManager extends RestManager
      */
     public User getUser(String userId)
     {
-        return User.fromJSON(execute(Method.GET,
-                USERS_URL.replace("{userId}", userId),
-                null
-        ).getJSONObject("user"));
+        return User.fromJSON(
+                execute(Method.GET,
+                        USERS_URL.replace("{userId}", userId),
+                        null
+                ).getJSONObject("user")
+        );
     }
 
     /**
@@ -76,10 +78,12 @@ public class MemberManager extends RestManager
      */
     public ServerMember getServerMember(String serverId, String userId)
     {
-        return ServerMember.fromJSON(execute(Method.GET,
-                MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId,
-                null
-        ).getJSONObject("member"));
+        return ServerMember.fromJSON(
+                execute(Method.GET,
+                        MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId,
+                        null
+                ).getJSONObject("member")
+        );
     }
 
     /**
@@ -90,7 +94,10 @@ public class MemberManager extends RestManager
      */
     public void kickServerMember(String serverId, String userId)
     {
-        execute(Method.DELETE, MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId, null);
+        execute(Method.DELETE,
+                MEMBERS_URL.replace("{serverId}", serverId) + "/" + userId,
+                null
+        );
     }
 
     /**
@@ -101,7 +108,10 @@ public class MemberManager extends RestManager
      */
     public ServerMemberSummary[] getServerMembers(String serverId)
     {
-        JSONArray membersJson = execute(Method.GET, MEMBERS_URL.replace("{serverId}", serverId), null).getJSONArray("members");
+        JSONArray membersJson = execute(Method.GET,
+                MEMBERS_URL.replace("{serverId}", serverId),
+                null
+        ).getJSONArray("members");
         ServerMemberSummary[] members = new ServerMemberSummary[membersJson.size()];
         for(int i = 0; i < membersJson.size(); i++)
             members[i] = ServerMemberSummary.fromJSON(membersJson.getJSONObject(i));
@@ -152,7 +162,10 @@ public class MemberManager extends RestManager
      */
     public void unbanServerMember(String serverId, String userId)
     {
-        execute(Method.DELETE, BANS_URL.replace("{serverId}", serverId) + "/" + userId, null);
+        execute(Method.DELETE,
+                BANS_URL.replace("{serverId}", serverId) + "/" + userId,
+                null
+        );
     }
 
     /**
@@ -163,9 +176,13 @@ public class MemberManager extends RestManager
      */
     public ServerMemberBan[] getServerMemberBans(String serverId)
     {
-        JSONArray bansJson = execute(Method.GET, BANS_URL.replace("{serverId}", serverId), null).getJSONArray("serverMemberBans");
+        JSONArray bansJson = execute(Method.GET,
+                BANS_URL.replace("{serverId}", serverId),
+                null
+        ).getJSONArray("serverMemberBans");
         ServerMemberBan[] bans = new ServerMemberBan[bansJson.size()];
-        for(int i = 0; i < bansJson.size(); i++) bans[i] = ServerMemberBan.fromJSON(bansJson.getJSONObject(i));
+        for(int i = 0; i < bansJson.size(); i++)
+            bans[i] = ServerMemberBan.fromJSON(bansJson.getJSONObject(i));
         return bans;
     }
 

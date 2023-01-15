@@ -27,7 +27,10 @@ public class RoleManager extends RestManager
      */
     public void addRoleMember(String serverId, int roleId, String userId)
     {
-        execute(Method.PUT, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId, null);
+        execute(Method.PUT,
+                ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId,
+                null
+        );
     }
 
     /**
@@ -38,7 +41,10 @@ public class RoleManager extends RestManager
      */
     public void removeRoleMember(String serverId, int roleId, String userId)
     {
-        execute(Method.DELETE, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId, null);
+        execute(Method.DELETE,
+                ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId) + "/" + roleId,
+                null
+        );
     }
 
     /**
@@ -50,9 +56,13 @@ public class RoleManager extends RestManager
      */
     public int[] getMemberRoles(String serverId, String userId)
     {
-        JSONArray rolesJson = execute(Method.GET, ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId), null).getJSONArray("roleIds");
+        JSONArray rolesJson = execute(Method.GET,
+                ROLES_URL.replace("{serverId}", serverId).replace("{userId}", userId),
+                null
+        ).getJSONArray("roleIds");
         int[] roles = new int[rolesJson.size()];
-        for(int i = 0; i != rolesJson.size(); i++) roles[i] = ((int) rolesJson.get(i));
+        for(int i = 0; i != rolesJson.size(); i++)
+            roles[i] = ((int) rolesJson.get(i));
         return roles;
     }
 }

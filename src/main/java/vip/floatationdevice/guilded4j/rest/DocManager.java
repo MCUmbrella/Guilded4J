@@ -64,7 +64,10 @@ public class DocManager extends RestManager
      */
     public void deleteDoc(String channelId, int docId)
     {
-        execute(Method.DELETE, DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId, null);
+        execute(Method.DELETE,
+                DOC_CHANNEL_URL.replace("{channelId}", channelId) + "/" + docId,
+                null
+        );
     }
 
     /**
@@ -91,9 +94,13 @@ public class DocManager extends RestManager
      */
     public Doc[] getChannelDocs(String channelId)
     {
-        JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId), null).getJSONArray("docs");
+        JSONArray docsJson = execute(Method.GET,
+                DOC_CHANNEL_URL.replace("{channelId}", channelId),
+                null
+        ).getJSONArray("docs");
         Doc[] docs = new Doc[docsJson.size()];
-        for(int i = 0; i < docsJson.size(); i++) docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
+        for(int i = 0; i < docsJson.size(); i++)
+            docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
         return docs;
     }
 
@@ -105,9 +112,13 @@ public class DocManager extends RestManager
      */
     public Doc[] getChannelDocs(String channelId, GObjectQuery query)
     {
-        JSONArray docsJson = execute(Method.GET, DOC_CHANNEL_URL.replace("{channelId}", channelId) + query, null).getJSONArray("docs");
+        JSONArray docsJson = execute(Method.GET,
+                DOC_CHANNEL_URL.replace("{channelId}", channelId) + query,
+                null
+        ).getJSONArray("docs");
         Doc[] docs = new Doc[docsJson.size()];
-        for(int i = 0; i < docsJson.size(); i++) docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
+        for(int i = 0; i < docsJson.size(); i++)
+            docs[i] = Doc.fromJSON(docsJson.getJSONObject(i));
         return docs;
     }
 }

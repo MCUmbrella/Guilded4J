@@ -94,7 +94,7 @@ public class ServerChannelManager extends RestManager
                                 set("name", name).
                                 set("topic", topic).
                                 set("isPublic", isPublic)
-                )
+                ).getJSONObject("channel")
         );
     }
 

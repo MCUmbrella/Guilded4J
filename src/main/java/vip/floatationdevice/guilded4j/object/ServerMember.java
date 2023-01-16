@@ -103,6 +103,16 @@ public class ServerMember extends User
     }
 
     /**
+     * Check if the member has the specified role.
+     */
+    public boolean hasRole(int roleId)
+    {
+        for(int i : roleIds)
+            if(i == roleId) return true;
+        return false;
+    }
+
+    /**
      * Convert ServerMember object to JSON string.
      * @return JSON string.
      */

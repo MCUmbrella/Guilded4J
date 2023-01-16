@@ -57,6 +57,16 @@ public class ServerMemberSummary extends UserSummary
     }
 
     /**
+     * Check if the member has the specified role.
+     */
+    public boolean hasRole(int roleId)
+    {
+        for(int i : roleIds)
+            if(i == roleId) return true;
+        return false;
+    }
+
+    /**
      * Convert the ServerMemberSummary object to a JSON string.
      * @return JSON string.
      */

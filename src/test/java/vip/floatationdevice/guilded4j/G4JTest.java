@@ -37,7 +37,8 @@ public class G4JTest
                 "  },\n" +
                 "  \"roleIds\": [114514,1919810]\n" +
                 "}"));
-        System.out.println(new JSONObject(member.toString()).toStringPretty());
+        System.out.println(member.hasRole(114514));
+        System.out.println(member.hasRole(1));
     }
 
     @Subscribe

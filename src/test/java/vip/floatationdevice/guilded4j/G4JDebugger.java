@@ -598,12 +598,12 @@ public class G4JDebugger
                             ServerMember member = client.getMemberManager().getServerMember(workServer, commands[1]);
                             System.out.print(datePfx() + " [i] Member " + commands[1] + ":\n"
                                     + "  - Nickname: " + member.getNickname() + "\n"
-                                    + "  - Real name: " + member.getUser().getName() + "\n"
-                                    + "  - User ID: " + member.getUser().getId() + "\n"
-                                    + "  - Type: " + member.getUser().getType() + "\n"
+                                    + "  - Real name: " + member.getName() + "\n"
+                                    + "  - User ID: " + member.getId() + "\n"
+                                    + "  - Type: " + member.getType() + "\n"
                                     + "  - Roles: " + Arrays.toString(member.getRoleIds()) + "\n"
                                     + "  - Joined at: " + member.getJoinTime() + "\n"
-                                    + "  - Registered at: " + member.getUser().getCreationTime() + "\n"
+                                    + "  - Registered at: " + member.getCreationTime() + "\n"
                             );
                         }
                         else
@@ -845,7 +845,7 @@ public class G4JDebugger
         @Subscribe
         public void onMemberJoined(ServerMemberJoinedEvent e)
         {
-            System.out.print("\n" + datePfx() + " [i] " + e.getMember().getUser().getName() + " (ID: " + e.getMember().getUser().getId() + ") joined the server " + e.getServerID() + prompt());
+            System.out.print("\n" + datePfx() + " [i] " + e.getMember().getName() + " (ID: " + e.getMember().getId() + ") joined the server " + e.getServerID() + prompt());
         }
 
         @Subscribe

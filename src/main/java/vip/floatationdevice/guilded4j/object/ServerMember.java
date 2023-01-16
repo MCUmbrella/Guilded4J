@@ -13,9 +13,8 @@ import vip.floatationdevice.guilded4j.Util;
  * Represents a member of a server.<br>
  * <a href="https://www.guilded.gg/docs/api/members/ServerMember" target=_blank>https://www.guilded.gg/docs/api/members/ServerMember</a>
  */
-public class ServerMember
+public class ServerMember extends User
 {
-    User user;
     int[] roleIds;
     String nickname;
     String joinedAt;
@@ -32,27 +31,27 @@ public class ServerMember
                 json.get("roleIds"),
                 json.get("joinedAt")
         );
+        JSONObject user = json.getJSONObject("user");
+        Util.checkNullArgument(
+                user.getStr("id"),
+                user.getStr("name"),
+                user.getStr("createdAt")
+        );
         Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
         int[] roleIds = new int[rawRoleIds.length];
         for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
-        return new ServerMember()
-                .setUser(User.fromJSON(json.getJSONObject("user")))
-                .setRoleIds(roleIds)
-                .setNickname(json.getStr("nickname"))
-                .setJoinTime(json.getStr("joinedAt"))
-                .setIsOwner(json.getBool("isOwner"));
-    }
-
-    /**
-     * Get the member's user object.
-     * @return The member's user object.
-     */
-    public User getUser(){return user;}
-
-    public ServerMember setUser(User user)
-    {
-        this.user = user;
-        return this;
+        ServerMember m = new ServerMember();
+        m.setId(user.getStr("id"));
+        m.setType(user.getStr("type"));
+        m.setName(user.getStr("name"));
+        m.setAvatar(user.getStr("avatar"));
+        m.setBanner(user.getStr("banner"));
+        m.setCreationTime(user.getStr("createdAt"));
+        m.setRoleIds(roleIds);
+        m.setNickname(json.getStr("nickname"));
+        m.setJoinTime(json.getStr("joinedAt"));
+        m.setIsOwner(json.getBool("isOwner"));
+        return m;
     }
 
     /**
@@ -111,7 +110,13 @@ public class ServerMember
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("user", new JSONObject(user.toString()))
+                .set("user", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("id", getId())
+                        .set("type", getType().toString().toLowerCase())
+                        .set("name", getName())
+                        .set("avatar", getAvatar())
+                        .set("banner", getBanner())
+                        .set("createdAt", getCreationTime()))
                 .set("roleIds", roleIds)
                 .set("nickname", nickname)
                 .set("joinedAt", joinedAt)

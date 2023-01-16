@@ -1,6 +1,5 @@
 ![Guilded4J](https://user-images.githubusercontent.com/40854260/163506743-1fdac3d2-f585-46d4-b365-c60ca5208eae.png)
 # Guilded API wrapper for Java development
-**Build status:** [![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)<br>
 **Official Guilded server:** [guilded.gg/Guilded4J-Cafe](https://www.guilded.gg/Guilded4J-Cafe) (or use [this](https://www.guilded.gg/r/zzzE8VxJNR?i=8412wg5d))<br>
 # Getting started with the ping-pong bot
 1. [Add G4J as dependency](https://github.com/MCUmbrella/Guilded4J/wiki/How-to-import-Guilded4J-to-your-Maven-project)
@@ -34,6 +33,9 @@ public class Main{
 ```
 3. Compile & have fun :)
 # Useful resources
+- Development builds:
+  - [CircleCI: ![CircleCI status](https://dl.circleci.com/status-badge/img/gh/MCUmbrella/Guilded4J/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/MCUmbrella/Guilded4J/tree/master)
+  - [GH Actions: ![GH Action status](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/MCUmbrella/Guilded4J/actions/workflows/maven.yml)
 - [Wiki page](https://github.com/MCUmbrella/Guilded4J/wiki)
 - [Javadoc](http://docs.floatationdevice.vip/guilded4j/)
 - [Other example bots](https://github.com/MCUmbrella/Guilded4J-Examples)

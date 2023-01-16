@@ -46,7 +46,7 @@ public class MemberManager extends RestManager
      * Update/delete a member's nickname.<br>
      * <a href="https://www.guilded.gg/docs/api/members/MemberNicknameUpdate" target=_blank>https://www.guilded.gg/docs/api/members/MemberNicknameUpdate</a>
      * @param serverId The ID of the server where the member is.
-     * @param userId The ID of the member.
+     * @param userId The ID of the member, "@me" can be used to refer to bot itself.
      * @param nickname The nickname to assign to the member (use {@code null} to delete nickname).
      * @return The nickname to be set when setting nickname, {@code null} when deleting nickname.
      */
@@ -73,7 +73,7 @@ public class MemberManager extends RestManager
      * Get a server member by ID.<br>
      * <a href="https://www.guilded.gg/docs/api/members/ServerMemberRead" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberRead</a>
      * @param serverId The ID of the server where the member is.
-     * @param userId The ID of the member.
+     * @param userId The ID of the member, "@me" can be used to refer to bot itself.
      * @return The member's ServerMember object.
      */
     public ServerMember getServerMember(String serverId, String userId)
@@ -90,7 +90,7 @@ public class MemberManager extends RestManager
      * Kick a member from the server.<br>
      * <a href="https://www.guilded.gg/docs/api/members/ServerMemberDelete" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberDelete</a>
      * @param serverId The ID of the server where the member is.
-     * @param userId The ID of the member.
+     * @param userId The ID of the member, "@me" can be used to refer to bot itself, which makes the bot leave the server.
      */
     public void kickServerMember(String serverId, String userId)
     {

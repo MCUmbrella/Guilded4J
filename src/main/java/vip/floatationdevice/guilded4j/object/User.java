@@ -15,6 +15,16 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class User
 {
+    /**
+     * Represents the type of user.
+     */
+    public enum Type
+    {
+        USER,
+        BOT,
+        UNKNOWN
+    }
+
     private String id, type, name, avatar, banner, createdAt;
 
     /**
@@ -51,9 +61,21 @@ public class User
 
     /**
      * Get the type of user.
-     * @return The type of user. If this property is absent, it can assumed to be of type 'user'.
+     * @return User.Type.USER, BOT, or UNKNOWN. If UNKNOWN is returned, report it to the devs of G4J.
      */
-    public String getType(){return type;}
+    public Type getType()
+    {
+        if(type == null) return Type.USER;
+        else
+            try
+            {
+                return Type.valueOf(type.toUpperCase());
+            }
+            catch(IllegalArgumentException e)
+            {
+                return Type.UNKNOWN;
+            }
+    }
 
     public User setType(String type)
     {

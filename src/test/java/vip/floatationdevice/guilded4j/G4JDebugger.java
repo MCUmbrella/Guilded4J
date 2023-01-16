@@ -583,9 +583,9 @@ public class G4JDebugger
                             ServerMemberSummary[] members = client.getMemberManager().getServerMembers(workServer);
                             for(ServerMemberSummary member : members)
                                 System.out.println("=============================="
-                                        + "\n  - Name: " + member.getUser().getName()
-                                        + "\n  - ID: " + member.getUser().getId()
-                                        + "\n  - Type: " + member.getUser().getType()
+                                        + "\n  - Name: " + member.getName()
+                                        + "\n  - ID: " + member.getId()
+                                        + "\n  - Type: " + member.getType()
                                         + "\n  - Roles: " + Arrays.toString(member.getRoleIds())
                                 );
                         }

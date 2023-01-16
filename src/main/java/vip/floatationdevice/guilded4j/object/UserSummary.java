@@ -48,9 +48,21 @@ public class UserSummary
 
     /**
      * Get the type of the user.
-     * @return The type of user. If this property is absent, it can assumed to be of type 'user'.
+     * @return User.Type.USER, BOT, or UNKNOWN. If UNKNOWN is returned, report it to the devs of G4J.
      */
-    public String getType(){return type;}
+    public User.Type getType()
+    {
+        if(type == null) return User.Type.USER;
+        else
+            try
+            {
+                return User.Type.valueOf(type.toUpperCase());
+            }
+            catch(IllegalArgumentException e)
+            {
+                return User.Type.UNKNOWN;
+            }
+    }
 
     public UserSummary setType(String type)
     {

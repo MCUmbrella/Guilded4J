@@ -13,9 +13,8 @@ import vip.floatationdevice.guilded4j.Util;
  * Represents a short summary of a server member.<br>
  * <a href="https://www.guilded.gg/docs/api/members/ServerMemberSummary" target=_blank>https://www.guilded.gg/docs/api/members/ServerMemberSummary</a>
  */
-public class ServerMemberSummary
+public class ServerMemberSummary extends UserSummary
 {
-    UserSummary user;
     int[] roleIds;
 
     /**
@@ -28,24 +27,21 @@ public class ServerMemberSummary
                 json.get("user"),
                 json.get("roleIds")
         );
+        JSONObject user = json.getJSONObject("user");
+        Util.checkNullArgument(
+                user.getStr("id"),
+                user.getStr("name")
+        );
         Object[] rawRoleIds = json.getJSONArray("roleIds").toArray();
         int[] roleIds = new int[rawRoleIds.length];
         for(int i = 0; i < rawRoleIds.length; i++) roleIds[i] = (int) rawRoleIds[i];
-        return new ServerMemberSummary()
-                .setUser(UserSummary.fromJSON(json.getJSONObject("user")))
-                .setRoleIds(roleIds);
-    }
-
-    /**
-     * Get the user summary of the member.
-     * @return The user summary.
-     */
-    public UserSummary getUser(){return user;}
-
-    public ServerMemberSummary setUser(UserSummary user)
-    {
-        this.user = user;
-        return this;
+        ServerMemberSummary s = new ServerMemberSummary();
+        s.setId(user.getStr("id"));
+        s.setType(user.getStr("type"));
+        s.setName(user.getStr("name"));
+        s.setAvatar(user.getStr("avatar"));
+        s.setRoleIds(roleIds);
+        return s;
     }
 
     /**
@@ -68,7 +64,11 @@ public class ServerMemberSummary
     public String toString()
     {
         return new JSONObject(new JSONConfig().setIgnoreNullValue(true))
-                .set("user", new JSONObject(user.toString()))
+                .set("user", new JSONObject(new JSONConfig().setIgnoreNullValue(true))
+                        .set("id", id)
+                        .set("type", type)
+                        .set("name", name)
+                        .set("avatar", avatar))
                 .set("roleIds", roleIds)
                 .toString();
     }

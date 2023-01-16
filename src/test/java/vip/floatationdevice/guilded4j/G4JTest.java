@@ -6,8 +6,7 @@ import vip.floatationdevice.guilded4j.event.GuildedEvent;
 import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
 import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
 import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
-import vip.floatationdevice.guilded4j.object.ServerMember;
-import vip.floatationdevice.guilded4j.object.User;
+import vip.floatationdevice.guilded4j.object.ServerMemberSummary;
 
 import java.util.Scanner;
 
@@ -30,7 +29,14 @@ public class G4JTest
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
         //c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
-        ServerMember member = c.getMemberManager().getServerMember(s.savedServerId, "@me");
+        ServerMemberSummary member = ServerMemberSummary.fromJSON(new JSONObject("{\n" +
+                "  \"user\": {\n" +
+                "    \"id\": \"Ann6LewA\",\n" +
+                "    \"type\": \"user\",\n" +
+                "    \"name\": \"Leopold Stotch\"\n" +
+                "  },\n" +
+                "  \"roleIds\": [114514,1919810]\n" +
+                "}"));
         System.out.println(new JSONObject(member.toString()).toStringPretty());
     }
 

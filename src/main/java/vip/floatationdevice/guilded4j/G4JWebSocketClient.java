@@ -85,7 +85,7 @@ public class G4JWebSocketClient extends WebSocketClient
     public void onMessage(String rawMessage)
     {
         JSONObject json = new JSONObject(rawMessage);
-        if(verboseEnabled) System.out.println(json.toStringPretty());
+        if(verboseEnabled) System.out.println("[Guilded4J/G4JWebsocketClient] " + json.toStringPretty());
         Integer op = json.getInt("op");//operation code: 0, 1, 2, 8, 9
         String eventType = json.getStr("t");//hope they wont change this key name in the future
 

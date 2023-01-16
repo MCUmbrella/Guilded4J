@@ -24,7 +24,7 @@ public class G4JTest
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
-        //c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
+        c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
         ChatMessage m = c.getChatMessageManager().createChannelMessage(s.savedChannelId, "hello world!");
         c.getChatMessageManager().createChannelMessage(m.setContent(m.getContent().toUpperCase()));

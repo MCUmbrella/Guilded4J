@@ -30,7 +30,7 @@ public class G4JClient
     private final ArrayList<RestManager> managers = new ArrayList<>(); // contains all the REST managers
     private final EventBus bus = new EventBus();
     private final String token;
-    public boolean verboseEnabled = false, autoReconnect = false;
+    private boolean verboseEnabled = false, autoReconnectEnabled = false;
     public G4JWebSocketClient ws;
     int httpTimeout = 20000;
     private String lastMessageId = null;
@@ -153,7 +153,7 @@ public class G4JClient
     {
         Bot self = e.getSelf();
         if(verboseEnabled)
-            System.out.println("[G4JClient] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" +
+            System.out.println("[Guilded4J/G4JClient] WebSocket client logged in (last message ID: " + e.getLastMessageId() + ", heartbeat: " + e.getHeartbeatInterval() + "ms)" +
                     "\n Logged in as " + self.getName() + " (user ID: " + self.getId() + ", bot ID: " + self.getBotId() + ", home server ID: " + e.getServerID() + ")"
             );
     }
@@ -162,7 +162,7 @@ public class G4JClient
     public void onResumeEvent(ResumeEvent e)
     {
         if(verboseEnabled)
-            System.out.println("[G4JClient] Recovered previous session");
+            System.out.println("[Guilded4J/G4JClient] Recovered previous session");
     }
 
     @Subscribe
@@ -175,15 +175,15 @@ public class G4JClient
     private void onDisconnect(GuildedWebSocketClosedEvent e)
     {
         if(verboseEnabled)
-            System.out.println("[G4JClient] Connection closed " + (e.isRemote() ? "(by remote peer) " : "") + (e.isUnexpected() ? "(by error)" : "") +
+            System.out.println("[Guilded4J/G4JClient] Connection closed " + (e.isRemote() ? "(by remote peer) " : "") + (e.isUnexpected() ? "(by error)" : "") +
                     "\n Code: " + e.getCode() + ", reason: " + e.getReason()
             );
-        if(e.isUnexpected() && autoReconnect) // auto reconnect?
+        if(e.isUnexpected() && autoReconnectEnabled) // auto reconnect?
         {
             if(e.getCode() == 1007)
             {
                 if(verboseEnabled)
-                    System.err.println("[G4JClient] Unable to recover the previous session. Establish clean connection");
+                    System.err.println("[Guilded4J/G4JClient] Unable to recover the previous session. Establish clean connection");
                 Util.runAsyncTaskLater(new Runnable()
                 {
                     @Override
@@ -195,7 +195,7 @@ public class G4JClient
             }
             else
             {
-                if(verboseEnabled) System.err.println("[G4JClient] Connection lost. Attempting to reconnect");
+                if(verboseEnabled) System.err.println("[Guilded4J/G4JClient] Connection lost. Attempting to reconnect");
                 Util.runAsyncTaskLater(new Runnable()
                 {
                     @Override
@@ -250,8 +250,24 @@ public class G4JClient
      */
     public G4JClient setAutoReconnect(boolean status)
     {
-        autoReconnect = status;
+        autoReconnectEnabled = status;
         return this;
+    }
+
+    /**
+     * Check if the client has enabled verbose mode.
+     */
+    public boolean verboseEnabled()
+    {
+        return verboseEnabled;
+    }
+
+    /**
+     * Check if the client has enabled auto reconnect.
+     */
+    public boolean autoReconnectEnabled()
+    {
+        return autoReconnectEnabled;
     }
 
     /**

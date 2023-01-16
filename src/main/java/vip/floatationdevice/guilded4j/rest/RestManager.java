@@ -97,6 +97,7 @@ public abstract class RestManager
      */
     public JSONObject execute(Method method, String url, JSONObject body)
     {
+        if(verboseEnabled) System.out.println("[Guilded4J/RestManager] " + method.toString() + ' ' + url);
         HttpResponse res;
         try
         {
@@ -109,10 +110,10 @@ public abstract class RestManager
                     .timeout(httpTimeout);
             if(body != null) req.body(body.toString());
             if(proxy != null) req.setProxy(proxy);
-            if(verboseEnabled) System.out.println(req.toString());
+            if(verboseEnabled) System.out.println("[Guilded4J/RestManager] " + req.toString());
             req.header("Authorization", "Bearer " + authToken);
             res = req.execute();
-            if(verboseEnabled) System.out.println(res.toString());
+            if(verboseEnabled) System.out.println("[Guilded4J/RestManager] " + res.toString());
         }
         catch(IORuntimeException e)
         {

@@ -1,12 +1,9 @@
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.JSONObject;
+import cn.hutool.json.*;
 import com.google.common.eventbus.Subscribe;
-import vip.floatationdevice.guilded4j.event.GuildedEvent;
-import vip.floatationdevice.guilded4j.event.GuildedWebSocketClosedEvent;
-import vip.floatationdevice.guilded4j.event.GuildedWebSocketWelcomeEvent;
-import vip.floatationdevice.guilded4j.event.UnknownGuildedEvent;
-import vip.floatationdevice.guilded4j.object.ServerMemberSummary;
+import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.object.*;
 
 import java.util.Scanner;
 
@@ -29,16 +26,8 @@ public class G4JTest
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
         //c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
-        ServerMemberSummary member = ServerMemberSummary.fromJSON(new JSONObject("{\n" +
-                "  \"user\": {\n" +
-                "    \"id\": \"Ann6LewA\",\n" +
-                "    \"type\": \"user\",\n" +
-                "    \"name\": \"Leopold Stotch\"\n" +
-                "  },\n" +
-                "  \"roleIds\": [114514,1919810]\n" +
-                "}"));
-        System.out.println(member.hasRole(114514));
-        System.out.println(member.hasRole(1));
+        ChatMessage m = c.getChatMessageManager().createChannelMessage(s.savedChannelId, "hello world!");
+        c.getChatMessageManager().createChannelMessage(m.setContent(m.getContent().toUpperCase()));
     }
 
     @Subscribe

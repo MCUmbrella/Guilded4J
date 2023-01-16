@@ -56,6 +56,43 @@ public class ChatMessageManager extends RestManager
         );
     }
 
+    public ChatMessage createChannelMessage(String channelId, String content)
+    {
+        return createChannelMessage(channelId, content, null, null, null, null);
+    }
+
+    public ChatMessage createChannelMessage(String channelId, Embed embed)
+    {
+        return createChannelMessage(channelId, null, new Embed[]{embed}, null, null, null);
+    }
+
+    public ChatMessage createChannelMessage(String channelId, String content, String... replyMessageIds)
+    {
+        return createChannelMessage(channelId, content, null, replyMessageIds, null, null);
+    }
+
+    public ChatMessage createChannelMessage(String channelId, Embed embed, String... replyMessageIds)
+    {
+        return createChannelMessage(channelId, null, new Embed[]{embed}, replyMessageIds, null, null);
+    }
+
+    /**
+     * Send a new chat message using the existing chat message object.
+     * @param message The chat message object.
+     * @return The newly created chat message object.
+     */
+    public ChatMessage createChannelMessage(ChatMessage message)
+    {
+        return createChannelMessage(
+                message.getChannelId(),
+                message.getContent(),
+                message.getEmbeds(),
+                message.getReplyMessageIds(),
+                message.isPrivate(),
+                message.isSilent()
+        );
+    }
+
     /**
      * Delete a channel message.<br>
      * <a href="https://www.guilded.gg/docs/api/chat/ChannelMessageDelete" target=_blank>https://www.guilded.gg/docs/api/chat/ChannelMessageDelete</a>

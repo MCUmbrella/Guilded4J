@@ -18,7 +18,7 @@ import vip.floatationdevice.guilded4j.Util;
 public class ChatMessage
 {
     private String id, type, serverId, channelId, content, createdAt, createdBy, createdByWebhookId, updatedAt;
-    private Boolean isPrivate;
+    private Boolean isPrivate, isSilent;
     private String[] replyMessageIds;
     private Embed[] embeds;
 
@@ -51,11 +51,11 @@ public class ChatMessage
                 .setServerId(json.getStr("serverId"))
                 .setChannelId(json.getStr("channelId"))
                 .setContent(json.getStr("content"))
-                .setCreationTime(json.getStr("createdAt"))
+                .setCreatedAt(json.getStr("createdAt"))
                 .setCreatorId(json.getStr("createdBy"))
-                .setWebhookCreatorId(json.getStr("createdByWebhookId"))
+                .setCreatedByWebhookId(json.getStr("createdByWebhookId"))
                 .setUpdateTime(json.getStr("updatedAt"))
-                .setPrivateReply(json.getBool("isPrivate"))
+                .setIsPrivate(json.getBool("isPrivate"))
                 .setReplyMessageIds(replyMessageIds)
                 .setEmbeds(embeds);
     }
@@ -126,7 +126,7 @@ public class ChatMessage
      */
     public String getCreationTime(){return createdAt;}
 
-    public ChatMessage setCreationTime(String createdAt)
+    public ChatMessage setCreatedAt(String createdAt)
     {
         this.createdAt = createdAt;
         return this;
@@ -150,7 +150,7 @@ public class ChatMessage
      */
     public String getWebhookCreatorId(){return createdByWebhookId;}
 
-    public ChatMessage setWebhookCreatorId(String createdByWebhookId)
+    public ChatMessage setCreatedByWebhookId(String createdByWebhookId)
     {
         this.createdByWebhookId = createdByWebhookId;
         return this;
@@ -197,13 +197,16 @@ public class ChatMessage
      * @return {@code true} if the message is a private reply, {@code false} if not,
      * {@code null} if the message is not replying to any messages.
      */
-    public Boolean isPrivate()
+    public boolean isPrivate()
     {
-        return replyMessageIds != null ?
-                isPrivate != null
-                        ? isPrivate
-                        : false
-                : null;
+        return replyMessageIds != null &&
+                (isPrivate != null ? isPrivate : false);
+    }
+
+    public boolean isSilent()
+    {
+        return replyMessageIds != null &&
+                (isSilent != null ? isSilent : false);
     }
 
     /**
@@ -218,7 +221,7 @@ public class ChatMessage
      */
     public Boolean isWebhookMessage(){return createdByWebhookId != null;}
 
-    public ChatMessage setPrivateReply(Boolean isPrivate)
+    public ChatMessage setIsPrivate(Boolean isPrivate)
     {
         this.isPrivate = isPrivate;
         return this;

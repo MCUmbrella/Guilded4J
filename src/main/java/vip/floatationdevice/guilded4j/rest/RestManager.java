@@ -24,6 +24,7 @@ import java.util.HashMap;
 public abstract class RestManager
 {
     public static final String
+            USER_AGENT = "Guilded4J/0.9.15 Hutool/5.8.11",
             CHANNELS_URL = "https://www.guilded.gg/api/v1/channels",
             CALENDAR_CHANNEL_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events",
             CALENDAR_RSVP_URL = "https://www.guilded.gg/api/v1/channels/{channelId}/events/{calendarEventId}/rsvps",
@@ -103,7 +104,7 @@ public abstract class RestManager
         {
             HttpRequest req = new HttpRequest(UrlBuilder.of(url))
                     .method(method)
-                    .header("User-Agent", "Guilded4J/0.9.14 Hutool/5.8.11")
+                    .header("User-Agent", USER_AGENT)
                     .header("Authorization", "[REDACTED]")
                     .header("Accept", "application/json")
                     .header("Content-type", "application/json")

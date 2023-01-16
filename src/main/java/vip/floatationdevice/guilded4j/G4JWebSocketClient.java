@@ -25,6 +25,7 @@ import java.net.URI;
  */
 public class G4JWebSocketClient extends WebSocketClient
 {
+    public static final String USER_AGENT = "Guilded4J/0.9.15 Java-WebSocket/1.5.3";
     /**
      * Guilded API's WebSocket URI (<a>wss://api.guilded.gg/v1/websocket</a>)
      */
@@ -45,7 +46,7 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         super(WEBSOCKET_URI);
         clearHeaders();
-        addHeader("User-Agent", "Guilded4J/0.9.14 Java-WebSocket/1.5.3");
+        addHeader("User-Agent", USER_AGENT);
         addHeader("Authorization", "Bearer " + token);
         setHeartbeatInterval(heartbeatIntervalMs);
     }
@@ -59,7 +60,7 @@ public class G4JWebSocketClient extends WebSocketClient
     {
         super(WEBSOCKET_URI);
         clearHeaders();
-        addHeader("User-Agent", "Guilded4J/0.9.14 Java-WebSocket/1.5.3");
+        addHeader("User-Agent", USER_AGENT);
         addHeader("Authorization", "Bearer " + token);
         if(lastMessageId != null) addHeader("guilded-last-message-id", lastMessageId);
         setHeartbeatInterval(heartbeatIntervalMs);

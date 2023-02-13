@@ -15,7 +15,7 @@ import vip.floatationdevice.guilded4j.Util;
 public class Emote
 {
     private int id;
-    private String name, url;
+    private String name, url, serverId;
 
     public static Emote fromJSON(JSONObject json)
     {
@@ -27,7 +27,8 @@ public class Emote
         return new Emote()
                 .setId(json.getInt("id"))
                 .setName(json.getStr("name"))
-                .setUrl(json.getStr("url"));
+                .setUrl(json.getStr("url"))
+                .setServerId(json.getStr("serverId"));
     }
 
     /**
@@ -35,16 +36,32 @@ public class Emote
      */
     public int getId(){return id;}
 
+    /**
+     * Get the name of the emote.
+     */
+    public String getName(){return name;}
+
+    /**
+     * Get the URL of the emote image.
+     */
+    public String getUrl()
+    {
+        return url;
+    }
+
+    /**
+     * Get the ID of the server the emote was created on.
+     */
+    public String getServerId()
+    {
+        return serverId;
+    }
+
     public Emote setId(int id)
     {
         this.id = id;
         return this;
     }
-
-    /**
-     * Get the name of the emote.
-     */
-    public String getName(){return name;}
 
     public Emote setName(String name)
     {
@@ -55,6 +72,12 @@ public class Emote
     public Emote setUrl(String url)
     {
         this.url = url;
+        return this;
+    }
+
+    public Emote setServerId(String serverId)
+    {
+        this.serverId = serverId;
         return this;
     }
 

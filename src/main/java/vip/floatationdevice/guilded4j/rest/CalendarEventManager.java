@@ -229,4 +229,20 @@ public class CalendarEventManager extends RestManager
             calendarEventRsvps[i] = CalendarEventRsvp.fromJSON(jsonArray.getJSONObject(i));
         return calendarEventRsvps;
     }
+
+    public void addReaction(String channelId, int calendarEventId, int emoteId) //TODO
+    {
+    }
+
+    public void removeReaction(String channelId, int calendarEventId, int emoteId) //TODO
+    {
+    }
+
+    public void addReaction(String channelId, int calendarEventId, int calendarEventCommentId, int emoteId) //TODO
+    {
+    }
+
+    public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId,int emoteId) //TODO
+    {
+    }
 }

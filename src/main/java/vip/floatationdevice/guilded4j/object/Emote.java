@@ -88,6 +88,7 @@ public class Emote
                 .set("id", id)
                 .set("name", name)
                 .set("url", url)
+                .set("serverId", serverId)
                 .toString();
     }
 }

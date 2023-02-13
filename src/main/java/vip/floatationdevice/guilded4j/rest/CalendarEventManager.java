@@ -230,19 +230,65 @@ public class CalendarEventManager extends RestManager
         return calendarEventRsvps;
     }
 
+    /**
+     * Add a reaction emote to a calendar event.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/CalendarEventReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/CalendarEventReactionCreate</a>
+     * @param channelId The ID of the channel where the calendar event exists.
+     * @param calendarEventId The ID of the calendar event.
+     * @param emoteId The ID of the reaction emote.
+     */
     public void addReaction(String channelId, int calendarEventId, int emoteId) //TODO
     {
+        execute(Method.PUT,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/emotes/" + emoteId,
+                null
+        );
     }
 
+    /**
+     * Remove a reaction emote from a calendar event.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/CalendarEventReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/CalendarEventReactionDelete</a>
+     * @param channelId The ID of the channel where the calendar event exists.
+     * @param calendarEventId The ID of the calendar event.
+     * @param emoteId The ID of the reaction emote.
+     */
     public void removeReaction(String channelId, int calendarEventId, int emoteId) //TODO
     {
+        execute(Method.DELETE,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/emotes/" + emoteId,
+                null
+        );
     }
 
+    /**
+     * Add a reaction emote to a comment within an event.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/CalendarEventCommentReactionCreate" target=_blank>https://www.guilded.gg/docs/api/reactions/CalendarEventCommentReactionCreate</a>
+     * @param channelId The ID of the channel where the calendar event exists.
+     * @param calendarEventId The ID of the calendar event.
+     * @param calendarEventCommentId The ID of the calendar event comment.
+     * @param emoteId The ID of the reaction emote.
+     */
     public void addReaction(String channelId, int calendarEventId, int calendarEventCommentId, int emoteId) //TODO
     {
+        execute(Method.PUT,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId + "/emotes/" + emoteId,
+                null
+        );
     }
 
+    /**
+     * Remove a reaction emote to a comment within an event.<br>
+     * <a href="https://www.guilded.gg/docs/api/reactions/CalendarEventCommentReactionDelete" target=_blank>https://www.guilded.gg/docs/api/reactions/CalendarEventCommentReactionDelete</a>
+     * @param channelId The ID of the channel where the calendar event exists.
+     * @param calendarEventId The ID of the calendar event.
+     * @param calendarEventCommentId The ID of the calendar event comment.
+     * @param emoteId The ID of the reaction emote.
+     */
     public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId,int emoteId) //TODO
     {
+        execute(Method.DELETE,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId + "/emotes/" + emoteId,
+                null
+        );
     }
 }

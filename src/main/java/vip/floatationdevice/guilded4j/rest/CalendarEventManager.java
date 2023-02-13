@@ -237,7 +237,7 @@ public class CalendarEventManager extends RestManager
      * @param calendarEventId The ID of the calendar event.
      * @param emoteId The ID of the reaction emote.
      */
-    public void addReaction(String channelId, int calendarEventId, int emoteId) //TODO
+    public void addReaction(String channelId, int calendarEventId, int emoteId)
     {
         execute(Method.PUT,
                 CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/emotes/" + emoteId,
@@ -252,7 +252,7 @@ public class CalendarEventManager extends RestManager
      * @param calendarEventId The ID of the calendar event.
      * @param emoteId The ID of the reaction emote.
      */
-    public void removeReaction(String channelId, int calendarEventId, int emoteId) //TODO
+    public void removeReaction(String channelId, int calendarEventId, int emoteId)
     {
         execute(Method.DELETE,
                 CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/emotes/" + emoteId,
@@ -268,7 +268,7 @@ public class CalendarEventManager extends RestManager
      * @param calendarEventCommentId The ID of the calendar event comment.
      * @param emoteId The ID of the reaction emote.
      */
-    public void addReaction(String channelId, int calendarEventId, int calendarEventCommentId, int emoteId) //TODO
+    public void addReaction(String channelId, int calendarEventId, int calendarEventCommentId, int emoteId)
     {
         execute(Method.PUT,
                 CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId + "/emotes/" + emoteId,
@@ -284,7 +284,7 @@ public class CalendarEventManager extends RestManager
      * @param calendarEventCommentId The ID of the calendar event comment.
      * @param emoteId The ID of the reaction emote.
      */
-    public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId,int emoteId) //TODO
+    public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId,int emoteId)
     {
         execute(Method.DELETE,
                 CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId + "/emotes/" + emoteId,

@@ -1,9 +1,7 @@
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.*;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
-import vip.floatationdevice.guilded4j.object.*;
 
 import java.util.Scanner;
 
@@ -51,5 +49,27 @@ public class G4JTest
     public void onGuildedEvent(GuildedEvent e)
     {
         lastMessageId = e.getEventID();
+    }
+
+    @Subscribe
+    public void onReactionAdd(CalendarEventReactionCreatedEvent e)
+    {
+        System.out.println(e.getCalendarEventId() + ' ' +
+                e.getServerID() + ' ' +
+                e.getChannelId() + ' ' +
+                e.getCreatedBy() + ' ' +
+                e.getEmote().toString()
+        );
+    }
+
+    @Subscribe
+    public void onReactionDel(CalendarEventReactionDeletedEvent e)
+    {
+        System.out.println(e.getCalendarEventId() + ' ' +
+                e.getServerID() + ' ' +
+                e.getChannelId() + ' ' +
+                e.getCreatedBy() + ' ' +
+                e.getEmote().toString()
+        );
     }
 }

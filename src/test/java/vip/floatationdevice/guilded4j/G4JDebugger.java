@@ -226,7 +226,7 @@ public class G4JDebugger
                     case "exit":
                     {
                         System.out.println(datePfx() + " [i] Exiting");
-                        client.ws.close();
+                        client.disconnectWebSocket();
                         session.save();
                         System.exit(0);
                     }
@@ -767,7 +767,7 @@ public class G4JDebugger
             catch(NoSuchElementException e)
             {
                 System.out.println("\n" + datePfx() + " [i] Exiting");
-                client.ws.close();
+                client.disconnectWebSocket();
                 session.save();
                 break;
             }

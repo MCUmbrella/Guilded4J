@@ -31,7 +31,7 @@ public class G4JClient
     private final EventBus bus = new EventBus();
     private final String token;
     private boolean verboseEnabled = false, autoReconnectEnabled = false;
-    public G4JWebSocketClient ws;
+    private G4JWebSocketClient ws;
     int httpTimeout = 20000;
     private String lastMessageId = null;
     private Proxy proxy = Proxy.NO_PROXY;

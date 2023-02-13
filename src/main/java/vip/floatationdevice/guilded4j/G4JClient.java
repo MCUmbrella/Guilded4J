@@ -33,6 +33,7 @@ public class G4JClient
     private boolean verboseEnabled = false, autoReconnectEnabled = false;
     private G4JWebSocketClient ws;
     int httpTimeout = 20000;
+    long autoReconnectDelay = 1000;
     private String lastMessageId = null;
     private Proxy proxy = Proxy.NO_PROXY;
 
@@ -203,7 +204,7 @@ public class G4JClient
                     {
                         connectWebSocket(false, lastMessageId);
                     }
-                }, 1000);
+                }, autoReconnectDelay);
             }
         }
     }
@@ -219,6 +220,23 @@ public class G4JClient
         if(timeoutMs < 0) throw new IllegalArgumentException("HTTP request timeout cannot be negative");
         this.httpTimeout = timeoutMs;
         for(RestManager m : managers) m.setHttpTimeout(httpTimeout);
+    }
+
+    /**
+     * Get the auto reconnect delay.
+     */
+    public long getAutoReconnectDelay()
+    {
+        return autoReconnectDelay;
+    }
+
+    /**
+     * Set the auto reconnect delay.
+     */
+    public void setAutoReconnectDelay(long milliseconds)
+    {
+        if(milliseconds < 0) throw new IllegalArgumentException("Reconnect delay must be positive");
+        this.autoReconnectDelay = milliseconds;
     }
 
     /**

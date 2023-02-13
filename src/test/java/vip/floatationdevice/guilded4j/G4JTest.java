@@ -52,23 +52,27 @@ public class G4JTest
     }
 
     @Subscribe
-    public void onReactionAdd(CalendarEventReactionCreatedEvent e)
+    public void onReactionAdd(CalendarEventCommentReactionCreatedEvent e)
     {
-        System.out.println(e.getCalendarEventId() + ' ' +
-                e.getServerID() + ' ' +
-                e.getChannelId() + ' ' +
-                e.getCreatedBy() + ' ' +
+        System.out.println("" +
+                e.getCalendarEventId() + ',' +
+                e.getCalendarEventCommentId() + ',' +
+                e.getServerID() + ',' +
+                e.getChannelId() + ',' +
+                e.getCreatedBy() + ',' +
                 e.getEmote().toString()
         );
     }
 
     @Subscribe
-    public void onReactionDel(CalendarEventReactionDeletedEvent e)
+    public void onReactionDel(CalendarEventCommentReactionDeletedEvent e)
     {
-        System.out.println(e.getCalendarEventId() + ' ' +
-                e.getServerID() + ' ' +
-                e.getChannelId() + ' ' +
-                e.getCreatedBy() + ' ' +
+        System.out.println("" +
+                e.getCalendarEventId() + ',' +
+                e.getCalendarEventCommentId() + ',' +
+                e.getServerID() + ',' +
+                e.getChannelId() + ',' +
+                e.getCreatedBy() + ',' +
                 e.getEmote().toString()
         );
     }

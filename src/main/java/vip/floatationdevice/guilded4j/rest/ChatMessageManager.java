@@ -50,8 +50,8 @@ public class ChatMessageManager extends RestManager
                                     public JSONObject apply(Embed embed){return new JSONObject(embed.toString());}
                                 }).toArray()))
                                 .set("replyMessageIds", replyMessageIds == null ? null : new JSONArray(replyMessageIds))
-                                .set("isPrivate", isPrivate)
-                                .set("isSilent", isSilent)
+                                .set("isPrivate", replyMessageIds == null ? null : isPrivate)
+                                .set("isSilent", replyMessageIds == null ? null : isSilent)
                 ).getJSONObject("message")
         );
     }

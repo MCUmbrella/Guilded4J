@@ -46,7 +46,7 @@ public class ServerChannelManager extends RestManager
                                 .set("serverId", serverId)
                                 .set("groupId", groupId)
                                 .set("categoryId", categoryId)
-                )
+                ).getJSONObject("channel")
         );
     }
 
@@ -62,7 +62,7 @@ public class ServerChannelManager extends RestManager
                 execute(Method.GET,
                         CHANNELS_URL + "/" + channelId,
                         null
-                )
+                ).getJSONObject("channel")
         );
     }
 

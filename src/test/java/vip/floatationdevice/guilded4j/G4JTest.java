@@ -24,6 +24,9 @@ public class G4JTest
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
+        System.out.println(c.getServerChannelManager().getServerChannel("398dad55-e937-4127-86a4-9f480062dc2a"));
+        Util.checkNullArgument(c, System.class, s, null);
+        System.exit(0);
     }
 
     @Subscribe
@@ -49,31 +52,5 @@ public class G4JTest
     public void onGuildedEvent(GuildedEvent e)
     {
         lastMessageId = e.getEventID();
-    }
-
-    @Subscribe
-    public void onReactionAdd(CalendarEventCommentReactionCreatedEvent e)
-    {
-        System.out.println("" +
-                e.getCalendarEventId() + ',' +
-                e.getCalendarEventCommentId() + ',' +
-                e.getServerID() + ',' +
-                e.getChannelId() + ',' +
-                e.getCreatedBy() + ',' +
-                e.getEmote().toString()
-        );
-    }
-
-    @Subscribe
-    public void onReactionDel(CalendarEventCommentReactionDeletedEvent e)
-    {
-        System.out.println("" +
-                e.getCalendarEventId() + ',' +
-                e.getCalendarEventCommentId() + ',' +
-                e.getServerID() + ',' +
-                e.getChannelId() + ',' +
-                e.getCreatedBy() + ',' +
-                e.getEmote().toString()
-        );
     }
 }

@@ -21,8 +21,14 @@ public class Util
 
     public static void checkNullArgument(Object... objects)
     {
-        for(Object object : objects)
-            if(object == null) throw new IllegalArgumentException("Essential argument(s) shouldn't be null");
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i != objects.length; i++)
+        {
+            if(objects[i] == null)
+                throw new IllegalArgumentException("Unexpected null value at argument index " + i + ": " + sb.append(">null<"));
+            else
+                sb.append(objects[i].getClass().getSimpleName()).append(", ");
+        }
     }
 
     /**

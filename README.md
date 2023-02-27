@@ -62,6 +62,11 @@ public class Main{
 - [x] Update event - updateCalendarEvent()
 - [x] Get event info - getCalendarEvent()
 - [x] Get events - getCalendarEvents()
+- [x] Create comment - createCalendarEventComment()
+- [x] Update comment - updateCalendarEventComment()
+- [x] Delete comment - deleteCalendarEventComment()
+- [x] Get comment info - getCalendarEventComment()
+- [x] Get comments - getCalendarEventComments()
 - [x] Create or update RSVP - updateCalendarEventRsvp()
 - [x] Get RSVPs - getCalendarEventRsvps()
 - [x] Delete RSVP - deleteCalendarEventRsvp()
@@ -187,6 +192,9 @@ public class Main{
 - [x] BotServerMembershipDeletedEvent
 - [x] CalendarEventCreatedEvent
 - [x] CalendarEventDeletedEvent
+- [x] CalendarEventCommentCreatedEvent
+- [x] CalendarEventCommentUpdatedEvent
+- [x] CalendarEventCommentDeletedEvent
 - [x] CalendarEventRsvpDeletedEvent
 - [x] CalendarEventRsvpManyUpdatedEvent
 - [x] CalendarEventRsvpUpdatedEvent

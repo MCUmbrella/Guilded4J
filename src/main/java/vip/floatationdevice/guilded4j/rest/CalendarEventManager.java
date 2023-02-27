@@ -158,6 +158,14 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    /**
+     * Create a comment on an event.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentCreate" target=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentCreate</a>
+     * @param channelId The UUID of the channel that the calendar event belongs to.
+     * @param calendarEventId The ID of the event that the comment will be created at.
+     * @param content The content of the comment.
+     * @return The newly created comment's CalendarEventComment object.
+     */
     public CalendarEventComment createCalendarEventComment(String channelId, int calendarEventId, String content)
     {
         return CalendarEventComment.fromJSON(
@@ -168,6 +176,14 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    /**
+     * Update a comment on an event.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentUpdate" target=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentUpdate</a>
+     * @param channelId The UUID of the channel that the calendar event belongs to.
+     * @param calendarEventId The ID of the event that the comment belongs to.
+     * @param content The new content of the comment.
+     * @return The updated comment's CalendarEventComment object.
+     */
     public CalendarEventComment updateCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId, String content)
     {
         return CalendarEventComment.fromJSON(
@@ -178,6 +194,13 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    /**
+     * Delete a comment on an event.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentDelete" target=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentDelete</a>
+     * @param channelId The UUID of the channel that the calendar event belongs to.
+     * @param calendarEventId The ID of the event that the comment will be deleted from.
+     * @param calendarEventCommentId The ID of the comment that will be deleted.
+     */
     public void deleteCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId)
     {
         execute(Method.DELETE,
@@ -186,6 +209,14 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    /**
+     * Get a comment on the calendar event.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentRead" target=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentRead</a>
+     * @param channelId The UUID of the channel that the event belongs to.
+     * @param calendarEventId The ID of the event that the comment belongs to.
+     * @param calendarEventCommentId The ID of the comment to get.
+     * @return The comment's CalendarEventComment object.
+     */
     public CalendarEventComment getCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId)
     {
         return CalendarEventComment.fromJSON(
@@ -196,6 +227,13 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    /**
+     * Get a calendar event's comments.<br>
+     * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentReadMany" target=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventCommentReadMany</a>
+     * @param channelId The UUID of the channel that the event belongs to.
+     * @param calendarEventId The ID of the event to get the comments from.
+     * @return The CalendarEventComment array containing the comments of the event.
+     */
     public CalendarEventComment[] getCalendarEventComments(String channelId, int calendarEventId)
     {
         JSONArray commentsArray = execute(Method.GET,

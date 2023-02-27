@@ -9,41 +9,67 @@ import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.Util;
 
+/**
+ * The comment of a calendar event.<br>
+ * <a href="https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventComment" targer=_blank>https://www.guilded.gg/docs/api/calendarEventComments/CalendarEventComment</a>
+ */
 public class CalendarEventComment
 {
     private int id, calendarEventId;
     private String channelId, content, createdAt, updatedAt, createdBy;
 
+    /**
+     * Get the ID of the calendar event comment.
+     */
     public int getId()
     {
         return id;
     }
 
+    /**
+     * Get the ID of the calendar event that the comment belongs to.
+     */
     public int getCalendarEventId()
     {
         return calendarEventId;
     }
 
+    /**
+     * Get the UUID of the channel that the calendar event belongs to.
+     */
     public String getChannelId()
     {
         return channelId;
     }
 
+    /**
+     * Get the content of the comment.
+     */
     public String getContent()
     {
         return content;
     }
 
+    /**
+     * Get the ISO 8601 timestamp that the calendar event comment was created at.
+     */
     public String getCreatedAt()
     {
         return createdAt;
     }
 
+    /**
+     * Get the ID of the user who created this calendar event comment.
+     */
     public String getCreatedBy()
     {
         return createdBy;
     }
 
+    /**
+     * Get the ISO 8601 timestamp that the calendar event comment was updated at.
+     * If the comment hasn't benn updated, return null.
+     */
     public String getUpdatedAt()
     {
         return updatedAt;

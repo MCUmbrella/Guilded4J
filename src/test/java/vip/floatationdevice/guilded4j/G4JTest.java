@@ -24,22 +24,8 @@ public class G4JTest
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
-        //c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
+        c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
-        System.out.println(
-                new JSONObject(
-                        CalendarEventComment.fromJSON(new JSONObject("{\n" +
-                                "  \"id\": 1234567890,\n" +
-                                "  \"content\": \"I will be there!!\",\n" +
-                                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
-                                "  \"createdAt\": \"2022-06-15T20:15:00.706Z\",\n" +
-                                "  \"createdBy\": \"Ann6LewA\",\n" +
-                                "  \"calendarEventId\": 987654321\n" +
-                                "}")
-                        ).toString()
-                ).toStringPretty()
-        );
-        System.exit(0);
     }
 
     @Subscribe
@@ -65,5 +51,23 @@ public class G4JTest
     public void onGuildedEvent(GuildedEvent e)
     {
         lastMessageId = e.getEventID();
+    }
+
+    @Subscribe
+    public void onCalenderEventCommentCreated(CalendarEventCommentCreatedEvent e)
+    {
+        System.out.println("created\n"+e.getCalendarEventComment());
+    }
+
+    @Subscribe
+    public void onCalenderEventCommentUpdated(CalendarEventCommentUpdatedEvent e)
+    {
+        System.out.println("updated\n"+e.getCalendarEventComment());
+    }
+
+    @Subscribe
+    public void onCalenderEventCommentDeleted(CalendarEventCommentDeletedEvent e)
+    {
+        System.out.println("deleted\n"+e.getCalendarEventComment());
     }
 }

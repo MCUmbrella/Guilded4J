@@ -11,6 +11,7 @@ import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONObject;
 import vip.floatationdevice.guilded4j.misc.GObjectQuery;
 import vip.floatationdevice.guilded4j.object.CalendarEvent;
+import vip.floatationdevice.guilded4j.object.CalendarEventComment;
 import vip.floatationdevice.guilded4j.object.CalendarEventRsvp;
 
 /**
@@ -157,6 +158,56 @@ public class CalendarEventManager extends RestManager
         );
     }
 
+    public CalendarEventComment createCalendarEventComment(String channelId, int calendarEventId, String content)
+    {
+        return CalendarEventComment.fromJSON(
+                execute(Method.POST,
+                        CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments",
+                        new JSONObject().set("content", content)
+                ).getJSONObject("calendarEventComment")
+        );
+    }
+
+    public CalendarEventComment updateCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId, String content)
+    {
+        return CalendarEventComment.fromJSON(
+                execute(Method.PATCH,
+                        CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId,
+                        new JSONObject().set("content", content)
+                ).getJSONObject("calendarEventComment")
+        );
+    }
+
+    public void deleteCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId)
+    {
+        execute(Method.DELETE,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId,
+                null
+        );
+    }
+
+    public CalendarEventComment getCalendarEventComment(String channelId, int calendarEventId, int calendarEventCommentId)
+    {
+        return CalendarEventComment.fromJSON(
+                execute(Method.GET,
+                        CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId,
+                        null
+                ).getJSONObject("calendarEventComment")
+        );
+    }
+
+    public CalendarEventComment[] getCalendarEventComments(String channelId, int calendarEventId)
+    {
+        JSONArray commentsArray = execute(Method.GET,
+                CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments",
+                null
+        ).getJSONArray("calendarEventComments");
+        CalendarEventComment[] comments = new CalendarEventComment[commentsArray.size()];
+        for(int i = 0; i < commentsArray.size(); i++)
+            comments[i] = CalendarEventComment.fromJSON(commentsArray.getJSONObject(i));
+        return comments;
+    }
+
     /**
      * Get a calendar event RSVP.<br>
      * <a href="https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpRead" target=_blank>https://www.guilded.gg/docs/api/calendarEvents/CalendarEventRsvpRead</a>
@@ -284,7 +335,7 @@ public class CalendarEventManager extends RestManager
      * @param calendarEventCommentId The ID of the calendar event comment.
      * @param emoteId The ID of the reaction emote.
      */
-    public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId,int emoteId)
+    public void removeReaction(String channelId, int calendarEventId, int calendarEventCommentId, int emoteId)
     {
         execute(Method.DELETE,
                 CALENDAR_CHANNEL_URL.replace("{channelId}", channelId) + '/' + calendarEventId + "/comments/" + calendarEventCommentId + "/emotes/" + emoteId,

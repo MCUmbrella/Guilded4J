@@ -1,6 +1,5 @@
 package vip.floatationdevice.guilded4j;
 
-import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
 import vip.floatationdevice.guilded4j.object.CalendarEventComment;
@@ -26,6 +25,22 @@ public class G4JTest
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
         c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
+        CalendarEventComment c1 = c.getCalendarEventManager().createCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, "comment1");
+        CalendarEventComment c2 = c.getCalendarEventManager().createCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, "comment2");
+        sc.nextLine();
+        System.out.println("c1: " + c.getCalendarEventManager().getCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, c1.getId()));
+        sc.nextLine();
+        c.getCalendarEventManager().updateCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, c1.getId(), "comment1 new");
+        c.getCalendarEventManager().updateCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, c2.getId(), "comment2 new");
+        sc.nextLine();
+        for(CalendarEventComment c0 : c.getCalendarEventManager().getCalendarEventComments("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732))
+            System.out.println(c0);
+        sc.nextLine();
+        c.getCalendarEventManager().deleteCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, c1.getId());
+        c.getCalendarEventManager().deleteCalendarEventComment("fd40acc7-10c6-486c-8a13-6747e9e30d7c", 5963732, c2.getId());
+        sc.nextLine();
+        System.exit(0);
+
     }
 
     @Subscribe
@@ -56,18 +71,18 @@ public class G4JTest
     @Subscribe
     public void onCalenderEventCommentCreated(CalendarEventCommentCreatedEvent e)
     {
-        System.out.println("created\n"+e.getCalendarEventComment());
+        System.out.println("created\n" + e.getCalendarEventComment());
     }
 
     @Subscribe
     public void onCalenderEventCommentUpdated(CalendarEventCommentUpdatedEvent e)
     {
-        System.out.println("updated\n"+e.getCalendarEventComment());
+        System.out.println("updated\n" + e.getCalendarEventComment());
     }
 
     @Subscribe
     public void onCalenderEventCommentDeleted(CalendarEventCommentDeletedEvent e)
     {
-        System.out.println("deleted\n"+e.getCalendarEventComment());
+        System.out.println("deleted\n" + e.getCalendarEventComment());
     }
 }

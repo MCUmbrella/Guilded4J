@@ -60,7 +60,7 @@ public class CalendarEventComment
         this.calendarEventId = calendarEventId;
         return this;
     }
-    
+
     public CalendarEventComment setChannelId(String channelId)
     {
         this.channelId = channelId;

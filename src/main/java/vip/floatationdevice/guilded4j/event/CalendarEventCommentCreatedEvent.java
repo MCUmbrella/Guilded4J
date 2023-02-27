@@ -11,6 +11,7 @@ import vip.floatationdevice.guilded4j.object.CalendarEventComment;
 public class CalendarEventCommentCreatedEvent extends GuildedEvent
 {
     private final CalendarEventComment calendarEventComment;
+
     public CalendarEventCommentCreatedEvent(Object source, String json)
     {
         super(source, json);

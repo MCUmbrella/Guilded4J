@@ -1,7 +1,9 @@
 package vip.floatationdevice.guilded4j;
 
+import cn.hutool.json.JSONObject;
 import com.google.common.eventbus.Subscribe;
 import vip.floatationdevice.guilded4j.event.*;
+import vip.floatationdevice.guilded4j.object.CalendarEventComment;
 
 import java.util.Scanner;
 
@@ -22,10 +24,21 @@ public class G4JTest
         s.restore();
         c = new G4JClient(s.savedToken).setVerbose(true).setAutoReconnect(true);
         //c.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 9910)));
-        c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
+        //c.registerEventListener(new G4JTest()).connectWebSocket(true, null);
         //==============================================================
-        System.out.println(c.getServerChannelManager().getServerChannel("398dad55-e937-4127-86a4-9f480062dc2a"));
-        Util.checkNullArgument(c, System.class, s, null);
+        System.out.println(
+                new JSONObject(
+                        CalendarEventComment.fromJSON(new JSONObject("{\n" +
+                                "  \"id\": 1234567890,\n" +
+                                "  \"content\": \"I will be there!!\",\n" +
+                                "  \"channelId\": \"00000000-0000-0000-0000-000000000000\",\n" +
+                                "  \"createdAt\": \"2022-06-15T20:15:00.706Z\",\n" +
+                                "  \"createdBy\": \"Ann6LewA\",\n" +
+                                "  \"calendarEventId\": 987654321\n" +
+                                "}")
+                        ).toString()
+                ).toStringPretty()
+        );
         System.exit(0);
     }
 

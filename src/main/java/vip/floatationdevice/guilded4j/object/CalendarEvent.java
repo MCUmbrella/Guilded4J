@@ -19,7 +19,7 @@ public class CalendarEvent
     private int id;
     private String serverId, channelId, name, description, location, url, startsAt, createdAt, createdBy;
     private Integer color, duration;
-    private Boolean isPrivate;
+    private Boolean isPrivate, repeats;
     private Mention[] mentions;
     private CalendarEventCancellation cancellation;
 
@@ -49,6 +49,7 @@ public class CalendarEvent
                 .setLocation(json.getStr("location"))
                 .setUrl(json.getStr("url"))
                 .setColor(json.getInt("color"))
+                .setRepeats(json.getBool("repeats"))
                 .setStartsAt(json.getStr("startsAt"))
                 .setDuration(json.getInt("duration"))
                 .setIsPrivate(json.getBool("isPrivate"))
@@ -147,6 +148,17 @@ public class CalendarEvent
     }
 
     /**
+     * Is this event a repeating event?
+     */
+    public boolean isRepeating(){return repeats != null && repeats;}
+
+    public CalendarEvent setRepeats(Boolean repeats)
+    {
+        this.repeats = repeats;
+        return this;
+    }
+
+    /**
      * Get the ISO 8601 timestamp that the event starts at.
      */
     public String getStartsAt(){return startsAt;}
@@ -171,7 +183,7 @@ public class CalendarEvent
     /**
      * No description available in API documentation.
      */
-    public Boolean getIsPrivate(){return isPrivate;}
+    public boolean isPrivate(){return isPrivate != null && isPrivate;}
 
     public CalendarEvent setIsPrivate(Boolean isPrivate)
     {
@@ -236,6 +248,7 @@ public class CalendarEvent
                 .set("location", location)
                 .set("url", url)
                 .set("color", color)
+                .set("repeats", repeats)
                 .set("startsAt", startsAt)
                 .set("duration", duration)
                 .set("isPrivate", isPrivate)

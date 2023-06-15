@@ -10,25 +10,25 @@ import vip.floatationdevice.guilded4j.G4JClient;
 import vip.floatationdevice.guilded4j.event.ChatMessageCreatedEvent;
 import vip.floatationdevice.guilded4j.object.ChatMessage;
 
-public class Main{
-    final static G4JClient client = new G4JClient("YOUR TOKEN HERE");
-    @Subscribe
-    public void onMessage(ChatMessageCreatedEvent event){
-        ChatMessage m = event.getChatMessage();
-        if(m.getContent().equals("ping")) // someone sends "ping"
-            client.getChatMessageManager().createChannelMessage(
-                    m.getChannelId(), // send to
-                    "pong", // text content
-                    null, // embed content
-                    new String[]{m.getId()}, // reply to
-                    false, // reply privately
-                    false // reply silently
+public class Main {
+  final static G4JClient client = new G4JClient("YOUR TOKEN HERE");
+
+  @Subscribe
+  public void onMessage(ChatMessageCreatedEvent event) {
+    ChatMessage m = event.getChatMessage();
+    if(m.getContent().equals("ping")) { // if someone sends "ping"
+      client.getChatMessageManager()    // use the client's chat message manager
+            .createChannelMessage(      // send a chat message
+                m.getChannelId(),       // send to the channel where "ping" belongs to
+                "pong"                  // send "pong"
             );
     }
-    public static void main(String[] args){
-        client.registerEventListener(new Main());
-        client.connectWebSocket();
-    }
+  }
+
+  public static void main(String[] args) {
+    client.registerEventListener(new Main());
+    client.connectWebSocket();
+  }
 }
 ```
 3. Compile & have fun :)

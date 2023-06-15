@@ -11,17 +11,17 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
-            <version>5.8.11</version>
+            <version>5.8.19</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-json</artifactId>
-            <version>5.8.11</version>
+            <version>5.8.19</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.0.1-jre</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>

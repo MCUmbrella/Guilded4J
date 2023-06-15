@@ -14,7 +14,7 @@ import vip.floatationdevice.guilded4j.Util;
  */
 public class Webhook
 {
-    private String id, name, serverId, channelId, createdAt, createdBy, deletedAt, token;
+    private String id, name, avatar, serverId, channelId, createdAt, createdBy, deletedAt, token;
 
     /**
      * Generate a Webhook object from the given JSON object.
@@ -33,6 +33,7 @@ public class Webhook
         return new Webhook()
                 .setId(json.getStr("id"))
                 .setName(json.getStr("name"))
+                .setAvatar(json.getStr("avatar"))
                 .setServerId(json.getStr("serverId"))
                 .setChannelId(json.getStr("channelId"))
                 .setCreationTime(json.getStr("createdAt"))
@@ -66,6 +67,20 @@ public class Webhook
     public Webhook setName(String name)
     {
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the URL of the avatar image associated with the webhook.
+     */
+    public String getAvatar()
+    {
+        return avatar;
+    }
+
+    public Webhook setAvatar(String avater)
+    {
+        this.avatar = avater;
         return this;
     }
 
@@ -162,6 +177,7 @@ public class Webhook
         return new JSONObject()
                 .set("id", id)
                 .set("name", name)
+                .set("avatar", avatar)
                 .set("serverId", serverId)
                 .set("channelId", channelId)
                 .set("createdAt", createdAt)

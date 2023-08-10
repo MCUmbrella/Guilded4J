@@ -18,7 +18,7 @@ public class ForumTopic
     int id;
     String serverId, channelId, title, content, createdAt, createdBy, createdByWebhookId, updatedAt, bumpedAt;
     boolean isPinned = false, isLocked = false;
-    Mention mentions;
+    Mentions mentions;
 
     /**
      * Use the given JSON object to generate ForumTopic object.
@@ -164,7 +164,7 @@ public class ForumTopic
         return this;
     }
 
-    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+    public Mentions getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
 
     /**
      * Check if the topic is pinned.

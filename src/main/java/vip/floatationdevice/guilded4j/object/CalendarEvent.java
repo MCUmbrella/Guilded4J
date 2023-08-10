@@ -20,7 +20,7 @@ public class CalendarEvent
     private String serverId, channelId, name, description, location, url, startsAt, createdAt, createdBy;
     private Integer color, duration;
     private Boolean isPrivate, repeats;
-    private Mention[] mentions;
+    private Mentions mentions;
     private CalendarEventCancellation cancellation;
 
     /**
@@ -195,9 +195,9 @@ public class CalendarEvent
      * No description available in API documentation.
      * Also, mentions will not be implemented in Guilded4J - yet.
      */
-    public Mention[] getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+    public Mentions[] getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
 
-    public CalendarEvent setMentions(Mention[] mentions)
+    public CalendarEvent setMentions(Mentions mentions)
     {
         this.mentions = mentions;
         return this;

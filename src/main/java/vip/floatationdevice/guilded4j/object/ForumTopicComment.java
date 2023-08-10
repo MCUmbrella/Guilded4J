@@ -17,7 +17,7 @@ public class ForumTopicComment
 {
     int id, forumTopicId;
     String content, createdAt, createdBy, updatedAt, channelId;
-    Mention mentions;
+    Mentions mentions;
 
     public static ForumTopicComment fromJSON(JSONObject json)
     {
@@ -115,7 +115,7 @@ public class ForumTopicComment
         return this;
     }
 
-    public Mention getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
+    public Mentions getMentions(){throw new UnsupportedOperationException("https://www.guilded.gg/Guilded4J-Cafe/blog/Announcements/About-the-APIs-new-Mentions-feature");}
 
     @Override
     public String toString()

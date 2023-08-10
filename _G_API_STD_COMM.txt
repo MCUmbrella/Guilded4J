@@ -1,4 +1,4 @@
 When does Guilded4J currently correspond to the Guilded API standard?
 
-2023-02-07 12:26:37
-7fa1f91bb09ca5c2247f6789bdaf5813150cd9c7
+2023-02-14 01:15:19
+6481b51bfbfe68fc770b3309b497f28ea5b123b1
